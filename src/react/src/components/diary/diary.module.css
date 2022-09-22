@@ -1,0 +1,26 @@
+.diaryHeader{
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    background-color: #a8dada;
+    color: white;
+    font-weight: 600;
+    font-size: medium;
+}
+.diaryBody{
+    white-space: nowrap !important;
+    height: 100%;
+}
+
+.diaryList > li{
+    position: sticky;
+    top: 0%;
+    background-color: #f2f5f7;
+    list-style: none;
+    margin-left: -30px;
+}
+.diaryList{
+    height: 100% !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+}

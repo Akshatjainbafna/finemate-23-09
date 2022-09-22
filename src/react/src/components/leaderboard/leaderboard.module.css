@@ -1,0 +1,23 @@
+.leaderboardHeader{
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    background-color: #a8dada;
+    color: white;
+    font-weight: 600;
+    font-size: medium;
+}
+table, tr, td{
+    text-align: center;
+}
+th{
+    background-color: #f2f5f7;
+    font-size: 12px;
+    padding: 5px;
+}
+tr{
+    border-bottom: 2px solid #f2f5f7 ;
+}
+td:nth-child(1){
+    font-weight: 600;
+}

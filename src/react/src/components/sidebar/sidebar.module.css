@@ -1,0 +1,98 @@
+/*Sidebar Styles*/
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+.logoContainer{
+    display: flex;
+    justify-content: center;
+    margin: 0px;
+}
+.menuIcon {
+    cursor: pointer;
+}
+.logoContainer:hover, .menuIcon:hover{
+    margin: 0px;
+}
+.sideBar {
+    display: flex;
+    position: absolute;
+    margin-left: 0px;
+    flex-direction: column;
+    top: 0px;
+    left: 0px;
+    width: 22vw;
+    height: 110vh !important;
+    background-color: white;
+    color: white;
+    font-family: "Open Sans";
+    font-weight: bold;
+    box-shadow: 2px 0px 10px -1px rgba(0,0,0,.3) !important;
+    border-radius: 0px !important;
+}
+
+.sideBar ul {
+    margin: 0;
+    padding: 0;
+}
+
+.sideBar ul a {
+    text-decoration: none;
+}
+
+.sideBar ul a li.active {
+    background: #A78EC3;
+    margin-left: 0;
+    padding-left: 30px;
+    text-decoration: none;
+}
+.sideBar ul a li.active span{
+    color: white;
+    text-decoration: none;
+    text-align: left;
+    margin-left: 20px;
+    margin-right: 12px;
+}
+.sideBar ul a li {
+    margin: 10px;
+    padding: 10px 10px 10px 0px;
+    margin-top: 10px;
+    border-radius: 0px 15px 15px 0px;
+    list-style-type: none;
+    list-style-position: outside;
+    text-decoration: none;
+}
+
+.sideBar ul a li span{
+    text-decoration: none;
+    text-align: left;
+    color: #919699;
+    margin-left: 20px;
+    margin-right: 12px;
+    padding-left: 0px;
+    font-size: 16px;
+    position: relative;
+} 
+
+.sideBar ul a:hover:not(.active) li{
+    background: #A78EC3;
+    box-shadow: 0 20px 20px -2px rgba(0,0,0,.2);
+    color:white;
+    margin-left: 0;
+    padding-left: 30px;
+    text-decoration: none;
+}
+
+
+.sideBar ul a li:hover span {
+    color: inherit;
+}
+
+.sideBar ul a:hover {
+    text-decoration: none;
+}
+
+.sideBar ul a li{
+    color: white;
+    text-decoration: none;
+    text-align: left;
+    margin-left: 20px;
+    margin-right: 12px;
+}

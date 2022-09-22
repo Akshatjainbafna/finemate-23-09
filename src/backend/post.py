@@ -1,0 +1,338 @@
+from io import BytesIO
+from profile import ProfileObj
+from flask.helpers import send_file
+import mongoengine as me
+from flask import Flask, make_response, request, jsonify
+from Exceptions.MissingRequiredField import checkFields
+from Exceptions.MissingRequiredField import checkFieldsReturnAll
+from datetime import datetime
+import json
+Profile = ProfileObj.Profile
+
+class PostObj():
+
+    """
+	This class holds all the CRUD methods for the posts
+	"""
+
+    class Posts(me.Document):
+        username=me.StringField(required=True)
+        subject=me.StringField(required=True, max_length=20, min_length=3)
+        topic=me.StringField(required=True, max_length=20, min_length=3)
+        subtopic=me.StringField(required=True, max_length=20, min_length=3)
+        type=me.StringField(required=True, choices=['News', 'Information' , 'News & Information'])
+        question=me.StringField()
+        fact=me.StringField(required=True, min_length=30)
+        background=me.StringField()
+        mcq1=me.StringField(required=True)
+        mcq1Options=me.ListField(required=True, unique=False)
+        #mcq1opt2=me.StringField(required=True, unique=False)
+        #mcq1opt3=me.StringField(unique= False)
+        #mcq1opt4=me.StringField(unique=False)
+        #to store date in iso formate datetimefield can be used instead of string field by passing just datetime.now() object instead of converting it into string and passing ans also remember don't pass datetime.now() object directly or by default coz datetime object can't be iterated 
+        creation_date_time=me.StringField()
+        accuracy=me.FloatField()
+        prerequisite=me.ListField()
+        totalLikes= me.IntField(default=0)
+
+
+    def __init__(self, content):
+        """
+		Instantiates a new instance of PostObj
+		"""
+        self.content=content
+    
+    def create_a_post(self, image, nameOfImage):
+        """
+		Saves the post to the database.
+		"""
+        
+        if (self.Posts.objects(fact=self.content['fact']).count() > 0):
+            return make_response("Plagiarism Detected", 400)
+
+        mcq1Opts=[self.content['mcq1opt1'], self.content['mcq1opt2']]
+        if len(self.content['mcq1opt3']) > 0:
+            mcq1Opts.append(self.content['mcq1opt3'])
+
+        if len(self.content['mcq1opt4']) > 0:
+            mcq1Opts.append(self.content['mcq1opt4'])
+
+        prn= self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcq1Opts, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), accuracy=1.0, background= nameOfImage).save()
+        print(prn, prn.to_json(), sep="\n")
+
+        objectOfTherecordOfTheUser= Profile.objects(username=self.content['username']).first()
+
+        allSubjectsOfUser= objectOfTherecordOfTheUser.educations
+
+        print(allSubjectsOfUser)
+        if self.content['subject'] not in allSubjectsOfUser:
+            Profile.objects(username=self.content['username']).update_one(push__educations = self.content['subject'])
+        else: 
+            pass
+
+        return make_response("", 200)
+    
+    '''
+    def display_posts_on_newsfeed(self):
+
+        x = checkFields(self.content, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+        objectOfTherecordOfTheUser= Profile.objects(username=self.content['username']).first()
+
+        allSubjectsOfUser= objectOfTherecordOfTheUser.educations
+        
+        if len(allSubjectsOfUser) <= 0:
+            return make_response("Add a Subject First", 404)
+
+
+        raw = list(self.Posts.objects(subject=any(allSubjectsOfUser)).all())
+
+        return make_response(jsonify(raw), 200)
+        
+    '''        
+    
+    
+    
+    
+    def display_posts_on_newsfeed(self):
+
+        x = checkFields(self.content, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+
+
+        objectOfTherecordOfTheUser= Profile.objects(username=self.content['username']).first()
+
+        allSubjectsOfUser= objectOfTherecordOfTheUser.educations
+        
+        if len(allSubjectsOfUser) <= 0:
+            return make_response("Add a Subject First", 404)
+
+        postData = []
+        
+        '''
+        var1=UserInteractions.objects(username=self.content['username']).only('interaction').to_json()
+        var2=json.loads(var1)
+        var3= var2[0]['interaction']
+        if len(var3)!=0:
+            listOfPostIds=[x['postId'] for x in var3]
+            print(listOfPostIds, len(listOfPostIds))
+
+        print(var3, sep="\n")'''
+        
+        for i in range(len(allSubjectsOfUser)):
+            for post in self.Posts.objects(subject=allSubjectsOfUser[i]):
+                #appending post in a list to send to client
+                postData.append(post)
+                #storing time in string, at which the user saw the post inside a timeList listfield
+                timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                
+                #storing the reference inside a user_interactions collection inside a interaction list
+                postToString=post.to_json()
+                postStringToDict=json.loads(postToString)
+                idOfPost=postStringToDict['_id']['$oid']
+                print(idOfPost)
+                
+                if UserInteractions.objects(me.Q(username=self.content['username']) & me.Q(postId=post)):
+                    UserInteractions.objects(me.Q(username=self.content['username']) & me.Q(postId=post)).update_one(inc__timesViewed=1)
+                    UserInteractions.objects(me.Q(username=self.content['username']) & me.Q(postId=post)).update_one(dec__points=1)
+                    UserInteractions.objects(me.Q(username=self.content['username']) & me.Q(postId=post)).update_one(push__timeList=timeRytNow)
+                else:
+                    UserInteractions(userReference=objectOfTherecordOfTheUser,
+                    username=self.content['username'],
+                    postId=post,
+                    timeList=[timeRytNow]
+                    ).save()
+           
+        postData.reverse()
+        return make_response(jsonify(postData), 200)
+
+        #postData = self.Posts.objects(username=self.content['username']).exclude('background')first()
+        #postImage = self.Posts.objects(username=self.content['username']).only('background').first()
+
+        #bgImage=postImage.background.read()
+        
+        '''
+        bgImage=postImage.background.read()
+        filename = postImage.background.filename
+        content_type = postImage.background.content_type
+        '''
+        '''
+        imageBinary=read_image(postImage)
+        responseImage=make_response(imageBinary)
+        response.headers.set('Content-Type', 'image/jpg')
+        response.headers.set('Content-Disposition', 'attachment', filename='%s.jpg' %imageBinary)
+        return response
+        '''      
+
+        '''
+        responseImage=make_response(send_file(bgImage, download_name=filename, mimetype=content_type))
+        responseImage.headers['Content-Transfer-Encoding']='base64'
+        return responseImage
+       '''
+        #return make_response(jsonify(postData.to_json()), 200)
+        #return send_file(bgImage, download_name=filename, mimetype=content_type), 200
+
+
+
+
+    
+class UserInteractions(me.Document):
+    userReference= me.ReferenceField(Profile, reverse_delete_rule=me.CASCADE)
+    username=me.StringField()
+    postId=me.ReferenceField(PostObj.Posts)
+    liked=me.BooleanField(default=False)
+    lighten=me.BooleanField(default=False)
+    saved=me.BooleanField(default=False)
+    timesViewed=me.IntField(default=1)
+    points=me.IntField(default=10)
+    #to store date in iso formate datetimefield can be used instead of string field
+    timeList=me.ListField(me.StringField())
+
+    def store_interactions(self):
+        if len(self['liked'])>0:
+            for i in self['liked']:
+                UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__liked=True)
+
+        if len(self['lighten'])>0:
+            for i in self['lighten']:
+                UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__lighten=True)
+
+        if len(self['savedPosts'])>0:
+            for i in self['savedPosts']:
+                UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__saved=True)
+        
+        return make_response("", 200)
+
+    def designing_newsfeed(self):
+
+        objectOfTherecordOfTheUser= Profile.objects(username=self['username']).first()
+
+        allSubjectsOfUser= objectOfTherecordOfTheUser.educations
+        
+        if len(allSubjectsOfUser) <= 0:
+            return make_response("Add a Subject First", 404)
+
+        #Empty list that will curate most appropirate 10 posts to be send to the client
+        postData=[]
+
+        #storing time in string, at which the user saw the post inside a timeList listfield
+        timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        
+        # make a change here count() < 50:
+        if UserInteractions.objects(username=self['username']).count()<10:
+
+            for i in range(len(allSubjectsOfUser)):
+                if len(postData)==10:
+                    break
+                for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
+                    if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
+                        pass
+                    elif len(postData)==10:
+                        break
+                    else:
+                        #making a document in user_interactions collection of new post for a particular user
+                        user_interaction=UserInteractions(userReference=objectOfTherecordOfTheUser,
+                        username=self['username'],
+                        postId=post,
+                        timeList=[timeRytNow]
+                        ).save()
+
+
+                        #Combining the post data with the user interaction 
+                        addThePostStr=post.to_json()
+                        addTheInteractionStr=user_interaction.to_json()
+                        combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                        objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                        #appending the combined object build from two different strings to the postData List to send to client
+                        postData.append(objectOfTheCombinedString)
+            
+            postData.reverse()
+            return make_response(jsonify(postData), 200)
+
+        else:
+
+            #sending MCQ's for chechking retention
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)).order_by('timesViewed')[:3]:
+                questionPosts=UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)).order_by('timesViewed')[:3]
+                
+                #updating user_interactionsData
+                for post in questionPosts:
+                    yo=post.postId.id
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post.postId)).update_one(inc__timesViewed=1)
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post.postId)).update_one(dec__points=1)
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post.postId)).update_one(push__timeList=timeRytNow)
+
+                    #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
+                    addThePost=PostObj.Posts.objects(id=yo).first()
+
+                    #Combining the post data with the user interaction 
+                    addThePostStr=addThePost.to_json()
+                    addTheInteractionStr=post.to_json()
+                    combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                    objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                    #appending the combined object build from two different strings to the postData List to send to client
+                    postData.append(objectOfTheCombinedString)
+
+
+
+            #sending old posts to ensuring retention
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=7) & me.Q(points__lte=10)).order_by('timesViewed')[:4]:
+                oldPostsToRevise=UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=7) & me.Q(points__lte=10)).order_by('timesViewed')[:4]
+                
+                #updating user_interactionsData
+                for post in oldPostsToRevise:
+                    yo=post.postId.id
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post.postId)).update_one(inc__timesViewed=1)
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post.postId)).update_one(dec__points=1)
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post.postId)).update_one(push__timeList=timeRytNow)
+                    
+                    #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
+                    addThePost=PostObj.Posts.objects(id=yo).first()
+
+                    #Combining the post data with the user interaction 
+                    addThePostStr=addThePost.to_json()
+                    addTheInteractionStr=post.to_json()
+                    combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                    objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                    #appending the combined object build from two different strings to the postData List to send to client
+                    postData.append(objectOfTheCombinedString)
+
+
+
+            #sending new post's to maintain the uncertainity            
+            for i in range(len(allSubjectsOfUser)):
+                if len(postData)==12:
+                    break
+                for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
+                    if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
+                        pass
+                    elif len(postData)==12:
+                        break
+                    else:
+                        #making a document in user_interactions collection of new post for a particular user
+                        user_interaction=UserInteractions(userReference=objectOfTherecordOfTheUser,
+                        username=self['username'],
+                        postId=post,
+                        timeList=[timeRytNow]
+                        ).save()
+
+
+                        #Combining the post data with the user interaction 
+                        addThePostStr=post.to_json()
+                        addTheInteractionStr=user_interaction.to_json()
+                        combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                        objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                        #appending the combined object build from two different strings to the postData List to send to client
+                        postData.append(objectOfTheCombinedString)
+
+
+            postData.reverse()
+            return make_response(jsonify(postData), 200)

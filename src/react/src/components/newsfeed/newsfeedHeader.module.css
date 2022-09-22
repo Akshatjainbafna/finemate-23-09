@@ -1,0 +1,214 @@
+.newsfeedFeatures{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between !important;
+    align-items: center;
+  }
+  .newsfeedFeatures > section{
+  
+}
+  .story{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 30vw;
+    height: 12vh;
+
+    overflow: hidden;
+  }
+  
+  .story p{
+    color: wheat;
+    margin: 0;
+    text-align: center;
+    line-height: 4vh;
+  }
+  .story p:nth-child(1){
+    background-color: #b798db;
+}
+.story p:nth-child(2){
+    position: relative;
+    top: -10%;
+    background-color: #a77ed6;
+}
+.story p:nth-child(3){
+    position: relative;
+    top: -20%;
+    border-radius: 0 0 50px 50px;
+    background-color: #834bc4;
+}
+  .addPostIcon {
+    width: 12vh;
+  }
+
+  /*setting buttons*/
+.newsfeedSettings{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+}
+
+
+.button {
+    position: relative;
+    width: 6vw;
+    height: 4.1vh;
+    margin: 0;
+    overflow: hidden;
+    margin: 0.2vw 0;
+  }
+  .knobs,
+  .layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .button .layer {
+  border-radius:  100px;
+}
+  .checkbox {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;
+  }
+  .knobs {
+    z-index: 2;
+  }
+  
+  #button3 .layer {
+    width: 100%;
+    background-color: #b6ffa9;
+    transition: 0.3s ease all;
+    z-index: 1;
+ 
+  }
+  
+  #button3 .knobs:before {
+    content: "LEARN";
+    position: absolute;
+    top: 0px;
+    left: 0.1vw;
+    width: 2vw;
+    height: 2vw;
+    color: #fff;
+    font-size: 8px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 8px;
+    padding: 10px 0;
+    background-color: #39FF14;
+    border-radius: 100%;
+    transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
+  }
+
+  #button3 .checkbox:checked:active + .knobs:before {
+    margin-left: -20px;
+  }
+  
+  #button3 .checkbox:checked + .knobs:before {
+    content: "TEST";
+    left: 3.9vw;
+    background-color: #3442FB;
+  }
+  
+  #button3 .checkbox:checked ~ .layer {
+    background-color: rgb(177, 182, 255);
+  }
+
+  /* BUTTON4 */
+  #button4 .layer {
+    width: 100%;
+    background-color: #ffcea9;
+    transition: 0.3s ease all;
+    z-index: 1;
+ 
+  }
+  #button4 .knobs:before {
+    content: "ALL";
+    position: absolute;
+    top: 0px;
+    left: 0.1vw;
+    width: 2vw;
+    height: 2vw;
+    color: #fff;
+    font-size: 8px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 8px;
+    padding: 10px 0;
+    background-color: #FF7B19;
+    border-radius:100%;
+    transition: 0.3s ease all, left 0.3s cubic-bezier(0.18, 0.89, 0.35, 1.15);
+  }
+  
+
+  
+  #button4 .checkbox:checked:active + .knobs:before {
+    margin-left: -20px;
+  }
+  
+  #button4 .checkbox:checked + .knobs:before {
+    content: "CORE";
+    left: 3.9vw;
+    background-color: #FF199D;
+  }
+  
+  #button4 .checkbox:checked ~ .layer {
+    background-color: #ffaddb;
+  }
+  .addPostForm{
+    display: none;
+    height: 30vw;
+    width: 48vw;
+    position: fixed;
+    background: white;
+    border: dashed #834bc4;
+    border-radius: 50px;
+    box-shadow: 4px 8px 8px 2px rgb( 0, 0, 0, 0.3);
+    z-index: 99;  
+  }
+  .addPostForm div{
+    margin: 1vw;
+  }
+  .addPostFormHeading{
+    display: block;
+    font-size: large;
+    font-weight: 800;
+    padding: 0 1vw;
+  }
+  .formNavigation{
+    display: flex;
+    justify-content: space-between;
+  }
+  .formPost input, .formPost textarea, .mediaUploadOptions{
+    display: block;
+    margin: 1vw;
+  }
+  .linkNext{
+    color: black;
+    opacity: 1 !important;
+  }
+  .addPostFormHeading ~ textarea{
+    resize: none;
+    border: 2px solid grey;
+    border-radius: 10px;
+  }
+  .mediaUploadOptions a{
+    display: inline-block;
+    text-decoration: none;
+    color: #3442FB;
+    font-weight: 600;
+  }
+  .mediaUploadOptions a:hover{
+    border-bottom: 2px solid #3442FB;
+  }

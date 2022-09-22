@@ -1,0 +1,58 @@
+.page {
+    background-color: #7A7A7A !important;
+}
+body{
+    background-color: #FCFCFB !important;
+    overflow-x: hidden;
+}
+.picture{
+    flex:1;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    width: auto; /* ie8 */
+}
+
+.events{
+    display: flex;
+    align-self: center;
+    flex-direction: row-reverse;
+}
+
+
+.Sidebar{
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+.containerDash {
+    display: flex;
+    margin-left: 22vw;
+
+  }
+.leftHalf {
+    padding: 0 1rem;
+    width: 50vw;
+  }
+  .rightHalf {
+    width: 28vw;
+    height: max-content;
+    display: flex;
+    flex-direction: column;
+    right: 0px;
+    background: none repeat scroll 0 0 white;
+    box-shadow: -2px 0px 11px -1px rgba(0,0,0,.3) !important;
+    overflow-x: hidden !important;
+  }
+
+  /*akshat on 16-07*/
+

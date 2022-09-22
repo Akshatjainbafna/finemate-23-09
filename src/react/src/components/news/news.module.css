@@ -1,0 +1,131 @@
+.classCardStyle {
+  display: flex;
+  align-items: center;
+  background-color:#FCFCFB;
+  border-color:#FCFCFB;
+  font-family: "Open Sans";
+  box-shadow: none !important;
+}
+h1{
+  font-size: 20px!important;
+}
+
+.classCardTitleStyle {
+  font-family: "Open Sans";
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    text-align: left;
+    margin-top: 10px !important;
+    padding-left: 12px !important;
+    color: #7A7A7A;
+    border-bottom: 3px solid #A78EC3 !important;
+    border-left: 3px solid #A78EC3 !important;
+    border-radius: 20px 0 0 20px;
+}
+.textbox{
+  float: left;
+  margin-right: 20px;
+}
+a {
+  color: rgb(255, 255, 255);
+}
+
+
+* {
+  box-sizing: border-box;
+  
+}
+
+body {
+
+  background: #ffffff;
+  
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background: #ffffff;
+  border-color: white;
+  font-family: "Open Sans" !important;
+  width: 26vw !important;
+  height: 22vw !important;
+  border-radius: 20px;
+  border: 2px dashed #834bc4 !important;
+  margin: 0px !important;
+  overflow-y: auto;
+}
+
+.input {
+  position: absolute;
+  opacity: 0;
+}
+
+.label {
+  padding: 5px 5px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 14px;
+  color: #7A7A7A;
+  transition: background 0.1s, color 0.1s;
+}
+
+.input:checked + .label {
+  background: #A78EC3;
+  color: #fff;
+  border-radius: 10px;
+}
+
+.label:active {
+  background: #000;
+}
+h1{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+
+.input:hover + .label {
+  background: #fff;
+  color: #000;
+  text-decoration: underline;
+  text-decoration-color:#834bc4 ;
+  text-underline-position: under;
+}
+
+@media (min-width: 600px) {
+  .label {
+    width: auto;
+  }
+}
+.panel {
+  display: none;
+  position: relative;
+  padding: 20px 30px 30px;
+  background: #fff;
+}
+.btnLearn{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.btnLearnMore{
+	border: none;
+	border-radius: 0px 10px 10px 10px ;
+  max-width: 100%;
+  margin-top: 40px;
+  margin-left: 500px;
+  color: #FCFCFB;
+  background-color: #A78EC3;
+  font-size: small;
+}
+
+@media (min-width: 600px) {
+  .panel {
+    order: 99;
+  }
+}
+
+.input:checked + .label + .panel {
+  display: block;
+}

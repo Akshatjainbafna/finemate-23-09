@@ -1,0 +1,52 @@
+import React, { Component } from "react";
+import "./discussionDetailPage.css";
+import DiscussionDetail from "../../components/discussion/discussionDetail.component.js";
+import { Redirect } from "react-router-dom";
+// Bunch of pictures
+import Headerbar from "../..//components/headerbar/HeaderTaskbar.js";
+import Sidebar from "../..//components/sidebar/sidebar.component.js";
+import profile from "../../assets/profile.png";
+import classes from "../../assets/classes.png";
+import scheduling from "../../assets/scheduling.png";
+import community from "../../assets/community.png";
+import mailbox from "../../assets/mailbox.png";
+import socialInitiatives from "../../assets/Welfare.png";
+import dashboard from "../../assets/dashboard.png";
+// End of pictures
+
+let headerItems = { link: "/profile", title: "Discussion Board", profileImg: profile };
+
+let navItems = [
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: classes, title: "Courses"},
+  { id: 3,link: "/library",imgSrc: classes,title: "Library"},
+  { id: 4, link: "/search", imgSrc: classes, title: "Search"},
+  { id: 5, link: "/attendanceUser", imgSrc: classes, title: "Attendance"},
+  { id: 6, link: "/gradesUser", imgSrc: classes, title: "Grades"},
+  { id: 7, link: "/discussionList", imgSrc: community, title: "Community" },
+  { id: 8, link: "/marketplace", imgSrc: mailbox, title: "Marketplace" },
+  { id: 9, link: "/feesPayment", imgSrc: scheduling, title: "Fees Payment" },
+  { id: 10, link: "/a&t", imgSrc: classes, title: "Accomodation & Transportation" },
+];
+
+class DiscussionListPage extends Component {
+  state = {
+
+  };
+
+  render() {
+    if (!localStorage.getItem("token")) {
+      return <Redirect to="/login" />;
+    }
+    return (
+      <React.Fragment>
+        <Sidebar books={navItems} />
+        <Headerbar icons={headerItems} />
+        <div className="profileBox">
+          <DiscussionDetail handle = {this.props.match.params.handle}/>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+export default DiscussionListPage;

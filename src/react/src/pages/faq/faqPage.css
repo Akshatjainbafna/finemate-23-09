@@ -1,0 +1,18 @@
+.FAQBox {
+  background-color: #fcfcfb;
+  margin-left: 290px;
+  margin-top: 0px;
+}
+.faqAnswer {
+  background-color: #fcfcfb !important;
+  font-size: 20px;
+}
+.faqQuestion {
+  background-color: #fcfcfb !important;
+  font: bold !important;
+}
+.faq-header {
+  margin-left: 490px;
+  font-size: 30px;
+  font-weight: bold;
+}

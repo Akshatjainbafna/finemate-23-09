@@ -1,0 +1,34 @@
+.taskHeader{
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    background-color: #a8dada;
+    color: white;
+    font-weight: 600;
+    font-size: medium;
+}
+.taskFilter{
+    background-color: #f2f5f7;
+    font-size: 12px;
+    padding: 5px;
+}
+.taskBody{
+    overflow: visible !important;
+}
+.task{
+    display: inline-block;
+}
+.taskHeading{
+    font-size: medium;
+    color: black;
+    font-weight: 600;
+}
+.subject{
+
+}
+.submissionDate{
+
+}
+.submissionTime{
+
+}

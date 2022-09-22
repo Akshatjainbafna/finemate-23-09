@@ -1,0 +1,40 @@
+.headerTask {
+    background-color:white;
+    border-color: white;
+    border-radius: 0px 0px 15px 15px;
+    height: 9vh;
+    align-items: center;
+    box-shadow: 0px 2px 10px -1px rgba(0,0,0,.3) !important;
+}
+
+.Navbar{
+    margin-left: 22vw;
+    margin-top: 0px;
+}
+.header {
+    color: #A78EC3;
+    text-decoration-color: #A78EC3;
+    font-size: 25px !important;
+}
+.searchIcon {
+    background-color: #fff;
+    border-radius: 10px;
+    border-style: none;
+    margin-left:-25px;
+}
+.searchImg{
+    background-color: #fff;
+
+}
+.headerIcons {
+    background-color: #fff;
+    border-radius: 10px;
+    border-style: none;
+}
+
+.form-control {
+    border: hsl(270, 38%, 59%);
+    border-radius: 10px;
+    max-width: 100%;
+    background-color: #F5F7FA;
+}

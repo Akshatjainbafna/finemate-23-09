@@ -1,0 +1,13 @@
+.targetUser {
+    background-color: #FCFCFB;
+    margin-left: 24vw;
+    margin-top: 2vh;
+}
+.prompt {
+    margin-left: 24vw;
+    margin-top: 0px;
+}
+.writeButton {
+    background-color: #FCFCFB;
+    border-style: none;
+}
