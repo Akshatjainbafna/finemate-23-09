@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import createMessage from '../../assets/createMessage.png'
-import './SendMessage.css'
+import style from './SendMessage.module.css'
 
 class SendMessage extends Component {
     constructor() {
@@ -33,16 +33,16 @@ class SendMessage extends Component {
 
     render() {
         return (
-            <div className='message-pos'>
+            <div className={style.messagePos}>
                 <form
                     onSubmit={this.handleSubmit}
-                    className='form-inline'>
-                    <input className='form-control form-lg'
+                    className={style.formInlineMessage}>
+                    <input className={style.formControlMessage}
                         onChange={this.handleChange}
                         value={this.state.message}
                         placeholder='Enter your message'
                         type='text'/>
-                    <button className='writeButton ml-2' onClick={this.handleSubmit}>
+                    <button className={style.writeButton} onClick={this.handleSubmit}>
                          <img
                              src={createMessage}
                              alt={createMessage}/>

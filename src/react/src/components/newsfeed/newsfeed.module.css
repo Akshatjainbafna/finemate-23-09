@@ -30,17 +30,19 @@
 
 }
 .menuIcon{
-    
+    margin-right: -3vw ;
 }
 .menuListVisible{
     position: absolute;
     right: 1vw;
     top: -1vh;
     width: 15vw;
+    height: fit-content;
     border-radius: 10px;
     display: none;
     z-index: 99;
     background-color: #A78EC3;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     color: whitesmoke;
     padding: 1vh 1vw;
 }
@@ -100,7 +102,7 @@
 .postFooter{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin: 0 1vw;
     height: 8vh;
@@ -108,13 +110,39 @@
     padding: 0.5vw 2vw 0;
     border-radius: 0 0 30px 30px;
 }
-.readMoreBtn{
-    font-weight: 600;
-    font-size: 2.2vh;
-    border-radius: 25px;
-    border: 2px solid #A78EC3;
+.viewPostBtn{
+  font-size: small;
+  font-weight: bold;
+  border-radius: 5px;
+  color: #A78EC3;
+  background-color: white;
+  height: 4vh;
+  width: 8vw;
+  border: 1px solid #A78EC3;
 }
 
+.viewPostBtn:hover{
+  color: white;
+  background-color: #A78EC3;
+}
+/*
+.readMoreBtn{
+  font-size: small;
+  font-weight: bold;
+  border-radius: 5px;
+  color: #A78EC3;
+  background-color: white;
+  height: 4vh;
+  width: 8vw;
+  border: 1px solid #A78EC3;
+  transition: border-radius 4s, linear ;
+}
+.readMoreBtn:hover{
+  border-radius: 15px;
+}*/
+.viewPreviousNextPost{
+  margin-top: -8px;
+}
 .previousNextWindow{
     display: none;
     color: black !important;
@@ -124,12 +152,16 @@
     padding: 0.5vh 0.8vw;
     position: absolute;
     bottom: 0;
-    right: 1.4vw;
+    right: 4vw;
 }
 .accuracyIcon{
     width: 2.5vw;
 }
+.intrigrityMarker{
 
+  transform: translate(2.5vw, -1.5vw);
+  
+}
 /*Range Integrity Slider*/
 .integritySlider input[type=range] {
     -webkit-appearance: none;
@@ -147,45 +179,51 @@
     height: 1px;
     animate: 0.2s;
     border-radius: 100%;
+    visibility: hidden;
   }
   .integritySlider input[type=range][value="2"]::-webkit-slider-thumb {
     -webkit-appearance: none ;
     appearance: none;
-    height: 2.5vw;
-    width: 2.5vw;
+    height: 2vw;
+    width: 2vw;
     border: 0;
     background-image: url('correctBGicon.png');
     background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
-    margin-top: -1.25vw;
+    margin-top: -1vw;
+    visibility: visible;
   }
   .integritySlider input[type=range][value="1"]::-webkit-slider-thumb {
     -webkit-appearance: none ;
     appearance: none;
-    height: 2.5vw;
-    width: 2.5vw;
+    height: 2vw;
+    width: 2vw;
     border: 0;
     background-image: url('semicorrectBGicon.png');
     background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
-    margin-top: -1.25vw;
+    margin-top: -1vw;
+    visibility: visible;
+
   }
   .integritySlider input[type=range][value="0"]::-webkit-slider-thumb {
     -webkit-appearance: none ;
     appearance: none;
-    height: 2.5vw;
-    width: 2.5vw;
+    height: 2vw;
+    width: 2vw;
     border: 0;
     background-image: url('incorrectBGicon.png');
     background-size: contain;
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
-    margin-top: -1.25vw;
+    margin-top: -1vw;
+    visibility: visible;
+
   }
   
   /*Range Slider for Mozilla Firefox Webkit*/
@@ -195,6 +233,8 @@
     cursor: pointer;
     animate: 0.2s;
     border-radius: 100%;
+    visibility: hidden;
+
   }
   .integritySlider input[type=range][value="2"]::-moz-range-thumb {
     appearance: none;
@@ -206,6 +246,8 @@
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
+    visibility: visible;
+
   }
   .integritySlider input[type=range][value="1"]::-moz-range-thumb {
     
@@ -218,6 +260,7 @@
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
+    visibility: visible;
     
   }
   .integritySlider input[type=range][value="0"]::-moz-range-thumb {
@@ -231,6 +274,7 @@
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
+    visibility: visible;
 
   }
   
@@ -241,6 +285,8 @@
     cursor: pointer;
     animate: 0.2s;
     border-radius: 100%;
+    visibility: hidden;
+
   }
   .integritySlider input[type=range][value="2"]::-ms-thumb {
     
@@ -253,6 +299,7 @@
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
+    visibility: visible;
     
   }
   .integritySlider input[type=range][value="1"]::-ms-thumb {
@@ -266,6 +313,7 @@
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
+    visibility: visible;
     
   }
   .integritySlider input[type=range][value="0"]::-ms-thumb {
@@ -279,6 +327,7 @@
   background-position: center center;
   background-repeat: no-repeat;
     cursor: pointer;
+    visibility: visible;
 
   }
   .integritySlider input[type=range]::-ms-fill-lower {

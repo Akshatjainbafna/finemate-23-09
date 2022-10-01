@@ -16,7 +16,8 @@ class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      displaying: true
+      displaying: true,
+      editButton: false
     };
     this.newFirstName = React.createRef();
     this.newLastName = React.createRef();
@@ -28,11 +29,14 @@ class Profile extends Component {
   render() {
     const { educations } = this.props;
     const { skills } = this.props;
+    const { interests } = this.props;
+
     const { completedCourses } = this.props;
     const { languages } = this.props;
     const { description } = this.props;
     const { name } = this.props;
-    const { timeJoin } = this.props;
+    const { username } = this.props;
+    const { totalDaysJoined } = this.props;
     const { firstName } = this.props;
     const { lastName } = this.props;
     const { email } = this.props;
@@ -47,14 +51,61 @@ class Profile extends Component {
       >
         {/* card with education info */}
         <Card className="edu">
-          <Card.Body>
-            <div className="profilecard">
+        <div className="headerOfBlockInfoCard">
+          <div className="profileDisplayData">
+          <div className="leftBlockofInfoCard">
               <div className="profile_pic_slot">
-                <img src={tinyprofilePic} className="elementPic" />
+                <div><img src={profilePic} className="elementPic" /> </div>
+                <div className="usernameBlocky">{username}</div>
               </div>
-              <div className="name">{name}</div>
-              <div className="date">Established: {timeJoin}</div>
-            </div>
+              </div>
+
+            <div className="rightBlockofInfoCard">
+              <div className="pointsAndFriendsCountSection">
+                <div className="pointsAndFriendsCount"><div>573</div> <div>Points</div> </div>
+                <div className="pointsAndFriendsCount"><div>73</div> <div>Friends</div> </div>
+                <div className="pointsAndFriendsCount"><div>248</div> <div>Network</div> </div>
+              </div> 
+              {localStorage.getItem('username')==username ? <div className="addButton"> <button className="edit_button_profile" type="button" onClick={() => {
+                this.setState({ displaying: !this.state.displaying });
+              }}>Edit Profile</button> </div>
+              :
+              <div className="addButton">
+                  <button
+                    className="addFriend_button"
+                    type="submit"
+                    onClick={() => {}}
+                  >
+                    Add Friend
+                  </button>
+                  <button
+                    className="connect_button"
+                    type="submit"
+                    onClick={() => {}}
+                  >
+                    Connect
+                  </button>
+              </div>
+              }
+            </div> 
+
+          </div>
+            
+            <div className="descriptionOf"> {this.state.displaying ? description
+            : 
+              <input
+                className="description"
+                type="text"
+                defaultValue={description}
+                ref={this.newDescription}
+                placeholder="Update Bio"
+              />
+            } </div>
+          </div>
+
+
+          <Card.Body>
+            
             <Card.Title className="listed_titles">Education</Card.Title>
             <Card.Text className="listed_educations">
               <ColourText textInfo={educations} />
@@ -75,25 +126,59 @@ class Profile extends Component {
               <ColourText textInfo={languages} />
             </Card.Text>
 
-            <Card.Title className="listed_titles">Description</Card.Title>
-            {this.state.displaying ? (
-              <Card.Text className="listed_bodies">{description}</Card.Text>
-            ) : (
-              <input
-                className="description"
-                type="text"
-                defaultValue={description}
-                ref={this.newDescription}
-              />
-            )}
+            <Card.Title className="listed_titles">Interests</Card.Title>
+            <Card.Text className="listed_interests">
+              <ColourText textInfo={interests} />
+            </Card.Text>
+
           </Card.Body>
         </Card>
 
-        <div className="padding"></div>
-
-        {/* card with personal info */}
+        {this.state.displaying ? 
+        <Card className="info"> 
+            <Card.Body className="profileElements">
+              <Card.Title className="profileElementsTitle">
+                Achievements
+              </Card.Title>
+              <div className="profileElementContainer">
+                <div className="individualProfileElement">
+                <img src={fb} className="element_image" />
+                <img src={fb} className="element_image" />
+                <img src={fb} className="element_image" />
+                </div>
+              </div>
+            </Card.Body>
+            <Card.Body className="profileElements">
+              <Card.Title className="profileElementsTitle">
+                Recent Posts
+              </Card.Title>
+              <div className="profileElementContainer">
+                <div className="individualProfileElement">
+                <img src={fb} className="element_image" />
+                <img src={fb} className="element_image" />
+                <img src={fb} className="element_image" />
+                </div>
+              </div>
+            </Card.Body>
+            <Card.Body className="profileElements">
+              <Card.Title className="profileElementsTitle">
+                Saved Posts
+              </Card.Title>
+              <div className="profileElementContainer">
+                <div className="individualProfileElement">
+                <img src={fb} className="element_image" />
+                <img src={fb} className="element_image" />
+                <img src={fb} className="element_image" />
+                </div>
+              </div>
+            </Card.Body>
+        </Card>
+      :
+        
         <Card className="info">
-          <Card.Title className="info_title">Personal Information</Card.Title>
+
+          {/* card with personal info */}
+
           <div className="top">
             <Card.Body>
               <Card.Title className="title">First Name</Card.Title>
@@ -157,9 +242,7 @@ class Profile extends Component {
           </div>
           <div className="pic_and_account_bottom">
             <div className="pic">
-              <div className="profile_pic_slot">
-                <img src={profilePic} className="elementPic" />
-              </div>
+              
               <div className="spacer"></div>
               <div className="edit_slot">
                 <button className="element_button">Upload</button>
@@ -198,9 +281,12 @@ class Profile extends Component {
             </button>
           </div>
         </Card>
+  }
       </form>
     );
   }
+
+
   submit(e, description, name, firstName, lastName, phoneNumber) {
     // e.preventdefault();
     if (this.newFirstName.current.value != firstName) {

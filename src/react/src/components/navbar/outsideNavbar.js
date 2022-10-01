@@ -1,17 +1,24 @@
 import React, { Component } from "react";
 import "./outsideNavbar.css";
-import Logo from "../../assets/primaryNewLogoChoice1.png";
+import Logo from "../../assets/finemateLatestin Angelina fontLogo.png";
 import { Link } from "react-router-dom";
 
 class OutsideNavbar extends Component {
   render() {
     return (
-      <nav className="navbar navbar-expand-md sticky-top outsideNav m-2 d-flex align-content-between">
-        <Link to="/home" className="nav-item nav-link custom-link">
-          <button className="btn-logo"> <span className="custom-logo"><img
-                    src={Logo}
-                    /></span></button>
+      <nav className="navbar navbar-light navbar-expand-sm sticky-top outsideNav mt-2 d-flex align-content-between">
+        <Link to="/" className="nav-item nav-link navbar-brand">
+            <span className="custom-logo">
+              <img
+                  src={Logo}
+                  />
+            </span>
         </Link>
+        <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" aria-label="Toggle navigation" aria-controls="navbarSupportedContent" aria-expanded="false" >
+          <span className="navbar-toggler-icon "></span>
+        </button>
+      
+      <div className="collapse navbar-collapse" id="collapsibleNavbar" >
         <div>
           <ul className="navbar-nav p-0">
             <li className="nav-item ml-5">
@@ -36,8 +43,9 @@ class OutsideNavbar extends Component {
             <button className="btn btn-login m-3">SIGN UP</button>
           </Link>
           <Link to="/login">
-            <button className="btn btn-login m-3">LOGIN</button>
+            <button className="btn btn-login m-3">LOG IN</button>
           </Link>
+        </div>
         </div>
       </nav>
     );

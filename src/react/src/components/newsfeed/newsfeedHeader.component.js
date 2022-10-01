@@ -4,6 +4,7 @@ import style from './newsfeedHeader.module.css';
 import addPost from "../../assets/addPost.png";
 import axios from "axios";
 import { BsBorderMiddle, BsCaretLeftFill, BsCaretRightFill, BsChevronLeft, BsDot, BsSlash, BsTypeItalic, BsXCircleFill, BsXLg } from "react-icons/bs";
+import { Tooltip } from "@material-ui/core";
 
 function getBase64(file) {
     var reader = new FileReader();
@@ -100,10 +101,14 @@ class NewsfeedHeader extends Component{
             <>
             <div className={style.newsfeedFeatures}>
 
-                <section className={style.addPostIcon} onClick={this.abc}><img src={addPost}></img></section>
+               <Tooltip title="Add Post"><section className={style.addPostIcon} onClick={this.abc}><img src={addPost}></img></section></Tooltip>
 
-                <section className={style.story}><p>Avinash Agrawal</p><p>Rahul Joshi</p><p>Muskan Goyal</p></section>
+               <Tooltip title="Scroll horizontally"><section className={style.story}><ul className={style.list}>{ ["Badminton", "School Friends", "College Friends", "Walter Coaching", "Indore", "Shadi", "Cousins", "Project", "Coders", "Multi"].map((item, index) => {
+                   return <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> {item.charAt(0)} </div>   <div className={style.circleName}>{item.slice(0,7)}</div> </div> </li>
+                } )} </ul> </section></Tooltip>
 
+
+{/*  Toggle Buttons for Post Categories and MCQ-Post toggling
                 <section className={style.newsfeedSettings}>
                     <div className={style.button} id={style.button4}>
                         <input type="checkbox" className={style.checkbox} />
@@ -117,17 +122,21 @@ class NewsfeedHeader extends Component{
                         <div className={style.layer}></div>
                     </div>
                 </section>
-            </div>
-        <div className={style.addPostForm} id="addPostForm">
-           <button type="button" onClick={this.xyz}> <BsXLg/> </button>
+*/}
 
+            </div>
+
+
+
+        <div className={style.addPostForm} id="addPostForm">
+        <button type="button" className={style.closeButton} onClick={this.xyz}> <BsXLg/> </button>
             <div>
 
             <form autoComplete="on" className={style.formPost} method="post" id="formPost" encType="multipart/form-data" onSubmit={this.submit}>
             <div id='page1'>
             <div className={style.formNavigation}><a href="#page1" className={style.linkNext}><BsCaretLeftFill/></a> <a href="#page2" className={style.linkNext} onClick={this.pageVisible2}><BsCaretRightFill/></a></div>
             <span className={style.addPostFormHeading} >Select Category</span>
-                <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={this.handleChange} required/>
+                <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={this.handleChange} size='20' maxLength='20' required/>
                  <datalist id="subjects">
                     <option value="Computer Science"/>
                     <option value="Science"/>
@@ -139,7 +148,7 @@ class NewsfeedHeader extends Component{
                     <option value="Physics"/>
                  </datalist>
                 
-                 <input list="topics" name="topic" placeholder="Topic" form="formPost" value={this.state.topic} onChange={this.handleChange} required/>
+                 <input list="topics" name="topic" placeholder="Topic" form="formPost" value={this.state.topic} onChange={this.handleChange} size='20' maxLength='20' required/>
                  <datalist id="topics">
                     <option value="Computer Science"/>
                     <option value="Science"/>
@@ -151,7 +160,7 @@ class NewsfeedHeader extends Component{
                     <option value="Physics"/>
                  </datalist>
 
-                 <input list="subTopics" name="subtopic" placeholder="Subtopic" form="formPost" value={this.state.subtopic} onChange={this.handleChange} required/>
+                 <input list="subTopics" name="subtopic" placeholder="Subtopic" form="formPost" value={this.state.subtopic} onChange={this.handleChange} size='20' maxLength='25' required/>
                  <datalist id="subTopics">
                     <option value="Computer Science"/>
                     <option value="Science"/>
@@ -174,8 +183,8 @@ class NewsfeedHeader extends Component{
                  <div id="page2">
                  <div className={style.formNavigation}><a href="#page1" className={style.linkNext} onClick={this.pageVisible1}><BsCaretLeftFill/></a> <a href="#page3" className={style.linkNext} onClick={this.pageVisible3}><BsCaretRightFill/></a></div>
                     <span className={style.addPostFormHeading}>Create Post</span>
-                    <input type="text" form="formPost" name="question" placeholder="Question (optional)" size="50" value={this.state.question} onChange={this.handleChange}/>
-                    <textarea type="text" form="formPost" name="fact" placeholder="Fact (required)" maxLength="550" cols="50" rows="7" value={this.state.fact} onChange={this.handleChange} required/>
+                    <input type="text" form="formPost" name="question" placeholder="Question (optional)" size="40" maxLength="40" value={this.state.question} onChange={this.handleChange}/>
+                    <textarea type="text" form="formPost" name="fact" placeholder="Fact (required)" maxLength="365" cols="40" rows="5" value={this.state.fact} onChange={this.handleChange} required/>
                  </div>
                  <div id="page3">
                  <div className={style.formNavigation}><a href="#page2" className={style.linkNext} onClick={this.pageVisible2}><BsCaretLeftFill/></a> <a href="#page4" className={style.linkNext} onClick={this.pageVisible4}><BsCaretRightFill/></a></div>
@@ -192,17 +201,17 @@ class NewsfeedHeader extends Component{
                         </form>
                     </div>
                     <div className={style.uploadMedia} id="uploadMedia">
-                    <input type="file" name="background" value={this.state.background} onChange={this.handleChange} form="formPost" accept="image/*" required/>
+                    <input type="file" class="custom-file-input" name="background" value={this.state.background} onChange={this.handleChange} form="formPost" accept="image/*" required/>
                     </div>
                  </div>
                  <div id="page4">
                  <div className={style.formNavigation}><a href="#page3" className={style.linkNext} onClick={this.pageVisible3}><BsCaretLeftFill/></a> <a href="#page4" className={style.linkNext} onClick={this.pageVisible4}><BsCaretRightFill/></a></div>
                  <input type="hidden" name="custId" value=""/>
-                    <input type="text" name="mcq1" placeholder="Ask a Question" form="formPost" size="50" value={this.state.mcq1} onChange={this.handleChange} required/>
-                    <input name="mcq1opt1" type="text" placeholder="Option 1 (Enter correct answer here)" form="formPost" size="40" value={this.state.mcq1opt1} onChange={this.handleChange} required/>
-                    <input name="mcq1opt2" type="text" placeholder="Option 2" form="formPost" size="40" value={this.state.mcq1opt2} onChange={this.handleChange}required/>
-                    <input name="mcq1opt3" type="text" placeholder="Option 3" form="formPost" size="40" value={this.state.mcq1opt3} onChange={this.handleChange}/>
-                    <input name="mcq1opt4" type="text" placeholder="Option 4" form="formPost" size="40" value={this.state.mcq1opt4} onChange={this.handleChange}/>
+                    <input type="text" name="mcq1" placeholder="Ask a Question" form="formPost" size="40" maxLength="60" value={this.state.mcq1} onChange={this.handleChange} required/>
+                    <input name="mcq1opt1" type="text" placeholder="Enter correct answer here" form="formPost" size="25" maxLength="40" value={this.state.mcq1opt1} onChange={this.handleChange} required/>
+                    <input name="mcq1opt2" type="text" placeholder="Option 2" form="formPost" size="25" maxLength="40" value={this.state.mcq1opt2} onChange={this.handleChange}required/>
+                    <input name="mcq1opt3" type="text" placeholder="Option 3" form="formPost" size="25" maxLength="40" value={this.state.mcq1opt3} onChange={this.handleChange}/>
+                    <input name="mcq1opt4" type="text" placeholder="Option 4" form="formPost" size="25" maxLength="40" value={this.state.mcq1opt4} onChange={this.handleChange}/>
                     <input type="submit" value="Submit"/>
                  </div>
             </form>

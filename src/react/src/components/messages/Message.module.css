@@ -1,0 +1,25 @@
+.chatBox{
+    box-sizing: border-box;
+    margin-left: 1vw;
+    width: 44vw;
+    border-radius: 8px;
+}
+.chatHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border: 3px solid #ccc4d6d0;
+    border-radius: 5px;
+    padding: 2px;
+}
+.profilePictureChatHeader{
+    width: 8%;
+}
+.targetUser {
+    margin-left: 1vw;
+    text-align: center;
+    font-size: larger;
+    font-weight: bold;
+    color: #919699;
+    text-decoration-color: #919699;
+}

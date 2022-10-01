@@ -19,12 +19,12 @@ class PostObj():
         username=me.StringField(required=True)
         subject=me.StringField(required=True, max_length=20, min_length=3)
         topic=me.StringField(required=True, max_length=20, min_length=3)
-        subtopic=me.StringField(required=True, max_length=20, min_length=3)
+        subtopic=me.StringField(required=True, max_length=25, min_length=3)
         type=me.StringField(required=True, choices=['News', 'Information' , 'News & Information'])
-        question=me.StringField()
-        fact=me.StringField(required=True, min_length=30)
+        question=me.StringField(max_length=50)
+        fact=me.StringField(required=True, min_length=30, max_length=550)
         background=me.StringField()
-        mcq1=me.StringField(required=True)
+        mcq1=me.StringField(required=True, max_length=60)
         mcq1Options=me.ListField(required=True, unique=False)
         #mcq1opt2=me.StringField(required=True, unique=False)
         #mcq1opt3=me.StringField(unique= False)
@@ -193,6 +193,11 @@ class UserInteractions(me.Document):
     timeList=me.ListField(me.StringField())
 
     def store_interactions(self):
+
+        x = checkFields(self, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
         if len(self['liked'])>0:
             for i in self['liked']:
                 UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__liked=True)
@@ -208,6 +213,10 @@ class UserInteractions(me.Document):
         return make_response("", 200)
 
     def designing_newsfeed(self):
+
+        x = checkFields(self, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
 
         objectOfTherecordOfTheUser= Profile.objects(username=self['username']).first()
 
@@ -336,3 +345,17 @@ class UserInteractions(me.Document):
 
             postData.reverse()
             return make_response(jsonify(postData), 200)
+
+    def mcq_response(incomingData):
+
+        x = checkFields(incomingData, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        if 'idAdd' in incomingData.keys():
+            print("DoneAdded")
+            UserInteractions.objects(me.Q(username=incomingData['username']) & me.Q(postId=incomingData['idAdd'])).update_one(inc__points=3)
+        else:
+            print("DoneSubstracted")
+            UserInteractions.objects(me.Q(username=incomingData['username']) & me.Q(postId=incomingData['idSub'])).update_one(dec__points=1)
+        
+        return make_response("", 200)

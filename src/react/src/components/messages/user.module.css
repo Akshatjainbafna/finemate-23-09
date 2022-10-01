@@ -1,0 +1,71 @@
+*{
+    box-sizing: border-box;
+}
+.recentUserList{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 23vw;
+    border: 1px solid #ccc4d6d0;
+    max-width: 30vw;
+    border-radius: 8px;
+    overflow-y: auto;
+}
+.targetUser {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background-color: #FCFCFB;
+}
+.searchUser{
+    display: inline-block;
+    width: 30vw;
+    height: 3.5vw;
+    padding: 1vw;
+}
+.writeButton {
+    background-color: #FCFCFB;
+    border-style: none;
+}
+.recentChats{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2vh;
+    height: 75vh;
+    overflow-y: auto;
+}
+.userChatThumbnail{
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 7vh;
+    margin: 1vh 2vw;
+    border-bottom: 0.1px solid #dfd6e98f;
+    
+}
+.userChatThumbnailImage img{
+    margin: auto;
+    height: 5vh;
+    width: 5vh;
+}
+.userNameAndRecentMessage{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: -3px;
+    margin-left: 15px;
+    flex-grow: 5;
+}
+.userChatThumbnailUsername{
+    font-size: medium;
+    font-weight: 600;
+    font-family: Popins, sans-serif;
+    color: #919699;
+}
+.lastMessage{
+    font-size: small;
+}
+.userChatThumbnailTime{
+    color: #ccc4d6d0;
+}

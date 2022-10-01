@@ -8,6 +8,9 @@
     margin: 0 10px;
     margin-bottom: 20px;
   }
+  .EventCards:hover{
+    box-shadow: 0 30px 16px 0 rgba(0,0,0,0.2);
+  }
   .btn-e{
     border: none;
       border-radius: 10px;
@@ -21,11 +24,6 @@
       box-shadow: 5px 10px 18px #b6b5b5;
       border-color: white;
       float:left;
-  }
-  
-  /* On mouse-over, add a deeper shadow */
-  .card:hover {
-    box-shadow: 0 30px 16px 0 rgba(0,0,0,0.2);
   }
   
   /* Add some padding inside the card container */

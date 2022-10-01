@@ -267,3 +267,15 @@ class UserObj():
 			return make_response(jsonify(user_obj.user_type), 200)
 		else:
 			return make_response("", 404)
+
+	def search_user(self):
+
+		x = checkFields(self.content, fields=['username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		user_obj = self.User.objects(username=self.content['username']).first()
+		if user_obj:
+			return make_response(jsonify(user_obj.username), 200)
+		else:
+			return make_response("User Not Found", 200)

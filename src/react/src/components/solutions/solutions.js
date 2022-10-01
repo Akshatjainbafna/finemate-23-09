@@ -7,18 +7,20 @@ import main from "../../assets/solutionsComponent.svg";
 export const Solution = () => {
   const [firstStyle, setFirstStyle] = useState("solutions--btn--primary");
   const [secondStyle, setSecondStyle] = useState("solutions--btn--secondary");
+  const [thirdStyle, setThirdStyle] = useState("solutions--btn--secondary");
 
-  const [title, setTitle] = useState("Develop New Skills and Knowledge");
+  const [title, setTitle] = useState("Learn Better and Retain Better");
 
   const [text, setText] = useState(
-    "Enhance your skills sets and knowledges to advance your business."
+    "Making Learning and Revising just a piece of Cake."
   );
 
-  const [image, setImage] = useState("solutionsStudent.svg");
+  const [image, setImage] = useState("studentsSolution.svg");
 
-  const setUser = (firstStyle, secondStyle, title, text, image) => {
+  const setUser = (firstStyle, secondStyle, thirdStyle, title, text, image) => {
     setFirstStyle(firstStyle);
     setSecondStyle(secondStyle);
+    setThirdStyle(thirdStyle)
     setTitle(title);
     setText(text);
     setImage(image);
@@ -28,10 +30,14 @@ export const Solution = () => {
     <Container>
       <Wrapper>
         <TextBox>
-          <h3>Solutions</h3>
-          <p>
-            Finemate is an eLearning platform helps you to make <br />
-            an impact as you learn.
+          <h3 className="ml-1">Solutions</h3>
+        </TextBox>
+        <Image>
+          <img src={main} alt="" />
+        </Image>
+      </Wrapper>
+      <p>
+            Let's see them all one by one...
           </p>
           <Buttons>
             <SolutionsButton
@@ -40,9 +46,10 @@ export const Solution = () => {
                 setUser(
                   "solutions--btn--primary",
                   "solutions--btn--secondary",
-                  "Develop New Skills and Knowledge",
-                  "Enhance your skills sets and knowledges to advance your business.",
-                  "solutionsStudent.svg"
+                  "solutions--btn--secondary",
+                  "Learn Better and Retain Better",
+                  "Making Learning and Revising just a piece of Cake.",
+                  "studentsSolution.svg"
                 );
               }}
               type="button"
@@ -55,26 +62,42 @@ export const Solution = () => {
                 setUser(
                   "solutions--btn--secondary",
                   "solutions--btn--primary",
-                  "Teach or Coach for Students’ Success",
-                  "Host live sessions with students and clients, anywhere, anytime with the Finemate.",
-                  "solutionsInstructor.svg"
+                  "solutions--btn--secondary",
+                  "An Application that fullfills all the Digital requirements",
+                  "Making Managing students just a piece of Cake.",
+                  "instituteSolution.svg"
                 );
               }}
               type="button"
               buttonStyle={secondStyle}
             >
-              Instructors
+              Institutes
+            </SolutionsButton>
+            <SolutionsButton
+              onClick={() => {
+                setUser(
+                  "solutions--btn--secondary",
+                  "solutions--btn--secondary",
+                  "solutions--btn--primary",
+                  "Learn Better and Retain Better",
+                  "Enhance your skills sets and knowledges to advance your business.",
+                  "professionalsSolution.svg"
+                );
+              }}
+              type="button"
+              buttonStyle={thirdStyle}
+            >
+              Professionals
             </SolutionsButton>
           </Buttons>
-        </TextBox>
-        <Image>
-          <img src={main} alt="" />
-        </Image>
-      </Wrapper>
+          <br />
+          
       <User>
         <h3>{title}</h3>
         <p>{text}</p>
-        <img src={require(`../../assets/${image}`)} alt="" />
+        <div className="solutionsImageContainer"> 
+        <img className="solutionsImage" src={require(`../../assets/${image}`)} alt="" />  
+        </div>
       </User>
     </Container>
   );
@@ -86,38 +109,39 @@ const Container = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
+  margin: 0 5vw;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
+  margin-bottom: 10vh;
 `;
 
 const Image = styled.div`
   img {
-    height: 35rem;
-    margin-top: 6rem;
+    
   }
 `;
 
 const TextBox = styled.div`
   h3 {
-    font-size: 46px;
+    font-size: 4em;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
-    margin-top: 2rem;
-    margin-right: 34rem;
   }
   p {
     font-weight: normal;
     color: #3e4345;
     font-family: Open Sans;
-    font-size: 22px;
+    font-size: 1.5em;
   }
 `;
 
@@ -131,9 +155,12 @@ const User = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 8rem;
+  margin-top: 4vh;
   margin-bottom: 12rem;
-
+  .solutionsImageContainer{
+    display: flex;
+    justify-content: center;
+  }
   h3 {
     font-size: 36px;
     font-weight: 600;
@@ -148,7 +175,7 @@ const User = styled.div`
   }
 
   img {
-    height: 8rem;
+    width: 80%;
     margin-top: 4rem;
   }
 `;

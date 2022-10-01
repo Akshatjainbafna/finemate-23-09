@@ -1,0 +1,7 @@
+.chatScreen{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    height: 88vh;
+    margin-top: 2vh;
+}

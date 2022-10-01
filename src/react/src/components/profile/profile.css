@@ -1,16 +1,15 @@
 .main {
     display: flex;
     flex-direction: row;
-    padding: 1%;
-    height: fit-content;
+    padding: 2%;
+    
+    height: 90vh;
 }
-.padding {
-    flex:0.05;
-}
+
 .edu {
     flex: 1;
     border-radius: 10px;
-    height: fit-content;
+    margin-right: 1vw;
     box-shadow:none!important;
 }
 .person {
@@ -53,35 +52,38 @@
     padding-right: 10px;
     border-color: #A78EC3;
 }
+
 .listed_educations {
+    list-style: none;
     color: grey;
+}
+.listed_educations_list{
     display: flex;
-    flex-direction: column;
-    margin-left: 5%;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+}
+.colourTextListItems{
+    border-radius: 10px;
+    border: 1px solid #A78EC3;
+    margin: 0.5% 1%;
+    padding: 1%;
 }
 .listed_skills {
+    list-style: none;
     color: grey;
-    display: flex;
-    flex-direction: column;
-    margin-left: 5%;
 }
 .listed_courses {
-    color: grey;
-    display: flex;
-    flex-direction: column;
-    margin-left: 5%;
+    list-style: none;
+    color: grey;    
 }
 .listed_languages {
+    list-style: none;
     color: grey;
-    display: flex;
-    flex-direction: column;
-    margin-left: 5%;
 }
 .listed_titles {
-    color: rgb(151, 151, 151);
-    font-size: 28px;
-    margin-left:20px;
-    margin-top:30px;
+    color: #302c35;
+    font-size: larger;
+    font-weight: 600;
 }
 .listed_bodies {
     color: rgb(0, 0, 0);
@@ -99,7 +101,6 @@
 .info {
     flex: 1.5;
     border-radius: 10px;
-    height: fit-content;
     box-shadow:none !important;
 }
 .info_title {
@@ -141,9 +142,7 @@
     display: flex;
     flex-direction: row;
 }
-.profile_pic_slot {
-    margin-left: 40px;
-}
+
 .edit_slot {
     display: flex;
     flex-direction: column;
@@ -160,10 +159,7 @@
 .spacer {
     flex: 0.2;
 }
-.elemmentPic {
-    width: 150px;
-    height: 150px;
-}
+
 .element {
     flex: 1;
     width: 150px;
@@ -214,4 +210,149 @@
     color: gray;
     background-color: #e3dddd;
     border-radius: 5px;
+}
+
+
+/*27-09*/
+.headerOfBlockInfoCard{
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
+.profileDisplayData{
+    display: flex;
+    flex-direction: row;
+    height: fit-content;
+}
+.leftBlockofInfoCard{
+    width: 30%;
+    height: fit-content;
+    
+}
+.profile_pic_slot {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1vh 0;
+}
+.elementPic{
+    height: 15vh;
+    width: 15vh;
+    border-radius: 100%;
+    border: 1px solid #dfd6e9;
+}
+
+.usernameBlocky{
+    color: #302c35;
+    font-size: 15px;
+    font-weight: bolder;
+    width: 100%;
+    height: fit-content;
+    text-align: center;
+    text-overflow: clip;
+    
+}
+
+.rightBlockofInfoCard{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+.pointsAndFriendsCountSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    height: 10vh;
+}
+.pointsAndFriendsCount{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.descriptionOf{
+    margin: 1vh;
+    text-align: center;
+    height: fit-content;
+}
+.addButton{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1vh;
+}
+.addFriend_button{
+    margin: 0.5vh;
+    width: 8vw;
+    height: 5vh;
+    font-size: small;
+    font-family: "Open Sans";
+    box-shadow: none;
+    border: none;
+    border-radius: 25px;
+    background-color: #834bc4;
+    border-color: white !important;
+    color: white;
+}
+.addFriend_button:hover{
+    background-color: #6932a8;
+}
+.connect_button{
+    margin: 0.5vh;
+    width: 8vw;
+    height: 5vh;
+    font-size: small;
+    font-weight: 700;
+    font-family: "Open Sans";
+    box-shadow: none;
+    border-radius: 25px;
+    background-color: white;
+    border-color: #621eb1;
+    color: #621eb1;
+}
+.connect_button:hover{
+    border-color: #471381;
+    color: #471381;
+}
+.profileElements{
+    display: flex;
+    flex-direction: column;
+    height: 30vh;
+    width: 100%;
+}
+.profileElementsTitle{
+    font-size: larger;
+    font-weight: bolder;
+    font-family: Poppins, sans-serif;
+    color: black;
+}
+.profileElementContainer{
+    display: flex;
+    flex-direction: row;
+    border: 0.1px solid #dfd6e9;
+    border-radius: 15px;
+    height: 20vh;
+    padding: 1%;
+    overflow-y: auto;
+}
+.edit_button_profile{
+    margin: 0.5vh;
+    width: 15vw;
+    height: 5vh;
+    font-size: small;
+    font-weight: 700;
+    font-family: "Open Sans";
+    box-shadow: none;
+    border-radius: 10px;
+    background-color: white;
+    border-color: #471381;
+    color: #471381;
+}
+.edit_button_profile:hover{
+    color: white;
+    background-color: #471381;
+    border-color: #471381;
 }

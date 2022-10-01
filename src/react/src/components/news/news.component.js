@@ -11,12 +11,21 @@ import style from './news.module.css'
 
 
 class News extends Component {
+    constructor(props){
+        super(props);
+        this.state ={
+            redirectToCourses: false
+        }
+    }
     render() {
+        if (this.state.redirectToCourses){
+            return <Redirect to="/allclasslist" />
+        }
         return (
             <>
-            <div className={style.classCardTitleStyle}>News</div>
+        
             <Card className={style.classCardStyle}>
-                <Card.Body>
+                <Card.Body className={style.body}>
                     <div className={style.tabs}>
                         <input name="tabNews" type="radio" id="tabNews-1" checked="checked" className={style.input} />
                         <label for="tabNews-1" className={style.label}>Course Related</label>
@@ -25,7 +34,7 @@ class News extends Component {
                             <img className={style.textbox} src={book} ></img>
                             <p> Check out the newly added courses in the classes section</p>
                             <div className={style.btnLearn}>
-                            <button className={style.btnLearnMore}><a href="http://localhost:3000/allclasslist">view courses</a></button>
+                            <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToCourses: true})}}>Learn More</button>
                             </div>
                         </div>
 
@@ -49,7 +58,7 @@ class News extends Component {
                                 <p>Technology for improved education Guatemela is a project designed to improve the quality of eduction in Guatemala</p>
                             </div>
                             <div className={style.btnLearn}>
-                                <button className={style.btnLearnMore}>Learn More</button>
+                                <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToCourses: true})}}>Learn More</button>
                             </div>
                         </div>
 
@@ -60,7 +69,7 @@ class News extends Component {
                             <img className={style.textbox} src={computer} ></img>
                             <p>an AI algorithm called CAMEO that discovered a potentially useful new material</p>
                             <div className={style.btnLearn}>
-                                <button className={style.btnLearnMore}><a href="https://www.sciencedaily.com/releases/2020/11/201124092150.htm">learn more</a></button>
+                                <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToCourses: true})}}>learn more</button>
                             </div>
                         </div>
 
@@ -71,7 +80,7 @@ class News extends Component {
                             <img className={style.textbox} src={logo} ></img>
                             <p>learn more about UImpactify!</p>
                             <div className={style.btnLearn}>
-                                <button className={style.btnLearnMore}><a href="http://localhost:3000/faq">learn more</a></button>
+                                <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToCourses: true})}}>learn more</button>
                             </div>
                         </div>
                     </div>

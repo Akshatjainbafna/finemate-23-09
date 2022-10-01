@@ -3,26 +3,33 @@ import Message from "../../components/messages/Message.js";
 import Header from "../../components/headerbar/HeaderTaskbar.js";
 import profile from "../../assets/profile.png";
 import Sidebar from "../..//components/sidebar/sidebar.component.js";
-import classes from "../../assets/classes.png";
-import scheduling from "../../assets/scheduling.png";
-import community from "../../assets/community.png";
-import mailbox from "../../assets/mailbox.png";
-import socialInitiatives from "../../assets/Welfare.png";
-import dashboard from "../../assets/dashboard.png";
+
+
+//sidebar icons
+import dashboard from "../../assets/home.png";
+import courses from "../../assets/courses.png";
+import library from "../../assets/library.png";
+import search from "../../assets/search 1.png";
+import attendance from "../../assets/attendance.png";
+import grades from "../../assets/grades.png";
+import forum from "../../assets/forum.png";
+import cart from "../../assets/cart.png";
+import fees from "../../assets/fees.png";
+import navigation from "../../assets/navigation.png";
 
 let headerItems = { link: "/profile", title: "Live Chat", profileImg: profile };
 
 let navItems = [
   { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
-  { id: 2, link: "/allcoursesUser", imgSrc: classes, title: "Courses"},
-  { id: 3,link: "/library",imgSrc: classes,title: "Library"},
-  { id: 4, link: "/search", imgSrc: classes, title: "Search"},
-  { id: 5, link: "/attendanceUser", imgSrc: classes, title: "Attendance"},
-  { id: 6, link: "/gradesUser", imgSrc: classes, title: "Grades"},
-  { id: 7, link: "/discussionList", imgSrc: community, title: "Community" },
-  { id: 8, link: "/marketplace", imgSrc: mailbox, title: "Marketplace" },
-  { id: 9, link: "/feesPayment", imgSrc: scheduling, title: "Fees Payment" },
-  { id: 10, link: "/a&t", imgSrc: classes, title: "Accomodation & Transportation" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3,link: "/library",imgSrc: library,title: "Library"},
+  { id: 4, link: "/search", imgSrc: search, title: "Search"},
+  { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
+  { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
+  { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
+  { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
+  { id: 10, link: "/a&t", imgSrc: navigation, title: "Accomodation & Transportation" },
 ];
 
 class MessagePage extends Component {

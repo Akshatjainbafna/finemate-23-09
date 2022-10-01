@@ -4,24 +4,13 @@
   background-color:#FCFCFB;
   border-color:#FCFCFB;
   font-family: "Open Sans";
-  box-shadow: none !important;
 }
+
 h1{
   font-size: 20px!important;
 }
 
-.classCardTitleStyle {
-  font-family: "Open Sans";
-    font-weight: 600 !important;
-    font-size: 20px !important;
-    text-align: left;
-    margin-top: 10px !important;
-    padding-left: 12px !important;
-    color: #7A7A7A;
-    border-bottom: 3px solid #A78EC3 !important;
-    border-left: 3px solid #A78EC3 !important;
-    border-radius: 20px 0 0 20px;
-}
+
 .textbox{
   float: left;
   margin-right: 20px;
@@ -105,19 +94,23 @@ h1{
   background: #fff;
 }
 .btnLearn{
-  position: absolute;
-  bottom: 0;
-  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .btnLearnMore{
-	border: none;
-	border-radius: 0px 10px 10px 10px ;
-  max-width: 100%;
-  margin-top: 40px;
-  margin-left: 500px;
-  color: #FCFCFB;
-  background-color: #A78EC3;
+	border:  1px solid #A78EC3;
+	border-radius: 5px;
+  color: #A78EC3;
+  background-color: white;
+  height: 5vh;
+  width: 8vw;
   font-size: small;
+  font-weight: bold;
+}
+
+.btnLearnMore:hover{
+  border-radius: 15px;
 }
 
 @media (min-width: 600px) {

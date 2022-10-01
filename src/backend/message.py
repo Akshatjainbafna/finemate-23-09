@@ -1,3 +1,4 @@
+from enum import unique
 import mongoengine as me
 import hashlib
 from flask import Flask, make_response, request, jsonify
@@ -50,7 +51,7 @@ class MessageObj():
         if (User.objects(username=self.content['username2']).count() <= 0):
             return make_response("Username2 does not exist.", 404)
 
-        self.Message(username1=self.content['username1'], username2=self.content['username2'], message=self.content['message'], time=datetime.now().strftime("%m/%d/%Y, %H:%M:%S")).save()
+        self.Message(username1=self.content['username1'], username2=self.content['username2'], message=self.content['message'], time=datetime.now().strftime("%Y/%m/%d, %H:%M:%S")).save()
         return make_response("", 200)
     
     def db_get_messages(self):
@@ -80,7 +81,7 @@ class MessageObj():
         for message in raw:
             messages.append(message.to_json())
 
-        if len(message) == 0:
+        if len(messages) == 0:
             return make_response("Messages between users does not exist", 404)
         else:
             messages = sorted(messages, key=lambda k: k['time'], reverse=False)
@@ -93,12 +94,16 @@ class MessageObj():
         
         messages = []
 
-        raw = self.Message.objects(username1=self.content['username']).all()
-        for message in raw:
-            messages.append(message.username2)
+        uniqueUsers=[self.content['username']]
 
-        raw = self.Message.objects(username2=self.content['username']).all()
-        for message in raw:
-            messages.append(message.username1)
+        raw = self.Message.objects(me.Q(username1=self.content['username']) | me.Q(username2=self.content['username'])).order_by('-time').all()
+        
+        for i in raw:
+            if len(messages)==10:
+                break
+            if i.username2 not in uniqueUsers or i.username1 not in uniqueUsers:
+                messages.append(i)
+                uniqueUsers.append(i.username1 if i.username2==self.content['username'] else i.username2)
+                print(i.to_json())
 
         return make_response(jsonify(messages), 200)

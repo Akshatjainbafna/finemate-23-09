@@ -2,29 +2,28 @@
     box-sizing: border-box;
     padding: 0 0 0 10px;
     margin: 0;
-    width: 80%;
-    height: 500px;
+    height: 69vh;
     overflow-y: scroll;
     border: none;
     border-color: white;
     background: white;
 }
 .message-box {
-    background-color: #FCFCFB;
-    margin-left: 450px;
-    margin-top: -20px;
-    margin-right: -20px;
+    background-image: url('image 49.png') !important;
+    background-size: cover;
     box-shadow: none;
 }
 .user1 {
     color: #A78EC3;
     text-decoration-color: #A78EC3;
     font-weight: bold;
+    font-size: small;
 }
 .user2 {
     color: #919699;
     text-decoration-color:#919699;
     font-weight: bold;
+    font-size: small;
 }
 .time {
     color: white;
@@ -48,15 +47,16 @@
     border-radius: 5px;
     padding: 10px;
     width: max-content;
-    margin-left: auto;
+
     
 }
-
+.message1:hover span{
+    color: white;
+}
 .message2 {
     color:#FCFCFB;
     background-color: #919699;
     border-radius: 5px;
     padding: 10px;
     width: max-content;
-    margin-left: 25px;
 }

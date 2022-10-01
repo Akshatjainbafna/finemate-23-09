@@ -12,10 +12,8 @@
     margin: 0 10px;
     margin-bottom: 20px;
   }
-  
-  /* On mouse-over, add a deeper shadow */
-  .card:hover {
-    box-shadow: 0 30px 16px 0 rgba(0,0,0,0.2) !important;
+  .courseCards:hover{
+    box-shadow: 0 30px 16px 0 rgba(0,0,0,0.2);
   }
   
   /* Add some padding inside the card container */

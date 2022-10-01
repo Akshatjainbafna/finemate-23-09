@@ -15,6 +15,7 @@ import AssignmentsImg from '../../assets/assignment.png';
 import TodoImg from '../../assets/todo.png';
 import LeaderboardImg from '../../assets/leaderboard.png';
 import CalenderLogImg from '../../assets/log list.png';
+import { Tooltip } from '@material-ui/core';
 
 let vals;
 
@@ -139,11 +140,11 @@ class DashboardCalendarComponent extends Component {
 			<>
 			<div className={styles.dashCard4Style}>
 				<div className={styles.windowHiddenHeader}>
-				<a href="#dashMenu1" className={styles.dashCardMenu} ><img src={CalenderImg} alt='not found' /> </a>
-				<a href="#dashMenu2" className={styles.dashCardMenu} ><img src={CalenderLogImg} alt='not found' /> </a>
-				<a href="#dashMenu3" className={styles.dashCardMenu} ><img src={AssignmentsImg} alt='not found'/> </a>
-				<a href="#dashMenu4" className={styles.dashCardMenu} ><img src={TodoImg} alt='not found'/> </a>
-				<a href="#dashMenu5" className={styles.dashCardMenu} ><img src={LeaderboardImg} alt='not found'/> </a>
+				<Tooltip title ="Calendar"><a href="#dashMenu1" className={styles.dashCardMenu} ><img src={CalenderImg} alt='not found' /> </a></Tooltip>
+				<Tooltip title ="Diary"><a href="#dashMenu2" className={styles.dashCardMenu} ><img src={CalenderLogImg} alt='not found' /> </a></Tooltip>
+				<Tooltip title ="Assignments"><a href="#dashMenu3" className={styles.dashCardMenu} ><img src={AssignmentsImg} alt='not found'/> </a></Tooltip>
+				<Tooltip title ="Todo List"><a href="#dashMenu4" className={styles.dashCardMenu} ><img src={TodoImg} alt='not found'/> </a></Tooltip>
+				<Tooltip title ="Leaderboard"><a href="#dashMenu5" className={styles.dashCardMenu} ><img src={LeaderboardImg} alt='not found'/> </a></Tooltip>
 				
 				</div>
 				            <div className={styles.windowHidden} id="dashMenu1">

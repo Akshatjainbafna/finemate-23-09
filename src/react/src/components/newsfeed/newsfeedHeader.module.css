@@ -1,48 +1,94 @@
+*{
+  box-sizing: border-box;
+}
 .newsfeedFeatures{
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
-    justify-content: space-between !important;
+    width: 100%;
     align-items: center;
+    margin: 2vh 0; 
   }
   .newsfeedFeatures > section{
-  
 }
+
+/* 1. Add icon*/
+.addPostIcon {
+    width: 6vw;
+    height: 6vw;
+    transition: ease-in-out transform 2s;
+    margin-right: 10px;
+  }
+.addPostIcon:hover{
+transform:rotateZ(360deg);
+}
+/* 2. stories*/
   .story{
+    box-sizing: border-box;
+    align-items: center;
+    max-width: 40vw;
+    width: 100%;  
+    border-right: 1px solid #dfd6e9;
+  }
+  .list{
+    list-style: none;
+    height: 6vw;
+    margin: 0;
+    align-items: center;
+  }
+  .list {
     display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    width: 30vw;
-    height: 12vh;
-
-    overflow: hidden;
+    overflow-x: scroll;
+  
+    /* prevent accidentally going back or triggering other swipe events */
+    overscroll-behavior: contain;
+  
+    /* hide scroll bar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  
+    /* momentum scroll on iOS */
+    -webkit-overflow-scrolling: touch;
+  
+    /* disbable vertical scroll for touch */
+    touch-action: pan-x;
   }
   
-  .story p{
-    color: wheat;
-    margin: 0;
+  /* hide scroll bar */
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+  .item{
+    flex-shrink: 0;
+    border-radius: 100%;
+    margin-right: 5px;
+    align-items: center;
+  }
+.item:first-child{
+  margin-left: -3vw;
+}
+.userStoryThumbnail{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+    align-items: center;
+}
+.imgThumbnail{
+  width: 4vw !important;
+  height: 4vw !important;
+  background-color: white;
+    border: 1px solid #dfd6e9;
+    border-radius: 100%;
+    box-shadow: 1px 2px 2px #919699;
     text-align: center;
-    line-height: 4vh;
-  }
-  .story p:nth-child(1){
-    background-color: #b798db;
+    align-items: center;
 }
-.story p:nth-child(2){
-    position: relative;
-    top: -10%;
-    background-color: #a77ed6;
+.circleName{
+  font-size: x-small;
+  color: grey;
 }
-.story p:nth-child(3){
-    position: relative;
-    top: -20%;
-    border-radius: 0 0 50px 50px;
-    background-color: #834bc4;
-}
-  .addPostIcon {
-    width: 12vh;
-  }
 
-  /*setting buttons*/
+  /* 3. setting buttons*/
 .newsfeedSettings{
     display: flex;
     flex-direction: column;
@@ -169,13 +215,14 @@
   .addPostForm{
     display: none;
     height: 30vw;
-    width: 48vw;
+    width: 34vw;
     position: fixed;
     background: white;
-    border: dashed #834bc4;
+    border: 2px solid #919699;
     border-radius: 50px;
     box-shadow: 4px 8px 8px 2px rgb( 0, 0, 0, 0.3);
-    z-index: 99;  
+    z-index: 999;  
+    margin-left: 9.2vw;
   }
   .addPostForm div{
     margin: 1vw;
@@ -211,4 +258,9 @@
   }
   .mediaUploadOptions a:hover{
     border-bottom: 2px solid #3442FB;
+  }
+  .closeButton{
+    border-radius: 100%;
+    border-color: grey;
+    color: grey;
   }

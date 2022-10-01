@@ -39,6 +39,7 @@ class ProfilePage extends Component {
   state = {
     educations: [],
     skills: [],
+    interests: [],
     completedCourses: [],
     languages: [],
     name: "",
@@ -47,7 +48,8 @@ class ProfilePage extends Component {
     firstName: "",
     lastName: "",
     email: "",
-    phoneNumber: ""
+    phoneNumber: "",
+    totalDaysJoined: ""
   };
   componentDidMount() {
     axios
@@ -55,14 +57,17 @@ class ProfilePage extends Component {
         username: localStorage.getItem("username")
       })
       .then(response => {
-        console.log(response);
+        console.log(response.data);
         this.setState({ educations: response.data["educations"] });
         this.setState({ skills: response.data["skills"] });
+        this.setState({ interests: response.data["interests"] });
         this.setState({ completedCourses: response.data["completed_courses"] });
         this.setState({ languages: response.data["languages"] });
         this.setState({ name: response.data["name"] });
+        this.setState({ username: response.data["username"] });
         this.setState({ description: response.data["description"] });
         this.setState({ timeJoin: response.data["time_join"] });
+        this.setState({ totalDaysJoined: response.data["total_days_joined"] }, ()=> console.log(this.state.totalDaysJoined));
         this.setState({ firstName: response.data["first_name"] });
         this.setState({ lastName: response.data["last_name"] });
         this.setState({ phoneNumber: response.data["phone_number"] });
@@ -96,15 +101,18 @@ class ProfilePage extends Component {
           <Profile
             educations={this.state.educations}
             skills={this.state.skills}
+            interests={this.state.interests}
             completedCourses={this.state.completedCourses}
             languages={this.state.languages}
             name={this.state.name}
             description={this.state.description}
             timeJoin={this.state.timeJoin}
+            totalDaysJoined={this.state.totalDaysJoined}
             firstName={this.state.firstName}
             lastName={this.state.lastName}
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
+            username={this.state.username}
           />
         </div>
       </React.Fragment>

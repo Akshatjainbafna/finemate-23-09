@@ -1,4 +1,5 @@
 
+import json
 import mongoengine as me
 from mongoengine.fields import ListField
 from mongoengine.fields import StringField
@@ -27,6 +28,7 @@ class ProfileObj():
 		completed_courses = me.ListField(StringField(), default=list)
 		skills = me.ListField(StringField(), default=list)
 		educations = me.ListField(StringField(), default=list)
+		interests = me.ListField(StringField(), default=list)
 		
 
 		def to_json(self):
@@ -45,7 +47,8 @@ class ProfileObj():
 				"languages": self.languages,
 				"completed_courses": self.completed_courses,
 				"skills": self.skills,
-				"educations": self.educations
+				"educations": self.educations,
+				"interests": self.interests
 			}
 
 	def __init__(self, content):
@@ -72,7 +75,7 @@ class ProfileObj():
 					first_name='N/A',
 					last_name='N/A',
 					name='N/A',
-					time_join=datetime.now().strftime("%m/%d/%Y, %H:%M:%S"),
+					time_join=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 					description='N/A').save()
 		return make_response("", 200)
 	
@@ -86,8 +89,17 @@ class ProfileObj():
 			return make_response("Missing required field: " + x, 400)
 
 		prof_obj = self.Profile.objects(username=self.content['username']).first()
+
+		joinedOn = prof_obj.time_join
+		print(type(joinedOn))
+		joinedOn=datetime.strptime(joinedOn, "%Y-%m-%d %H:%M:%S")
+		todayDate= datetime.now()
+		print(todayDate-joinedOn)
 		if prof_obj:
-			return make_response(jsonify(prof_obj.to_json()), 200)
+			prof_obj_to_dict=prof_obj.to_json()
+			if str(todayDate-joinedOn).find(",") != -1:
+				prof_obj_to_dict['total_days_joined']=(str(todayDate-joinedOn).split(","))[0]
+			return make_response(jsonify(prof_obj_to_dict), 200)
 		else:
 			return make_response("Username does not exist", 404)
 	

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import './profile.css'
 class ColourText extends Component {
     constructor(props) {
         super(props)
@@ -17,10 +17,10 @@ class ColourText extends Component {
         }
         // console.log(array)
         return(
-                <div>
+                <div className="listed_educations_list" >
                     {array.map(
                         (texts) => 
-                            <li>{texts.text}</li>
+                            <li className='colourTextListItems'>{texts.text}</li>
                     )}
                 </div>
             )

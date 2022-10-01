@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Logo from '../../assets/primaryNewLogoChoice1.png';
+import Logo from '../../assets/finemateLatestin Angelina fontLogo.png';
 import style from './sidebar.module.css';
 
 const NavItem = ({link, imgSrc, title}) => {

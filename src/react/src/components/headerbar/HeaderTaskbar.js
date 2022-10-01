@@ -81,7 +81,7 @@ class HeaderTaskbar extends Component {
                 <div className='icons d-flex flex-row'>
                     <form className='form-inline'>
                         <input className='form-control mr-sm-2 ' type='text' placeholder='Search'></input>
-                        <button className='searchIcon my-2 my-sm-0' type='submit'>
+                        <button className='searchIcon ' type='submit'>
                             <div className='searchImg'><img src={search}></img></div>
                         </button>
                     </form>

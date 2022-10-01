@@ -60,6 +60,18 @@ def db_store_interactions():
     print(request.json)
     return UserInteractions.store_interactions(request.json)
 
+#to update user interaction with the post on mcqResponse
+@app.route('/api/mcq_response', methods=['POST'])
+def db_mcq_response():
+    print(request.json)
+    return UserInteractions.mcq_response(request.json)
+
+#search a user
+@app.route('/api/db_search_user', methods=['POST'])
+def db_search_user():
+    print(request.json)
+    return UserObj(request.json).search_user()
+
 # creates a new user and posts it to the database when provided with a json text formatted as {user_type: user_type, username: username, password: password, email: email}
 @app.route('/api/db_create_user', methods=['POST'])
 def db_create_user():

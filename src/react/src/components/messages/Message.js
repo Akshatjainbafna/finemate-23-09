@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import MessageList from './MessageList.js'
 import SendMessage from './SendMessage.js'
-import './Message.css'
+import style from './Message.module.css'
+import profilePic from '../../assets/profilePic.png'
 
 class Message extends Component {
     constructor() {
@@ -32,8 +33,11 @@ class Message extends Component {
 
     render() {
         return (
-            <div>
-                <h1 className='targetUser'>{localStorage.getItem('targetUser')}</h1>
+            <>
+            {(() => {
+                if (localStorage.getItem('targetUser')){
+                return <div className={style.chatBox}>
+                <div className={style.chatHeader}><img className={style.profilePictureChatHeader} src={profilePic}/><span className={style.targetUser}>{localStorage.getItem('targetUser')}</span></div>
                 <MessageList
                     messages={this.state.messages}
                 />
@@ -41,6 +45,11 @@ class Message extends Component {
                     message={this.message}
                 />
             </div>
+            }else{
+                return null
+            }
+            })()}
+            </>
         )
     }
 

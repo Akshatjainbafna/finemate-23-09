@@ -26,6 +26,7 @@
     background-color:#FCFCFB;
     border-color:#FCFCFB;
     font-family: "Open Sans";
+    overflow: hidden;
 }
 .dashCard4Style:hover{
     box-shadow: none !important;
@@ -217,9 +218,7 @@
 }
 
 .dashCardMenu:hover img {
-    background: #ead8ff;
-    border: 2px solid #834bc4;
-    border-radius: 20px;
+    transform: scale(1.1);
   }
 
   /*14-07-22*/

@@ -20,11 +20,12 @@
     background-color: #fff;
     border-radius: 10px;
     border-style: none;
-    margin-left:-25px;
+    margin-left:-50px;
+    margin-top: -4px;
 }
 .searchImg{
     background-color: #fff;
-
+    width: 80%;
 }
 .headerIcons {
     background-color: #fff;
@@ -35,6 +36,10 @@
 .form-control {
     border: hsl(270, 38%, 59%);
     border-radius: 10px;
-    max-width: 100%;
+    width: 14vw !important;
     background-color: #F5F7FA;
+    margin-top: -4px;
+}
+.icons{
+    padding-top: 4px;
 }

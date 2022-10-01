@@ -1,60 +1,95 @@
+import axios from "axios";
 import React, { Component } from "react";
 import styled from "styled-components";
 import backgroundAbout from "../../assets/backgroundAbout.svg";
 import macPicture from "../../assets/macPicture.svg";
 import social from "../../assets/teacherInClassSittingDown.svg";
 import instructor from "../../assets/teacherInClassStandingUp.svg";
+import WhiteBoardPainPoints from '../../assets/whiteBoardPainPoints.png';
+import createMessage from '../../assets/createMessage.png'
 import "./about.css";
 
 class About extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      addedPainPoint: ""
+    }
+  }
+  addPainPointToDatabase(event){
+    event.preventDefault();
+    axios.post("http://127.0.0.1:8103/api/add_pain_point_to_database", {'painPoint' : this.state.addedPainPoint}).catch(err => console.log(err));
+  }
+
   render() {
     return (
       <Container>
-        <h3> About U-Impactify </h3>
+        <h3> About Finemate </h3>
         <Wrapper>
           <MacPic>
             <img className="macPicture" src={macPicture} alt="" />
           </MacPic>
           <Content>
-            <h3 className="title1">What is U-IMPACTIFY ?</h3>
-            <p>
-              U-Impactify is an online learning platform that supports hybrid
-              learning (online learning & offline meetups) model. We are helping
-              <br />
-              impact specialists to create their best learning modules around
-              social entrepreneurship and 21st-century skills. On the other
-              side, <br /> social ventures and intrapreneurs will be part of
-              this curated and gamified learning support group to grow and
-              thrive.
+            <h3 className="title1">What is Finemate?</h3>
+            <p className="introFinemate">
+            Finemate is a Mobile-friendly SaaS platform with services of a Learning management system, Social learning platform, Student management system, Content authoring tools, Access control system, Library management system, MarketPlace for students, etc and a <b>Retention Engine</b> on top of this. Retention Engine is Software System that will help you in cognition and long-term retention of anything and everything that you learn from various different sources online and offline. It helps you to deal with confusion and helps you in better cognition.
             </p>
-            <h3 className="title2">What are we aiming for?</h3>
-            <Pictures>
-              <Social>
+            <h3 className="title1">What are we aiming for?</h3>
+            
+            <div className="aimContainer">
+              <div className="aimSocial">
                 <img className="social" src={social} alt="" />
-                <h3 className="title1">Social Initatives</h3>
-                <h3 className="title2">(Non-Profits, Charities, CSRs etc.)</h3>
+                <h4> Students </h4>
                 <p>
-                  • Helps students to gain new skiills or
+                  • Helps students to learn better
                   <br />
-                  knowledge to apply in their <br />
-                  organization. <br /> <br /> • Builds a learning community to
+                  and retain better.
+                  <br /> 
+                   • Builds a learning community to
                   share <br />
                   expertise and experience.
                 </p>
-                <p className="secondPoint"></p>
-              </Social>
-              <Instructor>
+              </div>
+              <div className="aimInstitute">
                 <img className="instructor" src={instructor} alt="" />
-                <h3>Instructors</h3>
+                <h4>Institutes</h4>
                 <p>
-                  • Helps instructors to get more clients.
+                  • Improving the students performance 
                   <br />
-                  <br /> • Helps instructor to create and manage
+                  eventually benefiting Institutes.
+                  <br /> 
+                  • Providing a Technically Advance
                   <br />
-                  their courses.
+                  Student Management System.
                 </p>
-              </Instructor>
-            </Pictures>
+              </div>
+            </div>
+          <div className="painPoints">
+          <h3 className="title1">Few of the Pain Points that finemate is solving...</h3>
+          
+          <div className="blackBoardContainer">
+            <img src={WhiteBoardPainPoints} alt="" />
+            <p className="addedPainPoint">{this.state.addedPainPoint ? this.state.addedPainPoint : ""}</p>
+          </div>
+          <br />
+          <div class="addPainPoint">
+            <div>As a Student, Professional or Institute if you face any problem please</div>
+            <div className="d-flex">
+              <input type="text" class="form-control" id="inlineFormPainPointInput" onChange={(e) => {this.setState({addedPainPoint: e.target.value})}} placeholder="Add one..." maxLength="25" />
+              <button type="submit" className="border-0 bg-light"  onSubmit={(e)=> this.addPainPointToDatabase(e)}>
+                <img src={createMessage} alt="" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
           </Content>
         </Wrapper>
       </Container>
@@ -73,12 +108,15 @@ const Container = styled.div`
   align-items: center;
 
   h3 {
-    font-size: 46px;
+    font-size: 3.5em;
     font-weight: 700;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
     margin-top: 6rem;
     margin-bottom: 4rem;
+  }
+  .introFinemate{
+    width: 80%;
   }
 `;
 
@@ -98,7 +136,6 @@ const MacPic = styled.div`
   .macPicture {
     height: 45rem;
     margin-top: 0rem;
-    margin-bottom: 4rem;
   }
 `;
 
@@ -111,7 +148,8 @@ const Content = styled.div`
     font-weight: 600;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
-    font-size: 32px;
+    font-size: 2em;
+    margin-top: 8rem;
     margin-bottom: 4rem;
   }
   p {
@@ -120,87 +158,7 @@ const Content = styled.div`
     font-family: Open Sans;
     font-size: 22px;
   }
-  .title2 {
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.82);
-    font-family: Open Sans;
-    font-size: 32px;
-    margin-top: 9rem;
-    margin-bottom: 4rem;
-  }
 `;
 
-const Pictures = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 7rem;
-`;
-
-const Social = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 10rem;
-
-  img {
-    height: 20rem;
-    margin-top: 0rem;
-  }
-
-  .title1 {
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.82);
-    font-family: Open Sans;
-    font-size: 32px;
-    margin-top: 0rem;
-    margin-bottom: 0rem;
-  }
-
-  .title2 {
-    font-weight: normal;
-    color: #919699;
-    font-family: Open Sans;
-    font-size: 16px;
-    margin-top: 0rem;
-  }
-
-  p {
-    font-weight: normal;
-    color: #3e4345;
-    font-family: Open Sans;
-    font-size: 22px;
-    margin-top: 0rem;
-    margin-bottom: 11rem;
-  }
-`;
-
-const Instructor = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-left: 10rem;
-
-  img {
-    height: 20rem;
-  }
-
-  h3 {
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.82);
-    font-family: Open Sans;
-    font-size: 32px;
-    margin-top: 1rem;
-  }
-
-  p {
-    font-weight: normal;
-    color: #3e4345;
-    font-family: Open Sans;
-    font-size: 22px;
-    margin-top: 1rem;
-    margin-bottom: 27rem;
-  }
-`;
 
 export default About;

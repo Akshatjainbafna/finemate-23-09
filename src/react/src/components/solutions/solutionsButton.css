@@ -10,18 +10,30 @@
   font-weight: 400;
   border-radius: 10px;
   cursor: pointer;
-  height: 40px;
-  width: 170px;
-  font-size: 18px;
+  height: 2em;
+  width: 10vw;
+  font-size: 1.2em;
 }
 
 .solutions--btn--primary {
   background-color: var(--primary);
   color: var(--secondary);
+  border: none;
 }
 
 .solutions--btn--secondary {
   background-color: var(--secondary);
   color: var(--primary);
   border: 2px solid var(--primary);
+}
+@media screen and (max-width: 600px) {
+  .solutions--btn {
+    font-family: "Open Sans", sans-serif;
+    font-weight: 400;
+    border-radius: 10px;
+    cursor: pointer;
+    height: 2em;
+    width: 30vw;
+    font-size: 1em;
+  }
 }
