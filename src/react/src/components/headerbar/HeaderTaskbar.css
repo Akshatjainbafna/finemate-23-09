@@ -43,3 +43,16 @@
 .icons{
     padding-top: 4px;
 }
+
+@media screen and (max-width: 991px) {
+    .Navbar{
+        margin-left: 80px;
+    }
+    .headerTask{
+        height: 5vh;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    
+}

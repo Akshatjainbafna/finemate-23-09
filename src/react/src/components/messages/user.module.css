@@ -5,22 +5,22 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 23vw;
     border: 1px solid #ccc4d6d0;
-    max-width: 30vw;
+    min-width: 30vw;
     border-radius: 8px;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 .targetUser {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     background-color: #FCFCFB;
+    margin-top: 3vh;
 }
 .searchUser{
     display: inline-block;
-    width: 30vw;
-    height: 3.5vw;
+    height: 6vh;
     padding: 1vw;
 }
 .writeButton {
@@ -68,4 +68,13 @@
 }
 .userChatThumbnailTime{
     color: #ccc4d6d0;
+}
+
+@media screen and (max-width: 991px) {
+    .searchUser{
+        display: inline-block;
+        height: 6vh;
+        width: 80%;
+        padding: 1vw;
+    }
 }

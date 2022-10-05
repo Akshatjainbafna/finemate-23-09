@@ -8,16 +8,20 @@
     width: 100%;
     align-items: center;
     margin: 2vh 0; 
+   
+
   }
   .newsfeedFeatures > section{
 }
 
 /* 1. Add icon*/
 .addPostIcon {
-    width: 6vw;
-    height: 6vw;
+    width: 6vw !important;
+    height: 6vw !important;
     transition: ease-in-out transform 2s;
     margin-right: 10px;
+
+
   }
 .addPostIcon:hover{
 transform:rotateZ(360deg);
@@ -26,9 +30,9 @@ transform:rotateZ(360deg);
   .story{
     box-sizing: border-box;
     align-items: center;
-    max-width: 40vw;
-    width: 100%;  
+    width: 40vw;
     border-right: 1px solid #dfd6e9;
+   
   }
   .list{
     list-style: none;
@@ -80,8 +84,11 @@ transform:rotateZ(360deg);
     border: 1px solid #dfd6e9;
     border-radius: 100%;
     box-shadow: 1px 2px 2px #919699;
-    text-align: center;
-    align-items: center;
+    justify-content: center;
+}
+.imgThumbnail img{
+  border-radius: 100%;
+  height: inherit;
 }
 .circleName{
   font-size: x-small;
@@ -264,3 +271,16 @@ transform:rotateZ(360deg);
     border-color: grey;
     color: grey;
   }
+
+  @media screen and (max-width: 991px) {
+    .story{
+        width: 48vw !important;
+    }
+    .item:first-child{
+      margin-left: -6vw;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    
+}

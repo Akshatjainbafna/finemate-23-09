@@ -2,11 +2,11 @@ import axios from "axios";
 import React, { Component } from "react";
 import styled from "styled-components";
 import backgroundAbout from "../../assets/backgroundAbout.svg";
-import macPicture from "../../assets/macPicture.svg";
+import macPicture from "../../assets/desktopFinemate.png";
 import social from "../../assets/teacherInClassSittingDown.svg";
 import instructor from "../../assets/teacherInClassStandingUp.svg";
 import WhiteBoardPainPoints from '../../assets/whiteBoardPainPoints.png';
-import createMessage from '../../assets/createMessage.png'
+import createMessage from '../../assets/createMessage.png';
 import "./about.css";
 
 class About extends Component {
@@ -84,12 +84,6 @@ class About extends Component {
         </div>
         <br />
         <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
-        <br />
           </Content>
         </Wrapper>
       </Container>
@@ -103,6 +97,7 @@ const Container = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
+  margin: 5vw 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,7 +107,7 @@ const Container = styled.div`
     font-weight: 700;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
-    margin-top: 6rem;
+    margin-top: 4rem;
     margin-bottom: 4rem;
   }
   .introFinemate{

@@ -37,7 +37,6 @@ img {
 .containerDash {
     display: flex;
     margin-left: 22vw;
-
   }
 .leftHalf {
     padding: 0 1rem;
@@ -54,5 +53,28 @@ img {
     overflow-x: hidden !important;
   }
 
-  /*akshat on 16-07*/
+  /*akshat on 4-09*/
 
+  @media screen and (max-width: 991px) {
+    .containerDash{
+        margin-left: 80px !important;
+    }
+    .leftHalf {
+        padding: 0 1rem;
+        min-width: 60vw;
+      }
+      .rightHalf {
+        min-width: 28vw;
+        height: max-content;
+        display: flex;
+        flex-direction: column;
+        right: 0px;
+        background: none repeat scroll 0 0 white;
+        box-shadow: -2px 0px 11px -1px rgba(0,0,0,.3) !important;
+        overflow-x: hidden !important;
+      }
+}
+
+@media screen and (max-width: 600px) {
+    
+}

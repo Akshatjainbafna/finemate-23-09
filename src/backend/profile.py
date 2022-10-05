@@ -1,4 +1,5 @@
 
+from email.policy import default
 import json
 import mongoengine as me
 from mongoengine.fields import ListField
@@ -28,8 +29,10 @@ class ProfileObj():
 		completed_courses = me.ListField(StringField(), default=list)
 		skills = me.ListField(StringField(), default=list)
 		educations = me.ListField(StringField(), default=list)
+		lookingForwardToLearn = me.ListField(StringField(), default=[])
 		interests = me.ListField(StringField(), default=list)
-		
+		qualification=me.StringField()
+		coreStream=me.StringField()
 
 		def to_json(self):
 			"""
@@ -48,7 +51,9 @@ class ProfileObj():
 				"completed_courses": self.completed_courses,
 				"skills": self.skills,
 				"educations": self.educations,
-				"interests": self.interests
+				"interests": self.interests,
+				"lookingForwardToLearn": self.lookingForwardToLearn,
+
 			}
 
 	def __init__(self, content):
@@ -301,6 +306,23 @@ class ProfileObj():
 		prof_obj = self.Profile.objects(username=self.content['username']).first()
 		if prof_obj:
 			prof_obj.update(pull__educations=self.content['education'])
+			return make_response("", 200)
+		else:
+			return make_response("User does not exist.", 404)
+	
+	def db_add_education_from_questionaire(self):
+
+		x = checkFields(self.content, fields=['listOfPreviousEducation', 'username', "coreStream", "listOfLookingForwardToLearn", "qualification"])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+		
+		prof_obj = self.Profile.objects(username=self.content['username']).first()
+
+		if prof_obj:
+			prof_obj.update(set__qualification=self.content['qualification'])
+			prof_obj.update(set__coreStream=self.content['coreStream'])
+			prof_obj.update(push_all__educations=self.content['listOfPreviousEducation'])
+			prof_obj.update(push_all__lookingForwardToLearn=self.content['listOfLookingForwardToLearn'])
 			return make_response("", 200)
 		else:
 			return make_response("User does not exist.", 404)

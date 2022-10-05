@@ -93,7 +93,7 @@ class User extends Component {
                 <div className={style.recentChats}> {this.state.recentChatUsers.map((user, index) => 
                     <div className={style.userChatThumbnail} key={index} onClick={(e)=>{this.openChatBox(e, index)}}>
                         <div className={style.userChatThumbnailImage}>  <Avatar sx={{ bgcolor: deepOrange[200] }}> {user.username2==localStorage.getItem('username') ? user.username1[0] : user.username2[0] } </Avatar></div>
-                        <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2==localStorage.getItem('username') ? user.username1 : user.username2 }</div> <div className={style.lastMessage}>{user.message}</div>   </div>
+                        <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2==localStorage.getItem('username') ? user.username1 : user.username2 }</div> <div className={style.lastMessage}>{user.message.slice(0, 25)+"..."}</div>   </div>
                         <div className={style.userChatThumbnailTime}>    03:44</div>
                     </div>
                 )}  

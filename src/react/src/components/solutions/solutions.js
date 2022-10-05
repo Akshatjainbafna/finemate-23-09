@@ -99,6 +99,7 @@ export const Solution = () => {
         <img className="solutionsImage" src={require(`../../assets/${image}`)} alt="" />  
         </div>
       </User>
+      <br />
     </Container>
   );
 };
@@ -109,7 +110,7 @@ const Container = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
-  margin: 0 5vw;
+  margin: 0 5vw 5vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -156,7 +157,6 @@ const User = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 4vh;
-  margin-bottom: 12rem;
   .solutionsImageContainer{
     display: flex;
     justify-content: center;

@@ -32,18 +32,18 @@ class OutsideNavbar extends Component {
               </Link>
             </li>
             <li className="nav-item ml-5">
-              <Link to="/faq" className="nav-item nav-link custom-link">
-                Pricing
+              <Link to="/team" className="nav-item nav-link custom-link">
+                Team
               </Link>
             </li>
           </ul>
         </div>
-        <div className="ml-auto">
+        <div className="ml-auto buttonContainer">
           <Link to="/create">
-            <button className="btn btn-login m-3">SIGN UP</button>
+            <button className="btn btn-login m-3 nav-item">SIGN UP</button>
           </Link>
           <Link to="/login">
-            <button className="btn btn-login m-3">LOG IN</button>
+            <button className="btn btn-login m-3 nav-item">LOG IN</button>
           </Link>
         </div>
         </div>

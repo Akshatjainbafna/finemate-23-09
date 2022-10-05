@@ -1,0 +1,19 @@
+.teamPageContainer{
+    margin: 5vw;
+    border: 1px solid white;
+}
+.aboutTeam{
+    margin: 5vw;
+    font-family: 'Times New Roman', Times, serif;
+    min-height: 80vh;
+}
+.linksContainer{
+    display: flex;
+    justify-content: center;
+}
+  @media screen and (max-width: 600px) {
+    .linksContainer{
+        width: 95%;
+        margin: auto;
+    }
+  }

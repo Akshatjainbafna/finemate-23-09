@@ -2,6 +2,17 @@
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    height: 88vh;
-    margin-top: 2vh;
+    height: 90vh;
+    margin-left: 22vw;
+    padding: 2%;
+}
+
+@media screen and (max-width: 991px) {
+    .chatScreen{
+        margin-left: 80px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    
 }

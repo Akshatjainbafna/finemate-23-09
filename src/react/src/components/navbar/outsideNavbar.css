@@ -1,8 +1,6 @@
 .outsideNav {
 	background-color: #FCFCFB;
 	border-color: #FCFCFB;
-	border: 1px solid red;
-
 }
 
 .custom-logo {
@@ -50,7 +48,43 @@
 	flex-direction: column;
 }
 
-/* 29-09 */
-.yoyo{
-	color: #A78EC3;
+@media screen and (max-width: 600px) {
+	.buttonContainer{
+		display: flex;
+		flex-direction: column;
+	}
+	.btn-sign {
+		border: none;
+		background-color: white;
+		font-family: "Open Sans";
+		color: black;
+		font-family: 'Open Sans';
+		font-weight: 600;
+		border: 0.1px solid grey;
+	}
+	
+	.btn-login {
+		border: none;
+		background-color: white;
+		font-family: "Open Sans";
+		color: black;
+		font-family: 'Open Sans';
+		font-weight: 600;
+		border: 0.1px solid grey;
+	}
+	.custom-link {
+		color: black !important;
+		font-size: medium;
+		font-family: 'Open Sans';
+		font-weight: 600;
+		border-bottom: 0.1px solid grey;
+	}
+	.custom-link:hover {
+		color: black;
+		border-bottom: none;
+		font-weight: 600;
+	}
+	.navbar-collapse{
+		height: 80vh;
+	}
 }

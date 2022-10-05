@@ -11,6 +11,7 @@ import editButton from "../../assets/editButton.png";
 import "./profile.css";
 import ColourText from "./colourText.component.js";
 import axios from "axios";
+import { Add } from "@material-ui/icons";
 
 class Profile extends Component {
   constructor(props) {
@@ -83,7 +84,7 @@ class Profile extends Component {
                     type="submit"
                     onClick={() => {}}
                   >
-                    Connect
+                    Connect 
                   </button>
               </div>
               }

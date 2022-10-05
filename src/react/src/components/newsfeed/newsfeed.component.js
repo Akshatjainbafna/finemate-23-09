@@ -13,7 +13,7 @@ import axios from "axios";
 //All the material UI imports
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects} from '@material-ui/icons';
+import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
 import { FormControl, RadioGroup, Radio, Tooltip } from "@material-ui/core";
 
 
@@ -42,6 +42,9 @@ class NewsFeed extends Component{
         super(props);
         this.state={responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], likeState: [], lightState: [], saveState:[], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[],        isLiked:false, isSaved: false, isLighten: false};
         this.slider=this.silder.bind(this);
+        this.referenceToPostQuestion = React.createRef();
+        this.referenceToPostFact = React.createRef();
+        this.referenceToPostImage = React.createRef();
         //this.clickedLike=this.clickedLike.bind(this);
         //this.clickedSave=this.clickedSave.bind(this);
         //this.clickedLighten=this.clickedLighten.bind(this);
@@ -65,6 +68,24 @@ class NewsFeed extends Component{
         this.setState({isLighten: ! this.state.isLighten});
     }
     */
+
+    showBackgroundImage(index){
+        const currentPostQuestion = this.referenceToPostQuestion.current;
+
+        var factId="idFact"+String(index);
+        document.getElementById(factId).style.display="none";
+
+        document.getElementById(index).style.opacity=1;
+    }
+    hideBackgroundImage(index){
+        const currentPostQuestion = this.referenceToPostQuestion.current;
+
+        var factId="idFact"+String(index);
+        document.getElementById(factId).style.display="block";
+        
+        document.getElementById(index).style.opacity=0.12;
+    }
+
 
     postLiked(index){
         this.setState(update(this.state, {
@@ -157,6 +178,8 @@ class NewsFeed extends Component{
             // array of all the elements by the passed names as now a extra post is created as the user's answer is false this arrays will also be updated from the arrays that were found in componentDidMount() stage
             var allMenuListVisible = document.getElementsByName('menuListName');
             var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
+            var allFacts = document.getElementsByName('factName');
+
 
             console.log("incorrect MCQs", this.state.inCorrectMCQs, "correctMCQs", this.state.correctMCQs, allMenuListVisible, allMenuListVisible.length);
 
@@ -175,6 +198,10 @@ class NewsFeed extends Component{
             var idValueOfWindow="idPreviousNextWindow"+String(index);
             var PN_window_list= allPreviousNextWindow[currentlyNumberOfPostRendered-1];
             PN_window_list.id=idValueOfWindow;
+
+            let idValueOfFact = "idFact"+String(index);
+            let factList = allFacts[index];
+            factList.id= idValueOfFact;
         }
         );
 
@@ -194,6 +221,8 @@ class NewsFeed extends Component{
                 // array of all the elements by the passed names as now a extra post is created as the user's answer is false this arrays will also be updated from the arrays that were found in componentDidMount() stage
                 var allMenuListVisible = document.getElementsByName('menuListName');
                 var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
+                var allFacts = document.getElementsByName('factName');
+
 
                 console.log("incorrect MCQs", this.state.inCorrectMCQs, "correctMCQs", this.state.correctMCQs, allMenuListVisible);
 
@@ -214,7 +243,10 @@ class NewsFeed extends Component{
                 var idValueOfWindow="idPreviousNextWindow"+String(index);
                 var PN_window_list= allPreviousNextWindow[currentlyNumberOfPostRendered-1];
                 PN_window_list.id=idValueOfWindow;
-    
+
+                let idValueOfFact = "idFact"+String(index);
+                let factList = allFacts[index];
+                factList.id= idValueOfFact;
 
             });
         });
@@ -238,6 +270,8 @@ class NewsFeed extends Component{
                 //NodeList of all the elements with name 'menuListName' & 'previousNextWindowName'
                 var allMenuListVisible = document.getElementsByName('menuListName');
                 var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
+                var allFacts = document.getElementsByName('factName');
+
 
                 
                 //for loop to create some elemnts, attributes, updating array states manually
@@ -313,6 +347,9 @@ class NewsFeed extends Component{
                         let PN_window_list = allPreviousNextWindow[i];
                         PN_window_list.id = idValueOfWindow;
 
+                        let idValueOfFact = "idFact"+String(i);
+                        let factList = allFacts[i];
+                        factList.id= idValueOfFact;
 
                     }
 
@@ -349,7 +386,7 @@ render(){
         <div className={style.postTypeDecider} key={index}> 
         {(() =>{ if (responseData.points >=7 || this.state.inCorrectMCQs.includes(responseData._id.$oid)) {
                                
-                return <div className={style.postCardContainer} key={index}  onMouseLeave={() => hideMoreOptions(index)}>
+                return <div className={style.postCardContainer} key={index} onMouseLeave={() => hideMoreOptions(index)}>
                 {/* If the points for a particular post is equal to or greater than 7 then the post will be of PostCard type */}
                     
                     <form id="postInteraction">
@@ -396,10 +433,10 @@ render(){
 
                             </div>
 
-                            
-                            <span className={style.quesFactBlock}>
+                            {this.state.normalPost}
+                            <span className={style.quesFactBlock} ref={this.referenceToPostQuestion}>
                                 {responseData.question ? <p className={style.question}>{responseData.question}</p> : ""} 
-                                <p className={style.fact}>{responseData.fact.split('\n').map(function(item) {
+                                <p className={style.fact} name="factName" ref={this.referenceToPostFact}> {responseData.fact.split('\n').map(function(item) {
                                     return (
                                         <span>
                                             {item}
@@ -411,13 +448,29 @@ render(){
                             </span>
 
 
-                            <img id={index}  className={style.backgroundImage} />  
+                            <img id={index} ref={this.referenceToPostImage} className={style.backgroundImage} />  
 
-                            <span name="previousNextWindowName" className={style.previousNextWindow} onMouseOver={() => viewPreviousNextPostWindow(index)}><BsArrowLeft size={22} cursor={"pointer"}/>  <BsArrowRight size={22} cursor={"pointer"}/></span>     
+                            <span name="previousNextWindowName" className={style.previousNextWindow} onMouseOver={() => viewPreviousNextPostWindow(index)}><BsArrowLeft size={22} cursor={"pointer"}/>  <BsArrowRight size={22} cursor={"pointer"}/></span> 
+                            <Tooltip title="View Background" > 
+                                <FormControlLabel
+                                    className={style.viewImageIcon}
+                                    control={
+                                        
+                                    <Checkbox 
+                                        checked={false}
+                                        icon={ <FilterCenterFocusRounded /> } 
+                                        checkedIcon={ <FilterCenterFocusRounded /> }
+                                        name="viewBackground" 
+                                        onMouseDownCapture={() => this.showBackgroundImage(index)} onMouseUpCapture={()=> this.hideBackgroundImage(index)}
+                                    />
+                                    }
+                                /> 
+                            </Tooltip>
                         </div>
 
 
                         <div className={style.postFooter} onMouseLeave={() => hidePreviousNextPostWindow(index)}>
+                            <div className={style.leftSectionFooter}>
                             <span>
                             <Tooltip title="Nice Explaination"> 
                                 <FormControlLabel
@@ -469,9 +522,11 @@ render(){
                                 />
                             </Tooltip>
                             </span>
+                            </div>
 
-
+                            <div className={style.rightSectionFooter}>
                             <span className={style.viewPreviousNextPost} onMouseOver={() => viewPreviousNextPostWindow(index)} ><SwapHorizOutlined style={{ fontSize: 30 }}/></span>
+                            </div>
                         </div>
                         
                     </form>

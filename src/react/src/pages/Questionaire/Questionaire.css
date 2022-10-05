@@ -3,9 +3,11 @@
     flex-direction: row;
     height: 100%;
     background-color: #FCFCFB;
-    padding-left: 360px;
+    margin-left: 22vw !important;
 }
-
+.questionairePage{
+    margin: 2vh 4vw;
+}
 .button {
     background-color: #FCFCFB;
     color: none;
@@ -20,8 +22,9 @@
     margin-top: 20px;
 }
  .image {
-     position: absolute;
-     right:16px;
+    position: absolute;
+    right:16px;
+    opacity: 0.5;
  }
 .note{
     font-size: large;
@@ -64,4 +67,16 @@ input[type=checkbox] {
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+}
+
+.newlyAddedSubject{
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin: 2px;
+    padding: 2px;
+}
+.addSubjectButtonQuestionaire{
+    border: 2px solid grey;
+    border-radius: 100px;
+    color: grey;
 }

@@ -17,7 +17,7 @@ import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
 
 
-let headerItems = { link: "/profile", title: "Live Chat", profileImg: profile };
+let headerItems = { link: "/profile", title: "Grade Chart", profileImg: profile };
 
 let navItems = [
   { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
@@ -29,7 +29,6 @@ let navItems = [
   { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
   { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
   { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
-  { id: 10, link: "/a&t", imgSrc: navigation, title: "Accomodation & Transportation" },
 ];
 
 

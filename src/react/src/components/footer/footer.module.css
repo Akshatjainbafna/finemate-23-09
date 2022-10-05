@@ -1,0 +1,19 @@
+.footer{
+    background-image: linear-gradient(#cac6cf, #ebe5f3);
+    padding: 10vh 0;
+    text-align: center;
+    position: relative;
+}
+.socialLinks a{
+    color: rgb(100, 100, 100);
+    text-decoration: none;
+}
+.socialLinks a:hover{
+    color: #834bc4;
+}
+.License{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    font-size: small;
+}

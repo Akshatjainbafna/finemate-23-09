@@ -2,3 +2,12 @@
     background-color: #FCFCFB;
     margin-left: 22vw !important;
 }
+@media screen and (max-width: 991px) {
+    .profileBox{
+        margin-left: 80px !important;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    
+}

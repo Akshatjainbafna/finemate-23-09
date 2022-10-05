@@ -13,13 +13,13 @@
 }
 .sideBar {
     display: flex;
-    position: absolute;
-    margin-left: 0px;
     flex-direction: column;
+    position: fixed;
+    margin-left: 0px;
     top: 0px;
     left: 0px;
     width: 22vw;
-    height: 110vh !important;
+    height: 100vh !important;
     background-color: white;
     color: white;
     font-family: "Open Sans";
@@ -40,7 +40,7 @@
 .sideBar ul a li.active {
     background: #A78EC3;
     margin-left: 0;
-    padding-left: 30px;
+    padding-left: 40px;
     text-decoration: none;
 }
 .sideBar ul a li.active span{
@@ -50,14 +50,17 @@
     margin-left: 20px;
     margin-right: 12px;
 }
-.sideBar ul a li {
-    margin: 10px;
-    padding: 10px 10px 10px 0px;
-    margin-top: 10px;
-    border-radius: 0px 15px 15px 0px;
+.sideBar ul a li{
+    color: white;
+    text-decoration: none;
     list-style-type: none;
     list-style-position: outside;
-    text-decoration: none;
+    text-align: left;
+    margin-left: 30px;
+    margin-right: 12px;
+    margin-top: 10px;
+    border-radius: 0px 15px 15px 0px;
+    padding: 10px 10px 10px 0px;
 }
 
 .sideBar ul a li span{
@@ -76,10 +79,9 @@
     box-shadow: 0 20px 20px -2px rgba(0,0,0,.2);
     color:white;
     margin-left: 0;
-    padding-left: 30px;
+    padding-left: 40px;
     text-decoration: none;
 }
-
 
 .sideBar ul a li:hover span {
     color: inherit;
@@ -89,10 +91,63 @@
     text-decoration: none;
 }
 
-.sideBar ul a li{
-    color: white;
-    text-decoration: none;
-    text-align: left;
-    margin-left: 20px;
-    margin-right: 12px;
+
+
+
+/* for tablet screens */
+@media screen and (max-width: 991px) {
+    .sideBar{
+        width: 80px;
+    }
+    .sideBar ul a li span{
+        display: none;
+    }
+    .sideBar ul a li.active {
+        background: white;
+        margin: auto;
+        text-decoration: none;
+        padding: 10px 10px 10px 20px;
+        margin-left: 0;
+        border-left: 5px solid#A78EC3;
+    }
+
+    .sideBar ul a li {
+        border-radius: 0;
+        list-style-type: none;
+        text-decoration: none;
+    }
+
+    
+    .sideBar ul a:hover:not(.active) li{
+        border-left: 5px solid#A78EC3;
+        background-color: white;
+        box-shadow: none;
+        color:white;
+        text-decoration: none;
+        padding: 10px 10px 10px 20px;
+    }
+
+    .logoContainer{
+        margin: 2vh 0;
+    }
+    .sideBar ul a li{
+        width: fit-content;
+        color: white;
+        text-decoration: none;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        padding: 10px;
+        margin: 2vh auto;
+    }
+    
+}
+
+
+
+/* for mobile screens */
+@media screen and (max-width: 600px) {
+
+    
+    
 }

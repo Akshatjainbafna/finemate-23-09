@@ -11,7 +11,7 @@ import NewsfeedHeader from "../../components/newsfeed/newsfeedHeader.component.j
 import profile from "../../assets/profile.png";
 import { Redirect } from "react-router-dom";
 
-
+//sidebar images
 import dashboard from "../../assets/home.png";
 import courses from "../../assets/courses.png";
 import fees from "../../assets/fees.png";
@@ -30,7 +30,15 @@ import NewsFeed from "../../components/newsfeed/newsfeed.component";
 
 let headerItems = { link: "/profile", title: "Home", profileImg: profile };
 
-let navItems = [
+let navItemsForNormalUser = [
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3, link: "/search", imgSrc: search, title: "Search"},
+  { id: 4, link: "/discussionList", imgSrc: forum, title: "Community" },
+  { id: 5, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+];
+
+let navItemsForStudent = [
   { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
   { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
   { id: 3,link: "/library",imgSrc: library,title: "Library"},
@@ -40,18 +48,29 @@ let navItems = [
   { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
   { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
   { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
-  { id: 10, link: "/a&t", imgSrc: navigation, title: "Accomodation & Transportation" },
 ];
+
+let navItemsForInstructorInstitute=[
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3,link: "/library",imgSrc: library,title: "Library"},
+  { id: 4, link: "/search", imgSrc: search, title: "Search"},
+  { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
+  { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
+  { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
+  { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 9, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+]
 
 class DashPage extends Component {
   render() {
     if (!localStorage.getItem("token")) {
       return <Redirect to="/login" />;
     }
-    if (localStorage.getItem("usertype") == "student") {
+    if(localStorage.getItem("usertype")=="normal"){
       return (
         <React.Fragment>
-          <Sidebar books={navItems} />
+          <Sidebar books={navItemsForNormalUser} />
           <Headerbar icons={headerItems} />
           <section className={style.containerDash}>
 
@@ -67,12 +86,37 @@ class DashPage extends Component {
                 <div>
                   <DashboardCalendarComponent />
                 </div>
-                {/*<div class="">
+                <div class="">
                   <InstructorClasses />
                 </div>
+            </div>
+
+          </section>
+        </React.Fragment>
+      );
+    }
+    if (localStorage.getItem("usertype") == "student") {
+      return (
+        <React.Fragment>
+          <Sidebar books={navItemsForStudent} />
+          <Headerbar icons={headerItems} />
+          <section className={style.containerDash}>
+
+            <div className={style.leftHalf}>
+              <NewsfeedHeader/>
+              <NewsFeed/>
+            </div>
+
+            <div className={style.rightHalf}>
                 <div>
-                  <Events />
-      </div>*/}
+                  <News />
+                </div>
+                <div>
+                  <DashboardCalendarComponent />
+                </div>
+                <div class="">
+                  <InstructorClasses />
+                </div>
             </div>
 
           </section>
@@ -80,10 +124,10 @@ class DashPage extends Component {
       );
     }
 
-    if (localStorage.getItem("usertype") == "instructor" || "initiatives") {
+    if (localStorage.getItem("usertype") == "instructor" || "institute") {
       return (
         <React.Fragment>
-          <Sidebar books={navItems} />
+          <Sidebar books={navItemsForInstructorInstitute} />
           <Headerbar icons={headerItems} />
           <section className={style.containerDash}>
 
@@ -101,9 +145,6 @@ class DashPage extends Component {
                 </div>
                 <div class="">
                   <InstructorClasses />
-                </div>
-                <div>
-                  <Events />
                 </div>
             </div>
           </section>

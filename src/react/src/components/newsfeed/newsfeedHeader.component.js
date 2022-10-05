@@ -6,6 +6,20 @@ import axios from "axios";
 import { BsBorderMiddle, BsCaretLeftFill, BsCaretRightFill, BsChevronLeft, BsDot, BsSlash, BsTypeItalic, BsXCircleFill, BsXLg } from "react-icons/bs";
 import { Tooltip } from "@material-ui/core";
 
+import Badminton from "../../assets/sampleImages/badminton.jpeg";
+import Coders from "../../assets/sampleImages/coders.jpeg";
+import Coaching from "../../assets/sampleImages/coaching.jpeg";
+import Shadi from "../../assets/sampleImages/shadi.jpeg";
+import Cousins from "../../assets/sampleImages/cousins.jpeg";
+import Project from "../../assets/sampleImages/project.jpeg";
+import School from "../../assets/sampleImages/school.jpeg";
+import College from "../../assets/sampleImages/coll.jpeg";
+import Multi from "../../assets/sampleImages/coll.jpeg";
+import Indore from "../../assets/sampleImages/indore.jpeg";
+
+
+
+
 function getBase64(file) {
     var reader = new FileReader();
     reader.readAsDataURL(file);
@@ -32,7 +46,7 @@ class NewsfeedHeader extends Component{
             mcq1opt1: '',
             mcq1opt2: '',
             mcq1opt3: '',
-            mcq1opt4: ''            
+            mcq1opt4: '',                       
         };
         this.submit=this.submit.bind(this);
         this.handleChange=this.handleChange.bind(this);
@@ -103,9 +117,20 @@ class NewsfeedHeader extends Component{
 
                <Tooltip title="Add Post"><section className={style.addPostIcon} onClick={this.abc}><img src={addPost}></img></section></Tooltip>
 
-               <Tooltip title="Scroll horizontally"><section className={style.story}><ul className={style.list}>{ ["Badminton", "School Friends", "College Friends", "Walter Coaching", "Indore", "Shadi", "Cousins", "Project", "Coders", "Multi"].map((item, index) => {
-                   return <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> {item.charAt(0)} </div>   <div className={style.circleName}>{item.slice(0,7)}</div> </div> </li>
-                } )} </ul> </section></Tooltip>
+               <Tooltip title="Scroll horizontally"><section className={style.story}><ul className={style.list}>
+                
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Badminton}/> </div>   <div className={style.circleName}>Badmint</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Shadi}/> </div>   <div className={style.circleName}>Shadi</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={College}/> </div>   <div className={style.circleName}> College </div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={School}/> </div>   <div className={style.circleName}> School </div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Indore}/> </div>   <div className={style.circleName}>Indore</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Coaching}/> </div>   <div className={style.circleName}>Coaching</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Project}/> </div>   <div className={style.circleName}>Project</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Multi}/> </div>   <div className={style.circleName}>Project</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Cousins}/> </div>   <div className={style.circleName}>Cousins</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Coders}/> </div>   <div className={style.circleName}>Coders</div> </div> </li>
+
+                 </ul> </section></Tooltip>
 
 
 {/*  Toggle Buttons for Post Categories and MCQ-Post toggling

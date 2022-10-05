@@ -59,6 +59,7 @@ import AllEventsList from "./components/events/eventlist";
 import Questionaire from "./pages/Questionaire/Questionaire.js";
 import AboutPage from "./pages/about/aboutPage.js";
 import SolutionsPage from "./pages/solutions/solutionsPage.js";
+import TeamPage from "./pages/team/Team.js"
 import HomePage from "./pages/home/homePage.js"
 
 
@@ -220,6 +221,10 @@ ReactDOM.render(
       {/* solutions*/}
       <Route exact path="/solutions">
         <SolutionsPage />
+      </Route>
+      {/* team */}
+      <Route exact path="/team">
+        <TeamPage />
       </Route>
 
       {/* side bar (not in use coz all the sidebars and props are maniually given on all the pages)*/}

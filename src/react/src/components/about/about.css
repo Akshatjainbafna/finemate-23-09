@@ -63,6 +63,16 @@
     .aimSocial, .aimInstitute{
       width: 80%;
     }
+    .addPainPoint{
+      display: flex;
+      flex-direction: column;
+    }
+    .addPainPoint > div{
+      margin-bottom: 2vh;
+    }
+    .addPainPoint input{
+      width : 75vw !important;
+    }
     .addedPainPoint{
       position: absolute;
       left: 4vw ;

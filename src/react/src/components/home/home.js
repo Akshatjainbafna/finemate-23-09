@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import styled from "styled-components";
+import "./home.css";
+import { Link } from "react-router-dom";
+
+//images
 import backgroundHome from "../../assets/backgroundHome.svg";
-import macPicture2 from "../../assets/macPicture2.png";
+import macPicture2 from "../../assets/homePage3DesktopFinemate.png";
 import RetentionImage from "../../assets/retentionBrainImage.png";
 import SocialLearningPlatform from "../../assets/socialLearningImage.png";
 import StudentManagementSystem from "../../assets/studentManagementSystemImage.png";
@@ -11,17 +15,11 @@ import WhatsForProfessionals from "../../assets/Whats for Professionals.png";
 import WhatsForCanteenOwners from "../../assets/Whats for Canteen Owners.png";
 import WhatsForInvestors from "../../assets/Whats for Investors.png";
 import FinemateMemeRepresentation from "../../assets/Finemate Meme representation.png";
+import AllDeviceSizes from '../../assets/allDeviceSizes.png';
+import FinemateOnDesktop from '../../assets/finemateScreenForDesktop.png';
+import FinemateOnTablet from '../../assets/finemateScreenForTablet.png';
+import FinemateOnMobile from '../../assets/finemateScreenForMobile.png';
 
-import whoWeServe from "../../assets/whoWeServe.svg";
-import testimonials from "../../assets/testimonials.svg";
-import whyBG1 from "../../assets/Mask groupwhyBGSmall Size1.png";
-import whyBG2 from "../../assets/Mask groupwhyBGSmall Size2.png";
-import whyBG3 from "../../assets/Mask groupwhyBGSmall Size3.png";
-import WhiteBoard from '../../assets/whiteBoardPng.png';
-
-import "./home.css";
-import { Link } from "react-router-dom";
-import back from '../../assets/Screenshot_2022-09-30-01-17-24-834_com.png';
 
 class Home extends Component {
   render() {
@@ -160,7 +158,36 @@ class Home extends Component {
 			<br />
 			<br />
 			<br />
-
+			
+			<Content>
+				<h2 className="whyHeader">Where can you access Finemate?</h2>
+				<p>Finemate, On every Device</p>
+				<img src={AllDeviceSizes} />
+				<p>So you can use it...</p>
+				<br />
+				<br />
+				<br />
+				<br />
+				<div className="whyContainer" >
+					<div>
+						<img src={FinemateOnDesktop} />
+					</div>
+					<br />
+				<br />
+					<div>
+						<img src={FinemateOnTablet} />
+					</div>
+					<br />
+				<br />
+					<div>
+						<img src={FinemateOnMobile} />
+					</div>
+				</div>
+			</Content>
+			<br />
+				<br />
+				<br />
+				<br />
 			<h2 className="whyHeader">A Quick Recape!</h2>
 			<br />
 			<div className="homepageMemeContainer"><img src={FinemateMemeRepresentation} alt="FinemateMemeRepresentation" /></div>
@@ -184,7 +211,6 @@ class Home extends Component {
 						</div>
 						<br/>
 						<br/>
-    
       </Container>
     );
   }
@@ -268,6 +294,8 @@ const MacPic = styled.div`
 const Content = styled.div`
 height: 100%;
   width: 100%;
+  align-items: center;
+  text-align: center;
   .whyContainer{
 	display: flex;
   flex-direction: row;

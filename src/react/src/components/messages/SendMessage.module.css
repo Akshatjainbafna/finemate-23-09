@@ -3,7 +3,7 @@
     margin-top: 15px;
  }
 .formInlineMessage .formControlMessage {
-    width: 85% !important;
+    width: 85%;
     border: 2px solid rgb(180, 180, 180);
     height: 7vh;
     padding: 2vh;
@@ -11,4 +11,12 @@
 .writeButton{
     background-color: white;
     border: none;
+}
+@media screen and (max-width: 991px) {
+    .formInlineMessage .formControlMessage {
+        width: 80%;
+        border: 2px solid rgb(180, 180, 180);
+        height: 6vh;
+        padding: 1.5vh;
+    }
 }

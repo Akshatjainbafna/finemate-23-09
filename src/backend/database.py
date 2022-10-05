@@ -48,6 +48,12 @@ def db_create_post():
     filenameOfImage=secure_filename(image.filename)
     return PostObj(formData).create_a_post(image, filenameOfImage)
 
+#setup educations and qualifications from questionaire
+@app.route('/api/add_education_from_questionaire', methods=['POST'])
+def db_add_education_from_questionaire():
+    print(request.json)
+    return ProfileObj(request.json).db_add_education_from_questionaire()
+
 #takes the post of the subjects which student has added from database to the newsfeed.component.js
 @app.route('/api/display_posts', methods=['POST'])
 def db_display_posts_on_newsfeed():

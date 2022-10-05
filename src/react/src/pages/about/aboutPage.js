@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import About from "../../components/about/about.js";
 import styled from "styled-components";
 import OutsideNavbar from "../../components/navbar/outsideNavbar.js";
+import Footer from "../../components/footer/Footer.component.js";
 
 class AboutPage extends Component {
   render() {
@@ -9,6 +10,7 @@ class AboutPage extends Component {
       <Container>
         <OutsideNavbar />
         <About />
+        <Footer />
       </Container>
     );
   }

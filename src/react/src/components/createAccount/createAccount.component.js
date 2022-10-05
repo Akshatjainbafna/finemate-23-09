@@ -54,32 +54,35 @@ class createAccount extends Component {
 	<Card.Body>
 		<Card.Title className="cardTitleStyle">Create an Account</Card.Title>
 		<form class="flex-column" onSubmit = {this.submit}>
-			<div class="form-group pt-0 pl-2 pr-2">
+			<div class="form-group">
 				<label for="inputEmail" class="text-dark font-weight-bold">Email</label>
-				<input type="text" class="form-control" name='email' value={this.state.email} placeholder="email" onChange={this.handleChange} aria-describedby="emailHelp" />
+				<input type="email" class="form-control" name='email' value={this.state.email} placeholder="email" onChange={this.handleChange} aria-describedby="emailHelp" />
 			</div>
-			<div class="form-group pt-0 pl-2 pr-2">
+			<div class="form-group">
 				<label for="inputUsername" class="text-dark font-weight-bold">Username</label>
-				<input type="text" class="form-control" name='username' value={this.state.username} placeholder="username" onChange={this.handleChange} aria-describedby="usernameHelp" />
+				<input type="text" class="form-control" name='username' value={this.state.username} pattern="^[A-Za-z][A-Za-z0-9_]{7,29}$" placeholder="username" onChange={this.handleChange} aria-describedby="usernameHelp" />
 			</div>
-			<div class="form-group pt-0 pl-2 pr-2">
+			<div class="form-group">
 				<label for="inputPassword" class="text-dark font-weight-bold">Password</label>
-				<input type="password" class="form-control" name='password' value={this.state.password} onChange={this.handleChange} placeholder="password" aria-describedby="passwordHelp"/>
+				<input type="password" class="form-control" name='password' value={this.state.password} pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$" onChange={this.handleChange} placeholder="password" aria-describedby="passwordHelp"/>
 			</div>
 			<form class="flex-row" onSubmit = {this.submit}>
-				<div class="form-group pt-0 pl-2 pr-2">
+				<div class="form-group">
 					<label class="text-dark font-weight-bold">Are you joining as a Student or Instructor?</label>
 					<small class="form-text text-muted">Please select your answer below.</small>
 				</div>
 				<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-					<div class="btn-group mr-2 pt-0 pl-2 pr-2" id="userStudent">
+					<div class="btn-group mr-2" id="userNormal">
+						<button type="button" class="btn btn-outline-secondary" name='user_type' value={'normal'} onClick={this.onclick} >Normal</button>
+					</div>
+					<div class="btn-group mr-2" id="userStudent">
 						<button type="button" class="btn btn-outline-secondary" name='user_type' value={'student'} onClick={this.onclick} >Student</button>
 					</div>
-					<div class="btn-group mr-2 pt-0 pl-2 pr-2" id="userInstructor">
+					<div class="btn-group mr-2" id="userInstructor">
 					<button type="button" class="btn btn-outline-secondary" name='user_type' value={'instructor'} onClick={this.onclick} >Instructor</button>
 					</div>
-					<div class="btn-group mr-2 pt-0 pl-2 pr-2" id="userSocial">
-					<button type="button" class="btn btn-outline-secondary" name='user_type' value={'initiatives'} onClick={this.onclick} >Initiatives</button>
+					<div class="btn-group mr-2" id="userInstitute">
+					<button type="button" class="btn btn-outline-secondary" name='user_type' value={'institute'} onClick={this.onclick} >Institute</button>
 					</div>
 					<div class="form-group pt-2 pl-2 pr-2">
 						<small class="form-text text-muted">*By sharing your email, you agree to our Offer Terms, Terms of Service, and Privacy Policy.</small>

@@ -17,7 +17,7 @@ import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
 
 
-let headerItems = { link: "/profile", title: "Live Chat", profileImg: profile };
+let headerItems = { link: "/profile", title: "Accomodation & Transportation", profileImg: profile };
 
 let navItems = [
   { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },

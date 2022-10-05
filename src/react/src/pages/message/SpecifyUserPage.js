@@ -32,7 +32,6 @@ let navItems = [
   { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
   { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
   { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
-  { id: 10, link: "/a&t", imgSrc: navigation, title: "Accomodation & Transportation" },
 ];
 
 class SpecifyUserPage extends Component {
