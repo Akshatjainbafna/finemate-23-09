@@ -3,6 +3,7 @@
     flex-direction: row;
     padding: 2%;
     height: 90vh;
+    flex-wrap: wrap;
 }
 
 .edu {
@@ -122,10 +123,13 @@
 .top {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .bottom {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+
 }
 .pic_and_account_top {
     display: flex;
@@ -339,7 +343,7 @@
 }
 .edit_button_profile{
     margin: 0.5vh;
-    width: 15vw;
+    min-width: 15vw;
     height: 5vh;
     font-size: small;
     font-weight: 700;
@@ -354,4 +358,12 @@
     color: white;
     background-color: #471381;
     border-color: #471381;
+}
+
+@media screen and (max-width: 600px) {
+    .main{
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
 }

@@ -61,6 +61,9 @@ import AboutPage from "./pages/about/aboutPage.js";
 import SolutionsPage from "./pages/solutions/solutionsPage.js";
 import TeamPage from "./pages/team/Team.js"
 import HomePage from "./pages/home/homePage.js"
+import ContentAuthoringToolComponentWindow from "./components/newsfeed/contentAuthoringTool.component";
+import NotificationPage from "./pages/notifications/Notifications";
+import DiscussionCommunitiesPage from "./pages/discussion/discussionCommunities";
 
 
 window.token = localStorage.getItem("token");
@@ -98,6 +101,9 @@ ReactDOM.render(
       <Route exact path="/profile">
         <ProfilePage />
       </Route>
+      <Route exact path="/allnotifications">
+        <NotificationPage />
+      </Route>
       {/* login page*/}
       <Route exact path="/login">
         <LogInPage />
@@ -107,6 +113,9 @@ ReactDOM.render(
         <Logout />
       </Route>
 
+      <Route exact path="/createpost">
+        <ContentAuthoringToolComponentWindow />
+      </Route>
 
     {/* Home Screen Starts Here*/}
       {/*Profile update questionaire*/}
@@ -137,10 +146,11 @@ ReactDOM.render(
       <Route exact path="/gradesUser">
         <GradesManagementSystem />
       </Route>
-      {/* discussionList*/}
-      <Route exact path="/discussionList">
-        <DiscussionListPage />
+      <Route exact path="/communities">
+        <DiscussionCommunitiesPage />
       </Route>
+      {/* discussionList*/}
+      <Route exact path="/discussionList/:community" component = {DiscussionListPage}></Route>
       { /* discussionDetail*/}
       <Route exact path="/discussionDetail/:handle" component = {DiscussionDetailPage}></Route>
       {/* marketplace */}

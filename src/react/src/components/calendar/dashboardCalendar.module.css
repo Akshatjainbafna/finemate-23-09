@@ -12,12 +12,13 @@
       border-bottom: 2px solid #834bc4;
       border-radius: 10px 0 0 10px;
   }*/
-  .react-calendar {
+  .reactCalendar {
 	font-family: "Open Sans" !important;
 	overflow: hidden;
     margin: 0px !important;
     border-radius: 20px;
     height: 22vw;
+    border: none;
 }
 .dashCard4Style {
     display: flex;
@@ -213,8 +214,8 @@
 
 /*akshat changes*/
 .dashCardMenu img{
-    width: 50px;
-    height: 50px;
+    width: 45px;
+    height: 45px;
 }
 
 .dashCardMenu:hover img {
@@ -230,7 +231,8 @@
     height: 22vw !important;
     margin: 10px;
     background: #fff;
-    border: 2px dashed #834bc4 !important;
+    border: 1px solid #a8dada !important;
+    box-shadow: 0px 2px 4px #badada;
     border-radius: 20px;
   }
 .windowHidden:target{

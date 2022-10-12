@@ -40,12 +40,12 @@ def too_large(e):
 @app.route('/api/db_create_post', methods=['POST'])
 def db_create_post():
     image=request.files['background']
-    fh =open(f"../react/src/assets/postBackgroundImages/{image.filename}", "wb")
+    filenameOfImage=secure_filename(image.filename)
+    fh =open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
     fh.write(image.read())
     fh.close()
     formData=request.form
     print(formData)
-    filenameOfImage=secure_filename(image.filename)
     return PostObj(formData).create_a_post(image, filenameOfImage)
 
 #setup educations and qualifications from questionaire
@@ -59,6 +59,12 @@ def db_add_education_from_questionaire():
 def db_display_posts_on_newsfeed():
     print(request.json)
     return UserInteractions.designing_newsfeed(request.json)
+
+#designing newsfeed when load more btn is pressed, sending posts which aren't already on the newsfeed
+@app.route('/api/load_more_posts', methods=[ 'POST'])
+def db_load_more_posts():
+    print(request.json)
+    return UserInteractions.designing_newsfeed_for_load_more_btn(request.json)
 
 #to store all the user interactions
 @app.route('/api/user_interactions', methods=['GET', 'POST'])
@@ -306,7 +312,7 @@ def db_get_messaged_users():
     return MessageObj(request.json).db_get_messaged_users()
 
 #Get all threads
-@app.route('/api/db_get_all_threads', methods=['GET'])
+@app.route('/api/db_get_all_threads', methods=['POST'])
 def db_get_all_threads():
     return Board(request.json).db_get_all_threads()
 

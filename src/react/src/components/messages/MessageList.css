@@ -26,19 +26,19 @@
     font-size: small;
 }
 .time {
-    color: white;
+    color: #bcb2c7;
     font-size: xx-small;
-}
-.time:hover {
-    color: #919699;
 }
 
 .profilePic1 {
     width: 5%;
+    height: 5%;
+
 }
 
 .profilePic2 {
     width: 5%;
+    height: 5%;
 }
 
 .message1 {
@@ -47,8 +47,8 @@
     border-radius: 5px;
     padding: 10px;
     width: max-content;
+    margin-left: 5vw !important;
 
-    
 }
 .message1:hover span{
     color: white;
@@ -59,4 +59,20 @@
     border-radius: 5px;
     padding: 10px;
     width: max-content;
+    margin-right: 5vw !important;
+}
+
+@media screen and (max-width: 600px) {
+    .message-list {
+        height: 68vh;
+    }
+    .profilePic1 {
+        width: 4vh;
+        height: 4vh;
+    }
+    
+    .profilePic2 {
+        width: 4vh;
+        height: 4vh;
+    }
 }

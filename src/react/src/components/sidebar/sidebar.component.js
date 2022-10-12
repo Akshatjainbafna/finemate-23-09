@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import LogoDesktop from '../../assets/finemateLatestin Angelina fontLogo.png';
 import LogoTablet from "../../assets/finemateLatestin Angelina fontLogo for Tablet Screens.png";
-import LogoMobile from "../../assets/changeView.png";
 import style from './sidebar.module.css';
 
 
@@ -56,11 +55,13 @@ class Sidebar extends Component {
         return (
             <nav className={style.sideBar}>
                 <span className={style.logoContainer}>
+                    <Link to="/dashboard" title="Home">
                     <picture> 
-                        <source media='(min-width: 992px)'  srcSet={LogoDesktop} />
-                        <source media='(min-width: 601px)'  srcSet={LogoTablet} />
-                        <img className={style.menuIcon} src={LogoMobile} style={{width:"auto"}} />
+                        <source media='(min-width: 992px)' className={style.menuIcon} srcSet={LogoDesktop} />
+                        <source media='(min-width: 601px)' className={style.menuIcon}  srcSet={LogoTablet} />
+                        <img className={style.menuIcon} src={LogoTablet} />
                     </picture>
+                    </Link>
                 </span>
 
                 <ul>

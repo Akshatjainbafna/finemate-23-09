@@ -9,5 +9,19 @@
 }
 
 @media screen and (max-width: 600px) {
-    
+  .headerForMobile{
+    box-sizing: border-box;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #FCFCFB !important;
+  }
+  .footerForMobile{
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
 }

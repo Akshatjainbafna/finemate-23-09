@@ -149,6 +149,7 @@ class DashboardCalendarComponent extends Component {
 				</div>
 				            <div className={styles.windowHidden} id="dashMenu1">
 								<Calendar
+								className={styles.reactCalendar}
 									onChange={this.onChange}
 									value={value}
 									locale={'en-US'}

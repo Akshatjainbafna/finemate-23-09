@@ -56,6 +56,7 @@ class User extends Component {
             localStorage.setItem('targetUser', this.state.recentChatUsers[index].username1);
 
         }
+
         this.setState({
             submitted: true
         })
@@ -72,6 +73,9 @@ class User extends Component {
     }
 
     render() {
+        if (window.innerWidth <= 600 && this.state.submitted==true){
+            return <Redirect to="/message" />
+        }
         return (
             <>
             <div className={style.recentUserList}>

@@ -40,16 +40,13 @@
     background-color: #F5F7FA;
     margin-top: -4px;
 }
-.icons{
-    padding-top: 4px;
-}
 
 @media screen and (max-width: 991px) {
     .Navbar{
         margin-left: 80px;
     }
     .headerTask{
-        height: 5vh;
+        height: 7vh;
     }
 }
 

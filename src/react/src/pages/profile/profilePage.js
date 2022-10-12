@@ -3,6 +3,10 @@ import Profile from "../../components/profile/profile.component.js";
 import "./profilePage.css";
 import { Redirect } from "react-router-dom";
 import axios from "axios";
+
+import HeaderBarForMobile from "../../components/headerbar/HeaderTaskbarForMobile";
+import FooterBarForMobile from "../../components/headerbar/FooterBarForMobile";
+
 // Bunch of pictures
 import Headerbar from "../..//components/headerbar/HeaderTaskbar.js";
 import Sidebar from "../..//components/sidebar/sidebar.component.js";
@@ -22,17 +26,59 @@ import settings from "../../assets/settings.png";
 
 let headerItems = { link: "/profile", title: "Profile", profileImg: profile };
 
-let navItems = [
+let navItemsForNormalUser = [
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3, link: "/search", imgSrc: search, title: "Search"},
+  { id: 4, link: "/communities", imgSrc: forum, title: "Community" },
+  { id: 5, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+];
+
+let navItemsForStudent = [
   { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
   { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
   { id: 3,link: "/library",imgSrc: library,title: "Library"},
   { id: 4, link: "/search", imgSrc: search, title: "Search"},
   { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
   { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
+  { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
   { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
   { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
 ];
+
+let navItemsForInstructorInstitute=[
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3,link: "/library",imgSrc: library,title: "Library"},
+  { id: 4, link: "/search", imgSrc: search, title: "Search"},
+  { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
+  { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
+  { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
+  { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 9, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+]
+
+let navItemsMobileForNormalUser = [
+  { id: 1, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+];
+
+let navItemsMobileForStudent = [
+  { id: 1,link: "/library",imgSrc: library,title: "Library"},
+  { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
+  { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
+  { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 5, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
+];
+
+let navItemsMobileForInstructorInstitute=[
+  { id: 1,link: "/library",imgSrc: library,title: "Library"},
+  { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
+  { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
+  { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 5, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+]
+
+
 
 class ProfilePage extends Component {
   state = {
@@ -92,11 +138,89 @@ class ProfilePage extends Component {
     if (!localStorage.getItem("token")) {
       return <Redirect to="/login" />;
     }
-    return (
-      <React.Fragment>
-        <Sidebar books={navItems} />
-        <Headerbar icons={headerItems} />
-        <div className="profileBox">
+
+    if (window.innerWidth <= 600){
+      if(localStorage.getItem("usertype")=="noraml"){
+        return (
+          <>
+            <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />
+            <Profile
+            educations={this.state.educations}
+            skills={this.state.skills}
+            interests={this.state.interests}
+            completedCourses={this.state.completedCourses}
+            languages={this.state.languages}
+            name={this.state.name}
+            description={this.state.description}
+            timeJoin={this.state.timeJoin}
+            totalDaysJoined={this.state.totalDaysJoined}
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            email={this.state.email}
+            phoneNumber={this.state.phoneNumber}
+            username={this.state.username}
+          />
+            <FooterBarForMobile className="footerForMobile"/>
+          </>
+        )
+      }
+      if(localStorage.getItem("usertype")=="student"){
+        return (
+          <>
+            <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForStudent} />
+            <Profile
+            educations={this.state.educations}
+            skills={this.state.skills}
+            interests={this.state.interests}
+            completedCourses={this.state.completedCourses}
+            languages={this.state.languages}
+            name={this.state.name}
+            description={this.state.description}
+            timeJoin={this.state.timeJoin}
+            totalDaysJoined={this.state.totalDaysJoined}
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            email={this.state.email}
+            phoneNumber={this.state.phoneNumber}
+            username={this.state.username}
+          />
+            <FooterBarForMobile className="footerForMobile" />
+          </>
+        )
+      }
+      if(localStorage.getItem("usertype")=="instructor" || "institute"){
+        return (
+          <>
+            <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForInstructorInstitute} />
+            <Profile
+            educations={this.state.educations}
+            skills={this.state.skills}
+            interests={this.state.interests}
+            completedCourses={this.state.completedCourses}
+            languages={this.state.languages}
+            name={this.state.name}
+            description={this.state.description}
+            timeJoin={this.state.timeJoin}
+            totalDaysJoined={this.state.totalDaysJoined}
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            email={this.state.email}
+            phoneNumber={this.state.phoneNumber}
+            username={this.state.username}
+          />
+            <FooterBarForMobile className="footerForMobile"/>
+          </>
+        )
+      }
+    }
+    else{
+
+    if(localStorage.getItem("usertype")=="normal"){
+      return (
+        <React.Fragment>
+          <Sidebar books={navItemsForNormalUser} />
+          <Headerbar icons={headerItems} />
+          <div className="profileBox">
           <Profile
             educations={this.state.educations}
             skills={this.state.skills}
@@ -114,8 +238,66 @@ class ProfilePage extends Component {
             username={this.state.username}
           />
         </div>
-      </React.Fragment>
-    );
+        </React.Fragment>
+      );
+    }
+    if (localStorage.getItem("usertype") == "student") {
+      return (
+        <React.Fragment>
+          <Sidebar books={navItemsForStudent} />
+          <Headerbar icons={headerItems} />
+          <div className="profileBox">
+          <Profile
+            educations={this.state.educations}
+            skills={this.state.skills}
+            interests={this.state.interests}
+            completedCourses={this.state.completedCourses}
+            languages={this.state.languages}
+            name={this.state.name}
+            description={this.state.description}
+            timeJoin={this.state.timeJoin}
+            totalDaysJoined={this.state.totalDaysJoined}
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            email={this.state.email}
+            phoneNumber={this.state.phoneNumber}
+            username={this.state.username}
+          />
+        </div>
+        </React.Fragment>
+      );
+    }
+
+    if (localStorage.getItem("usertype") == "instructor" || "institute") {
+      return (
+        <React.Fragment>
+          <Sidebar books={navItemsForInstructorInstitute} />
+          <Headerbar icons={headerItems} />
+          <div className="profileBox">
+          <Profile
+            educations={this.state.educations}
+            skills={this.state.skills}
+            interests={this.state.interests}
+            completedCourses={this.state.completedCourses}
+            languages={this.state.languages}
+            name={this.state.name}
+            description={this.state.description}
+            timeJoin={this.state.timeJoin}
+            totalDaysJoined={this.state.totalDaysJoined}
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            email={this.state.email}
+            phoneNumber={this.state.phoneNumber}
+            username={this.state.username}
+          />
+        </div>
+        </React.Fragment>
+      );
+    }
+  }
+
+
+
   }
 }
 export default ProfilePage;

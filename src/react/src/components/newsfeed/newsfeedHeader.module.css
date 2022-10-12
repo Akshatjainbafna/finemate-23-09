@@ -7,30 +7,21 @@
     flex-wrap: nowrap;
     width: 100%;
     align-items: center;
-    margin: 2vh 0; 
-   
-
+    margin: 1vh 0; 
   }
   .newsfeedFeatures > section{
 }
 
 /* 1. Add icon*/
-.addPostIcon {
+.addPostIcon{
     width: 6vw !important;
     height: 6vw !important;
-    transition: ease-in-out transform 2s;
-    margin-right: 10px;
-
-
   }
-.addPostIcon:hover{
-transform:rotateZ(360deg);
-}
 /* 2. stories*/
   .story{
     box-sizing: border-box;
     align-items: center;
-    width: 40vw;
+    width: 41vw;
     border-right: 1px solid #dfd6e9;
    
   }
@@ -219,21 +210,7 @@ transform:rotateZ(360deg);
   #button4 .checkbox:checked ~ .layer {
     background-color: #ffaddb;
   }
-  .addPostForm{
-    display: none;
-    height: 30vw;
-    width: 34vw;
-    position: fixed;
-    background: white;
-    border: 2px solid #919699;
-    border-radius: 50px;
-    box-shadow: 4px 8px 8px 2px rgb( 0, 0, 0, 0.3);
-    z-index: 999;  
-    margin-left: 9.2vw;
-  }
-  .addPostForm div{
-    margin: 1vw;
-  }
+
   .addPostFormHeading{
     display: block;
     font-size: large;
@@ -271,13 +248,12 @@ transform:rotateZ(360deg);
     border-color: grey;
     color: grey;
   }
-
   @media screen and (max-width: 991px) {
     .story{
-        width: 48vw !important;
+        width: 52vw !important;
     }
     .item:first-child{
-      margin-left: -6vw;
+      margin-left: -4vw;
     }
 }
 

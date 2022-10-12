@@ -18,6 +18,7 @@ class Board():
         users = me.ListField(me.StringField(required=True))
         bodies = me.ListField(me.StringField(required=True))
         timestamps = me.ListField(me.StringField(required=True))
+        community = me.StringField(required=True)
 
         def to_json(self):
             """
@@ -29,7 +30,8 @@ class Board():
                 "users": self.users,
                 "bodies": self.bodies, 
                 "timestamps": self.timestamps,
-                "_id": str(self.pk)
+                "_id": str(self.pk),
+                "community": self.community
             }
 
     def __init__(self, content):
@@ -42,15 +44,15 @@ class Board():
         """
         creates a thread for the first time
         """
-        x = checkFields(self.content, fields=['username', 'title', 'body'])
+        x = checkFields(self.content, fields=['username', 'title', 'body', 'community'])
         if (x):
             return make_response("Missing required field: " + x, 400)
 
         if (User.objects(username=self.content['username']).count() <= 0):
             return make_response("Username does not exist.", 404)
 
-        self.Thread(users=[self.content['username']], bodies=[self.content['body']], timestamps=[datetime.now().strftime("%m/%d/%Y, %H:%M:%S")], title = self.content['title']).save()
-        return make_response("", 200)
+        theCreatedThread = self.Thread(users=[self.content['username']], bodies=[self.content['body']], timestamps=[datetime.now().strftime("%m/%d/%Y, %H:%M:%S")], title = self.content['title'], community = self.content['community']).save()
+        return make_response(jsonify(theCreatedThread), 200)
 
     def db_put_thread_reply(self):
         x = checkFields(self.content, fields=['username', '_id', 'body'])
@@ -79,7 +81,7 @@ class Board():
 
     def db_get_all_threads(self):
 
-        thread = self.Thread.objects().all()
+        thread = self.Thread.objects(community=self.content['community']).all()
         if len(thread) > 0:
             board = []
             for t in thread:

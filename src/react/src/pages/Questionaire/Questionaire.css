@@ -3,7 +3,8 @@
     flex-direction: row;
     height: 100%;
     background-color: #FCFCFB;
-    margin-left: 22vw !important;
+    width: 60vw;
+    margin: 5vw auto;
 }
 .questionairePage{
     margin: 2vh 4vw;
@@ -14,7 +15,6 @@
     box-shadow: none;
     border: none;
     border-radius: none;
-    margin: auto 0px auto 340px;
 }
 
 .header {
@@ -23,8 +23,13 @@
 }
  .image {
     position: absolute;
-    right:16px;
+    right:10px;
+    top: 5vh;
     opacity: 0.5;
+    max-width: 100%;
+    height: auto;
+    width: auto; /* ie8 */
+    align-self: end;
  }
 .note{
     font-size: large;
@@ -39,21 +44,12 @@ body{
     flex:1;
 }
 
-img {
-    max-width: 100%;
-    height: auto;
-    width: auto; /* ie8 */
-    align-self: end;
-}
-input {
+.inputQuestionairePage {
     margin: auto 15px;
     border-style: solid;
     border-width: 2px;
     border-color: darkgray;
     border-radius: 5px;
-}
-input[type=checkbox] {
-    transform: scale(2);
 }
 
 .Sidebar{
@@ -79,4 +75,17 @@ input[type=checkbox] {
     border: 2px solid grey;
     border-radius: 100px;
     color: grey;
+}
+@media screen and (max-width: 600px) {
+    .page{
+        width: 90vw;
+        margin: auto;
+    }
+    .image{
+        top: 25vh;
+        right: -10vw;
+    }
+    .inputQuestionairePage {
+        width: 50vw !important;
+    }
 }

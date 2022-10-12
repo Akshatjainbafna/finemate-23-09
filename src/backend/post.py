@@ -22,7 +22,7 @@ class PostObj():
         subtopic=me.StringField(required=True, max_length=25, min_length=3)
         type=me.StringField(required=True, choices=['News', 'Information' , 'News & Information'])
         question=me.StringField(max_length=50)
-        fact=me.StringField(required=True, min_length=30, max_length=550)
+        fact=me.StringField(required=True, min_length=30, max_length=365)
         background=me.StringField()
         mcq1=me.StringField(required=True, max_length=60)
         mcq1Options=me.ListField(required=True, unique=False)
@@ -359,3 +359,158 @@ class UserInteractions(me.Document):
             UserInteractions.objects(me.Q(username=incomingData['username']) & me.Q(postId=incomingData['idSub'])).update_one(dec__points=1)
         
         return make_response("", 200)
+
+    def designing_newsfeed_for_load_more_btn(self):
+
+        x = checkFields(self, fields=['username', 'allTheCurrentPosts'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+
+        objectOfTherecordOfTheUser= Profile.objects(username=self['username']).first()
+
+        allSubjectsOfUser= objectOfTherecordOfTheUser.educations
+        
+        if len(allSubjectsOfUser) <= 0:
+            return make_response("Add a Subject First", 404)
+
+        #Empty list that will curate most appropirate 10 posts to be send to the client
+        postData=[]
+
+        #storing time in string, at which the user saw the post inside a timeList listfield
+        timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        
+        # make a change here count() < 50:
+        if UserInteractions.objects(username=self['username']).count()<10:
+
+            for i in range(len(allSubjectsOfUser)):
+                if len(postData)==10:
+                    break
+                for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
+                    if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
+                        pass
+                    elif len(postData)==10:
+                        break
+                    else:
+                        #making a document in user_interactions collection of new post for a particular user
+                        user_interaction=UserInteractions(userReference=objectOfTherecordOfTheUser,
+                        username=self['username'],
+                        postId=post,
+                        timeList=[timeRytNow]
+                        ).save()
+
+
+                        #Combining the post data with the user interaction 
+                        addThePostStr=post.to_json()
+                        addTheInteractionStr=user_interaction.to_json()
+                        combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                        objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                        #appending the combined object build from two different strings to the postData List to send to client
+                        postData.append(objectOfTheCombinedString)
+            
+            postData.reverse()
+            return make_response(jsonify(postData), 200)
+
+        else:
+
+
+
+
+
+#I think For loop lagana pdega to include posts which arent currently on the news feed
+
+
+
+
+
+
+            #sending MCQ's for chechking retention
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)):
+                counterMCQ=0
+                for mcqPost in UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)).order_by('timesViewed'):
+                    if counterMCQ == 3:
+                        break
+                    if mcqPost.postId.id not in self['allTheCurrentPosts']:
+                        counterMCQ+=1
+                        #updating user_interactionsData
+                        yo=mcqPost.postId.id
+                        UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=mcqPost.postId)).update_one(inc__timesViewed=1)
+                        UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=mcqPost.postId)).update_one(dec__points=1)
+                        UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=mcqPost.postId)).update_one(push__timeList=timeRytNow)
+
+                        #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
+                        addThePost=PostObj.Posts.objects(id=yo).first()
+
+                        #Combining the post data with the user interaction 
+                        addThePostStr=addThePost.to_json()
+                        addTheInteractionStr=mcqPost.to_json()
+                        combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                        objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                        #appending the combined object build from two different strings to the postData List to send to client
+                        postData.append(objectOfTheCombinedString)
+                
+
+
+
+            #sending old posts to ensuring retention
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=7) & me.Q(points__lte=10)):
+                counterOld=0
+                for mcqPost in UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=10)).order_by('timesViewed'):
+                    if counterOld==4:
+                        break
+                    if mcqPost.postId.id not in self['allTheCurrentPosts']:
+                        counterOld+=1
+                        #updating user_interactionsData
+                        yo=mcqPost.postId.id
+                        UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=mcqPost.postId)).update_one(inc__timesViewed=1)
+                        UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=mcqPost.postId)).update_one(dec__points=1)
+                        UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=mcqPost.postId)).update_one(push__timeList=timeRytNow)
+
+                        #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
+                        addThePost=PostObj.Posts.objects(id=yo).first()
+
+                        #Combining the post data with the user interaction 
+                        addThePostStr=addThePost.to_json()
+                        addTheInteractionStr=mcqPost.to_json()
+                        combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                        objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                        #appending the combined object build from two different strings to the postData List to send to client
+                        postData.append(objectOfTheCombinedString)
+
+
+
+
+
+            #sending new post's to maintain the uncertainity            
+            for i in range(len(allSubjectsOfUser)):
+                if len(postData)==12:
+                    break
+                for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
+                    if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
+                        pass
+                    elif len(postData)==12:
+                        break
+                    else:
+                        #making a document in user_interactions collection of new post for a particular user
+                        user_interaction=UserInteractions(userReference=objectOfTherecordOfTheUser,
+                        username=self['username'],
+                        postId=post,
+                        timeList=[timeRytNow]
+                        ).save()
+
+
+                        #Combining the post data with the user interaction 
+                        addThePostStr=post.to_json()
+                        addTheInteractionStr=user_interaction.to_json()
+                        combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                        objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                        #appending the combined object build from two different strings to the postData List to send to client
+                        postData.append(objectOfTheCombinedString)
+
+
+            postData.reverse()
+            return make_response(jsonify(postData), 200)

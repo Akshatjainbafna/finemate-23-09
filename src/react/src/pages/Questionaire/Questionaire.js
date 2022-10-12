@@ -31,18 +31,37 @@ let headerItems = {
   profileImg: profile
 };
 
-let navItems = [
+let navItemsForNormalUser = [
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3, link: "/search", imgSrc: search, title: "Search"},
+  { id: 4, link: "/communities", imgSrc: forum, title: "Community" },
+  { id: 5, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+];
+
+let navItemsForStudent = [
   { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
   { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
   { id: 3,link: "/library",imgSrc: library,title: "Library"},
   { id: 4, link: "/search", imgSrc: search, title: "Search"},
   { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
   { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
+  { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
   { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
   { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
-  { id: 10, link: "/a&t", imgSrc: navigation, title: "Accomodation & Transportation" },
 ];
+
+let navItemsForInstructorInstitute=[
+  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
+  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
+  { id: 3,link: "/library",imgSrc: library,title: "Library"},
+  { id: 4, link: "/search", imgSrc: search, title: "Search"},
+  { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
+  { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
+  { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
+  { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 9, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+]
 
 class Questionaire extends Component {
   constructor(props) {
@@ -113,8 +132,6 @@ class Questionaire extends Component {
     }
     return (
       <React.Fragment>
-        <Sidebar books={navItems} />
-        <Headerbar icons={headerItems} />
         <img class="image" src={BackImage} alt="Map"></img>
         <form class="flex-column" onSubmit={this.submit}>
           <div className="d-flex page">
@@ -169,7 +186,7 @@ class Questionaire extends Component {
                   </div>
                 </div>
                 </RadioGroup>
-                <input type="text" className="form-control fonm-control-md" placeholder="Other"></input>
+                <input type="text" className="form-control inputQuestionairePage" placeholder="Other"></input>
               <br />
               <br />
 
@@ -180,7 +197,7 @@ class Questionaire extends Component {
               <br />
               <div className="allTheTopics">
               <div className="d-flex">
-                <input list="subjects" name="subject" className="form-control fonm-control-md" placeholder="Add Subjects..." value={this.state.education} onChange={(e) => this.setState({education : e.target.value})} size='20' maxLength='20' required/>
+                <input list="subjects" name="subject" className="form-control inputQuestionairePage" placeholder="Add Subjects..." value={this.state.education} onChange={(e) => this.setState({education : e.target.value})} size='20' maxLength='20'/>
                 <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addEducation}> <Add /> </button>
               </div>
                 <datalist id="subjects">
@@ -212,7 +229,7 @@ class Questionaire extends Component {
               <br />
               <div className="allTheTopics">
                 <div className="d-flex">
-                  <input list="subjects" className="form-control fonm-control-md" name="subject" placeholder="Add Subjects..." value={this.state.newSubject} onChange={(e) => this.setState({newSubject : e.target.value})} size='20' maxLength='20' required/>
+                  <input list="subjects" className="form-control inputQuestionairePage" name="subject" placeholder="Add Subjects..." value={this.state.newSubject} onChange={(e) => this.setState({newSubject : e.target.value})} size='20' maxLength='20'/>
                   <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addNewSubject}> <Add /> </button>
                 </div>
                   
@@ -236,16 +253,17 @@ class Questionaire extends Component {
               <br />
               <br />
               <p id="messageForNoEducation"></p>
+              <div className="d-flex justify-content-end">
+                <button class="button">
+                  <span className="confirm">
+                    <img src={Confirm} alt="Map"></img>
+                  </span>
+                </button>
+              </div>
             </div>
+            
           </div>
-          <button class="button">
-            <span className="confirm">
-              <img src={Confirm} alt="Map"></img>
-            </span>
-          </button>
         </form>
-        <br />
-        <br />
         <br />
         <br />
         <br />

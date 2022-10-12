@@ -1,7 +1,7 @@
 .chatBox{
     box-sizing: border-box;
     margin-left: 1vw;
-    width: 44vw;
+    min-width: 44vw;
     border-radius: 8px;
 }
 .chatHeader{
@@ -22,4 +22,9 @@
     font-weight: bold;
     color: #919699;
     text-decoration-color: #919699;
+}
+@media screen and (max-width: 600px) {
+    .chatBox{
+        height: max-content;
+    }
 }

@@ -21,7 +21,7 @@ export default function Team(){
             </div>
             <div className={style.links}>
                 <Tooltip title= "Click to download Document a 10 minutes Read">
-                <a href={require("../../assets/IMG_20220915_204539.jpg")} download="yoBiyatch.png"> <img src={require("../../assets/rightHomepathic.png")} alt =""/> </a>
+                <a href={require("../../assets/Finemate Draft 1 dated 06-08-22.pdf")} download="Finemate Draft 1 dated 06-08-22."> <img src={require("../../assets/rightHomepathic.png")} alt =""/> </a>
                 </Tooltip>
             </div>
         </div>

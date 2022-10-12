@@ -1,5 +1,28 @@
 .profileBox{
     background-color: #FCFCFB;
-    margin-left: 290px;
+    margin-left: 22vw;
     margin-top: 0px;
 }
+@media screen and (max-width: 991px) {
+  .profileBox{
+      margin-left: 80px !important;
+  }
+}
+@media screen and (max-width: 600px) {
+    .headerForMobile{
+      box-sizing: border-box;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #FCFCFB !important;
+    }
+    .footerForMobile{
+      box-sizing: border-box;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0;
+      width: 100%;
+    }
+    
+  }

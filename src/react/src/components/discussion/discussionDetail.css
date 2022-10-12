@@ -1,13 +1,17 @@
 .discussion-detail-container {
     flex-direction: column;
     border-radius: 5px;
-    width: 80vw;
 }
-.discussion-detail-list {
-    overflow-y: scroll;
-    height: 55vh;
-    
+
+.discussion-detail-li{
+   margin: 0 10%;
 }
+.divStyl{
+    margin: 2%;
+    border: 1px solid #dfd6e98f;
+    border-radius: 5px;
+}
+
 .createReply{
     background-color: #4CAF50; /* Green */
     border: none;
@@ -17,4 +21,14 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+}
+
+@media screen and (max-width: 600px) {
+    .discussion-detail-li{
+        margin: 0;
+     }
+    .discussion-detail-container{
+        margin-top: 2vh;
+        min-height: calc(100vh - 110px);
+    }
 }

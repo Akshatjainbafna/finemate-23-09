@@ -1,10 +1,38 @@
 .discussion-list-container {
     flex-direction: column;
     border-radius: 5px;
-    width: 80vw;
 }
-.discussion-list-list {
-    overflow-y: scroll;
-    height: 75vh;
-    
+.divStyle{
+    margin: 1%;
+    border: 2px solid #77737a;
+    border-radius: 5px;
+    width: 75vw;
+    padding: 1%;
+    text-overflow: ellipsis !important;
+}
+.repliesBlock{
+    display: inline-block;
+    border-radius: 100%;
+    height: 18px !important;
+    width: 18px !important;
+    color: white;
+    text-align: center;
+    background-color: #77737ada;
+    font-size: small;
+}
+.discussion-list-list{
+    text-overflow: ellipsis !important;
+}
+@media screen and (max-width: 600px) {
+    .divStyle{
+        margin: 2vh auto;
+        border: 2px solid #77737a;
+        border-radius: 5px;
+        width: 90vw;
+        text-overflow: ellipsis !important;
+    }
+    .discussion-list-container{
+        margin-top: 2vh;
+        height: calc(100vh - 110px);
+    }
 }

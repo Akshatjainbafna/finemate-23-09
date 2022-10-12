@@ -14,7 +14,7 @@ import axios from "axios";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
-import { FormControl, RadioGroup, Radio, Tooltip } from "@material-ui/core";
+import { FormControl, RadioGroup, Radio, Tooltip, Button } from "@material-ui/core";
 
 
 //display/hide functions for previousNext window and moreOptions window
@@ -40,14 +40,12 @@ function hidePreviousNextPostWindow(key){
 class NewsFeed extends Component{
     constructor(props){
         super(props);
-        this.state={responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], likeState: [], lightState: [], saveState:[], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[],        isLiked:false, isSaved: false, isLighten: false};
+        this.state={responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], likeState: [], lightState: [], saveState:[], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
         this.slider=this.silder.bind(this);
         this.referenceToPostQuestion = React.createRef();
         this.referenceToPostFact = React.createRef();
         this.referenceToPostImage = React.createRef();
-        //this.clickedLike=this.clickedLike.bind(this);
-        //this.clickedSave=this.clickedSave.bind(this);
-        //this.clickedLighten=this.clickedLighten.bind(this);
+        this.loadMorePosts = this.loadMorePosts.bind(this);
     }
 
     //event handler for slider
@@ -57,17 +55,6 @@ class NewsFeed extends Component{
         }, () => console.log(this.state.silderValue))
     }
 
-    /* Like, Lighten, Saved Posts Handler but likes all the posts on clicking one/ update the states of all the posts instead of just the post liked,  CURRENTLY NOT IN USE
-    clickedLike(){
-        this.setState({isLiked: ! this.state.isLiked});
-    }
-    clickedSave(){
-        this.setState({isSaved: ! this.state.isSaved});
-    }
-    clickedLighten(){
-        this.setState({isLighten: ! this.state.isLighten});
-    }
-    */
 
     showBackgroundImage(index){
         const currentPostQuestion = this.referenceToPostQuestion.current;
@@ -252,7 +239,6 @@ class NewsFeed extends Component{
         });
     }
 
-
     componentDidMount() {
         const headers = { "Content-Type": "application/json" };
         axios.post('http://127.0.0.1:8103/api/display_posts', { 'username' : localStorage.getItem('username')}, {headers})
@@ -282,6 +268,7 @@ class NewsFeed extends Component{
                     let allTheCorrectOptions = this.state.correctOptions;
                     allTheCorrectOptions.push(this.state.responseData[i].mcq1Options[0]);
                     
+
 
                     /* This code creates 3 states of lists which contains whether a post is liked, lighten or saved or not, if its lighten it passes a boolean true to mark the icon/checkbox checked*/
                     let likeStateList= this.state.likeState;
@@ -334,8 +321,8 @@ class NewsFeed extends Component{
                         //setting the image src of the image element to display the post
                         let imgName = this.state.responseData[i].background;
                         let img = document.getElementById(indexOfPost);
-                        img.src = require('../../assets/postBackgroundImages/'+ imgName);
-
+                        var yo= img.src = require('../../assets/postBackgroundImages/'+ imgName);
+                        console.log(yo);
                 
                         //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post
                         let idValueOfMenuList = "idMenuListVisible"+String(i);
@@ -369,6 +356,10 @@ class NewsFeed extends Component{
                     (error) => console.log(error)
                 )
             }, 15000);
+    }
+
+    componentDidUpdate(){
+
     }
 
    /* making an image element and passing the address+image_name in src attribute deprecated from 1-08-22
@@ -433,9 +424,9 @@ render(){
 
                             </div>
 
-                            {this.state.normalPost}
+                           
                             <span className={style.quesFactBlock} ref={this.referenceToPostQuestion}>
-                                {responseData.question ? <p className={style.question}>{responseData.question}</p> : ""} 
+                                {responseData.question ? <p name="questionOfPost" className={style.question}>{responseData.question}</p> : ""} 
                                 <p className={style.fact} name="factName" ref={this.referenceToPostFact}> {responseData.fact.split('\n').map(function(item) {
                                     return (
                                         <span>
@@ -573,58 +564,129 @@ render(){
           )
 
         }
-        {/*STATIC POSTS OF HOMEPAGE
-                    <div className={style.postCardContainer}>
-                        <div className={style.postHeader} id="postHeader">
-                            <div>
-                               <p className={style.subject}>Science</p>
-                               <span className={style.topic}><a href=""> Organic Chemistry </a></span><BsArrowRightShort/>
-                               <span className={style.subTopic}><a href=""> Alkenes </a></span>
-                            </div>
-                            <div className={style.menuIcon}>
-                               <div className={style.menuList}><BsThreeDotsVertical/></div>
-                            </div>
-                        </div>
-                        <div className={style.postImg} onDoubleClick={this.clickedLike}> 
-                            <img src={infographic}/>       
-                        </div>
-
-                        <div className={style.postFooter}>
-                        <span onClick={this.clickedLike}>{this.state.isLiked ? <BsHeartFill size={20}/> : <BsHeart size={20}/>}</span>
-                            <span onClick={this.clickedSave}>{this.state.isSaved?<BsBookmarkHeartFill size={20}/> : <BsBookmarkHeart size={20}/>} </span>
-                            <button className={style.readMoreBtn}>Read More</button>
-                            <span onClick={this.clickedLighten}>{this.state.isLighten ? <BsLightbulbFill size={20}/> : <BsLightbulb size={20}/>}</span>
-                            <BsArrowLeftRight size={20}/>
-                        </div>
-                    </div>
-
-                    <div className={style.postCardContainer}>
-                        <div className={style.postHeader} id="postHeader">
-                            <div>
-                               <p className={style.subject}>Other</p>
-                               <span className={style.topic}><a href=""> Quotes </a></span><BsArrowRightShort/>
-                               <span className={style.subTopic}><a href=""> Motivation </a></span>
-                            </div>
-                            <div className={style.menuIcon}>
-                               <div className={style.menuList}><BsThreeDotsVertical/></div>
-                            </div>
-                        </div>
-                        <div className={style.postImg} onDoubleClick={this.clickedLike}> 
-                            <img src={infographic2}/>       
-                        </div>
-
-                        <div className={style.postFooter}>
-                            <span onClick={this.clickedLike}>{this.state.isLiked ? <BsHeartFill/> : <BsHeart/>}</span>
-                            <span onClick={this.clickedSave}>{this.state.isSaved?<BsBookmarkHeartFill/> : <BsBookmarkHeart/>} </span>
-                            <button className={style.readMoreBtn}>Read More</button>
-                            <span onClick={this.clickedLighten}>{this.state.isLighten ? <BsLightbulbFill/> : <BsLightbulb/>}</span>
-                            <BsArrowLeftRight />
-                        </div>
-                    </div>
-                */}
+        <br />
+        <br />
+        <div className="d-flex justify-content-center">
+            <Button style={{color: "#684096", border: "1px solid #A78EC3"}} onClick={this.loadMorePosts}>Load More</Button>
+        </div>
+        <br />
+        <br />
+        <br />
 
             </>
         );
+    }
+    loadMorePosts(){
+        var allThePosts = this.state.responseData;
+        var idOfAllPosts=[];
+        allThePosts.forEach((value, index, array) => { idOfAllPosts.push(allThePosts[index]._id.$oid)});
+
+        axios.post('http://127.0.0.1:8103/api/load_more_posts', { 'username' : localStorage.getItem('username'), 'allTheCurrentPosts' : idOfAllPosts}, { "Content-Type": "application/json" })
+        .then(res=>{
+            let newResponseData= res.data;
+            let responseData = allThePosts.concat(newResponseData);
+            console.log(responseData)
+
+            //this is a boilerplate code which is also ruining in componentDidMount component lifecycle method so a function can be declared and called here and in componentdidmount method.
+            this.setState({responseData: responseData}, ()=>{
+                let lengthOfResponseData= this.state.responseData.length;
+                let arrayForSelectedOptions= Array(lengthOfResponseData).fill('');
+                this.setState({selectedOptions: arrayForSelectedOptions})
+            })
+            
+            //NodeList of all the elements with name 'menuListName' & 'previousNextWindowName'
+            var allMenuListVisible = document.getElementsByName('menuListName');
+            var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
+            var allFacts = document.getElementsByName('factName');
+
+
+            
+            //for loop to create some elemnts, attributes, updating array states manually
+            for (let i = 0; i < this.state.responseData.length; i++) {
+                let indexOfPost = String(i);
+
+                //making a array state of all the correct answers for all the posts to match with the selected radio option to decide whether it is correct or not
+                let allTheCorrectOptions = this.state.correctOptions;
+                allTheCorrectOptions.push(this.state.responseData[i].mcq1Options[0]);
+                
+
+
+                /* This code creates 3 states of lists which contains whether a post is liked, lighten or saved or not, if its lighten it passes a boolean true to mark the icon/checkbox checked*/
+                let likeStateList= this.state.likeState;
+                if (this.state.responseData[i].liked !== true){
+                    likeStateList.push(false);
+                }else{
+                    likeStateList.push(true);
+                }
+
+                let lightStateList= this.state.lightState;
+                if (this.state.responseData[i].lighten !== true){
+                    lightStateList.push(false);
+                }else{
+                    lightStateList.push(true);
+                }
+
+                let saveStateList= this.state.saveState;
+                if (this.state.responseData[i].saved !== true){
+                    saveStateList.push(false);
+                }else{
+                    saveStateList.push(true);
+                }
+
+                //shuffling all the options for a mcq in mcq1Options array of the state.responseData object of the MCQ's[Posts with points less than 7]
+                if (this.state.responseData[i].points < 7 ){
+                let array = this.state.responseData[i].mcq1Options;
+                let m = array.length, yo, t;
+                // While there remain elements to shuffle…
+                    while (m) {
+                        // Pick a remaining element…
+                        yo = Math.floor(Math.random() * m--);
+            
+                        // And swap it with the current element.
+                        t = array[m];
+                        array[m] = array[yo];
+                        array[yo] = t;
+                    }
+                //changing and recreating the responseData state array after shuffling the mcq1Options array
+                let items=[...this.state.responseData];
+                let item={...items[i]};
+                item.mcq1Options=array;
+                items[i]=item
+                this.setState({responseData : items});
+                }
+
+
+                //code for the posts only if it has a score of greater than or equal to 7
+                if (this.state.responseData[i].points >= 7){
+
+                    //setting the image src of the image element to display the post
+                    let imgName = this.state.responseData[i].background;
+                    let img = document.getElementById(indexOfPost);
+                    var yo= img.src = require('../../assets/postBackgroundImages/'+ imgName);
+                    console.log(yo);
+            
+                    //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post
+                    let idValueOfMenuList = "idMenuListVisible"+String(i);
+                    let menuList = allMenuListVisible[i];
+                    menuList.id = idValueOfMenuList;
+            
+                    //setting the id for the previousNextWindow to make it visible and invisible onMouseLeve event on the footer of the post
+                    let idValueOfWindow = "idPreviousNextWindow"+String(i);
+                    let PN_window_list = allPreviousNextWindow[i];
+                    PN_window_list.id = idValueOfWindow;
+
+                    let idValueOfFact = "idFact"+String(i);
+                    let factList = allFacts[i];
+                    factList.id= idValueOfFact;
+
+                }
+
+            }
+
+        })
+        .catch(
+            (error) => console.log(error)
+        )
     }
 }
 export default NewsFeed

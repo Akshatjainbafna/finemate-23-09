@@ -8,9 +8,6 @@
 .menuIcon {
     cursor: pointer;
 }
-.logoContainer:hover, .menuIcon:hover{
-    margin: 0px;
-}
 .sideBar {
     display: flex;
     flex-direction: column;
@@ -77,17 +74,18 @@
 .sideBar ul a:hover:not(.active) li{
     background: #A78EC3;
     box-shadow: 0 20px 20px -2px rgba(0,0,0,.2);
-    color:white;
+    color:white !important;
     margin-left: 0;
     padding-left: 40px;
     text-decoration: none;
 }
 
 .sideBar ul a li:hover span {
-    color: inherit;
+    color: white !important;
 }
 
 .sideBar ul a:hover {
+    color: white !important;
     text-decoration: none;
 }
 
