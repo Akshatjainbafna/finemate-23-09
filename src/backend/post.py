@@ -7,6 +7,7 @@ from Exceptions.MissingRequiredField import checkFields
 from Exceptions.MissingRequiredField import checkFieldsReturnAll
 from datetime import datetime
 import json
+import os
 Profile = ProfileObj.Profile
 
 class PostObj():
@@ -26,15 +27,16 @@ class PostObj():
         background=me.StringField()
         mcq1=me.StringField(required=True, max_length=60)
         mcq1Options=me.ListField(required=True, unique=False)
-        #mcq1opt2=me.StringField(required=True, unique=False)
-        #mcq1opt3=me.StringField(unique= False)
-        #mcq1opt4=me.StringField(unique=False)
         #to store date in iso formate datetimefield can be used instead of string field by passing just datetime.now() object instead of converting it into string and passing ans also remember don't pass datetime.now() object directly or by default coz datetime object can't be iterated 
         creation_date_time=me.StringField()
-        accuracy=me.FloatField()
+        accuracy=me.FloatField(default = 1.0)
+        public=me.BooleanField()
         prerequisite=me.ListField()
         totalLikes= me.IntField(default=0)
-
+        totalLights=me.IntField(default=0)
+        totalSaves=me.IntField(default=0)
+        previousPost=me.ReferenceField('self')
+        nextPost=me.ReferenceField('self')
 
     def __init__(self, content):
         """
@@ -56,9 +58,11 @@ class PostObj():
 
         if len(self.content['mcq1opt4']) > 0:
             mcq1Opts.append(self.content['mcq1opt4'])
+        
+        publicState= True if self.content['public'] == 'true' else False
 
-        prn= self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcq1Opts, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), accuracy=1.0, background= nameOfImage).save()
-        print(prn, prn.to_json(), sep="\n")
+        createPost= self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcq1Opts, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState).save()
+        print(createPost, createPost.to_json(), sep="\n")
 
         objectOfTherecordOfTheUser= Profile.objects(username=self.content['username']).first()
 
@@ -72,6 +76,57 @@ class PostObj():
 
         return make_response("", 200)
     
+    def delete_a_post(self):
+        x = checkFields(self.content, fields=['username', 'id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        postToBeDeleted = self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id=self.content['id'])).first()
+
+        if postToBeDeleted:
+            background = postToBeDeleted.background
+            os.remove("../react/src/assets/postBackgroundImages/"+background)
+            postToBeDeleted.delete()
+            allTheInteractions = UserInteractions.objects(postId=self.content['id']).all()
+            
+            for interaction in allTheInteractions:
+                allTheInteractions.delete()
+
+            return make_response("Post deleted successfully!", 200)
+
+        else:
+            return make_response('Post Not Found', 404)
+
+    def get_all_post_of_user(self):
+
+        x = checkFields(self.content, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        postOfUser = self.Posts.objects(username = self.content['username']).only('username', 'background', 'subtopic', 'fact').order_by('-creation_date_time')[:12]
+
+        return make_response(jsonify(postOfUser), 200)
+
+    def get_public_post_of_user(self):
+
+        x = checkFields(self.content, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        postOfUser = self.Posts.objects(me.Q(username = self.content['username']) & me.Q(public = True)).only('username', 'background', 'subtopic', 'fact').order_by('-creation_date_time')[:12]
+
+        return make_response(jsonify(postOfUser), 200)
+    
+    def search_posts_of_topic(self):
+
+        x = checkFields(self.content, fields=['topic'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+        postsOfParticualarTopicSubtopic = self.Posts.objects(public = True).search_text(self.content['topic']).only('username', 'background', 'subtopic', 'fact').order_by('-creation_date_time')[:12]
+        
+        return make_response(jsonify(postsOfParticualarTopicSubtopic), 200)
+
     '''
     def display_posts_on_newsfeed(self):
 
@@ -92,9 +147,7 @@ class PostObj():
         return make_response(jsonify(raw), 200)
         
     '''        
-    
-    
-    
+
     
     def display_posts_on_newsfeed(self):
 
@@ -200,15 +253,25 @@ class UserInteractions(me.Document):
         
         if len(self['liked'])>0:
             for i in self['liked']:
-                UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__liked=True)
+                particularPost= UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).first()
+                if particularPost.liked == False:
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__liked=True)
+                    PostObj.Posts.objects(id=i).update(inc__totalLikes=1)
 
         if len(self['lighten'])>0:
             for i in self['lighten']:
-                UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__lighten=True)
+                particularPost= UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).first()
+                if particularPost.lighten == False:
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__lighten=True)
+                    PostObj.Posts.objects(id=i).update(inc__totalLights=1)
 
         if len(self['savedPosts'])>0:
             for i in self['savedPosts']:
-                UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__saved=True)
+                particularPost= UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).first()
+                if particularPost.saved == False:
+                    UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=i)).update(set__saved=True)
+                    PostObj.Posts.objects(id=i).update(inc__totalSaves=1)
+
         
         return make_response("", 200)
 
@@ -240,6 +303,8 @@ class UserInteractions(me.Document):
                 for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
                     if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
                         pass
+                    elif (post.public == False) and (post.username != self['username']):
+                        pass
                     elif len(postData)==10:
                         break
                     else:
@@ -266,8 +331,8 @@ class UserInteractions(me.Document):
         else:
 
             #sending MCQ's for chechking retention
-            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)).order_by('timesViewed')[:3]:
-                questionPosts=UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)).order_by('timesViewed')[:3]
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=8)).order_by('timesViewed')[:3]:
+                questionPosts=UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=8)).order_by('timesViewed')[:3]
                 
                 #updating user_interactionsData
                 for post in questionPosts:
@@ -291,8 +356,8 @@ class UserInteractions(me.Document):
 
 
             #sending old posts to ensuring retention
-            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=7) & me.Q(points__lte=10)).order_by('timesViewed')[:4]:
-                oldPostsToRevise=UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=7) & me.Q(points__lte=10)).order_by('timesViewed')[:4]
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=9) & me.Q(points__lte=10)).order_by('timesViewed')[:4]:
+                oldPostsToRevise=UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=9) & me.Q(points__lte=10)).order_by('timesViewed')[:4]
                 
                 #updating user_interactionsData
                 for post in oldPostsToRevise:
@@ -321,6 +386,8 @@ class UserInteractions(me.Document):
                     break
                 for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
                     if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
+                        pass
+                    elif (post.public == False) and (post.username != self['username']):
                         pass
                     elif len(postData)==12:
                         break
@@ -389,6 +456,8 @@ class UserInteractions(me.Document):
                 for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
                     if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
                         pass
+                    elif (post.public == False) and (post.username != self['username']):
+                        pass
                     elif len(postData)==10:
                         break
                     else:
@@ -415,20 +484,13 @@ class UserInteractions(me.Document):
         else:
 
 
-
-
-
 #I think For loop lagana pdega to include posts which arent currently on the news feed
-
-
-
-
-
+            
 
             #sending MCQ's for chechking retention
-            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)):
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=8)):
                 counterMCQ=0
-                for mcqPost in UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=6)).order_by('timesViewed'):
+                for mcqPost in UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=8)).order_by('timesViewed'):
                     if counterMCQ == 3:
                         break
                     if mcqPost.postId.id not in self['allTheCurrentPosts']:
@@ -450,14 +512,13 @@ class UserInteractions(me.Document):
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
-                
 
 
 
             #sending old posts to ensuring retention
-            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=7) & me.Q(points__lte=10)):
+            if UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=9) & me.Q(points__lte=10)):
                 counterOld=0
-                for mcqPost in UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__lte=10)).order_by('timesViewed'):
+                for mcqPost in UserInteractions.objects(me.Q(username=self['username']) & me.Q(points__gte=9) & me.Q(points__lte=10)).order_by('timesViewed'):
                     if counterOld==4:
                         break
                     if mcqPost.postId.id not in self['allTheCurrentPosts']:
@@ -482,14 +543,14 @@ class UserInteractions(me.Document):
 
 
 
-
-
             #sending new post's to maintain the uncertainity            
             for i in range(len(allSubjectsOfUser)):
                 if len(postData)==12:
                     break
                 for post in PostObj.Posts.objects(subject=allSubjectsOfUser[i]):
                     if UserInteractions.objects(me.Q(username=self['username']) & me.Q(postId=post)):
+                        pass
+                    elif (post.public == False) and (post.username != self['username']):
                         pass
                     elif len(postData)==12:
                         break
@@ -514,3 +575,59 @@ class UserInteractions(me.Document):
 
             postData.reverse()
             return make_response(jsonify(postData), 200)
+
+    def get_saved_post_of_user(incomingData):
+
+        x = checkFields(incomingData, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        postOfUser = UserInteractions.objects(me.Q(username = incomingData['username']) & me.Q(saved = True))[:12]
+
+        postData=[]
+
+        for post in postOfUser:
+            yo=post.postId.id
+                    
+            #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
+            addThePost = PostObj.Posts.objects(id=yo).only( 'username', 'background', 'subtopic', 'fact').first()
+
+            #Combining the post data with the user interaction 
+            addThePostStr=addThePost.to_json()
+            addTheInteractionStr=post.to_json()
+            combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+            objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+            #appending the combined object build from two different strings to the postData List to send to client
+            postData.append(objectOfTheCombinedString)
+
+        return make_response(jsonify(postData), 200)
+    
+    def get_particular_post(incomingData):
+
+        x = checkFields(incomingData, fields=['username', 'id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+        post = PostObj.Posts.objects(id=incomingData['id']).first()
+
+        if post:
+
+            userInteraction = UserInteractions.objects(me.Q(username = incomingData['username']) & me.Q(postId = incomingData['id'])).first()
+            
+            if userInteraction:
+
+                addThePostStr=post.to_json()
+                addTheInteractionStr=userInteraction.to_json()
+                combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                return make_response(jsonify(objectOfTheCombinedString), 200)
+            
+            else:
+                
+                return make_response(jsonify(post), 200)
+            
+        else:
+
+            return make_response('post not found', 400)

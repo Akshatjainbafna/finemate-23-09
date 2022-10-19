@@ -212,10 +212,10 @@
   }
 
   .addPostFormHeading{
-    display: block;
+    display: flex;
+    justify-content: space-between;
     font-size: large;
     font-weight: 800;
-    padding: 0 1vw;
   }
   .formNavigation{
     display: flex;
@@ -229,11 +229,7 @@
     color: black;
     opacity: 1 !important;
   }
-  .addPostFormHeading ~ textarea{
-    resize: none;
-    border: 2px solid grey;
-    border-radius: 10px;
-  }
+
   .mediaUploadOptions a{
     display: inline-block;
     text-decoration: none;

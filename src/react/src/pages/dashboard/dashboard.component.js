@@ -139,9 +139,6 @@ class DashPage extends Component {
                 <div>
                   <DashboardCalendarComponent />
                 </div>
-                <div class="">
-                  <InstructorClasses />
-                </div>
             </div>
 
           </section>
@@ -166,9 +163,6 @@ class DashPage extends Component {
                 </div>
                 <div>
                   <DashboardCalendarComponent />
-                </div>
-                <div class="">
-                  <InstructorClasses />
                 </div>
             </div>
 
@@ -195,9 +189,6 @@ class DashPage extends Component {
                 </div>
                 <div>
                   <DashboardCalendarComponent />
-                </div>
-                <div class="">
-                  <InstructorClasses />
                 </div>
             </div>
           </section>

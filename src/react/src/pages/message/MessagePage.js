@@ -79,29 +79,33 @@ class MessagePage extends Component {
     if(localStorage.getItem("usertype")=="noraml"){
       return (
         <>
+        <div className={style.mainScreenMobileMessage}>
           <HeaderBarForMobile className={style.headerForMobile} books={navItemsMobileForNormalUser} />
             <div className={style.mainScreenMobile}> <Message /> </div>
           <FooterBarForMobile className={style.footerForMobile}/>
+          </div>
         </>
       )
     }
     if(localStorage.getItem("usertype")=="student"){
       return (
         <>
+        <div className={style.mainScreenMobileMessage}>
           <HeaderBarForMobile className={style.headerForMobile} books={navItemsMobileForStudent} />
           <div className={style.mainScreenMobile}> <Message /> </div>
-
           <FooterBarForMobile className={style.footerForMobile} />
+          </div>
         </>
       )
     }
     if(localStorage.getItem("usertype")=="instructor" || "institute"){
       return (
         <>
+        <div className={style.mainScreenMobileMessage}>
           <HeaderBarForMobile className={style.headerForMobile} books={navItemsMobileForInstructorInstitute} />
           <div className={style.mainScreenMobile}> <Message /> </div>
-
           <FooterBarForMobile className={style.footerForMobile}/>
+          </div>
         </>
       )
     }

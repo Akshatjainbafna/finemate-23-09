@@ -5,7 +5,6 @@
     height: 90vh;
     flex-wrap: wrap;
 }
-
 .edu {
     flex: 1;
     border-radius: 10px;
@@ -29,7 +28,6 @@
     justify-content: center;
     margin-left: 10%;
 }
-
 .name {
     color: black;
     font-size: 34px;
@@ -52,8 +50,11 @@
     padding-right: 10px;
     border-color: #A78EC3;
 }
-
-.listed_educations {
+.selectFormColortext{
+    width: 20vw !important;
+    height: 6vh !important;
+}
+.listed_educations, .listed_courses, .listed_languages, .listed_skills {
     list-style: none;
     color: grey;
 }
@@ -62,23 +63,14 @@
     flex-direction: row !important;
     flex-wrap: wrap;
 }
+.removeEducations{
+    margin-left: -0.8vw;
+}
 .colourTextListItems{
     border-radius: 10px;
     border: 1px solid #A78EC3;
     margin: 0.5% 1%;
     padding: 1%;
-}
-.listed_skills {
-    list-style: none;
-    color: grey;
-}
-.listed_courses {
-    list-style: none;
-    color: grey;    
-}
-.listed_languages {
-    list-style: none;
-    color: grey;
 }
 .listed_titles {
     color: #302c35;
@@ -183,8 +175,8 @@
     margin-top:10px;
 }
 .element_image {
-    height: 40px;
-    width: 40px;
+    height: 5em;
+    width: 5em;
     margin-left: 5px;
 }
 .invis_button {
@@ -242,6 +234,7 @@
 .elementPic{
     height: 15vh;
     width: 15vh;
+    object-fit: cover;
     border-radius: 100%;
     border: 1px solid #dfd6e9;
 }
@@ -289,42 +282,46 @@
 }
 .addFriend_button{
     margin: 0.5vh;
-    width: 8vw;
+    width: 12vw;
     height: 5vh;
     font-size: small;
     font-family: "Open Sans";
-    box-shadow: none;
+    box-shadow: 0px 2px 2px #a59ab3;
     border: none;
     border-radius: 25px;
     background-color: #834bc4;
     border-color: white !important;
     color: white;
+    text-shadow: 1px 2px 2px #a59ab3;
 }
 .addFriend_button:hover{
     background-color: #6932a8;
+    box-shadow: inset 1px 2px 1px #5f3491;
+    text-shadow: none;
 }
 .connect_button{
-    margin: 0.5vh;
-    width: 8vw;
+    margin: 0.5vh 1vw;
+    width: 12vw;
     height: 5vh;
     font-size: small;
     font-weight: 700;
     font-family: "Open Sans";
     box-shadow: none;
-    border-radius: 25px;
+    border-radius: 8px;
     background-color: white;
     border-color: #621eb1;
     color: #621eb1;
 }
-.connect_button:hover{
-    border-color: #471381;
-    color: #471381;
+.addFriend_button:active, .connect_button:active{
+    transform: scale(1.1);
 }
+
 .profileElements{
     display: flex;
     flex-direction: column;
     height: 30vh;
     width: 100%;
+    padding: 1vw;
 }
 .profileElementsTitle{
     font-size: larger;
@@ -335,9 +332,29 @@
 .profileElementContainer{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
     border: 0.1px solid #dfd6e9;
     border-radius: 15px;
-    height: 20vh;
+    height: 25vh;
+    padding: 1%;
+    overflow-y: auto;
+}
+.profileElementsUserPosts{
+    display: flex;
+    flex-direction: column;
+    height: 60vh;
+    width: 100%;
+    padding: 1vw;
+}
+.profileElementContainerUserPosts{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-radius: 15px;
+    justify-content: space-between;
+    border: 0.1px solid #dfd6e9;
+    height: 50vh;
     padding: 1%;
     overflow-y: auto;
 }
@@ -351,19 +368,84 @@
     box-shadow: none;
     border-radius: 10px;
     background-color: white;
-    border-color: #471381;
-    color: #471381;
+    border-color: #621eb1;
+    color: #621eb1;
 }
 .edit_button_profile:hover{
     color: white;
-    background-color: #471381;
-    border-color: #471381;
+    background-color: #621eb1;
+    border-color: #621eb1;
+}
+.postThumbnail{
+    display: flex;
+    margin-left: 2px;
+    margin-bottom: 2px;
+    border: 0.1px solid rgb(226, 226, 226);
+    position: relative;
+    align-items: center;
+}
+.postThumbnail img{
+    object-fit: cover;
+    opacity: 0.4;
+    height: 24vh;
+    width: 24vh;
 }
 
+.factThumbnail{
+    position: absolute;
+    text-align: center;
+    max-height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.subTopicThumbnail{
+    font-weight: 600;
+    margin:auto;
+    font-size: 0.5em;
+    color: rgba(0, 0, 0, 0.9);
+}
+.fact{
+    color: rgba(0, 0, 0, 0.85);
+    font-weight: 600;
+    margin:auto;
+    font-size: 0.4em;
+}
+
+.changeProfilePictureBtn{
+    height: 15vh;
+    width: 15vh;
+}
 @media screen and (max-width: 600px) {
     .main{
         display: flex;
         flex-direction: column;
         height: auto;
+    }
+    .addFriend_button, .connect_button{
+        width: 35vw;
+        margin: 0.5vh 3vw;
+    }
+    .edit_button_profile{
+        width: 40vw;
+    }
+    .postThumbnail img{
+        height: 29vw;
+        width: 29vw;
+    }
+    .profileElementsUserPosts, .profileElements{
+        height: fit-content;
+        padding: 2vw;
+        border: none;
+    }
+    .profileElementContainerUserPosts, .profileElementContainer{
+        display: flex;
+        height: fit-content;
+        padding: 0;
+        border: none;
+        justify-content: space-between;
+    }
+    .selectFormColortext{
+        width: 80vw !important;
+        height: 6vh !important;
     }
 }

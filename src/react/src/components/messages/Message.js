@@ -4,12 +4,15 @@ import MessageList from './MessageList.js'
 import SendMessage from './SendMessage.js'
 import style from './Message.module.css'
 import profilePic from '../../assets/profilePic.png'
+import { Link } from 'react-router-dom';
+import { Avatar, ListItemAvatar } from '@material-ui/core';
 
 class Message extends Component {
     constructor() {
         super()
         this.state = {
-            messages: []
+            messages: [],
+            profilePicture: ''
         }
     }
 
@@ -20,6 +23,11 @@ class Message extends Component {
                     messages: res.data
                 })
             })
+        axios.post('http://127.0.0.1:8103/api/db_get_profile_picture', {'username': localStorage.getItem('targetUser')})
+            .then(response => {
+              this.setState({profilePicture: response.data.profilePicture});
+            })
+            .catch(err => console.log(err))
     }
 
     componentDidUpdate() {
@@ -37,7 +45,24 @@ class Message extends Component {
             {(() => {
                 if (localStorage.getItem('targetUser')){
                 return <div className={style.chatBox}>
-                <div className={style.chatHeader}><img className={style.profilePictureChatHeader} src={profilePic}/><span className={style.targetUser}>{localStorage.getItem('targetUser')}</span></div>
+                <div className={style.chatHeader}>
+                    <span>
+                    <Link to={"/profile/".concat(localStorage.getItem('targetUser'))}>
+                        {this.state.profilePicture ?
+                            <ListItemAvatar>
+                                <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureChatHeader}/>
+                            </ListItemAvatar>
+                            :
+                            <ListItemAvatar>
+                                <Avatar> {localStorage.getItem('targetUser')[0]} </Avatar>
+                            </ListItemAvatar>
+                        }
+                    </Link>
+                    </span>
+                    <span className={style.targetUser}>
+                        {localStorage.getItem('targetUser')}
+                    </span>
+                </div>
                 <MessageList
                     messages={this.state.messages}
                 />

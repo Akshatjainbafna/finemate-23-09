@@ -17,11 +17,7 @@
     font-size: 25px !important;
 }
 .searchIcon {
-    background-color: #fff;
-    border-radius: 10px;
-    border-style: none;
-    margin-left:-50px;
-    margin-top: -4px;
+    margin-top: 3px;
 }
 .searchImg{
     background-color: #fff;
@@ -40,7 +36,9 @@
     background-color: #F5F7FA;
     margin-top: -4px;
 }
-
+.form-control:focus{
+    box-shadow: none;
+}
 @media screen and (max-width: 991px) {
     .Navbar{
         margin-left: 80px;

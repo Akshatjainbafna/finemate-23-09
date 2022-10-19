@@ -1,13 +1,129 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import style from "./todo.module.css";
 import addTodo from '../../assets/addTodo.png'
 import changeView from '../../assets/changeView.png'
 import Card from 'react-bootstrap/Card'
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputLabel, OutlinedInput, Radio, RadioGroup, useMediaQuery, useTheme } from '@material-ui/core';
+import { BsPatchPlus, BsToggle2Off, BsToggle2On } from 'react-icons/bs';
+import { IconContext } from 'react-icons/lib';
+import Axios from 'axios';
+
+
+function AddTodoComponent(props){
+    const [todoState, setTodoState] = useState(props.todo);
+    const [title, settitle] = useState();
+    const [importance, setImportance] = useState();
+    const [checked, setChecked] = useState(false);
+
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+    function onSubmitHandler(){
+        Axios.post('http://127.0.0.1:8103/api/add_todo', {'username' : localStorage.getItem('username'), 'title': title, 'importance': importance, 'inNewsfeed' : checked})
+        .then(res => console.log(res.data))
+        .catch(err => console.log(err))
+        setTodoState(false);
+    }
+    function deleteTodo(event){
+        Axios.post('http://127.0.0.1:8103/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
+        .then(() => {
+            settitle(null);
+        })
+        .catch(err => console.log(err))  
+    }
+
+    return (
+    <>
+        <Dialog
+                        fullScreen={fullScreen}
+                        fullWidth={true}
+                        open={todoState}
+                        onClose={() => setTodoState(false)}
+                        aria-labelledby="responsive-dialog-title"
+                        >
+                        <DialogTitle color="primary"><b>Add Todo</b></DialogTitle>
+                        <DialogContent>
+                            <InputLabel htmlFor='titleOfThread'>Title</InputLabel>
+                            <OutlinedInput id="titleOfThread" type="text" name='title' placeholder="Add a Intriguing title..." inputProps={{maxLength: "80"}} value={title} onChange={(event) => settitle(event.target.value)} required/>
+                            <p></p>
+
+                            <InputLabel htmlFor='importanceOfTodo'>Importance</InputLabel>
+                            <RadioGroup
+                            id="importanceOfTodo"
+                            aria-labelledby="demo-radio-buttons-group-label"
+                            value={importance}
+                            onChange={(event) => setImportance(event.target.value)}
+                            name="ImportanceRadioGroup"
+                            required
+                            >
+                                <div className='d-flex'>
+                                    <FormControlLabel value="Extremely Important" control={<Radio />} label="Extremely Important" />
+                                    <FormControlLabel value="Moderate Important" control={<Radio />} label="Moderate Important" />
+                                </div>
+                            </RadioGroup>
+                            <p></p>
+
+                            <FormControlLabel onChange={() => setChecked(!checked) } control={<Checkbox />} label="Do you want in Newsfeed and Notified?" />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setTodoState(false)}>
+                                Cancel
+                            </Button>
+                            <Button type="submit" onClick={() => onSubmitHandler()}>
+                                Add Todo
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                    {title? 
+                    <div className="ml-4"><FormControlLabel value={title} onChange={(event) => deleteTodo(event)} control={<Checkbox />} label={title} /></div>
+                    : null}
+                    </>
+    )
+}
+
 
 class TodoComponent extends Component{
+    constructor(props){
+        super(props);
+        this.state ={
+            addTodo: false,
+            toggle: false,
+            allTodoList: []
+        }
+        this.addTodoWindow = this.addTodoWindow.bind(this);
+        this.switchTodoList = this.switchTodoList.bind(this);
+    }
+
+    addTodoWindow(){
+        console.log("todo")
+        this.setState({addTodo: !this.state.addTodo})
+    }
+    switchTodoList(){
+        console.log("toggle")
+        this.setState({toggle: !this.state.toggle})
+    }
+
+    deleteTodo(event, index){
+        Axios.post('http://127.0.0.1:8103/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
+        .then(() => {
+            const allTodoList = this.state.allTodoList;
+            allTodoList.splice(index, 1);
+            this.setState({allTodoList: allTodoList})
+        })
+        .catch(err => console.log(err))  
+    }
+    componentDidMount(){
+        Axios.post('http://127.0.0.1:8103/api/get_all_todo_for_user', {'username' : localStorage.getItem('username')})
+        .then(res => {
+            this.setState({allTodoList: res.data.todo}, () => console.log(this.state.allTodoList, res.data))
+        })
+        .catch(err => console.log(err))
+    }
+
     render(){
         return(
             <>
+            <div className={style.todoComponentContainer}>
             <div className={style.todoBlock}>
                 Do it Quickly
             </div>
@@ -16,31 +132,48 @@ class TodoComponent extends Component{
                 <a href="">Earliest Todo's</a>
         </div>*/}
             <div className={style.todoIcons}>
-                <div className={style.addTodo}><a  href="#"><img src={addTodo}/></a></div>
-                <div className={style.changeView}><a  href="#"><img src={changeView}/></a></div>
+                <Button onClick={this.addTodoWindow}>
+                    <IconContext.Provider value={{size: "25px", color: "orange"}}>
+                        <BsPatchPlus />
+                    </IconContext.Provider>
+                    </Button>
+                <Button onClick={this.switchTodoList} >{this.state.toggle ? 
+                    <IconContext.Provider value={{size: "25px", color: "orange"}}>
+                        <BsToggle2Off />
+                    </IconContext.Provider> : 
+                    <IconContext.Provider value={{size: "25px", color: "orange"}}>
+                        <BsToggle2On />
+                    </IconContext.Provider>
+                    } 
+                </Button>
             </div>
-            <div className={style.todoCards}>
+            {this.state.addTodo ? <AddTodoComponent todo={true} />   : null }
+
+            {this.state.toggle ? 
             
-                <Card style={{width: '6vw', height:'6vw',  margin: '2px', overflow:"hidden"}}>
-                    <Card.Img variant="top" src="https://image.shutterstock.com/image-illustration/tomato-illustration-on-white-background-260nw-88607548.jpg" alt="tomato"/>
-                    <Card.Body>
-                    </Card.Body>
-                </Card>
-                <Card style={{width: '6vw', height:'6vw',  margin: '2px',  overflow:"hidden"}}>
-                    <Card.Img variant="top" src="https://image.shutterstock.com/image-illustration/tomato-illustration-on-white-background-260nw-88607548.jpg" alt="tomato"/>
-                    <Card.Body>
-                    </Card.Body>
-                </Card>
-                <Card style={{width: '6vw', height:'6vw',  margin: '2px',  overflow:"hidden"}}>
-                    <Card.Img variant="top" src="https://image.shutterstock.com/image-illustration/tomato-illustration-on-white-background-260nw-88607548.jpg" alt="tomato"/>
-                    <Card.Body>
-                    </Card.Body>
-                </Card>
-                <Card style={{width: '6vw', height:'6vw',  margin: '2px',  overflow:"hidden"}}>
-                    <Card.Img variant="top" src="https://image.shutterstock.com/image-illustration/tomato-illustration-on-white-background-260nw-88607548.jpg" alt="tomato"/>
-                    <Card.Body>
-                    </Card.Body>
-                </Card>
+            this.state.allTodoList.map((todo, index) =>
+            <div key={index} className="ml-4">
+                <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox />} label={todo.title} />
+            </div>
+            )
+
+            : 
+            <div className={style.todoCardContainer}>
+            
+                <div className={style.todoCard}>
+                    <img variant="top" src="https://media.istockphoto.com/vectors/man-haircuts-in-a-barber-shop-on-a-white-background-characters-vector-id1216002434?k=20&m=1216002434&s=612x612&w=0&h=f_8CfDTM0OxF2lE3Z0oA1t9owsSI2NLV8-0x57_lNZI=" alt="tomato"/>
+                </div>
+                <div className={style.todoCard}>
+                    <img variant="top" src="https://png.pngtree.com/element_our/20200702/ourlarge/pngtree-cartoon-snack-potato-chips-illustration-image_2284479.jpg" alt="tomato"/>
+                </div>
+                <div className={style.todoCard}>
+                    <img variant="top" src="https://st.depositphotos.com/1695366/1394/v/950/depositphotos_13942373-stock-illustration-cartoon-large-bill.jpg" alt="tomato"/>
+                </div>
+                <div className={style.todoCard}>
+                    <img variant="top" src="https://charatoon.com/photo/3629.png" alt="tomato"/>
+                </div>
+            </div>
+        }
             </div>
             </>
         );

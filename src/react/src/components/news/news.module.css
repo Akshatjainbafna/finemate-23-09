@@ -1,12 +1,5 @@
-.classCardStyle {
-  display: flex;
-  align-items: center;
-  background-color:#FCFCFB;
-  border-color:#FCFCFB;
-  font-family: "Open Sans";
-}
 
-h1{
+.newsTitle{
   font-size: 20px!important;
 }
 
@@ -15,85 +8,62 @@ h1{
   float: left;
   margin-right: 20px;
 }
-a {
-  color: rgb(255, 255, 255);
-}
-
 
 * {
   box-sizing: border-box;
   
 }
 
-body {
-
-  background: #ffffff;
-  
-}
 .tabs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  background: #ffffff;
-  border-color: white;
   font-family: "Open Sans" !important;
   width: 26vw !important;
-  height: 22vw !important;
   border-radius: 20px;
   border: 1px solid #dfd6e9 !important;
   box-shadow: 0px 2px 4px #dfd6e9;
-  margin: 0px !important;
+  margin: 2vh auto;
   overflow-y: auto;
 }
 
 .input {
   position: absolute;
-  opacity: 0;
+  visibility: hidden;
 }
 
 .label {
   padding: 5px 5px;
-  background: #ffffff;
+  background-color: #ffffff;
   cursor: pointer;
   font-size: 14px;
   color: #7A7A7A;
-  transition: background 0.1s, color 0.1s;
+  transition: background-color 0.1s, color 0.1s;
 }
 
-.input:checked + .label {
+.input:checked + .label{
   background: #A78EC3;
   color: #fff;
   border-radius: 10px;
 }
 
-.label:active {
-  background: #000;
-}
-h1{
-  font-size: 20px;
-  font-weight: bold;
-}
-
-
 .input:hover + .label {
-  background: #fff;
-  color: #000;
-  text-decoration: underline;
-  text-decoration-color:#834bc4 ;
-  text-underline-position: under;
+  background: #A78EC3;
+  color: #fff;
+  border-radius: 10px;
+}
+.panelContainer{
+  height: 20vw;
+  padding: 2vh 2vw;
+  overflow-y: auto;
 }
 
-@media (min-width: 600px) {
-  .label {
-    width: auto;
-  }
-}
-.panel {
-  display: none;
-  position: relative;
-  padding: 20px 30px 30px;
+.panel:first-child {
+  display: block;
   background: #fff;
 }
+.panel:not(:first-child){
+  display: none;
+  background-color: #fff;
+}
+
 .btnLearn{
   display: flex;
   justify-content: center;
@@ -105,7 +75,7 @@ h1{
   color: #A78EC3;
   background-color: white;
   height: 5vh;
-  width: 8vw;
+  min-width: 8vw;
   font-size: small;
   font-weight: bold;
 }
@@ -114,12 +84,13 @@ h1{
   border-radius: 15px;
 }
 
-@media (min-width: 600px) {
-  .panel {
-    order: 99;
+@media screen and (max-width: 600px) {
+  .tabs {
+    width: 100vw !important;
   }
-}
-
-.input:checked + .label + .panel {
-  display: block;
+  .panelContainer{
+    padding: 2vh 8vw;
+    overflow-y: hidden;
+    height: auto;
+  }
 }

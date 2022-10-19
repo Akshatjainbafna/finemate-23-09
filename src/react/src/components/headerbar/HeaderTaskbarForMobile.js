@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemIcon, ListItemText, Drawer, Divider, Button } from "@material-ui/core";
+import { List, ListItem, ListItemIcon, ListItemText, Drawer, Divider, Button, ListItemAvatar, Avatar } from "@material-ui/core";
 import { ExtensionRounded, Inbox, Mail } from "@material-ui/icons";
 import React, { Component } from "react";
 import { BsBell, BsEmojiSunglasses } from "react-icons/bs";
@@ -12,6 +12,7 @@ import Leaderboard from '../../assets/leaderboardForMobile.png';
 import Setting from '../../assets/settings.png';
 import logo from '../../assets/finemateLatestin Angelina fontLogoForMobile.png';
 import profile from "../../assets/tinyprofile.png";
+import Axios from "axios";
 
 
 function CustomListItems({id, link, imgSrc, title}) {
@@ -47,7 +48,8 @@ class HeaderBarForMobile extends Component{
     constructor(props){
         super(props);
         this.state = {
-            sidebarOpened: false
+            sidebarOpened: false,
+            profilePicture: ''
         }
         this.toggleDrawer=this.toggleDrawer.bind(this);
  
@@ -60,7 +62,13 @@ class HeaderBarForMobile extends Component{
         this.setState({ sidebarOpened: open });
       };
     
-      
+      componentDidMount(){
+        Axios.post('http://127.0.0.1:8103/api/db_get_profile_picture', {'username': localStorage.getItem('username')})
+        .then(response => {
+          this.setState({profilePicture: response.data.profilePicture}, ()=> console.log(this.state.profilePicture));
+        })
+        .catch(err => console.log(err))
+      }
        
       
     render(){
@@ -94,10 +102,24 @@ class HeaderBarForMobile extends Component{
                         open={this.state.sidebarOpened}
                         onClose={this.toggleDrawer(false)}
                       >
-                        <div style={{width:"65vw"}}>
-                          <div className="d-flex justify-content-center"><img src={logo} alt="logo" /></div>
+                        <div style={{width:"75vw"}}>
+                          <div className="d-flex justify-content-center">
+                            <img src={logo} alt="logo" />
+                          </div>
                           <Link to="/profile" title="Profile Page" style={{color: "rgba(0, 0, 0, 0.8)", textDecoration: "none"}}>
-                            <div className="d-flex align-items-center"><span className="ml-3"><img style={{width: "35px", height: "35px"}} src={profile} alt="profilePic"/> </span><span  className="ml-3"><b>{localStorage.getItem('username')}</b></span></div>
+                            <div className="d-flex align-items-center">
+                              <span className="ml-3">
+                              {this.state.profilePicture ?
+                                    <ListItemAvatar>
+                                        <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureSidebarThumbnail}/>
+                                    </ListItemAvatar>
+                                    :
+                                    <ListItemAvatar>
+                                        <Avatar> {localStorage.getItem('username')[0]} </Avatar>
+                                    </ListItemAvatar>
+                                    }
+                              </span>
+                              <span  className="ml-3"><b>{localStorage.getItem('username')}</b></span></div>
                           </Link>
                             <List>
                               {books.map((book)=>

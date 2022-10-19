@@ -65,6 +65,8 @@
 }
 .lastMessage{
     font-size: small;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 .userChatThumbnailTime{
     color: #ccc4d6d0;

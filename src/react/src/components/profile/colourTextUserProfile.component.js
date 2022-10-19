@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './profile.css'
-class ColourText extends Component {
+class ColourTextUser extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -17,13 +17,13 @@ class ColourText extends Component {
         }
         // console.log(array)
         return(
-                <div className="listed_educations_list" >
+                <span className="listed_educations_list" >
                     {array.map(
-                        (texts) => 
-                            <li className='colourTextListItems'>{texts.text}</li>
+                        (texts, index) => 
+                            <li key={index} className='colourTextListItems'>{texts.text}</li>
                     )}
-                </div>
+                </span>
             )
         }
 }
-export default ColourText
+export default ColourTextUser

@@ -89,3 +89,13 @@ class Board():
             return make_response(jsonify(board), 200)
         else:
             return make_response("No Threads", 404)
+
+    def search_thread(self, incomingData):
+
+        findThreadTitle= self.Thread.objects.search_text(incomingData['title']).all()
+        
+        if findThreadTitle:
+            return make_response(jsonify(findThreadTitle), 200)
+        else:
+            return make_response("No Threads", 404)
+

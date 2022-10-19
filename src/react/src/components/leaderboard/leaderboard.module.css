@@ -1,11 +1,15 @@
 .leaderboardHeader{
-    height: 44px;
+    min-height: 44px;
+    text-overflow: ellipsis;
     line-height: 44px;
     text-align: center;
     background-color: #a8dada;
     color: white;
     font-weight: 600;
     font-size: medium;
+}
+.leaderboardTableContainer{
+    width: 100%;
 }
 table, tr, td{
     text-align: center;
@@ -20,4 +24,10 @@ tr{
 }
 td:nth-child(1){
     font-weight: 600;
+}
+
+@media screen and (max-width: 600px) {
+    .leaderboardTableContainer{
+        width: 100vw;
+    }
 }

@@ -5,6 +5,7 @@ from flask_cors import CORS
 from pyrsistent import immutable
 
 from flask_mongoengine import MongoEngine
+from todos import TodoDocument
 from user import UserObj 
 from profile import ProfileObj
 from calender import CalenderObj
@@ -22,7 +23,7 @@ import message
 
 app = Flask(__name__) 
 app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpeg', '.webp', '.gif', '.jgp', '.svg'] 
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 4096 * 4096
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 
@@ -41,12 +42,43 @@ def too_large(e):
 def db_create_post():
     image=request.files['background']
     filenameOfImage=secure_filename(image.filename)
-    fh =open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
+    fh = open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
     fh.write(image.read())
     fh.close()
     formData=request.form
     print(formData)
     return PostObj(formData).create_a_post(image, filenameOfImage)
+
+#create Post
+@app.route('/api/db_delete_post', methods=['POST'])
+def db_delete_post():
+    return PostObj(request.json).delete_a_post()
+
+# all the posts of a particular user
+@app.route('/api/db_get_all_post_of_user', methods = ['POST'])
+def db_get_all_post_of_user():
+    return PostObj(request.json).get_all_post_of_user()
+
+# all the public posts of a particular user
+@app.route('/api/db_get_public_post_of_user', methods = ['POST'])
+def db_get_public_post_of_user():
+    return PostObj(request.json).get_public_post_of_user()
+
+# all the posts of a particular subjext, topic, subtopic
+@app.route('/api/db_search_posts_of_topic', methods = ['POST'])
+def db_search_posts_of_topic():
+    print(request.json)
+    return PostObj(request.json).search_posts_of_topic()
+
+# saved posts of a particular user
+@app.route('/api/db_get_saved_post_of_user', methods = ['POST'])
+def db_get_saved_post_of_user():
+    return UserInteractions.get_saved_post_of_user(request.json)
+
+# get particular post of user
+@app.route('/api/db_get_particular_post', methods=['POST'])
+def db_get_particular_post():
+    return UserInteractions.get_particular_post(request.json)
 
 #setup educations and qualifications from questionaire
 @app.route('/api/add_education_from_questionaire', methods=['POST'])
@@ -66,6 +98,18 @@ def db_load_more_posts():
     print(request.json)
     return UserInteractions.designing_newsfeed_for_load_more_btn(request.json)
 
+@app.route('/api/add_todo', methods=['POST'])
+def db_add_todo():
+    return TodoDocument.db_add_todo(request.json)
+
+@app.route('/api/get_all_todo_for_user', methods=['POST'])
+def db_get_all_todo_for_user():
+    return TodoDocument.db_get_all_todo_for_user(request.json)
+
+@app.route('/api/delete_todo', methods=['POST'])
+def db_delete_todo():
+    return TodoDocument.db_delete_todo(request.json)
+
 #to store all the user interactions
 @app.route('/api/user_interactions', methods=['GET', 'POST'])
 def db_store_interactions():
@@ -84,12 +128,50 @@ def db_search_user():
     print(request.json)
     return UserObj(request.json).search_user()
 
+#search a user
+@app.route('/api/db_search_user_profile', methods=['POST'])
+def db_search_user_profile():
+    print(request.json)
+    return ProfileObj(request.json).search_user_profile()
+
 # creates a new user and posts it to the database when provided with a json text formatted as {user_type: user_type, username: username, password: password, email: email}
 @app.route('/api/db_create_user', methods=['POST'])
 def db_create_user():
     print(request.json)
-    ProfileObj(request.json).db_create_profile()
-    return UserObj(request.json).db_create_user()
+    created = UserObj(request.json).db_create_user()
+    if created == "true":
+        ProfileObj(request.json).db_create_profile()
+        TodoDocument.db_create_todo_profile(request.json)
+        return make_response("", 200)
+    else:
+        return make_response("Username or Email already in use.", 400)
+
+# connect a user with other user
+@app.route('/api/db_add_connection', methods=['POST'])
+def db_add_connection():
+    return ProfileObj(request.json).add_connection()
+
+# disconnect a user with other user
+@app.route('/api/db_remove_connection', methods=['POST'])
+def db_remove_connection():
+    return ProfileObj(request.json).remove_connection()
+
+# add a user friend with other user
+@app.route('/api/db_add_friend', methods=['POST'])
+def db_add_friend():
+    return ProfileObj(request.json).add_friend()
+
+# disconnect a user with other user
+@app.route('/api/db_remove_friend', methods=['POST'])
+def db_remove_friend():
+    return ProfileObj(request.json).remove_friend()
+
+
+# disconnect a user with other user
+@app.route('/api/db_get_pending', methods=['POST'])
+def db_get_pending():
+    return ProfileObj(request.json).get_pending()
+
 
 # returns the user requested from the database when provided with a json text formatted as {email: email}
 @app.route('/api/db_get_user', methods=['POST'])
@@ -161,6 +243,11 @@ def db_create_profile():
 def db_get_profile():
     return ProfileObj(request.json).db_get_profile()
 
+# returns the profile requested from the database when provided with a json text formatted as {username: username}
+@app.route('/api/db_get_profile_picture', methods=['POST'])
+def db_get_profile_picture():
+    return ProfileObj(request.json).db_get_profile_picture()
+
 # updates the user's phone number when provided with a json text formatted as {phone_number: phone_number, username: username} 
 @app.route('/api/db_update_profile_phone_number', methods=['POST'])
 def db_update_profile_phone_number():
@@ -181,13 +268,29 @@ def db_update_profile_last_name():
 def db_update_profile_description():
     return ProfileObj(request.json).db_update_profile_description()
 
+# updating profile picture when provided with a form data MIMETYPE form-data where image is in the file form and username as request.form formatted as {description: description, username: username} 
+@app.route('/api/db_update_profile_picture', methods=['POST'])
+def db_update_profile_picture():
+    print(request.form)
+    image=request.files['profilePicture']
+    cleanFilenameOfImage=secure_filename(image.filename)
+    profilePicture = open(f"../react/src/assets/profilePictures/{cleanFilenameOfImage}", "wb")
+    profilePicture.write(image.read())
+    profilePicture.close()
+    return ProfileObj(request.form).set_profile_picture(cleanFilenameOfImage)
+
+@app.route('/api/db_authorization_check', methods=['DELETE'])
+def db_authorization_check():
+    return make_response('true', 200)
+
+
 # adds to the user's languages when provided with a json text formatted as {language: language, username: username} 
 @app.route('/api/db_add_profile_language', methods=['PUT'])
 def db_add_profile_language():
     return ProfileObj(request.json).db_add_profile_language()
 
 # deletes from the user's languages when provided with a json text formatted as {language: language, username: username} 
-@app.route('/api/db_delete_profile_language', methods=['DELETE'])
+@app.route('/api/db_delete_profile_language', methods=['POST'])
 def db_delete_profile_language():
     return ProfileObj(request.json).db_delete_profile_language()
 
@@ -197,7 +300,7 @@ def db_add_profile_completed_course():
     return ProfileObj(request.json).db_add_profile_completed_course()
 
 # deletes from the user's completed courses when provided with a json text formatted as {completed_course: completed_course, username: username} 
-@app.route('/api/db_delete_profile_completed_course', methods=['DELETE'])
+@app.route('/api/db_delete_profile_completed_course', methods=['POST'])
 def db_delete_profile_completed_course():
     return ProfileObj(request.json).db_delete_profile_completed_course()
 
@@ -207,7 +310,7 @@ def db_add_profile_skill():
     return ProfileObj(request.json).db_add_profile_skill()
 
 # deletes from the user's skills when provided with a json text formatted as {skill: skill, username: username} 
-@app.route('/api/db_delete_profile_skill', methods=['DELETE'])
+@app.route('/api/db_delete_profile_skill', methods=['POST'])
 def db_delete_profile_skill():
     return ProfileObj(request.json).db_delete_profile_skill()
 
@@ -217,9 +320,19 @@ def db_add_profile_education():
     return ProfileObj(request.json).db_add_profile_education()
 
 # deletes from the user's educations when provided with a json text formatted as {education: education, username: username} 
-@app.route('/api/db_delete_profile_education', methods=['DELETE'])
+@app.route('/api/db_delete_profile_education', methods=['POST'])
 def db_delete_profile_education():
     return ProfileObj(request.json).db_delete_profile_education()
+
+# adds to the user's educations when provided with a json text formatted as {education: education, username: username} 
+@app.route('/api/db_add_profile_interest', methods=['PUT'])
+def db_add_profile_interest():
+    return ProfileObj(request.json).db_add_profile_interest()
+
+# deletes from the user's educations when provided with a json text formatted as {education: education, username: username} 
+@app.route('/api/db_delete_profile_interest', methods=['POST'])
+def db_delete_profile_interest():
+    return ProfileObj(request.json).db_delete_profile_interest()
 
 # Allows Creation Of events for a user
 @app.route('/api/db_create_event', methods=['POST'])
@@ -229,6 +342,7 @@ def db_create_event():
 # Gets an event for the user
 @app.route('/api/db_get_schedule', methods=['PUT'])
 def db_get_event():
+    print(request.json)
     return CalenderObj(request.json).db_get_event()
 
 #updates events for a user
@@ -315,6 +429,11 @@ def db_get_messaged_users():
 @app.route('/api/db_get_all_threads', methods=['POST'])
 def db_get_all_threads():
     return Board(request.json).db_get_all_threads()
+
+#search a thread
+@app.route('/api/db_search_thread', methods=['POST'])
+def db_search_thread():
+    return Board(request.json).search_thread(request.json)
 
 #Get threads by id
 @app.route('/api/db_get_thread_id', methods=['POST'])

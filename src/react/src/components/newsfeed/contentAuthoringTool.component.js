@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import style from './newsfeedHeader.module.css';
 import addPost from "../../assets/addPost.png";
 import axios from "axios";
-import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl} from "@material-ui/core";
+import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl, Switch} from "@material-ui/core";
 import {AddPhotoAlternateRounded} from "@material-ui/icons";
 import { useTheme } from '@material-ui/core/styles';
 
@@ -24,7 +24,8 @@ class ContentAuthoringTool extends Component{
             mcq1opt2: '',
             mcq1opt3: '',
             mcq1opt4: '',
-            setOpen: this.props.createpost
+            setOpen: this.props.createpost,
+            public: true
         }
         this.submit=this.submit.bind(this);
         this.handleChange=this.handleChange.bind(this);
@@ -66,7 +67,24 @@ class ContentAuthoringTool extends Component{
         <DialogContent>
             <form autoComplete="on" className={style.formPost} method="post" id="formPost" encType="multipart/form-data" onSubmit={this.submit}>
             
-            <span className={style.addPostFormHeading} >Select Category</span>
+            <div className={style.addPostFormHeading}>
+                <div>
+                    Select Category
+                </div>
+                <div>
+                    <FormControlLabel 
+                        control={
+                        <Switch 
+                            style={{color: 'lightgray'}} 
+                            color="default"
+                            checked={this.state.public} 
+                            onChange={() => this.setState({public: !this.state.public})}
+                            />
+                        } 
+                        label="Public"
+                    />
+                </div> 
+            </div>
                 <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={this.handleChange} size='20' maxLength='20' required/>
                  <datalist id="subjects">
                     <option value="Computer Science"/>
@@ -178,6 +196,7 @@ class ContentAuthoringTool extends Component{
         form_data.append('mcq1opt2', this.state.mcq1opt2);
         form_data.append('mcq1opt3', this.state.mcq1opt3);
         form_data.append('mcq1opt4', this.state.mcq1opt4);
+        form_data.append('public', this.state.public);
         axios({method: "post", url: "http://localhost:8103/api/db_create_post", data: form_data, headers: { "Content-Type": "multipart/form-data" }})
         .then(response => {
             console.log(response.data);

@@ -28,7 +28,6 @@ import Headerbar from "./components/headerbar/HeaderTaskbar.js";
 import Classes from "./components/yourClasses/yourClasses.component.js";
 import InstructorClasses from "./components/yourClasses/instructorClasses.component.js";
 import Events from "./components/events/events.component.js";
-import News from "./components/news/news.component.js";
 
 // HomePageMainPages(Active)
 import DashPage from "./pages/dashboard/dashboard.component.js";
@@ -64,6 +63,13 @@ import HomePage from "./pages/home/homePage.js"
 import ContentAuthoringToolComponentWindow from "./components/newsfeed/contentAuthoringTool.component";
 import NotificationPage from "./pages/notifications/Notifications";
 import DiscussionCommunitiesPage from "./pages/discussion/discussionCommunities";
+import TodoListPage from "./pages/todoList/TodoListPage";
+import NoticeNewsPage from "./pages/notice & News/NoticeNewsPage";
+import LeaderBoardPage from "./pages/LeaderBoard/LeaderBoardPage";
+import UserProfilePage from "./pages/userProfilePage/UserProfilePage";
+import IndividualPostPage from "./pages/post/Post";
+import SettingPage from "./pages/settings/settings";
+import SearchPageForTopic from "./pages/searchPage/SearchPageForTopic";
 
 
 window.token = localStorage.getItem("token");
@@ -101,6 +107,7 @@ ReactDOM.render(
       <Route exact path="/profile">
         <ProfilePage />
       </Route>
+      <Route exact path="/profile/:username" component={UserProfilePage}></Route>
       <Route exact path="/allnotifications">
         <NotificationPage />
       </Route>
@@ -126,6 +133,9 @@ ReactDOM.render(
       <Route exact path="/dashboard">
         <DashPage />
       </Route>
+      {/* Individual Post */}
+      <Route exact path='/post/:id' component={IndividualPostPage}></Route>
+      <Route exact path='/topic/:topic' component={SearchPageForTopic}></Route>
       {/* courses */}
       <Route exact path="/allcoursesUser">
         <AllCourses />
@@ -169,7 +179,19 @@ ReactDOM.render(
       <Route exact path="/messageuser">
         <SpecifyUserPage />
       </Route>
-
+      <Route exact path="/todolist">
+        <TodoListPage />
+      </Route>
+      {/* news comp*/}
+      <Route exact path="/notice">
+        <NoticeNewsPage />
+      </Route>
+      <Route exact path="/leaderboard">
+        <LeaderBoardPage />
+      </Route>
+      <Route exact path="/settings">
+        <SettingPage />
+      </Route>
 
     {/* Pages not in use currently so they aren't redirected from Dashboard page */}
       {/* classes the one you have enrolled in Faculties can add a course */}
@@ -212,10 +234,7 @@ ReactDOM.render(
         <AllEventListPage />
       </Route>
       
-      {/* news comp*/}
-      <Route exact path="/news">
-        <News />
-      </Route>
+      
       {/* schedule page for teachers*/}
       <Route exact path="/schedule">
         <SchedulePage />

@@ -7,12 +7,11 @@
     border: none;
     border-color: white;
     background: white;
-}
-.message-box {
-    background-image: url('image 49.png') !important;
+    background-image: url('chat Background.png') !important;
     background-size: cover;
     box-shadow: none;
 }
+
 .user1 {
     color: #A78EC3;
     text-decoration-color: #A78EC3;

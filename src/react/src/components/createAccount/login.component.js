@@ -67,6 +67,7 @@ class Login extends Component {
 							<div class="mx-auto text-right p-0 col-md-12 mb-4 text-sm">
 								<a href="" class="text-dark font-weight-bold"><u>Forgot Password</u></a>
 							</div>
+							<p id="ErrorMessage"></p>
 							<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
 								<button className="btnSignUp">LOGIN</button>
 							</div>
@@ -102,6 +103,7 @@ class Login extends Component {
 					localStorage.setItem('token', response.data)
 					localStorage.setItem('username', (this.state.username))
 					console.log(localStorage.getItem('username'))
+
 					axios.post('http://127.0.0.1:8103/api/db_get_user_type', {username: this.state.username})
 					.then(response => {
 						console.log(response);
@@ -110,10 +112,15 @@ class Login extends Component {
 						console.log(localStorage.getItem('usertype'))
 					})
 					.catch((error) => {
-					console.log(error)
+						console.log(error)
 				});
 			})
+			.catch((error) => {
+				document.getElementById('ErrorMessage').innerHTML="Incorrect Username or Password";
+				console.log(error)
+			})
 		}).catch((error) => {
+			document.getElementById('ErrorMessage').innerHTML="No user with this username found. Please enter correct username or make a account first.";
 			console.log(error)
 		});
     }

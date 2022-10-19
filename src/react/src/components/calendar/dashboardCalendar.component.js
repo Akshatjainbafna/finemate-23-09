@@ -15,7 +15,8 @@ import AssignmentsImg from '../../assets/assignment.png';
 import TodoImg from '../../assets/todo.png';
 import LeaderboardImg from '../../assets/leaderboard.png';
 import CalenderLogImg from '../../assets/log list.png';
-import { Tooltip } from '@material-ui/core';
+import { Button, Tooltip } from '@material-ui/core';
+import { Redirect } from 'react-router-dom';
 
 let vals;
 
@@ -78,18 +79,21 @@ const EventItem = ({ eventType, eventName, eventTime }) => {
 }
 
 class DashboardCalendarComponent extends Component {
-
-	state = {
-		date: new Date(),
-		selectedDay: String,
-		email: String,
+	constructor(props){
+		super(props);
+		this.state={
+			redirectTodo: false,
+			date: new Date(),
+			selectedDay: String,
+			email: String,
+		}
 	}
+
 
 	componentDidMount() {
 		axios.post('http://127.0.0.1:8103/api/db_get_user_email', { 'username': localStorage.getItem('username') })
 			.then(res => {
-				this.state.email = res.data;
-				window.localStorage.setItem('email', this.state.email);
+				this.setState({email: res.data}, () => window.localStorage.setItem('email', this.state.email))
 			});
 	}
 
@@ -131,8 +135,23 @@ class DashboardCalendarComponent extends Component {
 
 	onChange = date => this.setState({ date })
 
-	
+	displayDashMenu(dashMenu){
+        for (let x=1; x<=5; x++){
+            var dashMenuId= 'dashMenu'+String(x);
+            if (dashMenuId == dashMenu){
+                document.getElementById(dashMenu).style.display="block";
+            }
+            else{
+                document.getElementById(dashMenuId).style.display="none";
+            }
+        }
+    }
+
+
 	render() {
+		if (this.state.redirectTodo){
+			return <Redirect to="/todolist" />
+		}
 
 		const { value } = this.state;
 
@@ -140,16 +159,18 @@ class DashboardCalendarComponent extends Component {
 			<>
 			<div className={styles.dashCard4Style}>
 				<div className={styles.windowHiddenHeader}>
-				<Tooltip title ="Calendar"><a href="#dashMenu1" className={styles.dashCardMenu} ><img src={CalenderImg} alt='not found' /> </a></Tooltip>
-				<Tooltip title ="Diary"><a href="#dashMenu2" className={styles.dashCardMenu} ><img src={CalenderLogImg} alt='not found' /> </a></Tooltip>
-				<Tooltip title ="Assignments"><a href="#dashMenu3" className={styles.dashCardMenu} ><img src={AssignmentsImg} alt='not found'/> </a></Tooltip>
-				<Tooltip title ="Todo List"><a href="#dashMenu4" className={styles.dashCardMenu} ><img src={TodoImg} alt='not found'/> </a></Tooltip>
-				<Tooltip title ="Leaderboard"><a href="#dashMenu5" className={styles.dashCardMenu} ><img src={LeaderboardImg} alt='not found'/> </a></Tooltip>
+				<Tooltip title ="Calendar"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu1")}> <img src={CalenderImg} alt='not found' /> </Button></Tooltip>
+				<Tooltip title ="Diary"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu2")}><img src={CalenderLogImg} alt='not found' /> </Button></Tooltip>
+				<Tooltip title ="Assignments"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu3")}><img src={AssignmentsImg} alt='not found'/> </Button></Tooltip>
+				<Tooltip title ="Todo List"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectTodo: true})} onClick={() => this.displayDashMenu("dashMenu4")}><img src={TodoImg} alt='not found'/> </Button></Tooltip>
+				<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
 				
 				</div>
-				            <div className={styles.windowHidden} id="dashMenu1">
+
+				<div>
+				    		<div className={styles.windowHidden} id="dashMenu1">
 								<Calendar
-								className={styles.reactCalendar}
+									className={styles.reactCalendar}
 									onChange={this.onChange}
 									value={value}
 									locale={'en-US'}
@@ -161,24 +182,19 @@ class DashboardCalendarComponent extends Component {
 									onClickDay={this.clickDay(this.state.date)}
 								/>
 							</div>
-							<div class={styles.windowHidden} id="dashMenu2">
+							<div className={styles.windowHidden} id="dashMenu2">
 								<DiaryComponent/>
 							</div>
-							<div class={styles.windowHidden} id="dashMenu3">
+							<div className={styles.windowHidden} id="dashMenu3">
 								<TaskComponent />
 							</div>
-							<div class={styles.windowHidden} id="dashMenu4">
+							<div className={styles.windowHidden} id="dashMenu4">
 								<TodoComponent />
 							</div>
-							<div class={styles.windowHidden} id="dashMenu5">
+							<div className={styles.windowHidden} id="dashMenu5">
 								<LeaderboardYouVsYou />
 							</div>
-
-						{/*<div class="d-flex2 flex-column card-subheading mt-6">
-							<div>{localStorage.getItem('date')}</div>
-							{this.buildEvents(vals)}
-		</div>*/}
-
+				</div>
 			</div>
 			</>
 		);

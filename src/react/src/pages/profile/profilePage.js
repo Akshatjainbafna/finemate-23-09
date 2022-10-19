@@ -94,7 +94,10 @@ class ProfilePage extends Component {
     lastName: "",
     email: "",
     phoneNumber: "",
-    totalDaysJoined: ""
+    totalDaysJoined: "",
+    friends: [],
+    connections: [],
+    profilePicture: ''
   };
   componentDidMount() {
     axios
@@ -112,10 +115,13 @@ class ProfilePage extends Component {
         this.setState({ username: response.data["username"] });
         this.setState({ description: response.data["description"] });
         this.setState({ timeJoin: response.data["time_join"] });
-        this.setState({ totalDaysJoined: response.data["total_days_joined"] }, ()=> console.log(this.state.totalDaysJoined));
+        this.setState({ totalDaysJoined: response.data["total_days_joined"] });
         this.setState({ firstName: response.data["first_name"] });
         this.setState({ lastName: response.data["last_name"] });
         this.setState({ phoneNumber: response.data["phone_number"] });
+        this.setState({friends: response.data["friends"]});
+        this.setState({connections: response.data["connections"]});
+        this.setState({profilePicture: response.data["profilePicture"]});
       })
       .catch(error => {
         console.log(error);
@@ -125,8 +131,7 @@ class ProfilePage extends Component {
         username: localStorage.getItem("username")
       })
       .then(response => {
-        console.log(response);
-        console.log(response.data["email"]);
+        console.log(response.data);
         this.setState({ email: response.data });
       })
       .catch(error => {
@@ -159,6 +164,9 @@ class ProfilePage extends Component {
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
             username={this.state.username}
+            friends = {this.state.friends}
+            connections = {this.state.connections}
+            profilePicture = {this.state.profilePicture}
           />
             <FooterBarForMobile className="footerForMobile"/>
           </>
@@ -183,6 +191,9 @@ class ProfilePage extends Component {
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
             username={this.state.username}
+            friends = {this.state.friends}
+            connections = {this.state.connections}
+            profilePicture = {this.state.profilePicture}
           />
             <FooterBarForMobile className="footerForMobile" />
           </>
@@ -207,6 +218,9 @@ class ProfilePage extends Component {
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
             username={this.state.username}
+            friends = {this.state.friends}
+            connections = {this.state.connections}
+            profilePicture = {this.state.profilePicture}
           />
             <FooterBarForMobile className="footerForMobile"/>
           </>
@@ -236,6 +250,9 @@ class ProfilePage extends Component {
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
             username={this.state.username}
+            friends = {this.state.friends}
+            connections = {this.state.connections}
+            profilePicture = {this.state.profilePicture}
           />
         </div>
         </React.Fragment>
@@ -262,6 +279,9 @@ class ProfilePage extends Component {
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
             username={this.state.username}
+            friends = {this.state.friends}
+            connections = {this.state.connections}
+            profilePicture = {this.state.profilePicture}
           />
         </div>
         </React.Fragment>
@@ -289,6 +309,9 @@ class ProfilePage extends Component {
             email={this.state.email}
             phoneNumber={this.state.phoneNumber}
             username={this.state.username}
+            friends = {this.state.friends}
+            connections = {this.state.connections}
+            profilePicture = {this.state.profilePicture}
           />
         </div>
         </React.Fragment>

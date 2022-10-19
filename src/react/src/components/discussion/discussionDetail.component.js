@@ -3,6 +3,7 @@ import './discussionDetail.css'
 import CreateReply from './createReply.component.js'
 import axios from 'axios';
 import { Button, TextField } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 class DiscussionDetail extends Component {
     constructor(props) {
@@ -69,14 +70,16 @@ class DiscussionDetail extends Component {
                         {this.state.replies[0].bodies}
                     </div>
                     <span style={{marginLeft: "2%", color: "#aaa", fontSize: "small"}}>
-                        {this.state.replies[0].users} 
+                        <Link style={{color: "#aaa"}} to={"/profile/".concat(this.state.replies[0].users)}>
+                            {this.state.replies[0].users}
+                        </Link> 
                     </span>
                     <span style={{marginLeft: "2%", color: "#aaa", fontSize: "xx-small"}}>
                         {this.state.replies[0].timestamps}
                     </span>
                 </div>
                 <hr></hr>
-                <div className='d-flex' style = {{margin: "2% 10%"}}>
+                <div className='d-flex' style = {{margin: "2%"}}>
                 <TextField minRows={1}  multiline variant="outlined" placeholder="Add a reply..." fullWidth name='body' value={this.state.body} onChange={this.onChangeHandler} inputProps={{maxLength: "365"}} required />
                 <Button onClick={this.onSubmitHandler}>Reply</Button>
                 </div>
@@ -100,7 +103,11 @@ class DiscussionDetail extends Component {
                     {this.state.replies.slice(1).map(
                         (reply, index) => 
                             <div key={index} className='divStyl'>
-                                <span style={{marginLeft: "2%", color: "#aaa", fontSize: "xx-small"}}>{reply.users} </span>
+                                <span style={{marginLeft: "2%", color: "#aaa", fontSize: "xx-small"}}>
+                                    <Link style={{color: "#aaa"}} to={"/profile/".concat(reply.users)}>
+                                        {reply.users}
+                                    </Link>
+                                </span>
                                 <span style={{marginLeft: "2%", color: "#aaa", fontSize: "xx-small"}}>{reply.timestamps}</span>
                                 
                                 <div style = {{margin: "1%", padding: "10px", border: "1px solid #dfd6e9", borderRadius: "5px"}}>

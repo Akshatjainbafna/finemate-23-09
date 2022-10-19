@@ -17,6 +17,19 @@ class News extends Component {
             redirectToCourses: false
         }
     }
+    displayPanel(panel){
+        for (let x=1; x<=4; x++){
+            var panelId= 'panel'+String(x);
+            if (panelId == panel){
+                document.getElementById(panel).style.display="block";
+            }
+            else{
+                document.getElementById(panelId).style.display="none";
+            }
+        }
+    }
+
+    
     render() {
         if (this.state.redirectToCourses){
             return <Redirect to="/allclasslist" />
@@ -24,13 +37,30 @@ class News extends Component {
         return (
             <>
         
-            <Card className={style.classCardStyle}>
-                <Card.Body className={style.body}>
-                    <div className={style.tabs}>
-                        <input name="tabNews" type="radio" id="tabNews-1" checked="checked" className={style.input} />
-                        <label for="tabNews-1" className={style.label}>Course Related</label>
-                        <div className={style.panel}>
-                            <h1>New courses have been added!</h1>
+                <div className={style.tabs}>
+                        <div className="d-flex justify-content-around mt-2">
+                            <span>
+                                <input name="tabNews" type="radio" id="tabNews-1" className={style.input} onChange={() => this.displayPanel("panel1")} />
+                                <label for="tabNews-1" className={style.label}>Course Related</label>
+                            </span>
+                            <span>
+                                <input name="tabNews" type="radio" id="tabNews-2" className={style.input} onChange={() => this.displayPanel("panel2")}/>
+                                <label for="tabNews-2" className={style.label}>Institute</label>
+                            </span>
+                            <span>
+                                <input name="tabNews" type="radio" id="tabNews-3" className={style.input} onChange={() => this.displayPanel("panel3")}/>
+                                <label for="tabNews-3" className={style.label}>Teacher</label>
+                            </span>
+                            <span>
+                                <input name="tabNews" type="radio" id="tabNews-4" className={style.input} onChange={() => this.displayPanel("panel4")}/>
+                                <label for="tabNews-4" className={style.label}>Other</label>
+                            </span>
+                        </div>
+
+
+                        <div className={style.panelContainer}>
+                        <div className={style.panel} id="panel1">
+                            <h1 className={style.newsTitle}>New courses have been added!</h1>
                             <img className={style.textbox} src={book} ></img>
                             <p> Check out the newly added courses in the classes section</p>
                             <div className={style.btnLearn}>
@@ -39,10 +69,9 @@ class News extends Component {
                         </div>
 
 
-                        <input name="tabNews" type="radio" id="tabNews-2" className={style.input} />
-                        <label for="tabNews-2" className={style.label}>Institute</label>
-                        <div className={style.panel}>
-                            <h1>CFC launches new campaign</h1>
+                        
+                        <div className={style.panel} id="panel2">
+                            <h1 className={style.newsTitle}>CFC launches new campaign</h1>
                             <div className="picture-cfc">
                                 <img className={style.textbox} src={change} ></img>
                                 <p>Technology for improved education Guatemela is a project designed to improve the quality of eduction in Guatemala</p>
@@ -62,10 +91,9 @@ class News extends Component {
                             </div>
                         </div>
 
-                        <input name="tabNews" type="radio" id="tabNews-3" className={style.input} />
-                        <label for="tabNews-3" className={style.label}>Teacher</label>
-                        <div className={style.panel}>
-                        <h1>AI system discovers new useful material</h1>
+                        
+                        <div className={style.panel} id="panel3">
+                        <h1 className={style.newsTitle}>AI system discovers new useful material</h1>
                             <img className={style.textbox} src={computer} ></img>
                             <p>an AI algorithm called CAMEO that discovered a potentially useful new material</p>
                             <div className={style.btnLearn}>
@@ -73,20 +101,17 @@ class News extends Component {
                             </div>
                         </div>
 
-                        <input name="tabNews" type="radio" id="tabNews-4" className={style.input} />
-                        <label for="tabNews-4" className={style.label}>Other</label>
-                        <div className={style.panel}>
-                        <h1>Want to know more about UImpactify</h1>
+                        
+                        <div className={style.panel} id="panel4">
+                        <h1 className={style.newsTitle}>Want to know more about UImpactify</h1>
                             <img className={style.textbox} src={logo} ></img>
                             <p>learn more about UImpactify!</p>
                             <div className={style.btnLearn}>
                                 <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToCourses: true})}}>learn more</button>
                             </div>
                         </div>
-                    </div>
-                </Card.Body>
-                <div className='square'></div>
-            </Card>
+                        </div>
+                </div>
             </>
             );
     }

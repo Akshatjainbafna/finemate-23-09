@@ -15,6 +15,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
 import { FormControl, RadioGroup, Radio, Tooltip, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 
 //display/hide functions for previousNext window and moreOptions window
@@ -56,21 +57,21 @@ class NewsFeed extends Component{
     }
 
 
-    showBackgroundImage(index){
+    showBackgroundImage(index, imgId){
         const currentPostQuestion = this.referenceToPostQuestion.current;
 
         var factId="idFact"+String(index);
         document.getElementById(factId).style.display="none";
 
-        document.getElementById(index).style.opacity=1;
+        document.getElementById(imgId).style.opacity=1;
     }
-    hideBackgroundImage(index){
+    hideBackgroundImage(index, imgId){
         const currentPostQuestion = this.referenceToPostQuestion.current;
 
         var factId="idFact"+String(index);
         document.getElementById(factId).style.display="block";
         
-        document.getElementById(index).style.opacity=0.12;
+        document.getElementById(imgId).style.opacity=0.12;
     }
 
 
@@ -171,10 +172,6 @@ class NewsFeed extends Component{
             console.log("incorrect MCQs", this.state.inCorrectMCQs, "correctMCQs", this.state.correctMCQs, allMenuListVisible, allMenuListVisible.length);
 
             var currentlyNumberOfPostRendered = allMenuListVisible.length;
-            //setting the image src of the image element to display the post (IF THE USER'S ANSWER IS INCORRECT)
-            let img = document.getElementById(indexOfPost);
-            let imgName= this.state.responseData[index].background;
-            img.src= require('../../assets/postBackgroundImages/'+ imgName);
 
             //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post (IF THE USER'S ANSWER IS INCORRECT)
             var idValue="idMenuListVisible"+String(index);
@@ -213,13 +210,7 @@ class NewsFeed extends Component{
 
                 console.log("incorrect MCQs", this.state.inCorrectMCQs, "correctMCQs", this.state.correctMCQs, allMenuListVisible);
 
-                var currentlyNumberOfPostRendered = allMenuListVisible.length;
-
-                //setting the image src of the image element to display the post (IF THE USER'S ANSWER IS INCORRECT)
-                let imgName= this.state.responseData[index].background;
-                let img = document.getElementById(indexOfPost);
-                img.src= require('../../assets/postBackgroundImages/'+ imgName);
-                
+                var currentlyNumberOfPostRendered = allMenuListVisible.length;    
                 
                 //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post (IF THE USER'S ANSWER IS INCORRECT)
                 var idValue="idMenuListVisible"+String(index);
@@ -238,7 +229,20 @@ class NewsFeed extends Component{
             });
         });
     }
-
+    deletePost(postId, index){
+        axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        .then(res => {
+            if (res.data==true){
+                axios.post('http://127.0.0.1:8103/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: postId})
+                .then(() => {
+                    const responseData = this.responseData;
+                    responseData.splice(index, 1)
+                    this.setState(responseData)})
+                .catch((error) => console.log(error))
+            }
+        })
+        .catch(err => console.log(err))
+    }
     componentDidMount() {
         const headers = { "Content-Type": "application/json" };
         axios.post('http://127.0.0.1:8103/api/display_posts', { 'username' : localStorage.getItem('username')}, {headers})
@@ -257,7 +261,6 @@ class NewsFeed extends Component{
                 var allMenuListVisible = document.getElementsByName('menuListName');
                 var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
                 var allFacts = document.getElementsByName('factName');
-
 
                 
                 //for loop to create some elemnts, attributes, updating array states manually
@@ -292,8 +295,8 @@ class NewsFeed extends Component{
                         saveStateList.push(true);
                     }
 
-                    //shuffling all the options for a mcq in mcq1Options array of the state.responseData object of the MCQ's[Posts with points less than 7]
-                    if (this.state.responseData[i].points < 7 ){
+                    //shuffling all the options for a mcq in mcq1Options array of the state.responseData object of the MCQ's[Posts with points less than 9]
+                    if (this.state.responseData[i].points < 9 ){
                     let array = this.state.responseData[i].mcq1Options;
                     let m = array.length, yo, t;
                     // While there remain elements to shuffle…
@@ -315,14 +318,8 @@ class NewsFeed extends Component{
                     }
 
 
-                    //code for the posts only if it has a score of greater than or equal to 7
-                    if (this.state.responseData[i].points >= 7){
-
-                        //setting the image src of the image element to display the post
-                        let imgName = this.state.responseData[i].background;
-                        let img = document.getElementById(indexOfPost);
-                        var yo= img.src = require('../../assets/postBackgroundImages/'+ imgName);
-                        console.log(yo);
+                    //code for the posts only if it has a score of greater than or equal to 8
+                    if (this.state.responseData[i].points >= 9){
                 
                         //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post
                         let idValueOfMenuList = "idMenuListVisible"+String(i);
@@ -348,7 +345,6 @@ class NewsFeed extends Component{
             )
 
 
-
             /*sending a list of likes, lightens, and saved posts oid every 15 sec*/
             setInterval(()=> {
                 axios.post('http://127.0.0.1:8103/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : this.state.listOfLikedPosts, 'lighten' : this.state.listOfLightenPosts, 'savedPosts' : this.state.listOfSavedPosts })
@@ -356,10 +352,6 @@ class NewsFeed extends Component{
                     (error) => console.log(error)
                 )
             }, 15000);
-    }
-
-    componentDidUpdate(){
-
     }
 
    /* making an image element and passing the address+image_name in src attribute deprecated from 1-08-22
@@ -375,17 +367,16 @@ render(){
             <>
         {this.state.responseData.map((responseData, index) =>
         <div className={style.postTypeDecider} key={index}> 
-        {(() =>{ if (responseData.points >=7 || this.state.inCorrectMCQs.includes(responseData._id.$oid)) {
+        {(() =>{ if (responseData.points >= 9 || this.state.inCorrectMCQs.includes(responseData._id.$oid)) {
                                
-                return <div className={style.postCardContainer} key={index} onMouseLeave={() => hideMoreOptions(index)}>
+                return <div className={style.postCardContainer} key={index} onMouseLeave={() => {hideMoreOptions(index); hidePreviousNextPostWindow(index)}}>
                 {/* If the points for a particular post is equal to or greater than 7 then the post will be of PostCard type */}
                     
                     <form id="postInteraction">
                         <div className={style.postHeader} id="postHeader">
                             <div className={style.postMetaData}>
                                <p className={style.subject} >{responseData.subject}</p>
-                               <span className={style.topic}  ><a href=""> {responseData.topic} </a></span><BsArrowRightShort/>
-                               <span className={style.subTopic} ><a href=""> {responseData.subtopic}</a></span>
+                               <p><span className={style.topic}  > <Link to={'/topic/'.concat(responseData.topic)}>{responseData.topic}</Link></span><BsArrowRightShort/> <span className={style.subTopic} ><Link to={'/topic/'.concat(responseData.subtopic)}> {responseData.subtopic} </Link></span></p> 
                             </div>
 
                              <Tooltip title="Intrigrity Slider"><div className={style.integritySlider}> <input type="range" aria-label="Intrigrity Slider" value={this.state.silderValue} min="0" step="1" max="2" onChange={this.slider}/></div></Tooltip>
@@ -414,15 +405,30 @@ render(){
                         </div>
 
                         <div className={style.postImg} onDoubleClick={() => {this.postLiked(index)}}  id="imageLocation">
-                            <div name="menuListName" className={style.menuListVisible} >
-                                <div>Not Interested</div>
-                                <div>Show Often</div>
-                                <div>Prerequisite</div>
-                                <div>Tags</div>
-                                <div>Glossaries</div>
-                                <div>Read More</div>
-
+                        {responseData.username==localStorage.getItem('username') ?
+                            
+                            <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Not Interested</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Show Often</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid, index)}>Delete Post</Button></div>
                             </div>
+
+                            :
+
+                            <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Not Interested</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Show Often</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
+                            </div>
+
+                            }
 
                            
                             <span className={style.quesFactBlock} ref={this.referenceToPostQuestion}>
@@ -438,10 +444,10 @@ render(){
                                 </p>
                             </span>
 
+                            <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
 
-                            <img id={index} ref={this.referenceToPostImage} className={style.backgroundImage} />  
-
-                            <span name="previousNextWindowName" className={style.previousNextWindow} onMouseOver={() => viewPreviousNextPostWindow(index)}><BsArrowLeft size={22} cursor={"pointer"}/>  <BsArrowRight size={22} cursor={"pointer"}/></span> 
+                            <span name="previousNextWindowName" className={style.previousNextWindow} onMouseOver ={() => viewPreviousNextPostWindow(index)}><BsArrowLeft size={22} cursor={"pointer"}/>  <BsArrowRight size={22} cursor={"pointer"}/></span> 
+                            
                             <Tooltip title="View Background" > 
                                 <FormControlLabel
                                     className={style.viewImageIcon}
@@ -452,7 +458,7 @@ render(){
                                         icon={ <FilterCenterFocusRounded /> } 
                                         checkedIcon={ <FilterCenterFocusRounded /> }
                                         name="viewBackground" 
-                                        onMouseDownCapture={() => this.showBackgroundImage(index)} onMouseUpCapture={()=> this.hideBackgroundImage(index)}
+                                        onMouseDownCapture={() => this.showBackgroundImage(index, responseData.background)} onMouseUpCapture={()=> this.hideBackgroundImage(index, responseData.background)}
                                     />
                                     }
                                 /> 
@@ -460,7 +466,7 @@ render(){
                         </div>
 
 
-                        <div className={style.postFooter} onMouseLeave={() => hidePreviousNextPostWindow(index)}>
+                        <div className={style.postFooter}>
                             <div className={style.leftSectionFooter}>
                             <span>
                             <Tooltip title="Nice Explaination"> 
@@ -516,7 +522,7 @@ render(){
                             </div>
 
                             <div className={style.rightSectionFooter}>
-                            <span className={style.viewPreviousNextPost} onMouseOver={() => viewPreviousNextPostWindow(index)} ><SwapHorizOutlined style={{ fontSize: 30 }}/></span>
+                            <span className={style.viewPreviousNextPost} onClick={() => viewPreviousNextPostWindow(index)} onMouseUpCapture={() => hidePreviousNextPostWindow(index)} onMouseOver={() => viewPreviousNextPostWindow(index)} ><SwapHorizOutlined style={{ fontSize: 30 }}/></span>
                             </div>
                         </div>
                         
@@ -634,7 +640,7 @@ render(){
                 }
 
                 //shuffling all the options for a mcq in mcq1Options array of the state.responseData object of the MCQ's[Posts with points less than 7]
-                if (this.state.responseData[i].points < 7 ){
+                if (this.state.responseData[i].points < 9 ){
                 let array = this.state.responseData[i].mcq1Options;
                 let m = array.length, yo, t;
                 // While there remain elements to shuffle…
@@ -657,13 +663,7 @@ render(){
 
 
                 //code for the posts only if it has a score of greater than or equal to 7
-                if (this.state.responseData[i].points >= 7){
-
-                    //setting the image src of the image element to display the post
-                    let imgName = this.state.responseData[i].background;
-                    let img = document.getElementById(indexOfPost);
-                    var yo= img.src = require('../../assets/postBackgroundImages/'+ imgName);
-                    console.log(yo);
+                if (this.state.responseData[i].points >= 9){
             
                     //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post
                     let idValueOfMenuList = "idMenuListVisible"+String(i);

@@ -44,7 +44,7 @@ class NewsfeedHeader extends Component{
             <>
             <div className={style.newsfeedFeatures}>
             
-            <Tooltip title="Add Post"><Button style={{padding: "0"}} className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}><img style={{width:"5.5vw", height: "5.5vw"}} src={addPost}></img></Button></Tooltip>
+            <Tooltip title="Add Post"><Button style={{padding: "0", borderRadius: '100%'}} className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}><img style={{width:"5.5vw", height: "5.5vw"}} src={addPost}></img></Button></Tooltip>
             
             {this.state.setOpen ? <ContentAuthoringToolWindow /> : null }
 

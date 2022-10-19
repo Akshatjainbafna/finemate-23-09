@@ -19,6 +19,7 @@ import forum from "../../assets/forum.png";
 import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
 import { Redirect } from "react-router-dom";
+import SearchPageComponent from "../../components/search/searchPage.component";
 
 
 let headerItems = { link: "/profile", title: "Search", profileImg: profile };
@@ -89,8 +90,8 @@ class SearchPage extends React.Component{
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />
-                  <div className="comingSoon">
-                    Search Page comingSoon
+                  <div className="searchPage">
+                    <SearchPageComponent />
                   </div>
                 <FooterBarForMobile className="footerForMobile"/>
               </>
@@ -100,8 +101,8 @@ class SearchPage extends React.Component{
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForStudent} />
-                    <div className="comingSoon">
-                      Search Page comingSoon
+                    <div className="searchPage">
+                    <SearchPageComponent />
                     </div>
                 <FooterBarForMobile className="footerForMobile" />
               </>
@@ -111,8 +112,9 @@ class SearchPage extends React.Component{
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForInstructorInstitute} />
-                    <div className="comingSoon">
-                      Search Page comingSoon
+                    <div className="searchPage">
+                    <SearchPageComponent />
+
                     </div>
                 <FooterBarForMobile className="footerForMobile"/>
               </>
@@ -127,7 +129,8 @@ class SearchPage extends React.Component{
               <Sidebar books={navItemsForNormalUser} />
               <Headerbar icons={headerItems} />
               <div className="profileBox">
-                Work in Progress
+              <SearchPageComponent />
+
               </div>
             </React.Fragment>
           );
@@ -138,7 +141,7 @@ class SearchPage extends React.Component{
               <Sidebar books={navItemsForStudent} />
               <Headerbar icons={headerItems} />
               <div className="profileBox">
-              Work in Progress
+              <SearchPageComponent />
 
               </div>
             </React.Fragment>
@@ -151,7 +154,7 @@ class SearchPage extends React.Component{
               <Sidebar books={navItemsForInstructorInstitute} />
               <Headerbar icons={headerItems} />
               <div className="profileBox">
-              Work in Progress
+              <SearchPageComponent />
 
               </div>
             </React.Fragment>

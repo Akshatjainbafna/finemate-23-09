@@ -25,3 +25,9 @@
 .sidebarListItem:hover, .sidebarListItem:focus{
     background-color: rgba(0, 0, 0, 0.15);
 }
+.profilePictureSidebarThumbnail{
+    height: 35px;
+    width: 35px;
+    object-fit: cover;
+    border-radius: 100%;
+}

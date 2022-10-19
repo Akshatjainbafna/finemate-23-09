@@ -93,6 +93,7 @@ class createAccount extends Component {
 				Already have an account? 
 				<a href="/login" class="ml-1 text-dark font-weight-bold"><u>Log in</u></a>
 			</div>
+			<p id="ErrorMessage"></p>
 			<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
 				<button className="btnSignUp">SIGN UP</button>
 			</div>
@@ -113,6 +114,7 @@ class createAccount extends Component {
 				this.setState({accountCreated:true});
 				})
 			.catch((error) => {
+				document.getElementById('ErrorMessage').innerHTML="Username or Email is Already in Use. Please Enter different Username and/or Email."
 			console.log(error)
 		});
     }

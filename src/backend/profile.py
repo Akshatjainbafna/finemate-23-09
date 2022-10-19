@@ -18,7 +18,7 @@ class ProfileObj():
 	# generic user class inheriting the mongo document 
 	class Profile(me.Document):
 
-		username = me.StringField(required=True)
+		username = me.StringField(required=True, unique = True)
 		phone_number = me.StringField()
 		first_name = me.StringField()
 		last_name = me.StringField()
@@ -33,6 +33,10 @@ class ProfileObj():
 		interests = me.ListField(StringField(), default=list)
 		qualification=me.StringField()
 		coreStream=me.StringField()
+		friends= me.ListField(StringField(), default=list)
+		connections= me.ListField(StringField(), default=list)
+		pending = me.ListField(StringField(), default=list)
+		profilePicture = me.StringField()
 
 		def to_json(self):
 			"""
@@ -53,7 +57,9 @@ class ProfileObj():
 				"educations": self.educations,
 				"interests": self.interests,
 				"lookingForwardToLearn": self.lookingForwardToLearn,
-
+				"friends": self.friends,
+				"connections": self.connections,
+				'profilePicture' : self.profilePicture
 			}
 
 	def __init__(self, content):
@@ -72,16 +78,18 @@ class ProfileObj():
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		if (self.Profile.objects(username=self.content['username']).count() > 0):
+		username = self.content['username'].lower()
+
+		if (self.Profile.objects(username=username).count() > 0):
 			return make_response("Username already in use.", 400)
 
-		self.Profile(username=self.content['username'],
-					phone_number='N/A',
-					first_name='N/A',
-					last_name='N/A',
-					name='N/A',
+		self.Profile(username=username,
+					phone_number='',
+					first_name='',
+					last_name='',
+					name='',
 					time_join=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-					description='N/A').save()
+					description='').save()
 		return make_response("", 200)
 	
 	def db_get_profile(self):
@@ -107,7 +115,25 @@ class ProfileObj():
 			return make_response(jsonify(prof_obj_to_dict), 200)
 		else:
 			return make_response("Username does not exist", 404)
-	
+
+
+	def db_get_profile_picture(self):
+		"""
+		Gets the profile given a username
+		"""
+
+		x = checkFields(self.content, fields=['username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		prof_obj = self.Profile.objects(username=self.content['username']).only('profilePicture').first()
+
+		if prof_obj:
+			return make_response(jsonify(prof_obj), 200)
+		else:
+			return make_response("Username does not exist", 404)
+
+
 	def db_update_profile_phone_number(self):
 		"""
 		Updates the phone number in the database for the corresponding username
@@ -309,6 +335,38 @@ class ProfileObj():
 			return make_response("", 200)
 		else:
 			return make_response("User does not exist.", 404)
+
+	def db_add_profile_interest(self):
+		"""
+		Adds a profile education in the database for the corresponding username
+		"""
+
+		x = checkFields(self.content, fields=['interest', 'username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		prof_obj = self.Profile.objects(username=self.content['username']).first()
+		if prof_obj:
+			prof_obj.update(add_to_set__interests=self.content['interest'])
+			return make_response("", 200)
+		else:
+			return make_response("User does not exist.", 404)
+
+	def db_delete_profile_interest(self):
+		"""
+		deleteds a profile educations in the database for the corresponding username
+		"""
+
+		x = checkFields(self.content, fields=['interest', 'username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		prof_obj = self.Profile.objects(username=self.content['username']).first()
+		if prof_obj:
+			prof_obj.update(pull__interests=self.content['interest'])
+			return make_response("", 200)
+		else:
+			return make_response("User does not exist.", 404)
 	
 	def db_add_education_from_questionaire(self):
 
@@ -324,5 +382,128 @@ class ProfileObj():
 			prof_obj.update(push_all__educations=self.content['listOfPreviousEducation'])
 			prof_obj.update(push_all__lookingForwardToLearn=self.content['listOfLookingForwardToLearn'])
 			return make_response("", 200)
+		else:
+			return make_response("User does not exist.", 404)
+
+	def search_user_profile(self):
+
+		x = checkFields(self.content, fields=['username','whoSearched'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		user_obj = self.Profile.objects.search_text(self.content['username'])[:10]
+
+		print(json.loads(user_obj.to_json()), user_obj.to_json())
+
+		if len(json.loads(user_obj.to_json())) > 1 or user_obj[0].username != self.content['whoSearched']:
+			return make_response(jsonify(user_obj), 200)
+		else:
+			return make_response("", 200)
+
+	def add_connection(self):
+
+		x = checkFields(self.content, fields=['username1', 'username2'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		if self.content['username1'] != self.content['username2']:
+			user_obj1 = self.Profile.objects(username=self.content['username1']).first()
+			user_obj2 = self.Profile.objects(username=self.content['username2']).first()
+
+			if user_obj1 and user_obj2:
+				if user_obj2.username not in user_obj1.connections and user_obj1.username not in user_obj2.connections and user_obj1.username not in user_obj2.pending:
+					user_obj1.update(push__connections = user_obj2.username)
+					user_obj2.update(push__connections = user_obj1.username)
+					user_obj2.update(push__pending = user_obj1.username)
+
+				return make_response("Done", 200)
+			else:
+				return make_response("User Not Found", 200)
+	
+	def remove_connection(self):
+
+		x = checkFields(self.content, fields=['username1', 'username2'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		user_obj1 = self.Profile.objects(username=self.content['username1']).first()
+		user_obj2 = self.Profile.objects(username=self.content['username2']).first()
+
+		if user_obj1 and user_obj2:
+			if user_obj2.username in user_obj1.connections and user_obj1.username in user_obj2.connections:
+				user_obj1.update(pull__connections = user_obj2.username)
+				user_obj2.update(pull__connections = user_obj1.username)
+				user_obj1.update(pull__pending = user_obj2.username)
+				user_obj2.update(pull__pending = user_obj1.username)
+
+			return make_response("Done", 200)
+		else:
+			return make_response("User Not Found", 200)
+	
+	def add_friend(self):
+
+		x = checkFields(self.content, fields=['username1', 'username2'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		if self.content['username1'] != self.content['username2']:
+			user_obj1 = self.Profile.objects(username=self.content['username1']).first()
+			user_obj2 = self.Profile.objects(username=self.content['username2']).first()
+
+			if user_obj1 and user_obj2:
+				if user_obj2.username in user_obj1.connections and user_obj1.username in user_obj2.connections and user_obj2.username not in user_obj1.friends and user_obj1.username not in user_obj2.friends:
+					user_obj1.update(pull__connections = user_obj2.username)
+					user_obj2.update(pull__connections = user_obj1.username)
+					user_obj1.update(pull__pending = user_obj2.username)
+
+					user_obj1.update(push__friends = user_obj2.username)
+					user_obj2.update(push__friends = user_obj1.username)
+
+				return make_response("Done", 200)
+			else:
+				return make_response("User Not Found", 200)
+
+	def remove_friend(self):
+
+		x = checkFields(self.content, fields=['username1', 'username2'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		user_obj1 = self.Profile.objects(username=self.content['username1']).first()
+		user_obj2 = self.Profile.objects(username=self.content['username2']).first()
+
+		if user_obj1 and user_obj2:
+			if user_obj2.username in user_obj1.friends and user_obj1.username in user_obj2.friends:
+				user_obj1.update(pull__friends = user_obj2.username)
+				user_obj2.update(pull__friends = user_obj1.username)
+			return make_response("Done", 200)
+		else:
+			return make_response("User Not Found", 200)
+
+	def get_pending(self):
+
+		x = checkFields(self.content, fields=['username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		allTheConnections = self.Profile.objects(username=self.content['username']).only('username', 'pending', 'profilePicture').first()
+		
+		allThePendings = []
+		if allTheConnections:
+			for i in allTheConnections.pending:
+				pendingUser = self.Profile.objects(username=i).only('username', 'profilePicture').first()
+				if pendingUser:
+					allThePendings.append(pendingUser)
+			return make_response(jsonify(allThePendings), 200)
+		else:
+			return make_response("Missing required field: " + x, 400)
+
+	def set_profile_picture(self, profilePictureFileName):
+		
+		user = self.Profile.objects(username = self.content['username'])
+
+		if user:
+			user.update(set__profilePicture = profilePictureFileName)
+			return make_response('Profile picture updated successfully!', 200)
 		else:
 			return make_response("User does not exist.", 404)

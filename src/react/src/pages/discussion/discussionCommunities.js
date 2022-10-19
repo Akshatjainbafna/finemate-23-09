@@ -82,27 +82,46 @@ let navItemsMobileForInstructorInstitute=[
 
 function Communities(){
     let allTheComunitities =[
-        {id: 1, imgSrc: profile, title: "EntrepreneurShip"},
-        {id: 2, imgSrc: profile, title: "Engineers"},
-        {id: 3, imgSrc: profile, title: "Developers"},
-        {id: 4, imgSrc: profile, title: "Data Analyst"},
-        {id: 5, imgSrc: profile, title: "Front End Developers"},
-        {id: 6, imgSrc: profile, title: "Blockchain Developers"},
-        {id: 7, imgSrc: profile, title: "Ethical Hackers"},
-        {id: 8, imgSrc: profile, title: "JEE Aspirants"},
-        {id: 9, imgSrc: profile, title: "Android Developers"},
-        {id: 10, imgSrc: profile, title: "Graphic Designers "},
+        "EntrepreneurShip",
+        "Engineers",
+        "Developers",
+        "Data Analyst",
+        "Front End Developers",
+        "Blockchain Developers",
+        "Ethical Hackers",
+        "JEE Aspirants",
+        "Android Developers",
+        "Graphic Designers ",
+        'Fashion Designers',
+        'Architects',
+        'Interior Designers',
+        'Business Analysts',
+        'Machine Learning',
+        'Gamers',
+        'Makeup Artists'
     ]
+    let m = allTheComunitities.length, yo, t;
+    // While there remain elements to shuffle…
+    while (m) {
+      // Pick a remaining element…
+      yo = Math.floor(Math.random() * m--);
+                
+      // And swap it with the current element.
+      t = allTheComunitities[m];
+      allTheComunitities[m] = allTheComunitities[yo];
+      allTheComunitities[yo] = t;
+    }
+
     return (
         <>
         <div className="communityContainer">
         {allTheComunitities.map(
             (community, index) => 
-                <Link key={index} to={'/discussionList/'.concat(community.title)} style={{backgroundColor: "#" + ((1<<24)*Math.random() | 0).toString(16)}} title={"Community of".concat(community.title)} className="community">
+                <Link key={index} to={'/discussionList/'.concat(community)} style={{backgroundColor: "#" + ((1<<24)*Math.random() | 0).toString(16)}} title={"Community of ".concat(community)} className="community">
                     <span className="mr-2">
-                        {community.title}
+                        {community}
                     </span>
-                    <span><img src={community.imgSrc} alt=""/></span>
+                    <span><img src={profile} alt=""/></span>
                 </Link>
             
         )}

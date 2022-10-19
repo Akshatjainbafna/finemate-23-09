@@ -19,9 +19,9 @@ class UserObj():
 	class User(me.Document):
 
 		user_type = me.StringField(required=True)
-		username = me.StringField(required=True)
+		username = me.StringField(required=True, unique = True)
 		password = me.StringField(required=True)
-		email = me.StringField(required=True)
+		email = me.StringField(required=True, unique = True)
 		last_login = me.StringField()
 		last_logout = me.StringField()
 
@@ -64,13 +64,17 @@ class UserObj():
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		if (self.User.objects(username=self.content['username']).count() > 0):
+		username = self.content['username'].lower()
+		email= self.content['email'].lower()
+
+		if (self.User.objects(username=username).count() > 0):
 			return make_response("Username already in use.", 400)
-		if (self.User.objects(email=self.content['email']).count() > 0):
+			
+		if (self.User.objects(email=email).count() > 0):
 			return make_response("Email already in use.", 400)
 
-		self.User(user_type=self.content['user_type'], username=self.content['username'], password=self.content['password'], email=self.content['email'], last_login='N/A', last_logout='N/A').save()
-		return make_response("", 200)
+		self.User(user_type=self.content['user_type'], username=username, password=self.content['password'], email=email, last_login='N/A', last_logout='N/A').save()
+		return "true"
 	
 	def db_get_user(self):
 		"""

@@ -20,9 +20,10 @@ import forum from "../../assets/forum.png";
 import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
 import { Redirect } from "react-router-dom";
+import NotificationComponent from "../../components/notifications/Notifications.component";
 
 
-let headerItems = { link: "/profile", title: "MarketPlace", profileImg: profile };
+let headerItems = { link: "/profile", title: "Notifications", profileImg: profile };
 
 let navItemsForNormalUser = [
     { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
@@ -89,7 +90,9 @@ class NotificationPage extends React.Component{
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />
-                  <div className="comingSoon"> Work in Progress</div>
+                  <div className="notificationPage">
+                    <NotificationComponent />
+                  </div>
                 <FooterBarForMobile className="footerForMobile"/>
               </>
             )
@@ -98,7 +101,9 @@ class NotificationPage extends React.Component{
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForStudent} />
-                    <div className="comingSoon"> Work in Progress</div>
+                    <div className="notificationPage">
+                      <NotificationComponent />
+                    </div>
                 <FooterBarForMobile className="footerForMobile" />
               </>
             )
@@ -107,7 +112,9 @@ class NotificationPage extends React.Component{
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForInstructorInstitute} />
-                    <div className="comingSoon"> Work in Progress</div>
+                    <div className="notificationPage">
+                      <NotificationComponent />
+                    </div>
                 <FooterBarForMobile className="footerForMobile"/>
               </>
             )
@@ -121,7 +128,7 @@ class NotificationPage extends React.Component{
               <Sidebar books={navItemsForNormalUser} />
               <Headerbar icons={headerItems} />
               <div className="profileBox">
-                Work in Progress
+                <NotificationComponent />
               </div>
             </React.Fragment>
           );
@@ -132,8 +139,7 @@ class NotificationPage extends React.Component{
               <Sidebar books={navItemsForStudent} />
               <Headerbar icons={headerItems} />
               <div className="profileBox">
-              Work in Progress
-
+                <NotificationComponent />
               </div>
             </React.Fragment>
           );
@@ -145,8 +151,7 @@ class NotificationPage extends React.Component{
               <Sidebar books={navItemsForInstructorInstitute} />
               <Headerbar icons={headerItems} />
               <div className="profileBox">
-              Work in Progress
-
+                <NotificationComponent />
               </div>
             </React.Fragment>
           );

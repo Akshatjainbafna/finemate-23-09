@@ -86,8 +86,18 @@
     background-color: #F7F7FF;
     font-family: "Open Sans";
     box-shadow: none !important;
-    margin: 0 1vw;
+    margin: 0 2vw;
 }
+
+.logOutScreen{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+    justify-content: center;
+}
+
 @media screen and (max-width: 600px) {
     .cardStyle2{
         margin-top: 5vh;
