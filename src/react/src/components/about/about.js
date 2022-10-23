@@ -76,7 +76,7 @@ class About extends Component {
             <div>As a Student, Professional or Institute if you face any problem please</div>
             <div className="d-flex">
               <input type="text" class="form-control" id="inlineFormPainPointInput" onChange={(e) => {this.setState({addedPainPoint: e.target.value})}} placeholder="Add one..." maxLength="25" />
-              <button type="submit" className="border-0 bg-light"  onSubmit={(e)=> this.addPainPointToDatabase(e)}>
+              <button type="submit" className="border-0 bg-light"  onClick={(e)=> this.addPainPointToDatabase(e)}>
                 <img src={createMessage} alt="" />
               </button>
             </div>

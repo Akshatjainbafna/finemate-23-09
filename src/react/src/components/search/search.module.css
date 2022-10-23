@@ -23,7 +23,10 @@
     transition: background-color 0.1s, color 0.1s;
   }
   .input:checked + .label{
-    background: #dfd6e9;
+    background: #e9e4f0;
+  }
+  .input:hover + .label{
+    background-color: #e9e4f0;
   }
   .profilePictureThumbnail{
     height: 2rem;

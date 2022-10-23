@@ -65,7 +65,7 @@ class HeaderBarForMobile extends Component{
       componentDidMount(){
         Axios.post('http://127.0.0.1:8103/api/db_get_profile_picture', {'username': localStorage.getItem('username')})
         .then(response => {
-          this.setState({profilePicture: response.data.profilePicture}, ()=> console.log(this.state.profilePicture));
+          this.setState({profilePicture: response.data.profilePicture});
         })
         .catch(err => console.log(err))
       }

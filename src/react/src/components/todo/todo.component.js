@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import style from "./todo.module.css";
 import addTodo from '../../assets/addTodo.png'
 import changeView from '../../assets/changeView.png'
@@ -13,13 +13,23 @@ function AddTodoComponent(props){
     const [todoState, setTodoState] = useState(props.todo);
     const [title, settitle] = useState();
     const [importance, setImportance] = useState();
+    const [bgImage, setBgImg] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [imgaes, setImages] = useState([]);
+
 
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    
+    useEffect(() => {
+        Axios.post('http://127.0.0.1:8103/api/get_todo_images', {title: title})
+        .then(response => {
+            setImages(response.data)
+        })
+    })
 
     function onSubmitHandler(){
-        Axios.post('http://127.0.0.1:8103/api/add_todo', {'username' : localStorage.getItem('username'), 'title': title, 'importance': importance, 'inNewsfeed' : checked})
+        Axios.post('http://127.0.0.1:8103/api/add_todo', {'username' : localStorage.getItem('username'), 'title': title, 'importance': importance, 'inNewsfeed' : checked, 'imageName': bgImage})
         .then(res => console.log(res.data))
         .catch(err => console.log(err))
         setTodoState(false);
@@ -43,8 +53,15 @@ function AddTodoComponent(props){
                         >
                         <DialogTitle color="primary"><b>Add Todo</b></DialogTitle>
                         <DialogContent>
-                            <InputLabel htmlFor='titleOfThread'>Title</InputLabel>
-                            <OutlinedInput id="titleOfThread" type="text" name='title' placeholder="Add a Intriguing title..." inputProps={{maxLength: "80"}} value={title} onChange={(event) => settitle(event.target.value)} required/>
+                            <div className='d-flex justify-content-between'>
+                                <div>
+                                    <InputLabel htmlFor='titleOfThread'>Title</InputLabel>
+                                    <OutlinedInput id="titleOfThread" type="text" name='title' placeholder="Add a Intriguing title..." inputProps={{maxLength: "80"}} value={title} onChange={(event) => settitle(event.target.value)} required/>
+                                </div>
+                                <div>
+                                    <FormControlLabel onChange={() => setChecked(!checked) } control={<Checkbox />} label="Notification" />
+                                </div>
+                            </div>
                             <p></p>
 
                             <InputLabel htmlFor='importanceOfTodo'>Importance</InputLabel>
@@ -63,7 +80,24 @@ function AddTodoComponent(props){
                             </RadioGroup>
                             <p></p>
 
-                            <FormControlLabel onChange={() => setChecked(!checked) } control={<Checkbox />} label="Do you want in Newsfeed and Notified?" />
+
+                        <RadioGroup
+                            aria-labelledby="bgImage"
+                            value={bgImage}
+                            onChange={(event) => {setBgImg(event.target.value); console.log(event.target.value)}}
+                            name='bgImage'
+                            >
+
+                            <div className="d-flex justify-content-around flex-wrap">
+                            {imgaes.map((image) =>
+                                <div className={style.todoCard}> 
+                                    <FormControlLabel value={image} control={<Radio style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ image)} alt='todo image' className={style.todoImages} />} />
+                                </div>
+                             )}
+                            </div>
+
+                        </RadioGroup>
+
                         </DialogContent>
                         <DialogActions>
                             <Button onClick={() => setTodoState(false)}>
@@ -104,6 +138,7 @@ class TodoComponent extends Component{
     }
 
     deleteTodo(event, index){
+        console.log(event.target.value)
         Axios.post('http://127.0.0.1:8103/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
         .then(() => {
             const allTodoList = this.state.allTodoList;
@@ -158,20 +193,14 @@ class TodoComponent extends Component{
             )
 
             : 
-            <div className={style.todoCardContainer}>
             
-                <div className={style.todoCard}>
-                    <img variant="top" src="https://media.istockphoto.com/vectors/man-haircuts-in-a-barber-shop-on-a-white-background-characters-vector-id1216002434?k=20&m=1216002434&s=612x612&w=0&h=f_8CfDTM0OxF2lE3Z0oA1t9owsSI2NLV8-0x57_lNZI=" alt="tomato"/>
-                </div>
-                <div className={style.todoCard}>
-                    <img variant="top" src="https://png.pngtree.com/element_our/20200702/ourlarge/pngtree-cartoon-snack-potato-chips-illustration-image_2284479.jpg" alt="tomato"/>
-                </div>
-                <div className={style.todoCard}>
-                    <img variant="top" src="https://st.depositphotos.com/1695366/1394/v/950/depositphotos_13942373-stock-illustration-cartoon-large-bill.jpg" alt="tomato"/>
-                </div>
-                <div className={style.todoCard}>
-                    <img variant="top" src="https://charatoon.com/photo/3629.png" alt="tomato"/>
-                </div>
+            <div className={style.todoCardContainer}>
+                {this.state.allTodoList.map((todo, index) =>
+                    <div key={index}  className={style.todoCard}>
+                        <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ todo.image)} alt='todo image' className={style.todoImages} />} />
+                    </div>
+                    )
+                }
             </div>
         }
             </div>

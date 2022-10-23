@@ -11,6 +11,7 @@ class OutsideNavbar extends Component {
             <span className="custom-logo">
               <img
                   src={Logo}
+                  alt='finemate logo'
                   />
             </span>
         </Link>

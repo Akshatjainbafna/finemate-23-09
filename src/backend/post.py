@@ -1,3 +1,4 @@
+from email.policy import default
 from io import BytesIO
 from profile import ProfileObj
 from flask.helpers import send_file
@@ -17,6 +18,7 @@ class PostObj():
 	"""
 
     class Posts(me.Document):
+
         username=me.StringField(required=True)
         subject=me.StringField(required=True, max_length=20, min_length=3)
         topic=me.StringField(required=True, max_length=20, min_length=3)
@@ -35,8 +37,8 @@ class PostObj():
         totalLikes= me.IntField(default=0)
         totalLights=me.IntField(default=0)
         totalSaves=me.IntField(default=0)
-        previousPost=me.ReferenceField('self')
-        nextPost=me.ReferenceField('self')
+        previousPost=me.ListField(me.ReferenceField('self'), default=[])
+        nextPost=me.ListField(me.ReferenceField('self'), default=[])
 
     def __init__(self, content):
         """
@@ -117,6 +119,43 @@ class PostObj():
 
         return make_response(jsonify(postOfUser), 200)
     
+    def add_previous_post(self):
+        x = checkFields(self.content, fields=['username', 'prevPostId', 'currentPostId', 'topic'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        currentPost=self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id = self.content['currentPostId'])).first()
+
+        if currentPost:
+            prevPost=self.Posts.objects(me.Q(public = True) & me.Q(id = self.content['prevPostId']) & me.Q(id = self.content['topic'])).first()
+            if prevPost:
+                currentPost.update(push__previousPost = prevPost)
+                return make_response('Post linked successfully!', 200)
+            else:
+                return make_response('Post is either of different topic, private or deleted.', 404)
+        else:
+            return make_response('Either post not found or you are not authorized to link a post of other user.', 404)
+
+
+    def add_next_post(self):
+        x = checkFields(self.content, fields=['username', 'nextPostId', 'currentPostId', 'topic'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        currentPost=self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id = self.content['currentPostId'])).first()
+
+        if currentPost:
+            nextPost=self.Posts.objects(me.Q(public = True) & me.Q(id = self.content['nextPostId']) & me.Q(id = self.content['topic'])).first()
+
+            if nextPost:
+                currentPost.update(push__nextPost = nextPost)
+                return make_response( 'Post linked successfully!', 200)
+            else:
+                return make_response('Post is either of different topic, private or deleted.', 404)
+        else:
+            return make_response('Post Not Found', 404)
+
+
     def search_posts_of_topic(self):
 
         x = checkFields(self.content, fields=['topic'])
@@ -630,4 +669,21 @@ class UserInteractions(me.Document):
             
         else:
 
+            return make_response('post not found', 400)
+    
+    def show_often(incomingData):
+
+        x = checkFields(incomingData, fields=['username', 'id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+        post = PostObj.Posts.objects(id=incomingData['id']).first()
+
+        if post:
+            userInteraction = UserInteractions.objects(me.Q(username = incomingData['username']) & me.Q(postId = incomingData['id'])).first()
+            if userInteraction:
+                userInteraction.update(set__points= '10', set__timesViewed = '1')
+                return make_response('Done', 200)
+            
+        else:
             return make_response('post not found', 400)

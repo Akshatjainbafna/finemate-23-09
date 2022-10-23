@@ -23,7 +23,7 @@ import { Redirect } from "react-router-dom";
 import SettingsComponent from "../../components/settings/setting.component";
 
 
-let headerItems = { link: "/profile", title: "Notifications", profileImg: profile };
+let headerItems = { link: "/profile", title: "Settings", profileImg: profile };
 
 let navItemsForNormalUser = [
     { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },

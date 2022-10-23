@@ -83,6 +83,7 @@ class DashboardCalendarComponent extends Component {
 		super(props);
 		this.state={
 			redirectTodo: false,
+			redirectLeaderboard: false,
 			date: new Date(),
 			selectedDay: String,
 			email: String,
@@ -152,6 +153,9 @@ class DashboardCalendarComponent extends Component {
 		if (this.state.redirectTodo){
 			return <Redirect to="/todolist" />
 		}
+		if (this.state.redirectTodo){
+			return <Redirect to="/leaderboard" />
+		}
 
 		const { value } = this.state;
 
@@ -163,7 +167,7 @@ class DashboardCalendarComponent extends Component {
 				<Tooltip title ="Diary"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu2")}><img src={CalenderLogImg} alt='not found' /> </Button></Tooltip>
 				<Tooltip title ="Assignments"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu3")}><img src={AssignmentsImg} alt='not found'/> </Button></Tooltip>
 				<Tooltip title ="Todo List"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectTodo: true})} onClick={() => this.displayDashMenu("dashMenu4")}><img src={TodoImg} alt='not found'/> </Button></Tooltip>
-				<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
+				<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectLeaderboard: true})} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
 				
 				</div>
 

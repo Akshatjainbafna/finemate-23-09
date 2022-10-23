@@ -31,12 +31,14 @@ class ProfileObj():
 		educations = me.ListField(StringField(), default=list)
 		lookingForwardToLearn = me.ListField(StringField(), default=[])
 		interests = me.ListField(StringField(), default=list)
+		hate = me.ListField(StringField(), default=list)
 		qualification=me.StringField()
 		coreStream=me.StringField()
 		friends= me.ListField(StringField(), default=list)
 		connections= me.ListField(StringField(), default=list)
 		pending = me.ListField(StringField(), default=list)
 		profilePicture = me.StringField()
+		notInterestedTopics=me.ListField(me.StringField(), default=list)
 
 		def to_json(self):
 			"""
@@ -391,14 +393,12 @@ class ProfileObj():
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		user_obj = self.Profile.objects.search_text(self.content['username'])[:10]
+		user_obj = self.Profile.objects(username__ne = self.content['whoSearched']).search_text(self.content['username'])[:10]
 
-		print(json.loads(user_obj.to_json()), user_obj.to_json())
-
-		if len(json.loads(user_obj.to_json())) > 1 or user_obj[0].username != self.content['whoSearched']:
+		if user_obj:
 			return make_response(jsonify(user_obj), 200)
 		else:
-			return make_response("", 200)
+			return make_response("No user found with that username/name.", 404)
 
 	def add_connection(self):
 
@@ -500,10 +500,24 @@ class ProfileObj():
 
 	def set_profile_picture(self, profilePictureFileName):
 		
-		user = self.Profile.objects(username = self.content['username'])
+		user = self.Profile.objects(username = self.content['username']).first()
 
 		if user:
 			user.update(set__profilePicture = profilePictureFileName)
 			return make_response('Profile picture updated successfully!', 200)
 		else:
 			return make_response("User does not exist.", 404)
+		
+	def add_not_interested_topic(self):
+
+		x = checkFields(self.content, fields=['username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		user = self.Profile.objects(username = self.content['username']).first()
+
+		if self.content['topic'] not in user.notInterestedTopics:
+			user.update(push__notInterestedTopics= self.content['topic'])
+			return make_response('Topic added successfully!', 200)
+		else:
+			return make_response('Topic already added', 200)

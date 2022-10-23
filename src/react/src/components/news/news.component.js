@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom'
 import change from '../../assets/change.png'
 import book from '../../assets/open-book.png'
 import computer from '../../assets/computer.png'
-import logo from '../../assets/uimpactify-logo.png'
+import logo from '../../assets/finemateLatestin Angelina fontLogo for Tablet Screens.png'
 import style from './news.module.css'
 
 
@@ -14,7 +14,8 @@ class News extends Component {
     constructor(props){
         super(props);
         this.state ={
-            redirectToCourses: false
+            redirectToCourses: false,
+            redirectToAbout: false
         }
     }
     displayPanel(panel){
@@ -33,6 +34,9 @@ class News extends Component {
     render() {
         if (this.state.redirectToCourses){
             return <Redirect to="/allclasslist" />
+        }
+        if (this.state.redirectToAbout){
+            return <Redirect to="/about" />
         }
         return (
             <>
@@ -103,11 +107,11 @@ class News extends Component {
 
                         
                         <div className={style.panel} id="panel4">
-                        <h1 className={style.newsTitle}>Want to know more about UImpactify</h1>
+                        <h1 className={style.newsTitle}>Want to know more about Finemate</h1>
                             <img className={style.textbox} src={logo} ></img>
-                            <p>learn more about UImpactify!</p>
+                            <p>learn more about Finemate!</p>
                             <div className={style.btnLearn}>
-                                <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToCourses: true})}}>learn more</button>
+                                <button className={style.btnLearnMore} onClick={() => {this.setState({redirectToAbout: true})}}>learn more</button>
                             </div>
                         </div>
                         </div>

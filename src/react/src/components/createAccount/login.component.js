@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import Card from 'react-bootstrap/Card'
 import axios from 'axios';
 import {Redirect} from 'react-router-dom'
+import { IconButton, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
 class Login extends Component {
 
 	constructor(props) {
@@ -14,6 +16,7 @@ class Login extends Component {
 			password: '',
 			loggedIn:false,
 			firstLogIn:false,
+			values: false
         };
 
 		this.handleChange = this.handleChange.bind(this);
@@ -52,16 +55,47 @@ class Login extends Component {
 			<Card className="cardStyle2">
 				<Card.Body>
 					<Card.Title className="cardTitleStyle">Welcome Back!</Card.Title>
-
 					<form class="flex-column" onSubmit = {this.submit}>
 					<div class="form-group">
-				<label for="inputUsername" class="text-dark font-weight-bold">Username</label>
-				<input type="text" class="form-control" name='username' value={this.state.username} placeholder="username" onChange={this.handleChange} aria-describedby="usernameHelp" />
+						<InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
+          				<OutlinedInput
+            				id="outlined-adornment-username"
+							name='username'
+							className='outlinedInput'
+							aria-describedby="usernameHelp"
+							style={{height: '40px', width: '200px'}}
+            				type='text'
+            				value={this.state.username}
+            				onChange={this.handleChange}
+          				/>
+					</div>
+					
+					<div class="form-group">
+						<InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          				<OutlinedInput
+            				id="outlined-adornment-password"
+							name='password'
+							className='outlinedInput'
+							aria-describedby="passwordHelp"
+							style={{height: '40px', width: '200px'}}
+            				type={this.state.values ? 'text' : 'password'}
+            				value={this.state.password}
+            				onChange={this.handleChange}
+            				endAdornment={
+              					<InputAdornment position="end">
+                					<IconButton
+                  						aria-label="toggle password visibility"
+                  						onClick={() => this.setState({values: ! this.state.values})}
+                  						onMouseDown={() => this.setState({values: ! this.state.values})}
+                  						edge="end"
+                						>
+                  						{this.state.values ? <VisibilityOff /> : <Visibility />}
+                					</IconButton>
+              					</InputAdornment>
+            				}
+          				/>
 			</div>
-						<div class="form-group">
-				<label for="inputPassword" class="text-dark font-weight-bold">Password</label>
-				<input type="password" class="form-control" name='password' value={this.state.password} onChange={this.handleChange} placeholder="password" aria-describedby="passwordHelp"/>
-			</div>
+
 						<form class="flex-row" onSubmit = {this.submit}>
 
 							<div class="mx-auto text-right p-0 col-md-12 mb-4 text-sm">

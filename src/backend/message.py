@@ -1,4 +1,5 @@
 from enum import unique
+import json
 import mongoengine as me
 import hashlib
 from flask import Flask, make_response, request, jsonify
@@ -102,8 +103,11 @@ class MessageObj():
             if len(messages)==10:
                 break
             if i.username2 not in uniqueUsers or i.username1 not in uniqueUsers:
-                messages.append(i)
+                latestMessage = i.to_json()
+                timeOfMessage = datetime.strptime(latestMessage['time'] , "%Y/%m/%d, %H:%M:%S")
+                timeDifference = datetime.now() - timeOfMessage
+                latestMessage['time'] = str(timeDifference)
+                messages.append(latestMessage)
                 uniqueUsers.append(i.username1 if i.username2==self.content['username'] else i.username2)
-                print(i.to_json())
 
         return make_response(jsonify(messages), 200)

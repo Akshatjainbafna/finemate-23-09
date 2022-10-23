@@ -3,11 +3,11 @@ import React, { Component } from "react";
 import style from './newsfeed.module.css';
 
 //icons & mui components
-import {BsArrowLeft,BsArrowRight, BsArrowRightShort, BsThreeDotsVertical} from 'react-icons/bs'
+import {BsArrowLeft,BsArrowRight, BsArrowRightShort, BsPlus, BsThreeDotsVertical} from 'react-icons/bs'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
-import {Button, Tooltip} from "@material-ui/core";
+import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded, PlusOne, Add} from '@material-ui/icons';
+import {Button, IconButton, Tooltip} from "@material-ui/core";
 
 //images
 import correct from './correctBGicon.png';
@@ -30,10 +30,18 @@ class IndividualPost extends Component{
     hideBackgroundImage(imgId){
         document.getElementById('factId1').style.display="block";
         document.getElementById(imgId).style.opacity=0.12;
+        if(this.state.responseData[0].question){
+            let allTheQuestion = document.getElementsByName('questionOfPost');
+            allTheQuestion[0].style.display='block';
+        }
     }
     showBackgroundImage(imgId){
         document.getElementById('factId1').style.display="none";
         document.getElementById(imgId).style.opacity=1;
+        if(this.state.responseData[0].question){
+            let allTheQuestion = document.getElementsByName('questionOfPost');
+            allTheQuestion[0].style.display='none';
+        }
     }
     hidePreviousNextPostWindow(){
         document.getElementById('idPreviousNextWindow1').style.display="none";
@@ -115,6 +123,17 @@ class IndividualPost extends Component{
         })
         .catch(err => console.log(err))
     }
+    notInterested(postTopic){
+        axios.post('http://127.0.0.1:8103/api/add_not_interested_topic', { 'username' : localStorage.getItem('username'), 'topic': postTopic})
+        .then(() => {
+            const uninterestedAcknowledgeMessage = postTopic + ' is marked as uninterested topic!'
+            alert(uninterestedAcknowledgeMessage)})
+        .catch(err => console.log(err))
+    }
+    showOften(postId){
+        axios.post('http://127.0.0.1:8103/api/show_often', { 'username' : localStorage.getItem('username'), 'id': postId})
+        .catch(err => console.log(err))
+    }
 
     componentDidMount(){
         axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username') , id: this.state.id})
@@ -124,7 +143,25 @@ class IndividualPost extends Component{
             this.setState({responseData : responseData})
         })
         .catch(err => console.log(err))
-      }
+    }
+    fetchPreviousPost(){
+        axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost[0].$oid})
+        .then((res) => {
+            let responseData = Array(res.data);
+            console.log(responseData)
+            this.setState({responseData : responseData})
+        })
+        .catch(err => console.log(err))
+    }
+    fetchNextPost(){
+        axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost[0].$oid})
+        .then((res) => {
+            let responseData = Array(res.data);
+            console.log(responseData)
+            this.setState({responseData : responseData})
+        })
+        .catch(err => console.log(err))
+    }
     render(){
         return(
             <>
@@ -175,20 +212,21 @@ class IndividualPost extends Component{
                             {responseData.username==localStorage.getItem('username') ?
                             
                             <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Not Interested</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Show Often</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid)}>Delete Post</Button></div>
+                                <div className="d-flex justify-content-around"><span><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid)}><Add style={{fontSize: 'medium'}} /> Previous</Button></span><span><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid)}>Next <Add style={{fontSize: 'medium'}} /></Button></span></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.deletePost(responseData.postId.$oid); this.hideMoreOptions();}}>Delete Post</Button></div>
                             </div>
 
                             :
 
                             <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Not Interested</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Show Often</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
+                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
                                 <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
@@ -214,7 +252,14 @@ class IndividualPost extends Component{
 
                             <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
 
-                            <span name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}><BsArrowLeft size={22} cursor={"pointer"}/>  <BsArrowRight size={22} cursor={"pointer"}/></span> 
+                            <span name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}>
+                                <IconButton onClick={() => this.fetchPreviousPost()}>
+                                    <BsArrowLeft size={22} cursor="pointer"/>
+                                </IconButton> 
+                                <IconButton onClick={() => this.fetchNextPost()}>
+                                    <BsArrowRight size={22} cursor="pointer"/>
+                                </IconButton>
+                            </span> 
                             
                             <Tooltip title="View Background" > 
                                 <FormControlLabel

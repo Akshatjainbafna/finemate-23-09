@@ -86,13 +86,14 @@
     width: fit-content;
     color: #fff;
     background-color: rgba(0, 0, 0, 0.849);
-    
+    margin-bottom: 2vh;
+    margin-top: auto;
 }
 
 
 .postImg .fact{
     color: rgba(0, 0, 0, 0.849);
-    margin: 2vh 5vw auto;
+    margin: auto 5vw;
     font-size: 1.2em;
     font-weight: bolder;
 }
@@ -395,7 +396,23 @@
   border-radius: 20px ;
   color: #000;
 }
+div.mcqOptions{
+  opacity: 0;
+}
+.postMCQ:hover .formcontrol > div.mcqOptions{
+  animation: mcqOptions 1s ease 2s none ;
+  animation-fill-mode: forwards;
+}
 
+@keyframes mcqOptions {
+  from{
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
 div.mcqQuestion{
   font-weight: bold;
 }
@@ -495,5 +512,9 @@ background-repeat: no-repeat;
 .postImg{
   max-height: 65vh;
   min-height: 55vh;
+}
+div.mcqOptions{
+  animation: mcqOptions 1s ease 2s none ;
+  animation-fill-mode: forwards;
 }
 }

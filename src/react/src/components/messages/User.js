@@ -6,7 +6,6 @@ import style from './user.module.css'
 import profilePic from '../../assets/profilePic.png'
 import Message from './Message'
 import { Avatar } from '@material-ui/core'
-import { deepOrange, deepPurple } from '@material-ui/core/colors'
 
 class User extends Component {
     constructor() {
@@ -48,8 +47,6 @@ class User extends Component {
     }
 
     openChatBox(e, index){
-        console.log(this.state.recentChatUsers[index].username1, this.state.recentChatUsers[index].username2);
-
         if (this.state.recentChatUsers[index].username1 == localStorage.getItem('username')){
             localStorage.setItem('targetUser', this.state.recentChatUsers[index].username2);
         }
@@ -64,8 +61,26 @@ class User extends Component {
     componentDidMount(){
         axios.post('http://127.0.0.1:8103/api/db_get_messaged_users', { 'username' : localStorage.getItem('username')})
             .then( res => {
-                console.log(res.data);
-                this.setState({recentChatUsers: res.data});
+                var responseData =  res.data;
+                for (let i=0; i<responseData.length; i++){
+
+                    var time = res.data[i].time.split(':');
+
+                    if (responseData[i].time.includes(',')){
+                        const numberOfDays = responseData[i].time.split(',')
+                        responseData[i].time= numberOfDays[0]+ ' ago';
+                    }
+                    else if (time[0] != 0){
+                        responseData[i].time= time[0]+ ' hours ago';
+                    }
+                    else if (time[0] == 0 && time[1] != 0){
+                        responseData[i].time= time[1]+ ' mins ago';
+                    }else{
+                        responseData[i].time= 'Just now';
+                    }
+
+                }
+                this.setState({recentChatUsers: responseData}, () => console.log(this.state.recentChatUsers));
             })
             .catch(
                 (error) => console.log(error)
@@ -98,7 +113,7 @@ class User extends Component {
                     <div className={style.userChatThumbnail} key={index} onClick={(e)=>{this.openChatBox(e, index)}}>
                         <div className={style.userChatThumbnailImage}>  <Avatar> {user.username2==localStorage.getItem('username') ? user.username1[0] : user.username2[0] } </Avatar></div>
                         <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2==localStorage.getItem('username') ? user.username1 : user.username2 }</div> <div className={style.lastMessage}>{user.message}</div>   </div>
-                        <div className={style.userChatThumbnailTime}>    03:44</div>
+                        <div className={style.userChatThumbnailTime}>  {user.time} </div>
                     </div>
                 )}  
                 </div>

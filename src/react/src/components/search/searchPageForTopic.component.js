@@ -81,7 +81,7 @@ export default function SearchPageForTopicComponent(props){
         <div className={style.searchBar}>
             
             
-                <OutlinedInput fullWidth autoFocus autoComplete="off" id="searchbar" type="text" name='search' placeholder="search" inputProps={{maxLength: "80"}} onChange={(event) => search(event)}/>
+                <OutlinedInput fullWidth autoComplete="off" id="searchbar" type="text" name='search' placeholder="search" inputProps={{maxLength: "80"}} onChange={(event) => search(event)}/>
             
                 <Divider />
             <div className="d-flex justify-content-around mt-2">

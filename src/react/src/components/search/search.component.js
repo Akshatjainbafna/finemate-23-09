@@ -1,7 +1,7 @@
-import { Avatar, Dialog, DialogContent, DialogTitle, Divider, List, ListItem, ListItemAvatar, ListItemText, OutlinedInput, useMediaQuery, useTheme } from "@material-ui/core";
+import { Avatar, Button, Dialog, DialogContent, DialogTitle, Divider, List, ListItem, ListItemAvatar, ListItemText, OutlinedInput, useMediaQuery, useTheme } from "@material-ui/core";
 import Axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import style from './search.module.css';
 
 export default function SearchComponent(props){
@@ -10,6 +10,7 @@ export default function SearchComponent(props){
     const [category, setCategory] = useState('People');
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+    const redirectToProfile = useHistory();
 
     function search(event){
         if (category == 'People'){
@@ -78,20 +79,20 @@ export default function SearchComponent(props){
             <Divider />
             <div className="d-flex justify-content-around mt-2">
                             <span>
-                                <input name="tabNews" type="radio" id="tabNews-1" className={style.input} onChange={() => setCategory("People")} />
-                                <label for="tabNews-1" className={style.label}>People</label>
+                                <input name="tabSearch" type="radio" id="tabSearch-1" className={style.input} onChange={() => setCategory("People")} />
+                                <label for="tabSearch-1" className={style.label}>People</label>
                             </span>
                             <span>
-                                <input name="tabNews" type="radio" id="tabNews-2" className={style.input} onChange={() => setCategory("Community")}/>
-                                <label for="tabNews-2" className={style.label}>Community</label>
+                                <input name="tabSearch" type="radio" id="tabSearch-2" className={style.input} onChange={() => setCategory("Community")}/>
+                                <label for="tabSearch-2" className={style.label}>Community</label>
                             </span>
                             <span>
-                                <input name="tabNews" type="radio" id="tabNews-3" className={style.input} onChange={() => setCategory("Topic")}/>
-                                <label for="tabNews-3" className={style.label}>Topic</label>
+                                <input name="tabSearch" type="radio" id="tabSearch-3" className={style.input} onChange={() => setCategory("Topic")}/>
+                                <label for="tabSearch-3" className={style.label}>Topic</label>
                             </span>
                             <span>
-                                <input name="tabNews" disabled type="radio" id="tabNews-4" className={style.input} onChange={() => setCategory("Course")}/>
-                                <label for="tabNews-4" className={style.label}>Course</label>
+                                <input name="tabSearch" disabled type="radio" id="tabSearch-4" className={style.input} onChange={() => setCategory("Course")}/>
+                                <label for="tabSearch-4" className={style.label}>Course</label>
                             </span>
                         </div>
                         <Divider />
@@ -103,7 +104,7 @@ export default function SearchComponent(props){
                         {searchData.map((user,index) =>
                             <div key={index}>
                             <List>
-                                <Link style={{textDecoration: "none", color: "grey"}} to={"/profile/".concat(user.username)}>
+                                <Button onClick={() => redirectToProfile.push("/profile/".concat(user.username))}>
                                 <ListItem>
                                     {user.profilePicture ?
                                     <ListItemAvatar>
@@ -119,7 +120,7 @@ export default function SearchComponent(props){
                                         {user.username}
                                     </ListItemText>
                                 </ListItem>
-                                </Link>
+                                </Button>
                             </List>
                         </div>
                             )}

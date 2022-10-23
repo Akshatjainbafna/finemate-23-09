@@ -5,6 +5,7 @@ from flask_cors import CORS
 from pyrsistent import immutable
 
 from flask_mongoengine import MongoEngine
+from problems import Problems
 from todos import TodoDocument
 from user import UserObj 
 from profile import ProfileObj
@@ -37,6 +38,11 @@ db.init_app(app)
 def too_large(e):    
     return "File is too large", 413 
 
+
+@app.route('/api/add_pain_point_to_database', methods=['POST'])
+def db_store_problem():
+    return Problems.store_problem(request.json)
+
 #create Post
 @app.route('/api/db_create_post', methods=['POST'])
 def db_create_post():
@@ -64,11 +70,31 @@ def db_get_all_post_of_user():
 def db_get_public_post_of_user():
     return PostObj(request.json).get_public_post_of_user()
 
+# add previous post
+@app.route('/api/db_add_previous_post', methods = ['POST'])
+def db_add_previous_post():
+    print(request.json)
+    return PostObj(request.json).add_previous_post()
+
+# add next post
+@app.route('/api/db_add_next_post', methods = ['POST'])
+def db_add_next_post():
+    return PostObj(request.json).add_next_post()
+
 # all the posts of a particular subjext, topic, subtopic
 @app.route('/api/db_search_posts_of_topic', methods = ['POST'])
 def db_search_posts_of_topic():
-    print(request.json)
     return PostObj(request.json).search_posts_of_topic()
+
+# all the posts of a particular subjext, topic, subtopic
+@app.route('/api/add_not_interested_topic', methods = ['POST'])
+def db_add_not_interested_topic():
+    return ProfileObj(request.json).add_not_interested_topic()
+
+# all the posts of a particular subjext, topic, subtopic
+@app.route('/api/show_often', methods = ['POST'])
+def db_show_often():
+    return UserInteractions.show_often(request.json)
 
 # saved posts of a particular user
 @app.route('/api/db_get_saved_post_of_user', methods = ['POST'])
@@ -101,6 +127,10 @@ def db_load_more_posts():
 @app.route('/api/add_todo', methods=['POST'])
 def db_add_todo():
     return TodoDocument.db_add_todo(request.json)
+
+@app.route('/api/get_todo_images', methods=['POST'])
+def db_get_todo_images():
+    return TodoDocument.db_get_todo_images(request.json)
 
 @app.route('/api/get_all_todo_for_user', methods=['POST'])
 def db_get_all_todo_for_user():

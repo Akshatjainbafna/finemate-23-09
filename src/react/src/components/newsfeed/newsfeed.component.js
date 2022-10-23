@@ -14,38 +14,181 @@ import axios from "axios";
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
-import { FormControl, RadioGroup, Radio, Tooltip, Button } from "@material-ui/core";
+import { FormControl, RadioGroup, Radio, Tooltip, Button, MenuItem, Menu, IconButton } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
+function MenuList(props){
+    const [anchorMenuList, setAnchorMenuList] = React.useState(null);
+    const openMenuList = Boolean(anchorMenuList);
+    
+    function deletePost(){
+        axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        .then(res => {
+            if (res.data==true){
+                axios.post('http://127.0.0.1:8103/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: props.id})
+                .then(() => {
+                    window.location.reload(true);
+                })
+                .catch((error) => console.log(error))
+            }
+        })
+        .catch(err => console.log(err))
+    }
+    function notInterested(){
+        axios.post('http://127.0.0.1:8103/api/add_not_interested_topic', { 'username' : localStorage.getItem('username'), 'topic': props.topic})
+        .then(() => {
+            const uninterestedAcknowledgeMessage = props.topic + ' is marked as uninterested topic!'
+            alert(uninterestedAcknowledgeMessage)})
+        .catch(err => console.log(err))
+    }
+    function showOften(){
+        axios.post('http://127.0.0.1:8103/api/show_often', { 'username' : localStorage.getItem('username'), 'id': props.id})
+        .catch(err => console.log(err))
+    }
 
-//display/hide functions for previousNext window and moreOptions window
-function viewMoreOptions(key){
-    var clickedID = "idMenuListVisible"+String(key);
-    document.getElementById(clickedID).style.display="block";
+    return(
+        <>
+        <IconButton
+            aria-label='menu-list'
+            id='userMenuList'
+            aria-controls='long-menuList'
+            aria-expanded={openMenuList ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={(event) => setAnchorMenuList(event.currentTarget)}
+        >
+            <BsThreeDotsVertical size={20} cursor={"pointer"}/>
+        </IconButton>
+
+        <Menu
+            id="long-menuList"
+            MenuListProps={{
+                'aria-labelledby': 'menu-list',
+            }}
+            anchorEl={anchorMenuList}
+            open={openMenuList}
+            onClose={() => setAnchorMenuList(null)}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+            }}
+            PaperProps={{
+                style: {
+                    width: '200px',
+                    height: 'fit-content',
+                    borderRadius: '10px',
+                    backgroundColor: '#A78EC3',
+                    boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
+                    padding: '0 10px',
+                    color: 'whitesmoke',
+                },
+            }}
+        >
+        
+            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => {setAnchorMenuList(null); notInterested()}}> Not Interested </MenuItem>
+            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => {setAnchorMenuList(null); showOften()}}> Show Often </MenuItem>
+            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Prerequisite </MenuItem>
+            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Hashtags </MenuItem>
+            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Glossaries </MenuItem>
+            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Read More </MenuItem>
+            {props.username == localStorage.getItem('username') ? <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => {setAnchorMenuList(null); deletePost()}}> Delete Post </MenuItem> : null }
+                                
+        </Menu>
+        </>                     
+    )
 }
-function hideMoreOptions(key){
-    var clickedID = "idMenuListVisible"+String(key);
-    document.getElementById(clickedID).style.display="none";
-   
-}
-function viewPreviousNextPostWindow(key){
-    var clickedID = "idPreviousNextWindow"+String(key);
-    document.getElementById(clickedID).style.display="block";
-}
-function hidePreviousNextPostWindow(key){
-    var clickedID = "idPreviousNextWindow"+String(key);
-    document.getElementById(clickedID).style.display ="none";
+
+function PreviousNextWindow(props){
+    const [anchorPrevNext, setAnchorPrevNext] = React.useState(null);
+    const openPrevNext = Boolean(anchorPrevNext);
+
+    function fetchPreviousPost(){
+        setAnchorPrevNext(null);
+        try{
+            axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId.$oid})
+        .then((res) => {
+            props.onUpdate(res.data);
+        })
+        .catch(err => console.log(err))
+        }catch{
+            console.log('No Previous Post.')
+        }
+    }
+    function fetchNextPost(){
+        setAnchorPrevNext(null);
+        try{
+            axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId.$oid})
+        .then((res) => {
+            props.onUpdate(res.data);
+        })
+        .catch(err => console.log(err))
+        }catch{
+            console.log('No Next Post.')
+        }
+    }
+    return (
+        <>
+        <IconButton
+            aria-label="prevNext"
+            id='previousNextPostIcon'
+            aria-controls='prevNextWindow'
+            aria-expanded={openPrevNext ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={(event) => setAnchorPrevNext(event.currentTarget)}
+            style={{
+                marginTop: '-8px', color: 'grey', marginRight: '2vw'
+            }}
+        >
+            <SwapHorizOutlined style={{ fontSize: 30 }}/>
+        </IconButton>
+        <Menu
+            id="prevNextWindow"
+            MenuListProps={{
+                'aria-labelledby': 'previousNextPostIcon',
+            }}
+            anchorEl={anchorPrevNext}
+            open={openPrevNext}
+            onClose={() => setAnchorPrevNext(null)}
+            getContentAnchorEl={null || undefined}
+            anchorOrigin={{
+                vertical: 'center',
+                horizontal: 'center'
+            }}
+            transformOrigin={{
+                vertical: 'center',
+                horizontal: 'center'
+            }}
+            PaperProps={{
+                style: {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    color: 'white',
+                    backgroundColor: '#A78EC3',
+                    borderRadius: '100px',
+                    boxShadow: '0px 2px 1px rgba(0, 0, 0, 0.2)',
+                    padding: '0',
+                    width: '75px'
+                },
+            }}
+        >               
+            <BsArrowLeft size={22} cursor='pointer' onClick={() => fetchPreviousPost()} />
+            <BsArrowRight size={22} cursor='pointer' onClick={() => fetchNextPost()} />
+        </Menu>
+
+        </>
+    )
 }
 
 
 class NewsFeed extends Component{
     constructor(props){
         super(props);
-        this.state={responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], likeState: [], lightState: [], saveState:[], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
+        this.state={ responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], likeState: [], lightState: [], saveState:[], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
         this.slider=this.silder.bind(this);
-        this.referenceToPostQuestion = React.createRef();
-        this.referenceToPostFact = React.createRef();
-        this.referenceToPostImage = React.createRef();
         this.loadMorePosts = this.loadMorePosts.bind(this);
     }
 
@@ -56,24 +199,24 @@ class NewsFeed extends Component{
         }, () => console.log(this.state.silderValue))
     }
 
-
     showBackgroundImage(index, imgId){
-        const currentPostQuestion = this.referenceToPostQuestion.current;
-
-        var factId="idFact"+String(index);
-        document.getElementById(factId).style.display="none";
-
+        document.getElementById(index).style.display="none";
         document.getElementById(imgId).style.opacity=1;
+        if(this.state.responseData[index].question){
+            let allTheQuestion = document.getElementsByName('questionOfPost');
+            for (let question = 0; question< allTheQuestion.length; question++){
+                allTheQuestion[question].style.display='none';
+            }
+        }
     }
     hideBackgroundImage(index, imgId){
-        const currentPostQuestion = this.referenceToPostQuestion.current;
-
-        var factId="idFact"+String(index);
-        document.getElementById(factId).style.display="block";
-        
+        document.getElementById(index).style.display="block";
         document.getElementById(imgId).style.opacity=0.12;
+        let allTheQuestion = document.getElementsByName('questionOfPost');
+            for (let question = 0; question< allTheQuestion.length; question++){
+                allTheQuestion[question].style.display='block';
+            }
     }
-
 
     postLiked(index){
         this.setState(update(this.state, {
@@ -84,13 +227,12 @@ class NewsFeed extends Component{
                     }
                 }
             ), ()=> {
-                console.log(this.state.likeState);
                     if (this.state.likeState[index] === true){
                         this.setState({listOfLikedPosts:[...this.state.listOfLikedPosts, this.state.responseData[index]._id.$oid]}, ()=>
-                        console.log("liked successfully", this.state.listOfLikedPosts, this.state.responseData[index]._id.$oid))
+                        console.log("liked successfully", this.state.responseData[index]._id.$oid))
                     } else{
                         this.setState({listOfLikedPosts: this.state.listOfLikedPosts.filter(item => item !==  this.state.responseData[index]._id.$oid)}, ()=>
-                        console.log("unliked successfully", this.state.listOfLikedPosts, this.state.responseData[index]._id.$oid))
+                        console.log("unliked successfully", this.state.responseData[index]._id.$oid))
                     }
                 }
             );
@@ -107,10 +249,10 @@ class NewsFeed extends Component{
         ), ()=> {
             if (this.state.lightState[index] === true){
                 this.setState({listOfLightenPosts:[...this.state.listOfLightenPosts, this.state.responseData[index]._id.$oid]}, ()=>
-                console.log("interesting", this.state.listOfLightenPosts, this.state.responseData[index]._id.$oid))
+                console.log("interesting", this.state.responseData[index]._id.$oid))
             } else{
                 this.setState({listOfLightenPosts: this.state.listOfLightenPosts.filter(item => item !==  this.state.responseData[index]._id.$oid)}, ()=>
-                console.log("not interesting", this.state.listOfLightenPosts, this.state.responseData[index]._id.$oid))
+                console.log("not interesting", this.state.responseData[index]._id.$oid))
             }
         });
     }
@@ -126,10 +268,10 @@ class NewsFeed extends Component{
         ), ()=>{
             if (this.state.saveState[index] === true){
                 this.setState({listOfSavedPosts:[...this.state.listOfSavedPosts, this.state.responseData[index]._id.$oid]}, ()=>
-            console.log("saved successfully", this.state.listOfSavedPosts, this.state.responseData[index]._id.$oid))
+            console.log("saved successfully",  this.state.responseData[index]._id.$oid))
             } else{
                 this.setState({listOfSavedPosts: this.state.listOfSavedPosts.filter(item => item !==  this.state.responseData[index]._id.$oid)}, ()=>
-                console.log("unsaved successfully", this.state.listOfSavedPosts, this.state.responseData[index]._id.$oid))
+                console.log("unsaved successfully",  this.state.responseData[index]._id.$oid))
             }
         });
    }
@@ -138,8 +280,6 @@ class NewsFeed extends Component{
     //event handler for radio click mcq option onChange event storing the current selected options as well as performing the tasks for incorrect and correct answers
     handleRadioClick(index, e){
 
-        let indexOfPost= String(index);
-        
         //updating the state array selectedOptions onChange event on radioButton
         const { selectedOptions } = this.state;
         selectedOptions.splice(index, 1, e.target.value);
@@ -154,8 +294,6 @@ class NewsFeed extends Component{
                 )
             });
         }else{
-            
-            
             //putting the _id.$oid of the post inCorrectMCQs state array so as to display the post on incorrect answer
             this.setState({inCorrectMCQs:[...this.state.inCorrectMCQs, this.state.responseData[index]._id.$oid]},  () => {
 
@@ -163,29 +301,6 @@ class NewsFeed extends Component{
                 .catch(
                     (error) => console.log(error)
                 )
-            // array of all the elements by the passed names as now a extra post is created as the user's answer is false this arrays will also be updated from the arrays that were found in componentDidMount() stage
-            var allMenuListVisible = document.getElementsByName('menuListName');
-            var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
-            var allFacts = document.getElementsByName('factName');
-
-
-            console.log("incorrect MCQs", this.state.inCorrectMCQs, "correctMCQs", this.state.correctMCQs, allMenuListVisible, allMenuListVisible.length);
-
-            var currentlyNumberOfPostRendered = allMenuListVisible.length;
-
-            //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post (IF THE USER'S ANSWER IS INCORRECT)
-            var idValue="idMenuListVisible"+String(index);
-            var menuList= allMenuListVisible[currentlyNumberOfPostRendered-1];
-            menuList.id=idValue;
-        
-            //setting the id for the previousNextWindow to make it visible and invisible onMouseLeve event on the footer of the post (IF THE USER'S ANSWER IS INCORRECT)
-            var idValueOfWindow="idPreviousNextWindow"+String(index);
-            var PN_window_list= allPreviousNextWindow[currentlyNumberOfPostRendered-1];
-            PN_window_list.id=idValueOfWindow;
-
-            let idValueOfFact = "idFact"+String(index);
-            let factList = allFacts[index];
-            factList.id= idValueOfFact;
         }
         );
 
@@ -197,70 +312,46 @@ class NewsFeed extends Component{
         this.setState({correctMCQs: this.state.listOfLikedPosts.filter(item => item !==  this.state.responseData[index]._id.$oid)}, () => {
             
             //putting the _id.$oid of the post inCorrectMCQs state array so as to display the post on incorrect answer
-            this.setState({inCorrectMCQs:[...this.state.inCorrectMCQs, this.state.responseData[index]._id.$oid]}, () => {
-                let indexOfPost= String(index);
-            
-                
-                
-                // array of all the elements by the passed names as now a extra post is created as the user's answer is false this arrays will also be updated from the arrays that were found in componentDidMount() stage
-                var allMenuListVisible = document.getElementsByName('menuListName');
-                var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
-                var allFacts = document.getElementsByName('factName');
-
-
-                console.log("incorrect MCQs", this.state.inCorrectMCQs, "correctMCQs", this.state.correctMCQs, allMenuListVisible);
-
-                var currentlyNumberOfPostRendered = allMenuListVisible.length;    
-                
-                //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post (IF THE USER'S ANSWER IS INCORRECT)
-                var idValue="idMenuListVisible"+String(index);
-                var menuList= allMenuListVisible[currentlyNumberOfPostRendered-1];
-                menuList.id=idValue;
-            
-                //setting the id for the previousNextWindow to make it visible and invisible onMouseLeve event on the footer of the post (IF THE USER'S ANSWER IS INCORRECT)
-                var idValueOfWindow="idPreviousNextWindow"+String(index);
-                var PN_window_list= allPreviousNextWindow[currentlyNumberOfPostRendered-1];
-                PN_window_list.id=idValueOfWindow;
-
-                let idValueOfFact = "idFact"+String(index);
-                let factList = allFacts[index];
-                factList.id= idValueOfFact;
-
-            });
+            this.setState({inCorrectMCQs:[...this.state.inCorrectMCQs, this.state.responseData[index]._id.$oid]});
         });
     }
-    deletePost(postId, index){
-        axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
-        .then(res => {
-            if (res.data==true){
-                axios.post('http://127.0.0.1:8103/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: postId})
-                .then(() => {
-                    const responseData = this.responseData;
-                    responseData.splice(index, 1)
-                    this.setState(responseData)})
-                .catch((error) => console.log(error))
-            }
-        })
-        .catch(err => console.log(err))
+    onUpdate(data, index){
+        if (data){
+            let responseData =  this.state.responseData;
+            data.points=10;
+            responseData.splice(index, 1, data);
+            this.setState({responseData: responseData})
+        }
     }
+
     componentDidMount() {
         const headers = { "Content-Type": "application/json" };
         axios.post('http://127.0.0.1:8103/api/display_posts', { 'username' : localStorage.getItem('username')}, {headers})
-            .then(res => {      
-                
-                const responseData= res.data;
-                console.log("responseData",responseData);
+            .then(res => {
 
-                this.setState({responseData}, ()=>{
-                    let lengthOfResponseData= this.state.responseData.length;
-                    let arrayForSelectedOptions= Array(lengthOfResponseData).fill('');
-                    this.setState({selectedOptions: arrayForSelectedOptions})
-                })
+                const responseData= res.data;
                 
-                //NodeList of all the elements with name 'menuListName' & 'previousNextWindowName'
-                var allMenuListVisible = document.getElementsByName('menuListName');
-                var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
-                var allFacts = document.getElementsByName('factName');
+                let m = responseData.length, yo, t;
+                    // While there remain elements to shuffle…
+                        while (m) {
+                            // Pick a remaining element…
+                            yo = Math.floor(Math.random() * m--);
+                
+                            // And swap it with the current element.
+                            t = responseData[m];
+                            responseData[m] = responseData[yo];
+                            responseData[yo] = t;
+                        }
+                    //changing and recreating the responseData state array after shuffling the mcq1Options array
+                    this.setState({responseData: responseData}, ()=>{
+                        let lengthOfResponseData= this.state.responseData.length;
+                        let arrayForSelectedOptions= Array(lengthOfResponseData).fill('');
+                        this.setState({selectedOptions: arrayForSelectedOptions})
+                    });
+                    
+                    
+                    console.log("responseData",responseData);
+                
 
                 
                 //for loop to create some elemnts, attributes, updating array states manually
@@ -317,26 +408,6 @@ class NewsFeed extends Component{
                     this.setState({responseData : items});
                     }
 
-
-                    //code for the posts only if it has a score of greater than or equal to 8
-                    if (this.state.responseData[i].points >= 9){
-                
-                        //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post
-                        let idValueOfMenuList = "idMenuListVisible"+String(i);
-                        let menuList = allMenuListVisible[i];
-                        menuList.id = idValueOfMenuList;
-                
-                        //setting the id for the previousNextWindow to make it visible and invisible onMouseLeve event on the footer of the post
-                        let idValueOfWindow = "idPreviousNextWindow"+String(i);
-                        let PN_window_list = allPreviousNextWindow[i];
-                        PN_window_list.id = idValueOfWindow;
-
-                        let idValueOfFact = "idFact"+String(i);
-                        let factList = allFacts[i];
-                        factList.id= idValueOfFact;
-
-                    }
-
                 }
 
             })
@@ -344,14 +415,21 @@ class NewsFeed extends Component{
                 (error) => console.log(error)
             )
 
-
             /*sending a list of likes, lightens, and saved posts oid every 15 sec*/
-            setInterval(()=> {
+            this.interactions = setInterval(()=> {
                 axios.post('http://127.0.0.1:8103/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : this.state.listOfLikedPosts, 'lighten' : this.state.listOfLightenPosts, 'savedPosts' : this.state.listOfSavedPosts })
+                .then(() =>{
+                    this.setState({listOfLikedPosts : []});
+                    this.setState({listOfLightenPosts : []});
+                    this.setState({listOfSavedPosts : []});
+                })
                 .catch(
                     (error) => console.log(error)
                 )
             }, 15000);
+    }
+    componentWillUnmount(){
+        clearInterval(this.interactions)
     }
 
    /* making an image element and passing the address+image_name in src attribute deprecated from 1-08-22
@@ -362,14 +440,13 @@ class NewsFeed extends Component{
 
 
 render(){
-
         return(
             <>
         {this.state.responseData.map((responseData, index) =>
         <div className={style.postTypeDecider} key={index}> 
         {(() =>{ if (responseData.points >= 9 || this.state.inCorrectMCQs.includes(responseData._id.$oid)) {
                                
-                return <div className={style.postCardContainer} key={index} onMouseLeave={() => {hideMoreOptions(index); hidePreviousNextPostWindow(index)}}>
+                return <div className={style.postCardContainer} key={index}>
                 {/* If the points for a particular post is equal to or greater than 7 then the post will be of PostCard type */}
                     
                     <form id="postInteraction">
@@ -379,13 +456,17 @@ render(){
                                <p><span className={style.topic}  > <Link to={'/topic/'.concat(responseData.topic)}>{responseData.topic}</Link></span><BsArrowRightShort/> <span className={style.subTopic} ><Link to={'/topic/'.concat(responseData.subtopic)}> {responseData.subtopic} </Link></span></p> 
                             </div>
 
-                             <Tooltip title="Intrigrity Slider"><div className={style.integritySlider}> <input type="range" aria-label="Intrigrity Slider" value={this.state.silderValue} min="0" step="1" max="2" onChange={this.slider}/></div></Tooltip>
+                            <Tooltip title="Intrigrity Slider">
+                                <div className={style.integritySlider}> <input type="range" aria-label="Intrigrity Slider" value={this.state.silderValue} min="0" step="1" max="2" onChange={this.slider}/></div>
+                            </Tooltip>
                             
-                             <div className={style.menuIcon}>
-                                    <div className={style.menuList}  onClick={() => viewMoreOptions(index)}><BsThreeDotsVertical size={20} cursor={"pointer"}/></div>
+                            <div className={style.menuIcon}>
+                                <MenuList id={responseData._id.$oid} username={responseData.username} topic={responseData.topic} />
                             </div>
 
-                            <div className={style.intrigrityMarker}>{(() => {
+                            <div className={style.intrigrityMarker}>
+                            
+                                {(() => {
                                 if (responseData.accuracy>= 0.75) {
                                     return (
                                     <img className={style.accuracyIcon} src={correct}/>
@@ -399,43 +480,19 @@ render(){
                                     <img className={style.accuracyIcon} src={incorrect}/>
                                     )
                                     }
-                                    })()}</div>
-                                
-                                
+                                    })()}
+
+                            </div>
+
                         </div>
 
                         <div className={style.postImg} onDoubleClick={() => {this.postLiked(index)}}  id="imageLocation">
-                        {responseData.username==localStorage.getItem('username') ?
-                            
-                            <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Not Interested</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Show Often</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid, index)}>Delete Post</Button></div>
-                            </div>
 
-                            :
-
-                            <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Not Interested</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Show Often</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
-                            </div>
-
-                            }
-
-                           
-                            <span className={style.quesFactBlock} ref={this.referenceToPostQuestion}>
+                            <span className={style.quesFactBlock}>
                                 {responseData.question ? <p name="questionOfPost" className={style.question}>{responseData.question}</p> : ""} 
-                                <p className={style.fact} name="factName" ref={this.referenceToPostFact}> {responseData.fact.split('\n').map(function(item) {
+                                <p className={style.fact} id={index}> {responseData.fact.split('\n').map(function(item, indexOfFactSpan) {
                                     return (
-                                        <span>
+                                        <span key={indexOfFactSpan}>
                                             {item}
                                             <br/>
                                         </span>
@@ -445,8 +502,6 @@ render(){
                             </span>
 
                             <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
-
-                            <span name="previousNextWindowName" className={style.previousNextWindow} onMouseOver ={() => viewPreviousNextPostWindow(index)}><BsArrowLeft size={22} cursor={"pointer"}/>  <BsArrowRight size={22} cursor={"pointer"}/></span> 
                             
                             <Tooltip title="View Background" > 
                                 <FormControlLabel
@@ -474,9 +529,9 @@ render(){
                                     control={
 
                                     <Checkbox 
-                                        checked={responseData.liked ? responseData.liked : this.state.likeState[index]}
+                                        checked={(responseData.liked ? responseData.liked : this.state.likeState[index]) || false}
                                         icon={ <FavoriteBorder style={{ fontSize: 26 }} /> } 
-                                        checkedIcon={ <Favorite style={{ fontSize: 26 }}/> }
+                                        checkedIcon={ <Favorite style={{ fontSize: 26 }} /> }
                                         name="likedPost" 
                                         onChange={() => {this.postLiked(index)}}
                                     />
@@ -491,7 +546,7 @@ render(){
                                 <FormControlLabel
                                     control={
                                     <Checkbox
-                                    checked={responseData.lighten ? responseData.lighten : this.state.lightState[index]}
+                                    checked={(responseData.lighten ? responseData.lighten : this.state.lightState[index]) || false}
                                     icon={ <EmojiObjectsOutlined style={{ fontSize: 26 }}/> } 
                                     checkedIcon={ <EmojiObjects style={{ fontSize: 26, color: 'yellow' }} />}
                                     name="lightPost"
@@ -506,7 +561,7 @@ render(){
                             <span>
                             <Tooltip title="Save">  
                                 <FormControlLabel 
-                                    checked={responseData.saved ? responseData.saved : this.state.saveState[index]}
+                                    checked={(responseData.saved ? responseData.saved : this.state.saveState[index]) || false}
                                     control={
                                         <Checkbox 
                                             icon={  <BookmarkBorder 
@@ -522,7 +577,7 @@ render(){
                             </div>
 
                             <div className={style.rightSectionFooter}>
-                            <span className={style.viewPreviousNextPost} onClick={() => viewPreviousNextPostWindow(index)} onMouseUpCapture={() => hidePreviousNextPostWindow(index)} onMouseOver={() => viewPreviousNextPostWindow(index)} ><SwapHorizOutlined style={{ fontSize: 30 }}/></span>
+                                <PreviousNextWindow previousId={responseData.previousPost[0]} nextId={responseData.nextPost[0]} onUpdate={(data) => this.onUpdate(data, index)} />
                             </div>
                         </div>
                         
@@ -539,15 +594,15 @@ render(){
                    return <div className={style.postMCQ}>
                     {/* If the points for a particular post is equal to or lower than 6 then the post will be of MCQ type */}
                         
-                        <FormControl>
+                        <FormControl className={style.formcontrol}>
                         <div className={style.mcqQuestion}>{responseData.mcq1}</div>
                         
                         <div className={style.mcqOptions}>
 
                         <RadioGroup
-                        key={index}
+                            key={index}
                             aria-labelledby="demo-radio-buttons-group-label"
-                            value={this.state.selectedOptions[index]}
+                            value={this.state.selectedOptions[index] ? this.state.selectedOptions[index] : null }
                             onChange={(e) => { this.handleRadioClick(index, e) }}
                             name={responseData.question}
                             >
@@ -573,7 +628,7 @@ render(){
         <br />
         <br />
         <div className="d-flex justify-content-center">
-            <Button style={{color: "#684096", border: "1px solid #A78EC3"}} onClick={this.loadMorePosts}>Load More</Button>
+            <Button style={{color: "#684096", border: "1px solid #A78EC3"}} onMouseOver={this.loadMorePosts} onClick={this.loadMorePosts}>Load More</Button>
         </div>
         <br />
         <br />
@@ -584,14 +639,27 @@ render(){
     }
     loadMorePosts(){
         var allThePosts = this.state.responseData;
+        let lengthOfExistingResponseData = allThePosts.length;
         var idOfAllPosts=[];
         allThePosts.forEach((value, index, array) => { idOfAllPosts.push(allThePosts[index]._id.$oid)});
 
         axios.post('http://127.0.0.1:8103/api/load_more_posts', { 'username' : localStorage.getItem('username'), 'allTheCurrentPosts' : idOfAllPosts}, { "Content-Type": "application/json" })
         .then(res=>{
             let newResponseData= res.data;
+
+            let m = newResponseData.length, yo, t;
+                    // While there remain elements to shuffle…
+                        while (m) {
+                            // Pick a remaining element…
+                            yo = Math.floor(Math.random() * m--);
+                
+                            // And swap it with the current element.
+                            t = newResponseData[m];
+                            newResponseData[m] = newResponseData[yo];
+                            newResponseData[yo] = t;
+                        }
+
             let responseData = allThePosts.concat(newResponseData);
-            console.log(responseData)
 
             //this is a boilerplate code which is also ruining in componentDidMount component lifecycle method so a function can be declared and called here and in componentdidmount method.
             this.setState({responseData: responseData}, ()=>{
@@ -600,22 +668,12 @@ render(){
                 this.setState({selectedOptions: arrayForSelectedOptions})
             })
             
-            //NodeList of all the elements with name 'menuListName' & 'previousNextWindowName'
-            var allMenuListVisible = document.getElementsByName('menuListName');
-            var allPreviousNextWindow = document.getElementsByName('previousNextWindowName');
-            var allFacts = document.getElementsByName('factName');
-
-
-            
             //for loop to create some elemnts, attributes, updating array states manually
-            for (let i = 0; i < this.state.responseData.length; i++) {
-                let indexOfPost = String(i);
+            for (let i = lengthOfExistingResponseData; i < this.state.responseData.length; i++) {
 
                 //making a array state of all the correct answers for all the posts to match with the selected radio option to decide whether it is correct or not
                 let allTheCorrectOptions = this.state.correctOptions;
                 allTheCorrectOptions.push(this.state.responseData[i].mcq1Options[0]);
-                
-
 
                 /* This code creates 3 states of lists which contains whether a post is liked, lighten or saved or not, if its lighten it passes a boolean true to mark the icon/checkbox checked*/
                 let likeStateList= this.state.likeState;
@@ -659,26 +717,6 @@ render(){
                 item.mcq1Options=array;
                 items[i]=item
                 this.setState({responseData : items});
-                }
-
-
-                //code for the posts only if it has a score of greater than or equal to 7
-                if (this.state.responseData[i].points >= 9){
-            
-                    //setting the id for the menuList to make it visible and invisible onMouseLeve event on the Post
-                    let idValueOfMenuList = "idMenuListVisible"+String(i);
-                    let menuList = allMenuListVisible[i];
-                    menuList.id = idValueOfMenuList;
-            
-                    //setting the id for the previousNextWindow to make it visible and invisible onMouseLeve event on the footer of the post
-                    let idValueOfWindow = "idPreviousNextWindow"+String(i);
-                    let PN_window_list = allPreviousNextWindow[i];
-                    PN_window_list.id = idValueOfWindow;
-
-                    let idValueOfFact = "idFact"+String(i);
-                    let factList = allFacts[i];
-                    factList.id= idValueOfFact;
-
                 }
 
             }

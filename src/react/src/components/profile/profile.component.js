@@ -12,7 +12,7 @@ import "./profile.css";
 import ColourText from "./colorText.component.js";
 import axios from "axios";
 import { Add, AddPhotoAlternateRounded } from "@material-ui/icons";
-import { Button, Input, TextField } from "@material-ui/core";
+import { Button, Input, Menu, MenuItem, TextField } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import Axios from "axios";
 
@@ -27,7 +27,10 @@ class Profile extends Component {
       newDescription: this.props.description,
       newProfilePicture: this.props.profilePicture,
       recentPosts: [],
-      savedPosts: []
+      savedPosts: [],
+      redirectToLeaderboard: false,
+      openFriendList: null,
+      openConnectionList: null
     };
     this.submit = this.submit.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
@@ -35,7 +38,6 @@ class Profile extends Component {
   onChangeHandler(event){
         let name = event.target.name;
         let value = event.target.value;
-        console.log(name, value)
         let data = {};
         data[name] = value;
         this.setState(data);
@@ -44,21 +46,40 @@ class Profile extends Component {
   componentDidMount(){
     Axios.post('http://127.0.0.1:8103/api/db_get_all_post_of_user', {username: localStorage.getItem('username')})
     .then(res => {
-      console.log(res.data)
         this.setState({recentPosts : res.data})
     })
     .catch(err => console.log(err))
 
     Axios.post('http://127.0.0.1:8103/api/db_get_saved_post_of_user', {username: localStorage.getItem('username')})
     .then(res => {
-      console.log(res.data)
         this.setState({savedPosts : res.data})
     })
     .catch(err => console.log(err))
   }
+  removeFriend(username2){
+    Axios.post('http://127.0.0.1:8103/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2' : username2})
+    .then(() => {
+      window.location.reload(true);
 
+    })
+    .catch(err => console.log(err))
+}
+
+disconnect(username2){
+    Axios.post('http://127.0.0.1:8103/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2' : username2})
+    .then(() => {
+      window.location.reload(true);
+    })
+    .catch(err => console.log(err))
+}
 
   render() {
+    if (this.state.redirectToLeaderboard){
+      return <Redirect to='/leaderboard' />
+    }
+    const openFriend = Boolean(this.state.openFriendList);
+    const openConnection = Boolean(this.state.openConnectionList);
+
     const { educations } = this.props;
     const { skills } = this.props;
     const { interests } = this.props;
@@ -180,12 +201,124 @@ class Profile extends Component {
 
             <div className="rightBlockofInfoCard">
               <div className="pointsAndFriendsCountSection">
-                <div className="pointsAndFriendsCount"><div><Button>10</Button></div> <div>Points</div> </div>
-                <div className="pointsAndFriendsCount"><div><Button>{friends ? friends.length : "0"}</Button></div> <div>Friends</div> </div>
-                <div className="pointsAndFriendsCount"><div><Button>{connections ? connections.length : "0"}</Button></div> <div>Network</div> </div>
+                <div className="pointsAndFriendsCount"><div><Button onClick={() => this.setState({redirectToLeaderboard: true})}>10</Button></div> <div>Points</div> </div>
+                <div className="pointsAndFriendsCount">
+                  <div>
+                    <Button 
+                      id='friendListBtn' 
+                      aria-label="friend-list-button" 
+                      aria-controls='friendList'
+                      aria-expanded={this.state.openFriendList ? 'true' : undefined}
+                      aria-haspopup="true" 
+                      onClick={(event) => this.setState({openFriendList: event.currentTarget})}
+                      >
+                        {friends ? friends.length : "0"}
+                    </Button>
+                  </div> 
+                  <div>Friends</div> 
+                </div>
+                <div className="pointsAndFriendsCount">
+                  <div>
+                    <Button 
+                    id='connectionListBtn' 
+                    aria-label="connection-list-button" 
+                    aria-controls='connectionList'
+                    aria-expanded={this.state.openConnectionList ? 'true' : undefined}
+                    aria-haspopup="true" 
+                    onClick={(event) => this.setState({openConnectionList : event.currentTarget})}
+                    >
+                      {connections ? connections.length : "0"}
+                    </Button>
+                  </div> 
+                  <div>Network</div> 
+                </div>
               </div> 
               <div className="addButton"> <button className="edit_button_profile" type="button" onClick={() => { this.setState({ displaying: !this.state.displaying }) }}>Edit Profile</button> </div>
             </div> 
+
+              <Menu
+                id="friendList"
+                MenuListProps={{
+                'aria-labelledby': 'friend-list-button',
+                }}
+                anchorEl={this.state.openFriendList}
+                open={openFriend}
+                onClose={() => this.setState({openFriendList: null})}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                PaperProps={{
+                  style: {
+                    width: '520px',
+                    height: '100vh',
+                    padding: '0 10px',
+                    color: '#302c35',
+                  },
+                }}
+            >
+              <h5>
+                All Friends
+              </h5>
+              {friends.map((username, index) => 
+              <MenuItem key={index}  className='d-flex justify-content-between'>
+                <Link style={{textDecoration: 'none', color : '#302c35'}} className="flex-grow-1" to={"/profile/".concat(username)}>
+                  <span>{username}</span>
+                </Link>
+                <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: '#cdb5e7', color: 'white', marginRight: "0.5em"}} onClick={() => this.removeFriend(username)}>
+                  Unfriend
+                </Button>
+              </MenuItem>
+              )}
+                                
+                                
+            </Menu>
+
+            <Menu
+                id="connectionList"
+                MenuListProps={{
+                'aria-labelledby': 'connection-list-button',
+                }}
+                anchorEl={this.state.openConnectionList}
+                open={openConnection}
+                onClose={() => this.setState({openConnectionList: null})}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                PaperProps={{
+                  style: {
+                    width: '520px',
+                    height: '100vh',
+                    padding: '0 10px',
+                    color: '#302c35',
+                  },
+                }}
+            >
+              <h5>
+                All Connections
+              </h5>
+              {connections.map((username, index) => 
+                <MenuItem key={index} className='d-flex justify-content-between'>
+                <Link style={{textDecoration: 'none', color : '#302c35'}} className="flex-grow-1" to={"/profile/".concat(username)}>
+                  <span>{username}</span> 
+                </Link>
+                  <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: "#cdb5e7", color: 'white'}} onClick={() => this.disconnect(username)}>
+                    Disconnect
+                  </Button>
+                </MenuItem>
+              )}
+                                
+                                
+            </Menu>
 
           </div>
             
@@ -367,9 +500,6 @@ class Profile extends Component {
           first_name: this.state.newFirstName,
           username: localStorage.getItem("username")
         })
-        .then(response => {
-          console.log(response.data);
-        })
         .catch(error => {
           console.log(error);
         });
@@ -379,9 +509,6 @@ class Profile extends Component {
         .post("http://127.0.0.1:8103/api/db_update_profile_last_name", {
           last_name: this.state.newLastName,
           username: localStorage.getItem("username")
-        })
-        .then(response => {
-          console.log(response.data);
         })
         .catch(error => {
           console.log(error);
@@ -393,9 +520,6 @@ class Profile extends Component {
           phone_number: this.state.newPhoneNumber,
           username: localStorage.getItem("username")
         })
-        .then(response => {
-          console.log(response.data);
-        })
         .catch(error => {
           console.log(error);
         });
@@ -405,9 +529,6 @@ class Profile extends Component {
         .post("http://127.0.0.1:8103/api/db_update_profile_description", {
           description: this.state.newDescription,
           username: localStorage.getItem("username")
-        })
-        .then(response => {
-          console.log(response.data);
         })
         .catch(error => {
           console.log(error);
@@ -422,10 +543,7 @@ class Profile extends Component {
         console.log(key[0] + ', ' + key[1]);
     }
 
-      axios.post("http://127.0.0.1:8103/api/db_update_profile_picture", form_data)
-        .then(response => {
-          console.log(response.data);
-        })
+      axios.post("http://127.0.0.1:8103/api/db_update_profile_picture", form_data, {headers: {'Content-Type': 'multipart/form-data'}})
         .catch(error => {
           console.log(error);
         });

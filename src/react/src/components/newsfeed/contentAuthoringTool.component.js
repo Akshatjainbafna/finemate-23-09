@@ -81,7 +81,7 @@ class ContentAuthoringTool extends Component{
                             onChange={() => this.setState({public: !this.state.public})}
                             />
                         } 
-                        label="Public"
+                        label={this.state.public ? "Public" : "Private"}
                     />
                 </div> 
             </div>

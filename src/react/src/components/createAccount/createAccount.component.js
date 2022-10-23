@@ -15,7 +15,9 @@ class createAccount extends Component {
             email: '',
             username:'',
 			password: '',
-			user_type:''
+			user_type:'',
+			instituteId: '',
+			institute: false
         };
 
 		this.handleChange = this.handleChange.bind(this);
@@ -29,7 +31,11 @@ class createAccount extends Component {
 		console.log(name,value)
 		let data ={};
 		data[name] = value;
-
+		if (value == 'student' || value=='instructor' || value== 'institute'){
+			this.setState({institute: true})
+		}else{
+			this.setState({institute: false})
+		}
 		this.setState(data)
 	}
 
@@ -66,6 +72,12 @@ class createAccount extends Component {
 				<label for="inputPassword" class="text-dark font-weight-bold">Password</label>
 				<input type="password" class="form-control" name='password' value={this.state.password} pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$" onChange={this.handleChange} placeholder="password" aria-describedby="passwordHelp"/>
 			</div>
+			{this.state.institute ? 
+			<div class="form-group">
+				<label for="inputIdentity" class="text-dark font-weight-bold">Identity Number</label>
+				<input type="text" class="form-control" name='identity' value={this.state.instituteId} pattern="[0-9]{10}" onChange={this.handleChange} placeholder="Enter Identity Number" aria-describedby="identityHelp" required/>
+			</div>
+	: null }
 			<form class="flex-row" onSubmit = {this.submit}>
 				<div class="form-group">
 					<label class="text-dark font-weight-bold">Are you joining as a Student or Instructor?</label>

@@ -11,7 +11,7 @@ import editButton from "../../assets/editButton.png";
 import "./profile.css";
 import axios from "axios";
 import { Add } from "@material-ui/icons";
-import { Button, Input, TextField } from "@material-ui/core";
+import { Button, Input, Menu, MenuItem, TextField } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import Axios from "axios";
 import {BsChatSquareTextFill} from 'react-icons/bs'
@@ -24,12 +24,19 @@ class UserProfile extends Component {
     super(props);
     this.state = {
       username: this.props.username,
-      recentPosts: []
+      recentPosts: [],
+      openConnectionList: null,
+      redirectDashboard: false
     };
   }
 
-  addConnection(){
-    Axios.post('http://127.0.0.1:8103/api/db_add_connection', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
+  addConnection(usernameFromTheConnectionList){
+    if (usernameFromTheConnectionList){
+      var username2 =  usernameFromTheConnectionList;
+    }else{
+      var username2 =  this.state.username;
+    }
+    Axios.post('http://127.0.0.1:8103/api/db_add_connection', {'username1' : localStorage.getItem('username'), 'username2': username2})
     .then(res => {
       window.location.reload(true);
     })
@@ -63,6 +70,9 @@ class UserProfile extends Component {
   }
   
   render() {
+    if (this.state.redirectDashboard){
+      return <Redirect to="/leaderboard" />
+    }
     const { educations } = this.props;
     const { skills } = this.props;
     const { interests } = this.props;
@@ -79,6 +89,8 @@ class UserProfile extends Component {
     const { friends } = this.props;
     const { connections } = this.props;
     const { connected } = this.props;
+    const { profilePicture } = this.props;
+
     return (
 
     <div className="main">
@@ -90,16 +102,34 @@ class UserProfile extends Component {
 
                     <div className="leftBlockofInfoCard">
                         <div className="profile_pic_slot">
-                            <div><img src={profilePic} className="elementPic" /> </div>
+                            <div>{profilePicture ? 
+                                  <div><img src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div> 
+                                  :
+                                  <div><img src={profilePic} className="elementPic" /> </div>
+                                }</div>
                             <div className="usernameBlocky">{username}</div>
                         </div>
                     </div>
 
                     <div className="rightBlockofInfoCard">
                         <div className="pointsAndFriendsCountSection">
-                            <div className="pointsAndFriendsCount"><div><Button>10</Button></div> <div>Points</div> </div>
-                            <div className="pointsAndFriendsCount"><div><Button>{friends ? friends.length : "0"}</Button></div> <div>Friends</div> </div>
-                            <div className="pointsAndFriendsCount"><div><Button>{connections ? connections.length : "0"}</Button></div> <div>Network</div> </div>
+                            <div className="pointsAndFriendsCount"><div><Button onClick={() => this.setState({redirectDashboard: true})}>10</Button></div> <div>Points</div> </div>
+                            <div className="pointsAndFriendsCount"><div><Button style={{pointerEvents: 'none'}}>{friends ? friends.length : "0"}</Button></div> <div>Friends</div> </div>
+                            <div className="pointsAndFriendsCount">
+                              <div>
+                                <Button
+                                  id='connectionListBtn' 
+                                  aria-label="connection-list-button" 
+                                  aria-controls='connectionList'
+                                  aria-expanded={this.state.openConnectionList ? 'true' : undefined}
+                                  aria-haspopup="true" 
+                                  onClick={(event) => this.setState({openConnectionList : event.currentTarget})}
+                                >
+                                  {connections ? connections.length : "0"}
+                                </Button>
+                                </div> 
+                              <div>Network</div> 
+                            </div>
                         </div> 
 
                         <div className="addButton">
@@ -132,6 +162,51 @@ class UserProfile extends Component {
                     </div>
                 </div>
             
+                <Menu
+                id="connectionList"
+                MenuListProps={{
+                'aria-labelledby': 'connection-list-button',
+                }}
+                anchorEl={this.state.openConnectionList}
+                open={Boolean(this.state.openConnectionList)}
+                onClose={() => this.setState({openConnectionList: null})}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                PaperProps={{
+                  style: {
+                    width: '520px',
+                    height: '100vh',
+                    padding: '0 10px',
+                    color: '#302c35',
+                  },
+                }}
+            >
+              <h5>
+                All Connections
+              </h5>
+              {connections.map((username, index) => 
+                <MenuItem key={index} className='d-flex justify-content-between'>
+                <Link style={{textDecoration: 'none', color : '#302c35'}} className="flex-grow-1" to={"/profile/".concat(username)}>
+                  <span>{username}</span> 
+                </Link>
+                {username == localStorage.getItem('username') ? '' : 
+                  <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: "#cdb5e7", color: 'white'}} onClick={() => this.addConnection(username)}>
+                    Connect
+                  </Button>
+                }
+                </MenuItem>
+              )}
+                                
+                                
+            </Menu>
+
+
                 <div className="descriptionOf"> {description} </div>
             </div>
 

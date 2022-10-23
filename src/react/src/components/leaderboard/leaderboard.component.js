@@ -6,7 +6,7 @@ class LeaderboardYouVsYou extends Component{
     render(){
         return(
             <>
-            <div className={style.leaderboardHeader}>{localStorage.getItem('username')} <img src={Verses} alt="VS"/> {localStorage.getItem('username')}</div>
+            <div className={style.leaderboardHeader}>You <img src={Verses} alt="VS"/> You</div>
             <div>
                 <table className={style.leaderboardTableContainer}>
                     <th>PERFORMANCE</th>

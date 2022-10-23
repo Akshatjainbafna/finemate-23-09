@@ -44,6 +44,9 @@
     border-radius: 5px;
     margin: 0.5vh 0.5vw;
 }
+.todoImages{
+    margin-left: 0.8em;
+}
 
 @media screen and (max-width: 600px) {
     .todoComponentContainer{
