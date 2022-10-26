@@ -244,6 +244,15 @@
     border-color: grey;
     color: grey;
   }
+  .addPostFormHeading ~ input, .addPostFormHeading ~ select{
+    min-width: 50%;
+    height: 2em;
+    margin-left: 0;
+    border: 1px solid rgb(200, 200, 200);
+    border-radius: 2px;
+  }
+
+
   @media screen and (max-width: 991px) {
     .story{
         width: 52vw !important;

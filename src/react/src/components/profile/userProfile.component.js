@@ -76,6 +76,7 @@ class UserProfile extends Component {
     const { educations } = this.props;
     const { skills } = this.props;
     const { interests } = this.props;
+    const { hate } = this.props;
     const { completedCourses } = this.props;
     const { languages } = this.props;
     const { description } = this.props;
@@ -238,6 +239,10 @@ class UserProfile extends Component {
                     <ColourTextUser textInfo={interests} />
                 </Card.Text>
 
+                <Card.Title className="listed_titles">Hate</Card.Title>
+                <Card.Text className="listed_interests">
+                    <ColourTextUser textInfo={hate} />
+                </Card.Text>
           </Card.Body>
 
         </Card>

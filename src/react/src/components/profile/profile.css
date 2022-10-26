@@ -60,7 +60,6 @@
 }
 .listed_educations_list{
     display: flex;
-    flex-direction: row !important;
     flex-wrap: wrap;
 }
 .removeEducations{
@@ -71,6 +70,11 @@
     border: 1px solid #A78EC3;
     margin: 0.5% 1%;
     padding: 1%;
+    list-style: none;
+}
+#ErrorMessage{
+    color: red;
+    font-size: small;
 }
 .listed_titles {
     color: #302c35;
@@ -445,7 +449,9 @@
         justify-content: space-between;
     }
     .selectFormColortext{
-        width: 80vw !important;
-        height: 6vh !important;
+        width: 70vw !important;
+    }
+    .editInterestsForm{
+        justify-content: center;
     }
 }

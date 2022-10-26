@@ -16,19 +16,15 @@ class SendMessage extends Component {
     handleChange(e) {
         this.setState({
             message: e.target.value
-        },()=> console.log(this.state.message))
+        })
     }
 
     handleSubmit(e) {
         e.preventDefault()
         axios.post('http://127.0.0.1:8103/api/db_send_message', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser'), 'message': this.state.message})
-        .then(res => {
-            console.log(res);
-            
-        });
-        this.setState({
-            message:''
-        })
+        .catch(err => console.log(err))
+        
+        this.setState({message:''});
     }
 
     render() {

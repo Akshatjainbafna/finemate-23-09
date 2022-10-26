@@ -5,6 +5,7 @@ from flask_cors import CORS
 from pyrsistent import immutable
 
 from flask_mongoengine import MongoEngine
+from metaData import SubjectsTopicsSubtopicsTags
 from problems import Problems
 from todos import TodoDocument
 from user import UserObj 
@@ -117,6 +118,30 @@ def db_add_education_from_questionaire():
 def db_display_posts_on_newsfeed():
     print(request.json)
     return UserInteractions.designing_newsfeed(request.json)
+
+#create Stream-Subject-Topic
+@app.route('/api/db_create_stream_subject_topic', methods=['POST'])
+def db_create_stream_subject_topic():
+    print(request.json)
+    return SubjectsTopicsSubtopicsTags.create_stream_subject_topic(request.json)
+
+#get all the subjects of a stream
+@app.route('/api/db_get_all_subjects_of_stream', methods=['POST'])
+def db_get_all_subjects_of_stream():
+    print(request.json)
+    return SubjectsTopicsSubtopicsTags.get_all_subjects_of_stream(request.json)
+
+#get all the subjects of a stream
+@app.route('/api/db_search_a_subject', methods=['POST'])
+def db_search_a_subject():
+    print(request.json)
+    return SubjectsTopicsSubtopicsTags.search_a_subject(request.json)
+
+#get all the subjects of a stream
+@app.route('/api/db_search_a_topic', methods=['POST'])
+def db_search_a_topic():
+    print(request.json)
+    return SubjectsTopicsSubtopicsTags.search_a_topic(request.json)
 
 #designing newsfeed when load more btn is pressed, sending posts which aren't already on the newsfeed
 @app.route('/api/load_more_posts', methods=[ 'POST'])
@@ -301,7 +326,6 @@ def db_update_profile_description():
 # updating profile picture when provided with a form data MIMETYPE form-data where image is in the file form and username as request.form formatted as {description: description, username: username} 
 @app.route('/api/db_update_profile_picture', methods=['POST'])
 def db_update_profile_picture():
-    print(request.form)
     image=request.files['profilePicture']
     cleanFilenameOfImage=secure_filename(image.filename)
     profilePicture = open(f"../react/src/assets/profilePictures/{cleanFilenameOfImage}", "wb")
@@ -363,6 +387,16 @@ def db_add_profile_interest():
 @app.route('/api/db_delete_profile_interest', methods=['POST'])
 def db_delete_profile_interest():
     return ProfileObj(request.json).db_delete_profile_interest()
+
+# adds to the user's educations when provided with a json text formatted as {education: education, username: username} 
+@app.route('/api/db_add_profile_hate', methods=['PUT'])
+def db_add_profile_hate():
+    return ProfileObj(request.json).db_add_profile_hate()
+
+# deletes from the user's educations when provided with a json text formatted as {education: education, username: username} 
+@app.route('/api/db_delete_profile_hate', methods=['POST'])
+def db_delete_profile_hate():
+    return ProfileObj(request.json).db_delete_profile_hate()
 
 # Allows Creation Of events for a user
 @app.route('/api/db_create_event', methods=['POST'])

@@ -501,7 +501,7 @@ render(){
                                 </p>
                             </span>
 
-                            <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
+                            <img id={"backgroundImage"+String(index)} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
                             
                             <Tooltip title="View Background" > 
                                 <FormControlLabel
@@ -513,7 +513,7 @@ render(){
                                         icon={ <FilterCenterFocusRounded /> } 
                                         checkedIcon={ <FilterCenterFocusRounded /> }
                                         name="viewBackground" 
-                                        onMouseDownCapture={() => this.showBackgroundImage(index, responseData.background)} onMouseUpCapture={()=> this.hideBackgroundImage(index, responseData.background)}
+                                        onMouseDownCapture={() => this.showBackgroundImage(index, "backgroundImage"+String(index))} onMouseUpCapture={()=> this.hideBackgroundImage(index, "backgroundImage"+String(index))}
                                     />
                                     }
                                 /> 

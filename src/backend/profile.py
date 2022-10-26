@@ -58,6 +58,7 @@ class ProfileObj():
 				"skills": self.skills,
 				"educations": self.educations,
 				"interests": self.interests,
+				'hate': self.hate,
 				"lookingForwardToLearn": self.lookingForwardToLearn,
 				"friends": self.friends,
 				"connections": self.connections,
@@ -366,6 +367,38 @@ class ProfileObj():
 		prof_obj = self.Profile.objects(username=self.content['username']).first()
 		if prof_obj:
 			prof_obj.update(pull__interests=self.content['interest'])
+			return make_response("", 200)
+		else:
+			return make_response("User does not exist.", 404)
+
+	def db_add_profile_hate(self):
+		"""
+		Adds a profile education in the database for the corresponding username
+		"""
+		print(self.content)
+		x = checkFields(self.content, fields=['hate', 'username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		prof_obj = self.Profile.objects(username=self.content['username']).first()
+		if prof_obj:
+			prof_obj.update(add_to_set__hate=self.content['hate'])
+			return make_response("", 200)
+		else:
+			return make_response("User does not exist.", 404)
+		
+	def db_delete_profile_hate(self):
+		"""
+		deleteds a profile educations in the database for the corresponding username
+		"""
+
+		x = checkFields(self.content, fields=['hate', 'username'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		prof_obj = self.Profile.objects(username=self.content['username']).first()
+		if prof_obj:
+			prof_obj.update(pull__hate=self.content['hate'])
 			return make_response("", 200)
 		else:
 			return make_response("User does not exist.", 404)

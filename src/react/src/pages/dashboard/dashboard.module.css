@@ -98,4 +98,8 @@ img {
   .leftHalf{
     width: calc(100vw - 80px);
   }
+  .comingSoon{
+    min-height: 84vh;
+    max-width: 100vw !important;
+  }
 }

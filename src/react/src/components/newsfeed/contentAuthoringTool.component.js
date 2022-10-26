@@ -12,10 +12,10 @@ class ContentAuthoringTool extends Component{
     constructor(props){
         super(props);
         this.state={
-            subject: '',
-            topic: '',
-            subtopic: '',
-            type: '',
+            subject: localStorage.getItem('subject'),
+            topic: localStorage.getItem('topic'),
+            subtopic: localStorage.getItem('subtopic'),
+            type: localStorage.getItem('type'),
             question: '',
             fact: '',
             background: '',
@@ -25,7 +25,9 @@ class ContentAuthoringTool extends Component{
             mcq1opt3: '',
             mcq1opt4: '',
             setOpen: this.props.createpost,
-            public: true
+            public: true,
+            listOfSubjects: [],
+            listOfTopics: []
         }
         this.submit=this.submit.bind(this);
         this.handleChange=this.handleChange.bind(this);
@@ -45,6 +47,18 @@ class ContentAuthoringTool extends Component{
       };
       
 
+    searchSubject(event){
+        axios.post('http://127.0.0.1:8103/api/db_search_a_subject', {subject: event.target.value})
+        .then(res => {
+          this.setState({listOfSubjects: res.data})
+        })
+      }
+      searchTopic(event){
+        axios.post('http://127.0.0.1:8103/api/db_search_a_topic', {topic: event.target.value})
+        .then(res => {
+          this.setState({listOfTopics: res.data})
+        })
+      }
 
     render(){
         const {fullScreen} = this.props;
@@ -85,61 +99,43 @@ class ContentAuthoringTool extends Component{
                     />
                 </div> 
             </div>
-                <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={this.handleChange} size='20' maxLength='20' required/>
+
+                <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={(e) => {this.searchSubject(e); this.handleChange(e)}} size='20' maxLength='20' required/>
                  <datalist id="subjects">
-                    <option value="Computer Science"/>
-                    <option value="Science"/>
-                    <option value="Geography"/>
-                    <option value="Pharmacy"/>
-                    <option value="Accounts"/>
-                    <option value="Economics"/>
-                    <option value="Chemistry"/>
-                    <option value="Physics"/>
+                 {this.state.listOfSubjects.map((name) => 
+                    <option key={name} value={name}/>
+                  )}
                  </datalist>
                 
-                 <input list="topics" name="topic" placeholder="Topic" form="formPost" value={this.state.topic} onChange={this.handleChange} size='20' maxLength='20' required/>
+                 <input list="topics" name="topic" placeholder="Topic" form="formPost" value={this.state.topic} onChange={ (e) => {this.searchTopic(e); this.handleChange(e)}} size='20' maxLength='20' required/>
                  <datalist id="topics">
-                    <option value="Computer Science"/>
-                    <option value="Science"/>
-                    <option value="Geography"/>
-                    <option value="Pharmacy"/>
-                    <option value="Accounts"/>
-                    <option value="Economics"/>
-                    <option value="Chemistry"/>
-                    <option value="Physics"/>
+                 {this.state.listOfTopics.map((name) => 
+                    <option key={name} value={name}/>
+                  )}
                  </datalist>
 
-                 <input list="subTopics" name="subtopic" placeholder="Subtopic" form="formPost" value={this.state.subtopic} onChange={this.handleChange} size='20' maxLength='25' required/>
-                 <datalist id="subTopics">
-                    <option value="Computer Science"/>
-                    <option value="Science"/>
-                    <option value="Geography"/>
-                    <option value="Pharmacy"/>
-                    <option value="Accounts"/>
-                    <option value="Economics"/>
-                    <option value="Chemistry"/>
-                    <option value="Physics"/>
-                 </datalist>
+                 <input name="subtopic" placeholder="Subtopic" form="formPost" value={this.state.subtopic} onChange={this.handleChange} size='20' maxLength='25' required/>
 
-                 <input list="type" name="type" placeholder="Type" form="formPost" value={this.state.type} onChange={this.handleChange} required/>
-                 <datalist id="type">
-                    <option value="News"/>
-                    <option value="Information"/>
-                    <option value="News & Information"/>
-                 </datalist>
-                 <br />
+                 <select name="type" form="formPost" value={this.state.type} onChange={this.handleChange} required>     
+                    <option value="Information"> Information </option>
+                    <option value="News"> News </option>
+                    <option value="News & Information"> News & Information </option>
+                 </select>
+
+                 <p><br /></p>
+                 
 
     
                     <span className={style.addPostFormHeading}>Create Post</span>
                     <br />
                     
                     <TextField variant="outlined" placeholder="Add a Question, if applicable..." fullWidth type="text" label="Question" name="question" inputProps={{ maxLength: 40 }} value={this.state.question} onChange={this.handleChange}/>
-<p></p>
+                        <p></p>
                     <TextField multiline variant="outlined" placeholder="Write a post of Max. 365 letters..." fullWidth type="text" label="Fact" form="formPost" name="fact" inputProps={{ maxLength: 365 }}  value={this.state.fact} onChange={this.handleChange} required/>
                     
-<p></p>
-<br />
-<p></p>
+                        <p></p>
+                        <br />
+                        <p></p>
 
                  
 
@@ -182,30 +178,46 @@ class ContentAuthoringTool extends Component{
         }
         else{
             const form_data= new FormData();
-        const ABC= document.querySelector('#uploadMedia > input[type="file"]').files[0];
-        form_data.append('username', localStorage.getItem('username'));
-        form_data.append('subject', this.state.subject);
-        form_data.append('topic', this.state.topic);
-        form_data.append('subtopic', this.state.subtopic);
-        form_data.append('type', this.state.type);
-        form_data.append('question', this.state.question);
-        form_data.append('fact', this.state.fact);
-        form_data.append('background', ABC);
-        form_data.append('mcq1', this.state.mcq1);
-        form_data.append('mcq1opt1', this.state.mcq1opt1);
-        form_data.append('mcq1opt2', this.state.mcq1opt2);
-        form_data.append('mcq1opt3', this.state.mcq1opt3);
-        form_data.append('mcq1opt4', this.state.mcq1opt4);
-        form_data.append('public', this.state.public);
-        axios({method: "post", url: "http://localhost:8103/api/db_create_post", data: form_data, headers: { "Content-Type": "multipart/form-data" }})
-        .then(response => {
-            console.log(response.data);
-            this.setState({setOpen: false});
+            const ABC= document.querySelector('#uploadMedia > input[type="file"]').files[0];
+            form_data.append('username', localStorage.getItem('username'));
+            form_data.append('subject', this.state.subject);
+            form_data.append('topic', this.state.topic);
+            form_data.append('subtopic', this.state.subtopic);
+            form_data.append('type', this.state.type);
+            form_data.append('question', this.state.question);
+            form_data.append('fact', this.state.fact);
+            form_data.append('background', ABC);
+            form_data.append('mcq1', this.state.mcq1);
+            form_data.append('mcq1opt1', this.state.mcq1opt1);
+            form_data.append('mcq1opt2', this.state.mcq1opt2);
+            form_data.append('mcq1opt3', this.state.mcq1opt3);
+            form_data.append('mcq1opt4', this.state.mcq1opt4);
+            form_data.append('public', this.state.public);
+
+        if (! this.state.listOfSubjects.includes(this.state.subject)){
+            document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Subject.";
+        }
+        else if(! this.state.listOfTopics.includes(this.state.topic)){
+            document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Topic.";
+        }
+        else if(this.state.subject != this.state.topic != this.state.subtopic){
+            axios({method: "post", url: "http://localhost:8103/api/db_create_post", data: form_data, headers: { "Content-Type": "multipart/form-data" }})
+            .then(response => {
+                console.log(response.data);
+                localStorage.setItem('subject', this.state.subject);
+                localStorage.setItem('topic', this.state.topic);
+                localStorage.setItem('subtopic', this.state.subtopic);
+                localStorage.setItem('type', this.state.type);
+                this.setState({setOpen: false});
             })
-        .catch((error) => {
-        console.log(error);
-        alert("We don't support Data Duplicasy!\nTo create a Post:\n1. Subject, Topic, Subtopic should be different.\n2. The type should be either News, Information or News& Information\n3. Options in multiple choice should not be same.\n4. The Fact should be Unique.");
-    });
+            .catch((error) => {
+            console.log(error);
+            alert("We don't support Data Duplicasy!\nTo create a Post:\n1. Subject, Topic, Subtopic should be different.\n2. The type should be either News, Information or News& Information\n3. Options in multiple choice should not be same.\n4. The Fact should be Unique.");
+        });
+        }
+        else{
+            document.getElementById('fillTheFormCompleteMessage').innerHTML="Subject, Topic & Subtopic should not be same.";
+        }
     }
     }
 

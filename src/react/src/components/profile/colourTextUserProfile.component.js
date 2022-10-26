@@ -17,12 +17,12 @@ class ColourTextUser extends Component {
         }
         // console.log(array)
         return(
-                <span className="listed_educations_list" >
+                <div className="listed_educations_list" >
                     {array.map(
                         (texts, index) => 
                             <li key={index} className='colourTextListItems'>{texts.text}</li>
                     )}
-                </span>
+                </div>
             )
         }
 }

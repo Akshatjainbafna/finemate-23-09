@@ -23,7 +23,8 @@ import navigation from "../../assets/navigation.png";
 import Headerbar from "../..//components/headerbar/HeaderTaskbar.js";
 import Sidebar from "../..//components/sidebar/sidebar.component.js";
 import { Add, TimerSharp } from "@material-ui/icons";
-import { FormControlLabel, Radio, RadioGroup } from "@material-ui/core";
+import { FormControlLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select } from "@material-ui/core";
+import LoadingGif from "../../components/loadingGif";
 
 let headerItems = {
   link: "/profile",
@@ -74,7 +75,9 @@ class Questionaire extends Component {
       newSubject: "",
       arrayOfLookingForwardToLearn: [],
       qualification: "",
-      coreStream: ""
+      coreStream: "",
+      loading: true,
+      searchedSubjects: []
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -84,9 +87,9 @@ class Questionaire extends Component {
   }
 
   componentDidMount() {
-    if (window.token) {
-      this.setState({ loggedIn: true });
-    }
+    setTimeout(() => {
+      this.setState({loading: false});
+    }, 2000);
   }
 
   handleChange(event) {
@@ -126,10 +129,119 @@ class Questionaire extends Component {
     this.setState({newSubject: ""});
   }
 
+  coreStream(event){
+    this.setState({coreStream: event.target.value})
+    axios.post('http://127.0.0.1:8103/api/db_get_all_subjects_of_stream', {stream: event.target.value})
+    .then(res => {
+      this.setState({arrayOfEducation: res.data})
+    })
+  }
+  search(event){
+    axios.post('http://127.0.0.1:8103/api/db_search_a_subject', {subject: event.target.value})
+    .then(res => {
+      this.setState({searchedSubjects: res.data})
+    })
+  }
+
   render() {
     if (this.state.done) {
       return <Redirect to="/dashboard" />;
     }
+    if (this.state.loading){
+      return  <div className="loadingGif">
+                <LoadingGif />
+              </div>
+    }
+    const listOfCoreStreams=[
+'Architecture',
+'Aeronautical Engineering',
+'Industrial Engineering',
+'Aerospace Engineering',
+'Marine Engineering',
+'Automobile Engineering',
+'Mechanical Engineering',
+'Biomedical Engineering',
+'Mechatronics Engineering',
+'Biotechnology Engineering',
+'Metallurgical Engineering',
+'Ceramic Engineering',
+'Mining Engineering',
+'Chemical Engineering',
+'Petroleum Engineering',
+'Civil Engineering',
+'Power Engineering',
+'Communications Engineering',
+'Production Engineering',
+'Computer Science Engineering',
+'Robotics Engineering',
+'Construction Engineering',
+'Structural Engineering',
+'Electrical Engineering',
+'Telecommunication Engineering',
+'Electronics & Communication Engineering',
+'Textile Engineering',
+'Electronics Engineering',
+'Tool Engineering',
+'Environmental Engineering',
+'Transportation Engineering',
+'BSc Agriculture',
+'BSc Biotechnology',
+'BSc Zoology',
+'BSc Clinical Research & Healthcare Management',
+'BSc Forestry',
+'BSc Microbiology',
+'BSc Nursing',
+'B.Sc. Physiotherapy',
+'B.Sc. Radiology',
+'B.Sc. Bioinformatics',
+'B.Sc. Physics',
+'B.Sc. Chemistry',
+'B.Sc. Botany',
+'B.Sc. IT',
+'B.Sc. Computer Science',
+'Business Administration',
+'Management Science',
+'Computer Applications',
+'Fine Arts',
+'Event Management',
+'LL.B',
+'Journalism and Mass Communication',
+'Fashion Designing',
+'Social Work',
+'Business Studies',
+'Travel and Tourism Management',
+'Aviation Courses',
+'Interior Design',
+'Hospitality and Hotel Administration',
+'BA in Design',
+'Performing Arts',
+'BA in History',
+'Chartered Accountancy',
+'Company Secretary',
+'Foreign Language',
+'Pharmacy',
+'Dental Surgery',
+'Finance',
+'Marketing',
+'Data Science',
+'Economics',
+'Physics', 
+'Philosophy',
+'Mathematics',
+'Chemistry',
+'History',
+'Geography',
+'Psychology',
+'Political Science & International Relations',
+'Statistics',
+'Zoology',
+'Anthropology',
+'Geology',
+'Psychology',
+'Sociology',
+'Commerce'
+    ]
+
     return (
       <React.Fragment>
         <img class="image" src={BackImage} alt="Map"></img>
@@ -141,74 +253,73 @@ class Questionaire extends Component {
               </h1>
               <br />
               <h3 class="text-dark font-weight-bold">
-                What is your Highest Qualification?
+                What is your Current Field?
               </h3>
-              <br />
+              
                 <RadioGroup
                   aria-labelledby="demo-radio-buttons-group-label"
                   value={this.state.qualification}
                   onChange={(e) => { this.setState({qualification: e.target.value}) }}
                   name="qualification"
                             >
+                    <div className="d-flex">
+                      <div className="d-flex flex-column">
+                    <FormControlLabel value="Working Professional" control={<Radio required={true}/>} label="Post Graduation" />
+                    <FormControlLabel value="PhD" control={<Radio required={true}/>} label="Post Graduation" />
                     <FormControlLabel value="Post Graduation" control={<Radio required={true}/>} label="Post Graduation" />
                     <FormControlLabel value="Graduation" control={<Radio required={true}/>} label="Graduation" />
                     <FormControlLabel value="Undergraducation" control={<Radio required={true}/>} label="Undergraduation" />
+                    </div>
+                    <div className="d-flex flex-column">
                     <FormControlLabel value="Senior Secondary" control={<Radio required={true}/>} label="Senior Secondary" />
                     <FormControlLabel value="Higher Secondary" control={<Radio required={true}/>} label="Higher Secondary" />
+                    <FormControlLabel value="Diploma" control={<Radio required={true}/>} label="Diploma" />
+                    <FormControlLabel value="Crash Course" control={<Radio required={true}/>} label="Crash Course" />
+                    <FormControlLabel value="Exam Preparation" control={<Radio required={true}/>} label="Exam Preparation" />
+                    </div>
+                    </div>
                 </RadioGroup>
-              <br />
-              <br />
-
-              <h3 class="text-dark font-weight-bold">
-                What is your recent core stream?
-              </h3>
-              <br />
-              <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  value={this.state.coreStream}
-                  onChange={(e) => { this.setState({coreStream: e.target.value}) }}
-                  name="coreStream"
-                            >
-                <div className="d-flex">
-                  <div className="d-flex flex-column">
-                    <FormControlLabel value="Science" control={<Radio required={true}/>} label="Science" />
-                    <FormControlLabel value="Commerce" control={<Radio required={true}/>} label="Commerce" />
-                    <FormControlLabel value="Arts" control={<Radio required={true}/>} label="Arts" />
-                    <FormControlLabel value="Computer Applications" control={<Radio required={true} />} label="Computer Applications" />
-                    <FormControlLabel value="Nursing" control={<Radio required={true}/>} label="Nursing" />
-                  </div>
-                  <div className="d-flex flex-column">
-                    <FormControlLabel value="Medical" control={<Radio required={true}/>} label="Medical" />
-                    <FormControlLabel value="Medicinal" control={<Radio required={true}/>} label="Medicinal"  />
-                    <FormControlLabel value="Engineering" control={<Radio required={true}/>} label="Engineering" />
-                    <FormControlLabel value="Finance" control={<Radio required={true}/>} label="Finance" />
-                    <FormControlLabel value="Management" control={<Radio required={true}/>} label="Management" />
-                  </div>
-                </div>
-                </RadioGroup>
-                <input type="text" className="form-control inputQuestionairePage" placeholder="Other"></input>
-              <br />
-              <br />
+                <p><br /></p>
 
 
               <h3 class="text-dark font-weight-bold">
-                What are the Subjects or Skills have already studied or acquired? (select all that apply)
+                What is your most recent stream?
               </h3>
               <br />
+              
+              <Select
+                value={this.state.coreStream}
+                onChange={(e) =>  this.coreStream(e)}
+                input={<OutlinedInput className='selectFormColortext' />}
+                name="coreStream"
+              >
+                  {listOfCoreStreams.sort().map((name) => (
+                    <MenuItem
+                      key={name}
+                      value={name}
+                    >
+                        {name}
+                    </MenuItem>
+                  ))}
+              </Select>
+              <p><br /></p>
+              <p><br /></p>
+
+
+              <h3 class="text-dark font-weight-bold">
+                All the subjects of your core streams are added, want to remove some or add more subjects that you know?(select all that apply)
+              </h3>
+              <br />  
               <div className="allTheTopics">
-              <div className="d-flex">
-                <input list="subjects" name="subject" className="form-control inputQuestionairePage" placeholder="Add Subjects..." value={this.state.education} onChange={(e) => this.setState({education : e.target.value})} size='20' maxLength='20'/>
-                <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addEducation}> <Add /> </button>
-              </div>
+                <div className="d-flex">
+                  <input list="subjects" type='search' name="subject" className="form-control inputQuestionairePage" placeholder="Add Subjects..." value={this.state.education} onChange={(e) => {this.search(e); this.setState({education : e.target.value})}} size='30' maxLength='30'/>
+                  <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addEducation}> <Add /> </button>
+                </div>
+                
                 <datalist id="subjects">
-                    <option value="Computer Science"/>
-                    <option value="Science"/>
-                    <option value="Geography"/>
-                    <option value="Pharmacy"/>
-                    <option value="Accounts"/>
-                    <option value="Economics"/>
-                    <option value="Chemistry"/>
-                    <option value="Physics"/>
+                  {this.state.searchedSubjects.map((name) => 
+                    <option key={name} value={name}/>
+                  )}
                  </datalist>
               </div>
               <br />
@@ -229,20 +340,16 @@ class Questionaire extends Component {
               <br />
               <div className="allTheTopics">
                 <div className="d-flex">
-                  <input list="subjects" className="form-control inputQuestionairePage" name="subject" placeholder="Add Subjects..." value={this.state.newSubject} onChange={(e) => this.setState({newSubject : e.target.value})} size='20' maxLength='20'/>
+                  <input list="subjects" className="form-control inputQuestionairePage" name="subject" placeholder="Add Subjects..." value={this.state.newSubject} onChange={(e) => {this.search(e); this.setState({newSubject : e.target.value})}} size='20' maxLength='20'/>
                   <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addNewSubject}> <Add /> </button>
                 </div>
                   
-                  <datalist id="subjects">
-                    <option value="Computer Science"/>
-                    <option value="Science"/>
-                    <option value="Geography"/>
-                    <option value="Pharmacy"/>
-                    <option value="Accounts"/>
-                    <option value="Economics"/>
-                    <option value="Chemistry"/>
-                    <option value="Physics"/>
+                <datalist id="subjects">
+                  {this.state.searchedSubjects.map((name) => 
+                    <option key={name} value={name}/>
+                  )}
                  </datalist>
+
               </div>
               <br />
               {this.state.arrayOfLookingForwardToLearn.map((item, index) => {

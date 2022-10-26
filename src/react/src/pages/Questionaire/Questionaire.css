@@ -50,6 +50,9 @@ body{
     border-width: 2px;
     border-color: darkgray;
     border-radius: 5px;
+    border: hsl(270, 38%, 59%);
+    width: 20vw !important;
+    background-color: #F5F7FA;
 }
 
 .Sidebar{
@@ -86,6 +89,6 @@ body{
         right: -10vw;
     }
     .inputQuestionairePage {
-        width: 50vw !important;
+        width: 75vw !important;
     }
 }

@@ -83,6 +83,7 @@ disconnect(username2){
     const { educations } = this.props;
     const { skills } = this.props;
     const { interests } = this.props;
+    const { hate } = this.props;
     const { completedCourses } = this.props;
     const { languages } = this.props;
     const { description } = this.props;
@@ -97,7 +98,8 @@ disconnect(username2){
     const { connections } = this.props;
     const { profilePicture } = this.props;
 
-    const education = [
+    const education=[]
+    const education2 = [
       'Computer Science',
       'Mechanical',
       'Electical',
@@ -365,6 +367,10 @@ disconnect(username2){
               <ColourText textInfo={interests} field='interest' editMode={!this.state.displaying} listOfItems={interest}/>
             </Card.Text>
 
+            <Card.Title className="listed_titles">Hate</Card.Title>
+                <Card.Text className="listed_interests">
+                    <ColourText textInfo={hate}  field='hate' editMode={!this.state.displaying} listOfItems={interest}/>
+                </Card.Text>
           </Card.Body>
         </Card>
 
