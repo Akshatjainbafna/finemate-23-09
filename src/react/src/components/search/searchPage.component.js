@@ -10,7 +10,7 @@ export default function SearchPageComponent(props){
     
 
     function search(event){
-        if (category == 'People'){
+        if (category === 'People'){
             Axios.post('http://127.0.0.1:8103/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
             .then(response => {
                 if (response.data){
@@ -22,7 +22,7 @@ export default function SearchPageComponent(props){
                 setSearchData([]);
             })
         }
-        if (category == 'Community'){
+        if (category === 'Community'){
             Axios.post('http://127.0.0.1:8103/api/db_search_thread', {'title': event.target.value})
             .then(response => {
                 if (response.data){
@@ -34,7 +34,7 @@ export default function SearchPageComponent(props){
                 setSearchData([]);
             })
         }
-        if (category == 'Topic'){
+        if (category === 'Topic'){
             Axios.post('http://127.0.0.1:8103/api/db_search_posts_of_topic', {'topic': event.target.value})
             .then(response => {
                 if (response.data){
@@ -47,7 +47,7 @@ export default function SearchPageComponent(props){
                 setSearchData([]);
             })
         }
-        if (category == 'Course'){
+        if (category === 'Course'){
             Axios.post('http://127.0.0.1:8103/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
             .then(response => {
                 if (response.data){
@@ -90,7 +90,7 @@ export default function SearchPageComponent(props){
                         <Divider />
              {(() =>{
 
-                if (category == 'People'){
+                if (category === 'People'){
                     return <div className={style.searchedResults}>
                         {searchData.map((user,index) =>
                             <div key={index}>
@@ -99,7 +99,7 @@ export default function SearchPageComponent(props){
                                 <ListItem>
                                     {user.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} className={style.profilePictureThumbnail}/>
+                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} alt="Profile Picture" className={style.profilePictureThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>
@@ -118,7 +118,7 @@ export default function SearchPageComponent(props){
                     </div>
                 }
 
-                if (category == 'Community'){
+                if (category === 'Community'){
                     return <div className = 'discussion-list-list'>
                     {searchData.map(
                         (thread) => 
@@ -137,7 +137,7 @@ export default function SearchPageComponent(props){
                     </div>
                 }
 
-                if (category == 'Topic'){
+                if (category === 'Topic'){
                     return <div className="d-flex justify-content-around flex-wrap">
                     {searchData.map((post, index) => 
                     <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
@@ -146,7 +146,7 @@ export default function SearchPageComponent(props){
                           <p className="subTopicThumbnail">{post.subtopic}</p>
                           <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background Image" />
                       </div>
                     </Link>
                     )}

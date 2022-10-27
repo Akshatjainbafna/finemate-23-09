@@ -17,7 +17,6 @@ import attendance from "../../assets/attendance.png";
 import grades from "../../assets/grades.png";
 import forum from "../../assets/forum.png";
 import cart from "../../assets/cart.png";
-import navigation from "../../assets/navigation.png";
 import { Redirect } from "react-router-dom";
 import SearchPageForTopicComponent from "../../components/search/searchPageForTopic.component";
 import LoadingGif from "../../components/loadingGif";
@@ -104,7 +103,7 @@ class SearchPageForTopic extends React.Component{
     
     
         if (window.innerWidth <= 600){
-          if(localStorage.getItem("usertype")=="noraml"){
+          if(localStorage.getItem("usertype")==="noraml"){
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />
@@ -115,7 +114,7 @@ class SearchPageForTopic extends React.Component{
               </>
             )
           }
-          if(localStorage.getItem("usertype")=="student"){
+          if(localStorage.getItem("usertype")==="student"){
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForStudent} />
@@ -126,7 +125,7 @@ class SearchPageForTopic extends React.Component{
               </>
             )
           }
-          if(localStorage.getItem("usertype")=="instructor" || "institute"){
+          if(localStorage.getItem("usertype")==="instructor" || "institute"){
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForInstructorInstitute} />
@@ -140,7 +139,7 @@ class SearchPageForTopic extends React.Component{
         }
         else{
     
-        if(localStorage.getItem("usertype")=="normal"){
+        if(localStorage.getItem("usertype")==="normal"){
           return (
             <React.Fragment>
               <Sidebar books={navItemsForNormalUser} />
@@ -151,7 +150,7 @@ class SearchPageForTopic extends React.Component{
             </React.Fragment>
           );
         }
-        if (localStorage.getItem("usertype") == "student") {
+        if (localStorage.getItem("usertype") === "student") {
           return (
             <React.Fragment>
               <Sidebar books={navItemsForStudent} />
@@ -163,7 +162,7 @@ class SearchPageForTopic extends React.Component{
           );
         }
     
-        if (localStorage.getItem("usertype") == "instructor" || "institute") {
+        if (localStorage.getItem("usertype") === "instructor" || "institute") {
           return (
             <React.Fragment>
               <Sidebar books={navItemsForInstructorInstitute} />

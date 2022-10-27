@@ -6,7 +6,6 @@ import * as serviceWorker from "./serviceWorker";
 
 
 import Sidebar from "./components/sidebar/sidebar.component.js";
-import CreateAccount from "./components/createAccount/createAccount.component.js";
 import CreateAccountPage from "./pages/createAccount/createAccount.js";
 import LogInPage from "./pages/login/login.js";
 import Logout from "./components/createAccount/logout.component.js";

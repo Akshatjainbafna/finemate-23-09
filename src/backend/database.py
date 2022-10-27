@@ -2,8 +2,6 @@ from werkzeug.utils import secure_filename
 import json
 from flask import Flask, make_response, request, jsonify
 from flask_cors import CORS
-from pyrsistent import immutable
-
 from flask_mongoengine import MongoEngine
 from metaData import SubjectsTopicsSubtopicsTags
 from problems import Problems
@@ -23,7 +21,7 @@ import dashevent
 import profile
 import message
 
-app = Flask(__name__) 
+app = Flask(__name__, static_folder='../react/build', static_url_path='/') 
 app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpeg', '.webp', '.gif', '.jgp', '.svg'] 
 app.config['MAX_CONTENT_LENGTH'] = 4096 * 4096
 CORS(app)
@@ -38,6 +36,10 @@ db.init_app(app)
 @app.errorhandler(413)
 def too_large(e):    
     return "File is too large", 413 
+
+@app.route('/')
+def index():
+    return app.send_static_file('index.html')
 
 
 @app.route('/api/add_pain_point_to_database', methods=['POST'])

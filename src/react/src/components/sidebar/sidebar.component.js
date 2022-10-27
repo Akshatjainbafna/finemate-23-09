@@ -13,7 +13,7 @@ const NavItem = ({link, imgSrc, title}) => {
     }
 
     //returning the active list item or say current selected sidebar menu
-    if (HeaderView()==link) {
+    if (HeaderView()===link) {
         return (
             <Link to={link} title={title}>
                 <li className={style.active}>
@@ -59,7 +59,7 @@ class Sidebar extends Component {
                     <picture> 
                         <source media='(min-width: 992px)' className={style.menuIcon} srcSet={LogoDesktop} />
                         <source media='(min-width: 601px)' className={style.menuIcon}  srcSet={LogoTablet} />
-                        <img className={style.menuIcon} src={LogoTablet} />
+                        <img className={style.menuIcon} src={LogoTablet} alt='icon'/>
                     </picture>
                     </Link>
                 </span>

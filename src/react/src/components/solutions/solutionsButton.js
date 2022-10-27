@@ -1,8 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import "./solutionsButton.css";
-import styled from "styled-components";
-import student from "../../assets/solutionsStudent.svg";
-import instructor from "../../assets/solutionsInstructor.svg";
+
 
 const STYLES = ["solutions--btn--primary", "solutions--btn--secondary"];
 

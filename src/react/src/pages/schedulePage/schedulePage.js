@@ -7,9 +7,9 @@ import classes from "../../assets/classes.png";
 import scheduling from "../../assets/scheduling.png";
 import community from "../../assets/community.png";
 import mailbox from "../../assets/mailbox.png";
-import achievements from "../../assets/achievements.png";
+//import achievements from "../../assets/achievements.png";
 import socialInitiatives from "../../assets/Welfare.png";
-import settings from "../../assets/settings.png";
+//import settings from "../../assets/settings.png";
 import dashboard from "../../assets/dashboard.png";
 
 let headerItems = { link: "/profile", title: "Schedule", profileImg: profile };

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import style from './FooterBarForMobile.module.css';
 import { BsBook, BsBookFill, BsChatDots, BsChatDotsFill, BsChatSquareQuote, BsChatSquareQuoteFill, BsHouseDoor, BsHouseDoorFill, BsSearch } from "react-icons/bs";
 import { Link, useLocation } from "react-router-dom";
@@ -16,12 +16,12 @@ export default function FooterBarForMobile(){
             <nav className={style.FooterBarForMobile}>
                 <Link to="/dashboard" title="Home">
                     <IconContext.Provider value={{ color: '#834bc4', size: '30px' }} >
-                        <div> {HeaderView()=="/dashboard"? <BsHouseDoorFill /> : <BsHouseDoor />} </div>
+                        <div> {HeaderView()==="/dashboard"? <BsHouseDoorFill /> : <BsHouseDoor />} </div>
                     </IconContext.Provider>
                 </Link> 
                 <Link to="/communities" title="Clubs">
                     <IconContext.Provider value={{ color: '#834bc4', size: '30px' }} >
-                        <div> {HeaderView()=="/communities"? <BsChatSquareQuoteFill /> : <BsChatSquareQuote />} </div>
+                        <div> {HeaderView()==="/communities"? <BsChatSquareQuoteFill /> : <BsChatSquareQuote />} </div>
                     </IconContext.Provider>
                 </Link> 
                 <Link to="/search" title="Search">
@@ -31,12 +31,12 @@ export default function FooterBarForMobile(){
                 </Link> 
                 <Link to="/messageuser" title="Messages">
                     <IconContext.Provider value={{ color: '#834bc4', size: '30px' }} >
-                    <div> {HeaderView()=="/messageuser"? <BsChatDotsFill /> : <BsChatDots />} </div>
+                    <div> {HeaderView()==="/messageuser"? <BsChatDotsFill /> : <BsChatDots />} </div>
                     </IconContext.Provider>
                 </Link> 
                 <Link to="/allcoursesuser" title="Courses">
                     <IconContext.Provider value={{ color: '#834bc4', size: '30px' }} >
-                    <div> {HeaderView()=="/courses"? <BsBookFill /> : <BsBook />} </div>
+                    <div> {HeaderView()==="/courses"? <BsBookFill /> : <BsBook />} </div>
                     </IconContext.Provider>
                 </Link>  
             </nav>

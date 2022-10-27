@@ -1,9 +1,7 @@
-import { Button, InputLabel, MenuItem, OutlinedInput, Select, useTheme } from '@material-ui/core';
 import React, { Component } from 'react';
 import './profile.css';
 import {BsXCircleFill} from 'react-icons/bs';
 import Axios from 'axios';
-import { Dropdown, Form, FormControl } from 'react-bootstrap';
 import { Add } from '@material-ui/icons';
 
 class ColourText extends Component {
@@ -19,7 +17,7 @@ class ColourText extends Component {
         event.preventDefault();
         Axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
-            if (res.data==true){
+            if (res.data===true){
                 switch(String(field)){
                     case 'education':
                         if (this.state.listOfItems.includes(this.state.itemName)){
@@ -66,6 +64,8 @@ class ColourText extends Component {
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
+                    default: 
+                        console.log('Select a Valid Case')
                 }
             }
             else{
@@ -77,7 +77,7 @@ class ColourText extends Component {
         event.preventDefault()
         Axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
-            if (res.data==true){
+            if (res.data===true){
                 switch(String(field)){
                     case 'education':
                         Axios.post('http://127.0.0.1:8103/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
@@ -114,6 +114,8 @@ class ColourText extends Component {
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
+                    default: 
+                        console.log('Select a Valid Case')
                 }
             }
             else{
@@ -125,7 +127,7 @@ class ColourText extends Component {
         event.preventDefault()
         Axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
-            if (res.data==true){
+            if (res.data===true){
                 switch(String(field)){
                     case 'education':
                         Axios.post('http://127.0.0.1:8103/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
@@ -172,6 +174,8 @@ class ColourText extends Component {
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
+                    default: 
+                        console.log('Select a Valid Case')
                 }
             }
             else{
@@ -181,7 +185,7 @@ class ColourText extends Component {
     }
     search(event, field){
         this.setState({itemName: event.target.value});
-        if (field == 'education'){
+        if (field === 'education'){
         document.getElementById('ErrorMessage').innerHTML='';
         Axios.post('http://127.0.0.1:8103/api/db_search_a_subject', {subject: event.target.value})
         .then(res => {
