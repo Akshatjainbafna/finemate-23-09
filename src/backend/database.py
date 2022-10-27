@@ -21,7 +21,7 @@ import dashevent
 import profile
 import message
 
-app = Flask(__name__, static_folder='../react/build', static_url_path='/') 
+app = Flask(__name__, static_folder='./react/build', static_url_path='/') 
 app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpeg', '.webp', '.gif', '.jgp', '.svg'] 
 app.config['MAX_CONTENT_LENGTH'] = 4096 * 4096
 CORS(app)
@@ -39,7 +39,7 @@ def too_large(e):
 
 @app.route('/')
 def index():
-    return app.send_static_file('index.html')
+    return app.send_static_file(app.static_folder, 'index.html')
 
 
 @app.route('/api/add_pain_point_to_database', methods=['POST'])

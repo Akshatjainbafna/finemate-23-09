@@ -108,7 +108,7 @@ function PreviousNextWindow(props){
     function fetchPreviousPost(){
         setAnchorPrevNext(null);
         try{
-            axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId.$oid})
+            axios.post('https://finemate.herokuapp.com/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId.$oid})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -120,7 +120,7 @@ function PreviousNextWindow(props){
     function fetchNextPost(){
         setAnchorPrevNext(null);
         try{
-            axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId.$oid})
+            axios.post('https://finemate.herokuapp.com/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId.$oid})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -643,7 +643,7 @@ render(){
         var idOfAllPosts=[];
         allThePosts.forEach((value, index, array) => { idOfAllPosts.push(allThePosts[index]._id.$oid)});
 
-        axios.post('http://127.0.0.1:8103/api/load_more_posts', { 'username' : localStorage.getItem('username'), 'allTheCurrentPosts' : idOfAllPosts}, { "Content-Type": "application/json" })
+        axios.post('https://finemate.herokuapp.com/api/load_more_posts', { 'username' : localStorage.getItem('username'), 'allTheCurrentPosts' : idOfAllPosts}, { "Content-Type": "application/json" })
         .then(res=>{
             let newResponseData= res.data;
 
