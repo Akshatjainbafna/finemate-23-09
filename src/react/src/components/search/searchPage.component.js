@@ -99,7 +99,7 @@ export default function SearchPageComponent(props){
                                 <ListItem>
                                     {user.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} alt="Profile Picture" className={style.profilePictureThumbnail}/>
+                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} alt="Profile" className={style.profilePictureThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>
@@ -146,7 +146,7 @@ export default function SearchPageComponent(props){
                           <p className="subTopicThumbnail">{post.subtopic}</p>
                           <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background Image" />
+                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background" />
                       </div>
                     </Link>
                     )}

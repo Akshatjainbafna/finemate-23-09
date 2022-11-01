@@ -45,14 +45,14 @@ class UserProfile extends Component {
 
   removeConnection(connections, friends){
     if (connections.includes(localStorage.getItem('username'))){
-      Axios.post('https://finemate.herokuapp.com/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
+      Axios.post('http://127.0.0.1:8103/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
       .then(res => {
         window.location.reload(true);
     })
     .catch(err => console.log(err))
     }
     if (friends.includes(localStorage.getItem('username'))){
-      Axios.post('https://finemate.herokuapp.com/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
+      Axios.post('http://127.0.0.1:8103/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
       .then(res => {
         window.location.reload(true);
     })
@@ -61,7 +61,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount(){
-    Axios.post('https://finemate.herokuapp.com/api/db_get_public_post_of_user', {username: this.state.username})
+    Axios.post('http://127.0.0.1:8103/api/db_get_public_post_of_user', {username: this.state.username})
     .then(res => {
         console.log(res.data)
         this.setState({recentPosts : res.data})

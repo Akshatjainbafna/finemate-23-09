@@ -39,7 +39,14 @@ class ContentAuthoringTool extends Component{
         console.log(name, value)
         let data = {};
         data[name] = value;
-        this.setState(data);
+        this.setState(data, () => {
+            if (name == 'background' && value){
+                const bgImage = document.querySelector('#uploadMedia > input[type="file"]').files[0];
+                const idOfPreview = document.getElementById('previewBackground');
+                idOfPreview.src = URL.createObjectURL(bgImage)
+                document.getElementById('uploadBgBtn').style.boxShadow = '0px 0px 4px 2px #00b300d5';
+            }
+        });
 	}
     
     handleClose = () => {
@@ -146,22 +153,24 @@ class ContentAuthoringTool extends Component{
                     <TextField variant="outlined" fullWidth size="small" label="Option 2" name="mcq1opt2" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt2} onChange={this.handleChange}required/>  <p></p>
                     <TextField variant="outlined" fullWidth size="small" label="Option 3" name="mcq1opt3" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt3} onChange={this.handleChange}/>  <p></p>
                     <TextField variant="outlined" fullWidth size="small" label="Option 4" name="mcq1opt4" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt4} onChange={this.handleChange}/>  <p></p>
-                    <p></p> <br /> <p id="fillTheFormCompleteMessage"></p>
 
-<div className="d-flex justify-content-between">                  
-            <Button variant="contained" component="label" className={style.backgroundBtn} >
-                <AddPhotoAlternateRounded /> Background
-                <div id="uploadMedia"> <input hidden type="file" name="background"  onChange={this.handleChange} form="formPost" accept="image/*" required /></div>
-            </Button>
+                {this.state.background ? <div><img id='previewBackground' alt='not found'/></div> : null}
 
-        <DialogActions>
-          <Button onClick={() => this.handleClose()}>
-            Cancel
-          </Button>
-          <Button onClick={this.submit}>
-            Save
-          </Button>
-        </DialogActions>
+                <p></p> <br /> <p id="fillTheFormCompleteMessage"></p>
+                <div className="d-flex justify-content-between">                  
+                    <Button variant="contained" component="label" id='uploadBgBtn' style={{boxShadow: "0px 0px 4px 2px #ff2020cc"}} >
+                        <AddPhotoAlternateRounded /> Background
+                        <div id="uploadMedia"> <input hidden type="file" name="background"  onChange={this.handleChange} form="formPost" accept="image/*" required /></div>
+                    </Button>
+
+            <DialogActions>
+                <Button onClick={() => this.handleClose()}>
+                    Cancel
+                </Button>
+                <Button onClick={this.submit}>
+                    Save
+                </Button>
+            </DialogActions>
 </div>
             
             </form>

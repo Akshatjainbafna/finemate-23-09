@@ -1,3 +1,5 @@
+import os
+import time
 from werkzeug.utils import secure_filename
 import json
 from flask import Flask, make_response, request, jsonify
@@ -21,9 +23,8 @@ import dashevent
 import profile
 import message
 
-app = Flask(__name__, static_folder='./react/build', static_url_path='/') 
-app.config['UPLOAD_EXTENSIONS'] = ['.png', '.jpeg', '.webp', '.gif', '.jgp', '.svg'] 
-app.config['MAX_CONTENT_LENGTH'] = 4096 * 4096
+app = Flask(__name__) 
+allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg']
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 
@@ -37,9 +38,7 @@ db.init_app(app)
 def too_large(e):    
     return "File is too large", 413 
 
-@app.route('/')
-def index():
-    return app.send_static_file(app.static_folder, 'index.html')
+
 
 
 @app.route('/api/add_pain_point_to_database', methods=['POST'])
@@ -49,14 +48,29 @@ def db_store_problem():
 #create Post
 @app.route('/api/db_create_post', methods=['POST'])
 def db_create_post():
-    image=request.files['background']
-    filenameOfImage=secure_filename(image.filename)
-    fh = open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
-    fh.write(image.read())
-    fh.close()
-    formData=request.form
-    print(formData)
-    return PostObj(formData).create_a_post(image, filenameOfImage)
+    try:
+        if request.files['background']:
+            image=request.files['background']
+            filenameOfImage=secure_filename(image.filename)
+
+            filename_without_extension = os.path.splitext(filenameOfImage)[0]
+            extension = os.path.splitext(filenameOfImage)[1]
+
+            # Check if the file is of proper extension
+            if len(extension) > 0 and extension.lower() not in allowed_extensions:
+                return make_response("Invalid file type", 400)
+
+            timestamp = time.strftime('_%Y-%m-%d-%H-%M-%S')
+            filenameOfImage = filename_without_extension[:10] + timestamp + extension
+            backgroundImagePath = open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
+            backgroundImagePath.write(image.read())
+            backgroundImagePath.close()
+            formData=request.form
+            return PostObj(formData).create_a_post(image, filenameOfImage)
+        else:
+            return make_response("Insert a image", 400)
+    except:
+        return make_response("Internal Server Error, something went wrong", 500)
 
 #create Post
 @app.route('/api/db_delete_post', methods=['POST'])
@@ -328,12 +342,30 @@ def db_update_profile_description():
 # updating profile picture when provided with a form data MIMETYPE form-data where image is in the file form and username as request.form formatted as {description: description, username: username} 
 @app.route('/api/db_update_profile_picture', methods=['POST'])
 def db_update_profile_picture():
-    image=request.files['profilePicture']
-    cleanFilenameOfImage=secure_filename(image.filename)
-    profilePicture = open(f"../react/src/assets/profilePictures/{cleanFilenameOfImage}", "wb")
-    profilePicture.write(image.read())
-    profilePicture.close()
-    return ProfileObj(request.form).set_profile_picture(cleanFilenameOfImage)
+    try:
+        if request.files['profilePicture']:
+            profileImage = request.files['profilePicture']
+            cleanfilenameOfImage=secure_filename(profileImage.filename)
+
+            filename_without_extension = os.path.splitext(cleanfilenameOfImage)[0]
+            extension = os.path.splitext(cleanfilenameOfImage)[1]
+
+            # Check if the file is of proper extension
+            if len(extension) > 0 and extension.lower() not in allowed_extensions:
+                return make_response("Invalid file type", 400)
+
+            timestamp = time.strftime('_%Y-%m-%d-%H-%M-%S')
+            cleanfilenameOfImage = filename_without_extension[:10] + timestamp + extension
+            profileImagePath = open(f"../react/src/assets/profilePictures/{cleanfilenameOfImage}", "wb")
+            profileImagePath.write(profileImage.read())
+            profileImagePath.close()
+            ProfileObj(request.form).delete_old_profile_picture()
+            return ProfileObj(request.form).set_profile_picture(cleanfilenameOfImage)
+        else:
+            return make_response("Insert a image", 400)
+    except:
+        return make_response("Internal Server Error, something went wrong", 500)
+
 
 @app.route('/api/db_authorization_check', methods=['DELETE'])
 def db_authorization_check():

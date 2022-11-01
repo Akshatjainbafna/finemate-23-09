@@ -54,7 +54,7 @@ class Message extends Component {
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>
-                                <Avatar> {localStorage.getItem('targetUser')[0]} </Avatar>
+                                <Avatar className={style.profilePictureChatHeader}> {localStorage.getItem('targetUser')[0]} </Avatar>
                             </ListItemAvatar>
                         }
                     </Link>

@@ -30,7 +30,8 @@ class Profile extends Component {
       savedPosts: [],
       redirectToLeaderboard: false,
       openFriendList: null,
-      openConnectionList: null
+      openConnectionList: null,
+      selectededNewProfilePicture: false
     };
     this.submit = this.submit.bind(this);
     this.onChangeHandler = this.onChangeHandler.bind(this);
@@ -40,7 +41,15 @@ class Profile extends Component {
         let value = event.target.value;
         let data = {};
         data[name] = value;
-        this.setState(data);
+        this.setState(data, () => {
+          if (name == 'newProfilePicture' && value){
+            this.setState({selectededNewProfilePicture: true}, () => {
+              const bgImage = document.querySelector('#uploadMedia > input[type="file"]').files[0];
+              const idOfPreview = document.getElementById('previewBackground');
+              idOfPreview.src = URL.createObjectURL(bgImage)
+            })
+          }
+      });
   }
 
   componentDidMount(){
@@ -185,13 +194,17 @@ disconnect(username2){
               <div className="profile_pic_slot">
                 {this.state.displaying ? 
                   profilePicture ? 
-                    <div><img src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div> 
+                    <div><img src={require('../../assets/profilePictures/'+ profilePicture)} alt="not found" className="elementPic" /> </div> 
                     :
-                    <div><img src={profilePic} className="elementPic" /> </div>
+                    <div><img src={profilePic} alt="not found" className="elementPic" /> </div>
                 :
                 <div>
-                  <Button variant="contained" component="label" className='changeProfilePictureBtn' >
-                    <AddPhotoAlternateRounded />
+                  <Button variant="contained" component="label" className='changeProfilePictureBtn' style={{borderRadius: '100%', padding: '0'}} >
+                    {this.state.selectededNewProfilePicture ?
+                      <img id="previewBackground" alt="not selected" style={{objectFit: 'cover', height:"15vh", width:"15vh", borderRadius: '100%'}} />
+                      :
+                      <AddPhotoAlternateRounded />
+                    }
                     <div id="uploadMedia"> <input hidden type="file" name="newProfilePicture"  onChange={this.onChangeHandler} form="my-form" accept="image/*"/></div>
                   </Button>
                 </div>

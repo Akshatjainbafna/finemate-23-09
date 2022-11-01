@@ -161,7 +161,7 @@ export default function SearchPageForTopicComponent(props){
                           <p className="subTopicThumbnail">{post.subtopic}</p>
                           <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background Image" />
+                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background" />
                       </div>
                     </Link>
                     )}

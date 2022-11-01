@@ -1,6 +1,8 @@
 
 from email.policy import default
 import json
+import os
+import profile
 import mongoengine as me
 from mongoengine.fields import ListField
 from mongoengine.fields import StringField
@@ -538,6 +540,17 @@ class ProfileObj():
 		if user:
 			user.update(set__profilePicture = profilePictureFileName)
 			return make_response('Profile picture updated successfully!', 200)
+		else:
+			return make_response("User does not exist.", 404)
+	
+	def delete_old_profile_picture(self):
+		user = self.Profile.objects(username = self.content['username']).first()
+
+		if user:
+			profilePicture = user.profilePicture
+			print(profilePicture)
+			os.remove("../react/src/assets/profilePictures/" + profilePicture)
+			return make_response('Old profile picture deleted successfully!', 200)
 		else:
 			return make_response("User does not exist.", 404)
 		

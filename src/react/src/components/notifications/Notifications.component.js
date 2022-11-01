@@ -1,6 +1,7 @@
 import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@material-ui/core";
 import Axios from "axios";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import style from './notifications.module.css';
 
 class NotificationComponent extends Component{
@@ -47,7 +48,8 @@ class NotificationComponent extends Component{
                 <div key={index}>
                     <List>
                         <ListItem>
-                        {user.profilePicture ?
+                            <Link style={{textDecoration: 'none', color : '#302c35'}} className="d-flex" to={"/profile/".concat(user.username)}>
+                                {user.profilePicture ?
                                     <ListItemAvatar>
                                         <img src={require('../../assets/profilePictures/'+ user.profilePicture)} className={style.profilePictureThumbnail}/>
                                     </ListItemAvatar>
@@ -59,6 +61,7 @@ class NotificationComponent extends Component{
                             <ListItemText>
                                 {user.username}
                             </ListItemText>
+                            </Link>
                             <ListItemSecondaryAction>
                                 <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: '#cdb5e7', color: 'white', marginRight: "0.5em"}} onClick={() => this.addFriend(user.username, index)}>
                                     Add Friend
