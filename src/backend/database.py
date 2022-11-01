@@ -5,6 +5,10 @@ import json
 from flask import Flask, make_response, request, jsonify
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
+import boto3
+from botocore.exceptions import NoCredentialsError
+from botocore.client import Config as ConfigAWS
+
 from metaData import SubjectsTopicsSubtopicsTags
 from problems import Problems
 from todos import TodoDocument
@@ -28,11 +32,24 @@ allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg']
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 
-DB_URI = "mongodb://localhost:27017/uimpactify"
-app.config["MONGODB_SETTINGS"] = {"host":"mongodb://localhost:27017/uimpactify"}
+DB_URI = "mongodb://3.111.18.160:27017/finemate"
+app.config["MONGODB_SETTINGS"] = {"host":"mongodb://3.111.18.160:27017/finemate"}
 
 db = MongoEngine()
 db.init_app(app)
+
+
+aws_access_key_id = 'AKIAX34YHC3NFZEBEY5Y'
+aws_access_secret_key = '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'
+aws_bucket_name = 'finemate.media'
+mode = 'production'
+
+s3 = boto3.resource(
+            's3',
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_access_secret_key,
+            config=ConfigAWS(signature_version='s3v4')
+        )
 
 @app.errorhandler(413)
 def too_large(e):    
@@ -62,9 +79,24 @@ def db_create_post():
 
             timestamp = time.strftime('_%Y-%m-%d-%H-%M-%S')
             filenameOfImage = filename_without_extension[:10] + timestamp + extension
-            backgroundImagePath = open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
-            backgroundImagePath.write(image.read())
-            backgroundImagePath.close()
+            complete_file_path = '../react/src/assets/postBackgroundImages/' + filenameOfImage
+            folder_name = 'postBackgroundImages'
+            
+            if mode != 'production':
+                backgroundImagePath = open(f"../react/src/assets/postBackgroundImages/{filenameOfImage}", "wb")
+                backgroundImagePath.write(image.read())
+                backgroundImagePath.close()
+            else:
+                try:
+                    data = open(complete_file_path, 'rb')
+                    s3.Bucket(aws_bucket_name).upload_file(complete_file_path, '%s/%s' % (folder_name, filenameOfImage))
+                except FileNotFoundError:
+                    print("Error: The file was not found")
+                    return ""
+                except NoCredentialsError:
+                    print("Error: Credentials not available")
+                    return ""
+                
             formData=request.form
             return PostObj(formData).create_a_post(image, filenameOfImage)
         else:
