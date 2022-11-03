@@ -68,6 +68,10 @@ class ContentAuthoringTool extends Component{
       }
 
     render(){
+        if (!localStorage.getItem("token")) {
+            return <Redirect to="/login" />;
+        }
+        
         const {fullScreen} = this.props;
         if (!this.state.setOpen){
             return <Redirect to="/dashboard" />
@@ -203,10 +207,10 @@ class ContentAuthoringTool extends Component{
             form_data.append('mcq1opt4', this.state.mcq1opt4);
             form_data.append('public', this.state.public);
 
-        if (! this.state.listOfSubjects.includes(this.state.subject)){
+        if (! this.state.listOfSubjects.includes(this.state.subject) && this.state.subject != localStorage.getItem('subject')){
             document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Subject.";
         }
-        else if(! this.state.listOfTopics.includes(this.state.topic)){
+        else if(! this.state.listOfTopics.includes(this.state.topic) && this.state.topic != localStorage.getItem('topic')){
             document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Topic.";
         }
         else if(this.state.subject != this.state.topic != this.state.subtopic){

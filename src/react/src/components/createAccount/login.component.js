@@ -12,15 +12,22 @@ class Login extends Component {
         super(props);
 
         this.state = {
+			email: '',
             username: '',
 			password: '',
 			loggedIn:false,
 			firstLogIn:false,
-			values: false
+			values: false,
+			forgetPassword: false,
+			sendOTP: false,
+			enteredOTP: '',
+			confirmPassword: '',
+			createNewPassword: false
         };
 
 		this.handleChange = this.handleChange.bind(this);
         this.submit = this.submit.bind(this);
+        this.forgetPassword = this.forgetPassword.bind(this);
 
 	}
 
@@ -37,10 +44,23 @@ class Login extends Component {
 		 data[name]=value;
   
 		 this.setState(data);
-	 
-	  
-	}
 
+	}
+	createNewPassword(event) {
+		let name=event.target.name;
+		let value=event.target.value;
+		 let data={};
+		 data[name]=value;
+  
+		 this.setState(data);
+
+		if (this.state.password != event.target.value){
+			document.getElementById('ErrorMessage').innerHTML="Unmatching Passwords !";
+		}
+		else{
+			document.getElementById('ErrorMessage').innerHTML="";
+		}
+	}
 	render() {
 		if(this.state.loggedIn){
 			if (this.state.firstLogIn){
@@ -55,6 +75,103 @@ class Login extends Component {
 			<Card className="cardStyle2">
 				<Card.Body>
 					<Card.Title className="cardTitleStyle">Welcome Back!</Card.Title>
+
+					{this.state.forgetPassword ? 
+		
+					this.state.createNewPassword ? 
+					<form class="flex-column" onSubmit = {this.forgetPassword}>
+						<div class="form-group">
+							<InputLabel htmlFor="outlined-adornment-new-password">Create New Password</InputLabel>
+          					<OutlinedInput
+            					id="outlined-adornment-new-password"
+								name='password'
+								className='outlinedInput'
+								aria-describedby="passwordHelp"
+								style={{height: '40px', width: '300px'}}
+								type={this.state.values ? 'text' : 'password'}
+            					value={this.state.password}
+            					onChange={this.handleChange}
+								required
+								inputProps={{pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{8,20}$', maxLength:'20'}}
+								endAdornment={
+									<InputAdornment position="end">
+									  <IconButton
+											aria-label="toggle password visibility"
+											onClick={() => this.setState({values: ! this.state.values})}
+											edge="end"
+										  >
+											{this.state.values ? <VisibilityOff /> : <Visibility />}
+									  </IconButton>
+									</InputAdornment>
+							  }
+          					/>
+						</div>
+						<div class="form-group">
+							<InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>
+          					<OutlinedInput
+            					id="outlined-adornment-confirm-password"
+								name='confirmPassword'
+								className='outlinedInput'
+								aria-describedby="passwordHelp"
+								style={{height: '40px', width: '300px'}}
+            					type='password'
+            					value={this.state.confirmPassword}
+            					onChange={(e) => this.createNewPassword(e)}
+								required
+								inputProps={{pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\\s).{8,20}$', maxLength:'20'}}
+          					/>
+						</div>
+						<p id="ErrorMessage"></p>
+							<div class="mx-auto text-center p-0 col-md-12 mt-5 text-sm">
+								<button className="btnSignUp">Create Password</button>
+							</div>
+					</form>
+
+					:
+
+					<form class="flex-column" onSubmit = {this.forgetPassword}>
+						<div class="form-group">
+							<InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
+          					<OutlinedInput
+            					id="outlined-adornment-email"
+								name='email'
+								className='outlinedInput'
+								aria-describedby="emailHelp"
+								style={{height: '40px', width: '300px'}}
+            					type='text'
+            					value={this.state.email}
+            					onChange={this.handleChange}
+								required
+          					/>
+						</div>
+						{this.state.sendOTP ? 
+							<div class="form-group">
+								<InputLabel htmlFor="inputOTP">Enter OTP</InputLabel>
+					  			<OutlinedInput
+									id="inputOTP"
+									type="text"
+									name='enteredOTP'
+									className='outlinedInput'
+									aria-describedby="otpHelp"
+									style={{height: '40px', width: '300px'}}
+									value={this.state.enteredOTP}
+									onChange={this.handleChange}
+									required
+									inputProps={{maxLength: '6'}}
+					  			/>
+							</div>
+							:
+							null
+						}
+
+						<p id="ErrorMessage"></p>
+							<div class="mx-auto text-center p-0 col-md-12 mt-5 text-sm">
+								<button className="btnSignUp">Send</button>
+							</div>
+					</form>
+
+					:
+
 					<form class="flex-column" onSubmit = {this.submit}>
 					<div class="form-group">
 						<InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
@@ -63,10 +180,11 @@ class Login extends Component {
 							name='username'
 							className='outlinedInput'
 							aria-describedby="usernameHelp"
-							style={{height: '40px', width: '200px'}}
+							style={{height: '40px', width: '300px'}}
             				type='text'
             				value={this.state.username}
             				onChange={this.handleChange}
+							required
           				/>
 					</div>
 					
@@ -77,16 +195,16 @@ class Login extends Component {
 							name='password'
 							className='outlinedInput'
 							aria-describedby="passwordHelp"
-							style={{height: '40px', width: '200px'}}
+							style={{height: '40px', width: '300px'}}
             				type={this.state.values ? 'text' : 'password'}
             				value={this.state.password}
             				onChange={this.handleChange}
+							required
             				endAdornment={
               					<InputAdornment position="end">
                 					<IconButton
                   						aria-label="toggle password visibility"
                   						onClick={() => this.setState({values: ! this.state.values})}
-                  						onMouseDown={() => this.setState({values: ! this.state.values})}
                   						edge="end"
                 						>
                   						{this.state.values ? <VisibilityOff /> : <Visibility />}
@@ -99,7 +217,7 @@ class Login extends Component {
 						<form class="flex-row" onSubmit = {this.submit}>
 
 							<div class="mx-auto text-right p-0 col-md-12 mb-4 text-sm">
-								<a href="" class="text-dark font-weight-bold"><u>Forgot Password</u></a>
+								<button style={{boxShadow: 'none', border: 'none', backgroundColor: 'inherit'}} class="text-dark font-weight-bold" onClick={() => this.setState({forgetPassword: true})}><u>Forgot Password</u></button>
 							</div>
 							<p id="ErrorMessage"></p>
 							<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
@@ -118,9 +236,37 @@ class Login extends Component {
 								</div>
 							</div>
 					</form>
+	}
 				</Card.Body>
 			</Card>
 		)
+	}
+
+	forgetPassword(e){
+		e.preventDefault();
+		document.getElementById('ErrorMessage').innerHTML="Wait A Second.";
+		axios.post('http://127.0.0.1:8103/api/db_update_user_password', {email: this.state.email, username: this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP})
+		.then(response => {
+			if (this.state.createNewPassword){
+				document.getElementById('ErrorMessage').innerHTML="New Password created successfully !!";
+				setTimeout(() => {
+					window.location.reload(true);
+				}, 1000)
+			}
+			document.getElementById('ErrorMessage').innerHTML="";
+			console.log(response.data)
+			this.setState({sendOTP: !this.state.sendOTP}, () =>{
+				if (this.state.sendOTP){
+						document.getElementById('ErrorMessage').innerHTML="";
+						this.setState({machineOTP: response.data.machineOTP});
+				}else{
+					this.setState({createNewPassword:true})
+				}
+			})
+		})
+		.catch(err => {
+			document.getElementById('ErrorMessage').innerHTML="Unregistered Email";
+		})
 	}
 
     submit(e) {

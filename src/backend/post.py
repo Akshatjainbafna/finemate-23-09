@@ -87,15 +87,11 @@ class PostObj():
 
         if postToBeDeleted:
             background = postToBeDeleted.background
-            os.remove("../react/src/assets/postBackgroundImages/"+background)
             postToBeDeleted.delete()
             allTheInteractions = UserInteractions.objects(postId=self.content['id']).all()
-            
-            for interaction in allTheInteractions:
-                allTheInteractions.delete()
+            allTheInteractions.delete()
 
-            return make_response("Post deleted successfully!", 200)
-
+            return background
         else:
             return make_response('Post Not Found', 404)
 

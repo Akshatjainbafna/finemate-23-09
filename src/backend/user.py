@@ -55,6 +55,19 @@ class UserObj():
 		if 'password' in self.content:
 			self.content['password'] = hashlib.sha224(self.content['password'].encode()).hexdigest()
 
+	def db_check_username_email_present(self):
+		x = checkFields(self.content, fields=['email'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		username = self.content['username'].lower()
+		email= self.content['email'].lower()
+
+		if (self.User.objects(username=username).count() > 0) or (self.User.objects(email=email).count() > 0):
+			return make_response("Username or Email already in use.", 400)
+		else:
+			return 'true'
+
 	def db_create_user(self):
 		"""
 		Saves the current user to the database.
@@ -74,7 +87,7 @@ class UserObj():
 			return make_response("Email already in use.", 400)
 
 		self.User(user_type=self.content['user_type'], username=username, password=self.content['password'], email=email, last_login='N/A', last_logout='N/A').save()
-		return "true"
+		return 'Done'
 	
 	def db_get_user(self):
 		"""

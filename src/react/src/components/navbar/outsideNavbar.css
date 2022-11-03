@@ -48,7 +48,7 @@
 	flex-direction: column;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 575px) {
 	.buttonContainer{
 		display: flex;
 		flex-direction: column;

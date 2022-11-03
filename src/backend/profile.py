@@ -546,11 +546,10 @@ class ProfileObj():
 	def delete_old_profile_picture(self):
 		user = self.Profile.objects(username = self.content['username']).first()
 
-		if user:
-			profilePicture = user.profilePicture
-			print(profilePicture)
-			os.remove("../react/src/assets/profilePictures/" + profilePicture)
-			return make_response('Old profile picture deleted successfully!', 200)
+		profilePicture = user.profilePicture
+
+		if profilePicture:
+			return profilePicture
 		else:
 			return make_response("User does not exist.", 404)
 		
