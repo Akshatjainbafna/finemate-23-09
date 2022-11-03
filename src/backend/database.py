@@ -32,14 +32,19 @@ import dashevent
 import profile
 import message
 
+mode = 'production'
 
 app = Flask(__name__) 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 
-DB_URI = "mongodb://localhost:27017/uimpactify"
-app.config["MONGODB_SETTINGS"] = {"host":"mongodb://localhost:27017/uimpactify"}
+if mode=="development":
+    DB_URI = "mongodb://localhost:27017/uimpactify"
+    app.config["MONGODB_SETTINGS"] = {"host":"mongodb://localhost:27017/uimpactify"}
+else:
+    DB_URI = "mongodb://3.111.18.160:27017/finemate"
+    app.config["MONGODB_SETTINGS"] = {"host":"mongodb://3.111.18.160:27017/finemate"}
 
 db = MongoEngine()
 db.init_app(app)
@@ -48,7 +53,7 @@ db.init_app(app)
 aws_access_key_id = 'AKIAX34YHC3NFZEBEY5Y'
 aws_access_secret_key = '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'
 aws_bucket_name = 'finemate.media'
-mode = 'development'
+
 
 session = boto3.Session(
     aws_access_key_id = aws_access_key_id,
