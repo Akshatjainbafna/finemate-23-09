@@ -32,19 +32,19 @@ import dashevent
 import profile
 import message
 
-mode = 'production'
+mode = 'development'
 
 app = Flask(__name__) 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 
-if mode=="development":
-    DB_URI = "mongodb://localhost:27017/uimpactify"
-    app.config["MONGODB_SETTINGS"] = {"host":"mongodb://localhost:27017/uimpactify"}
-else:
+if mode=="production":
     DB_URI = "mongodb://3.111.18.160:27017/finemate"
     app.config["MONGODB_SETTINGS"] = {"host":"mongodb://3.111.18.160:27017/finemate"}
+else:
+    DB_URI = "mongodb://localhost:27017/uimpactify"
+    app.config["MONGODB_SETTINGS"] = {"host":"mongodb://localhost:27017/uimpactify"}
 
 db = MongoEngine()
 db.init_app(app)
