@@ -8,7 +8,6 @@ from profile import ProfileObj
 import re
 
 
-
 class UserObj():
 	"""
 	This class holds all the CRUD methods for the users

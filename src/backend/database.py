@@ -32,6 +32,7 @@ import dashevent
 import profile
 import message
 
+
 app = Flask(__name__) 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
 CORS(app)

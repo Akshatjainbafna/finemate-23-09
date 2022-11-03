@@ -7,11 +7,8 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 
 class createAccount extends Component {
-
     constructor(props) {
-
         super(props);
-
         this.state = {
             email: '',
             username:'',
