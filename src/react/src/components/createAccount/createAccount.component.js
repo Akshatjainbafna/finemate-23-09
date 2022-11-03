@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
 import axios from 'axios';
 import Card from 'react-bootstrap/Card'
 import {Redirect} from 'react-router-dom'

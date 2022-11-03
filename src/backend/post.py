@@ -8,7 +8,6 @@ from Exceptions.MissingRequiredField import checkFields
 from Exceptions.MissingRequiredField import checkFieldsReturnAll
 from datetime import datetime
 import json
-import os
 Profile = ProfileObj.Profile
 
 class PostObj():

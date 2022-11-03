@@ -33,7 +33,7 @@ import profile
 import message
 
 app = Flask(__name__) 
-allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg']
+allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 

@@ -5,7 +5,6 @@ from Exceptions.MissingRequiredField import checkFields
 from Exceptions.MissingRequiredField import checkFieldsReturnAll
 from datetime import datetime
 from profile import ProfileObj
-import profile
 import re
 
 
