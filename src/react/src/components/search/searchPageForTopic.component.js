@@ -114,7 +114,7 @@ export default function SearchPageForTopicComponent(props){
                                 <ListItem>
                                     {user.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} alt="profilePicture" className={style.profilePictureThumbnail}/>
+                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ user.profilePicture} alt="profilePicture" className={style.profilePictureThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>
@@ -161,7 +161,7 @@ export default function SearchPageForTopicComponent(props){
                           <p className="subTopicThumbnail">{post.subtopic}</p>
                           <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background" />
+                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} alt="Post Background" />
                       </div>
                     </Link>
                     )}
