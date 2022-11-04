@@ -271,11 +271,7 @@ class UserProfile extends Component {
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                                 </div>
-<<<<<<< HEAD
                                 <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
-=======
-                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
->>>>>>> 508a8292beb6041b4e1fb50050811c1b1b931bf0
                     </div>
                     </Link>
                     )}
