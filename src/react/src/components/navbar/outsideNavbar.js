@@ -7,7 +7,7 @@ class OutsideNavbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-light navbar-expand-sm sticky-top outsideNav mt-2 d-flex align-content-between">
-        <Link to="/" className="nav-item nav-link navbar-brand">
+        <Link to="/" className="nav-link navbar-brand">
             <span className="custom-logo">
               <img
                   src={Logo}
@@ -22,17 +22,17 @@ class OutsideNavbar extends Component {
       <div className="collapse navbar-collapse" id="collapsibleNavbar" >
         <div>
           <ul className="navbar-nav p-0">
-            <li className="nav-item ml-5">
+            <li className="nav-item">
               <Link to="/about" className="nav-item nav-link custom-link">
                 About
               </Link>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item">
               <Link to="/solutions" className="nav-item nav-link custom-link">
                 Solutions
               </Link>
             </li>
-            <li className="nav-item ml-5">
+            <li className="nav-item">
               <Link to="/team" className="nav-item nav-link custom-link">
                 Team
               </Link>

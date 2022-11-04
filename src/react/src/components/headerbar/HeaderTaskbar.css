@@ -30,7 +30,6 @@
 }
 
 .form-control {
-    border: hsl(270, 38%, 59%);
     border-radius: 10px;
     width: 14vw !important;
     background-color: #F5F7FA;

@@ -7,19 +7,19 @@
 	max-height: 100%;
 }
 .custom-link {
-	color: black;
+	color: rgba(0, 0, 0, 0.8);
 	font-family: 'Open Sans';
 	font-weight: 600;
 }
 .custom-link:hover {
-	color: black;
+	color: rgba(0, 0, 0, 0.9);
 	border-bottom: 2px solid #A78EC3;
 	font-weight: 600;
 }
 .btn-sign {
 	border-color: #A78EC3;
 	border-radius: 10px;
-	max-width: 50%;
+	width: 7vw;
 	background-color: #FCFCFB;
 	font-family: "Open Sans";
 	color: #A78EC3;
@@ -27,7 +27,7 @@
 .btn-login {
 	border: none;
 	border-radius: 10px;
-	max-width: 50%;
+	width: 7vw;
 	color: #FCFCFB;
 	background-color: #A78EC3;
 }
@@ -39,44 +39,43 @@
 .custom-div {
 	flex-direction: column;
 }
-
+.nav-item, .navbar-brand{
+	margin-left: 2vw;
+}
 
 @media screen and (max-width: 575px) {
 	.buttonContainer{
 		display: flex;
-		flex-direction: column;
+		justify-content: space-around;
+		margin-top: 5vh;
 	}
 	.btn-sign {
-		border: none;
-		background-color: white;
-		font-family: "Open Sans";
-		color: black;
-		font-family: 'Open Sans';
-		font-weight: 600;
-		border: 0.1px solid grey;
+		width: 25vw;
 	}
 	.btn-login {
-		border: none;
-		background-color: white;
-		font-family: "Open Sans";
-		color: black;
-		font-family: 'Open Sans';
-		font-weight: 600;
-		border: 0.1px solid grey;
+		width: 25vw;
+
 	}
 	.custom-link {
-		color: black !important;
+		color: rgba(0, 0, 0, 0.8) !important;
 		font-size: medium;
 		font-family: 'Open Sans';
 		font-weight: 600;
-		border-bottom: 0.1px solid grey;
+		border-bottom: 1px solid grey;
 	}
 	.custom-link:hover {
-		color: black;
+		color: rgba(0, 0, 0, 0.8);
 		border-bottom: none;
 		font-weight: 600;
 	}
 	.navbar-collapse{
-		height: 80vh;
+		height: 100vh;
+	}
+	.navbar-brand{
+		padding: 0%;
+		margin-left: -5vw;
+	}
+	.nav-item{
+		margin-left: 0vw;
 	}
 }

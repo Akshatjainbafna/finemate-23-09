@@ -91,7 +91,7 @@ function AddTodoComponent(props){
                             <div className="d-flex justify-content-around flex-wrap">
                             {imgaes.map((image) =>
                                 <div className={style.todoCard}> 
-                                    <FormControlLabel value={image} control={<Radio style={{display: 'none'}} />} label={<img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/todoImages/'+ image} alt='todo image' className={style.todoImages} />} />
+                                    <FormControlLabel value={image} control={<Radio style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ image)} alt='todo image' className={style.todoImages} />} />
                                 </div>
                              )}
                             </div>
@@ -197,7 +197,7 @@ class TodoComponent extends Component{
             <div className={style.todoCardContainer}>
                 {this.state.allTodoList.map((todo, index) =>
                     <div key={index}  className={style.todoCard}>
-                        <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox style={{display: 'none'}} />} label={<img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/todoImages/'+ todo.image} alt='todo image' className={style.todoImages} />} />
+                        <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ todo.image)} alt='todo image' className={style.todoImages} />} />
                     </div>
                     )
                 }

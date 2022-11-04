@@ -26,9 +26,7 @@ class About extends Component {
       <Container>
         <h3> About Finemate </h3>
         <Wrapper>
-          <MacPic>
             <img className="macPicture" src={macPicture} alt="" />
-          </MacPic>
           <Content>
             <h3 className="title1">What is Finemate?</h3>
             <p className="introFinemate">
@@ -127,12 +125,6 @@ const Wrapper = styled.div`
   background-repeat: no-repeat;
 `;
 
-const MacPic = styled.div`
-  .macPicture {
-    height: 45rem;
-    margin-top: 0rem;
-  }
-`;
 
 const Content = styled.div`
   display: flex;

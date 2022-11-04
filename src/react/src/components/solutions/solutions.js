@@ -119,7 +119,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-evenly;
   align-items: center;
   margin-bottom: 10vh;
@@ -127,7 +127,7 @@ const Wrapper = styled.div`
 
 const Image = styled.div`
   img {
-    
+    width: 100%;
   }
 `;
 
@@ -162,7 +162,7 @@ const User = styled.div`
     justify-content: center;
   }
   h3 {
-    font-size: 36px;
+    font-size: 2.5em;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
@@ -171,12 +171,18 @@ const User = styled.div`
     font-weight: normal;
     color: #3e4345;
     font-family: Open Sans;
-    font-size: 22px;
+    font-size: 1.5em;
   }
 
-  img {
-    width: 80%;
+  .solutionsImage{
+    width: 75vw;
     margin-top: 4rem;
+  }
+  @media screen and (max-width: 600px){
+    .solutionsImage{
+      width: 100vw;
+      margin-top: 0;
+    }
   }
 `;
 export default Solution;

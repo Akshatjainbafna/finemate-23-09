@@ -98,7 +98,7 @@ class HeaderTaskbar extends Component {
                 <div className='icons d-flex flex-row align-items-center'>
                     <div>
                         <form className='form-inline'>
-                            <Button className='form-control' style={{color: "#bdc4cce8", fontSize: "0.8em"}} onClick={() => this.setState({openDialog: !this.state.openDialog})}> <div className='d-flex justify-content-around'> <div>Search</div> <IconContext.Provider value={{color: "#bdc4cce8", size: "16px"}}><BsSearch className='searchIcon' /></IconContext.Provider></div> </Button>
+                            <Button className='form-control' style={{color: "#d1c6dd", fontSize: "0.8em", border: '1px solid #d1c6dd'}} onClick={() => this.setState({openDialog: !this.state.openDialog})}> <div className='d-flex justify-content-around'> <div>Search</div> <IconContext.Provider value={{color: "#bdc4cce8", size: "16px"}}><BsSearch className='searchIcon' /></IconContext.Provider></div> </Button>
                         </form>
                         {this.state.openDialog? <SearchComponent search={true} /> : null }
                     </div>
