@@ -104,7 +104,7 @@ class UserProfile extends Component {
                     <div className="leftBlockofInfoCard">
                         <div className="profile_pic_slot">
                             <div>{profilePicture ? 
-                                  <div><img src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div> 
+                                  <div><img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ profilePicture} className="elementPic" /> </div> 
                                   :
                                   <div><img src={profilePic} className="elementPic" /> </div>
                                 }</div>
@@ -271,7 +271,7 @@ class UserProfile extends Component {
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                                 </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background)} />
                     </div>
                     </Link>
                     )}

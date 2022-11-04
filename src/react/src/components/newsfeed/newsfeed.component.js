@@ -496,7 +496,7 @@ render(){
                                 </p>
                             </span>
 
-                            <img id={"backgroundImage"+String(index)} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
+                            <img id={"backgroundImage"+String(index)} src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ responseData.background} className={style.backgroundImage} />
                             
                             <Tooltip title="View Background" > 
                                 <FormControlLabel

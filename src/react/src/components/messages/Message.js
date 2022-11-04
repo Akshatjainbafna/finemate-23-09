@@ -50,7 +50,7 @@ class Message extends Component {
                     <Link to={"/profile/".concat(localStorage.getItem('targetUser'))}>
                         {this.state.profilePicture ?
                             <ListItemAvatar>
-                                <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureChatHeader}/>
+                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ this.state.profilePicture} className={style.profilePictureChatHeader}/>
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>
