@@ -194,7 +194,7 @@ disconnect(username2){
               <div className="profile_pic_slot">
                 {this.state.displaying ? 
                   profilePicture ? 
-                    <div><img src={require('../../assets/profilePictures/'+ profilePicture)} alt="not found" className="elementPic" /> </div> 
+                    <div><img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ profilePicture} alt="not found" className="elementPic" /> </div> 
                     :
                     <div><img src={profilePic} alt="not found" className="elementPic" /> </div>
                 :
@@ -410,7 +410,7 @@ disconnect(username2){
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                       <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
                       </div>
                     </Link>
                 )}
@@ -429,7 +429,7 @@ disconnect(username2){
                       <p className="subTopicThumbnail">{post.subtopic}</p>
                       <p className="fact"> {post.fact}</p>
                     </div>
-                    <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
                   </div>
                 </Link>
               )}
