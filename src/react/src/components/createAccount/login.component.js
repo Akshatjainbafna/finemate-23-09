@@ -255,7 +255,6 @@ class Login extends Component {
 				}, 1000)
 			}
 			document.getElementById('ErrorMessage').innerHTML="";
-			console.log(response.data)
 			this.setState({sendOTP: !this.state.sendOTP}, () =>{
 				if (this.state.sendOTP){
 						document.getElementById('ErrorMessage').innerHTML="";
@@ -275,22 +274,16 @@ class Login extends Component {
 		//Check if this is the first login
 		axios.post('http://127.0.0.1:8103/api/db_last_login', {username: this.state.username})
 		.then(response => {
-			console.log(response);
 			this.state.firstLogIn = (response.data == "N/A");
-			console.log(this.state.firstLogIn);
 			axios.post('http://127.0.0.1:8103/api/db_login', {username: this.state.username, password: this.state.password })
 				.then(response => {
-					console.log(response);
 					localStorage.setItem('token', response.data)
 					localStorage.setItem('username', (this.state.username))
-					console.log(localStorage.getItem('username'))
 
 					axios.post('http://127.0.0.1:8103/api/db_get_user_type', {username: this.state.username})
 					.then(response => {
-						console.log(response);
 						localStorage.setItem('usertype', response.data)
 						this.setState({loggedIn:true});
-						console.log(localStorage.getItem('usertype'))
 					})
 					.catch((error) => {
 						console.log(error)

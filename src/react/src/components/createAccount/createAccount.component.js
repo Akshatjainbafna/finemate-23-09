@@ -28,9 +28,9 @@ class createAccount extends Component {
 	onclick(event){
 		let name = event.target.name;
 		let value = event.target.value;
-		console.log(name,value)
 		let data ={};
 		data[name] = value;
+
 		if (value == 'student' || value=='instructor' || value== 'institute'){
 			this.setState({institute: true})
 		}else{
@@ -42,13 +42,10 @@ class createAccount extends Component {
     handleChange(event) {
         let name = event.target.name;
         let value = event.target.value;
-        console.log(name, value)
         let data = {};
         data[name] = value;
 
         this.setState(data);
-
-
 	}
 	
     render() {
@@ -214,7 +211,6 @@ class createAccount extends Component {
 
         axios.post('http://localhost:8103/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP })
             .then(response => {
-				console.log(response.data)
 				this.setState({accountCreated:true});
 				})
 			.catch((error) => {

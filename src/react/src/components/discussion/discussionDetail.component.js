@@ -31,7 +31,6 @@ class DiscussionDetail extends Component {
                     resReply['users'] = response.data.users[i];
                     reply[i] = JSON.parse(JSON.stringify(resReply));
                 }
-                console.log(reply);
                 this.setState({replies: reply, title: response.data.title})
             })
 			.catch((error) => {
@@ -41,7 +40,6 @@ class DiscussionDetail extends Component {
     onChangeHandler(event){
         let name = event.target.name;
         let value = event.target.value;
-        console.log(name, value)
         let data = {};
         data[name] = value;
 

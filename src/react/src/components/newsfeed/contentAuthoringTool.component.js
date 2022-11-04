@@ -36,7 +36,6 @@ class ContentAuthoringTool extends Component{
     handleChange(event) {
         let name = event.target.name;
         let value = event.target.value;
-        console.log(name, value)
         let data = {};
         data[name] = value;
         this.setState(data, () => {
@@ -216,7 +215,6 @@ class ContentAuthoringTool extends Component{
         else if(this.state.subject != this.state.topic != this.state.subtopic){
             axios({method: "post", url: "http://localhost:8103/api/db_create_post", data: form_data, headers: { "Content-Type": "multipart/form-data" }})
             .then(response => {
-                console.log(response.data);
                 localStorage.setItem('subject', this.state.subject);
                 localStorage.setItem('topic', this.state.topic);
                 localStorage.setItem('subtopic', this.state.subtopic);

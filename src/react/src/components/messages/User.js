@@ -22,7 +22,7 @@ class User extends Component {
     handleChange(e) {
         this.setState({
             targetUser: e.target.value
-        }, () => console.log(this.state.targetUser))
+        })
     }
 
     handleSubmit(e) {
@@ -31,8 +31,6 @@ class User extends Component {
         axios.post('http://127.0.0.1:8103/api/db_search_user', {'username': localStorage.getItem('targetUser')})
         .then(res =>{
             let responseData = res.data;
-            console.log(responseData, localStorage.getItem('targetUser'));
-            
             if (responseData == localStorage.getItem('targetUser')){
                 console.log(localStorage.getItem('targetUser'))
             }else{
@@ -80,7 +78,7 @@ class User extends Component {
                     }
 
                 }
-                this.setState({recentChatUsers: responseData}, () => console.log(this.state.recentChatUsers));
+                this.setState({recentChatUsers: responseData});
             })
             .catch(
                 (error) => console.log(error)

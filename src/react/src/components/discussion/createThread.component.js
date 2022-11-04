@@ -19,25 +19,21 @@ class CreateThreadClass extends Component {
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
     }
     componentWillMount(){
-        console.log(this.state.setOpen)
         this.setState({setOpen: true});
     }
     onChangeHandler(event){
         let name = event.target.name;
         let value = event.target.value;
-        console.log(name, value)
         let data = {};
         data[name] = value;
 
         this.setState(data);
     }
     onSubmitHandler(){
-        console.log(this.state.community);
         if (this.state.title && this.state.body){
             axios.post('http://127.0.0.1:8103/api/db_create_thread', 
             {'username': localStorage.getItem('username'), 'title': this.state.title,'body': this.state.body, 'community': this.state.community})
         .then(response => {
-            console.log(response.data);
             this.setState({newThread: response.data})
         })
         .catch((error) => {

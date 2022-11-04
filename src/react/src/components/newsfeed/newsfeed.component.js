@@ -196,7 +196,7 @@ class NewsFeed extends Component{
     silder(event){
         this.setState({
             silderValue: event.target.value
-        }, () => console.log(this.state.silderValue))
+        })
     }
 
     showBackgroundImage(index, imgId){
@@ -348,11 +348,6 @@ class NewsFeed extends Component{
                         let arrayForSelectedOptions= Array(lengthOfResponseData).fill('');
                         this.setState({selectedOptions: arrayForSelectedOptions})
                     });
-                    
-                    
-                    console.log("responseData",responseData);
-                
-
                 
                 //for loop to create some elemnts, attributes, updating array states manually
                 for (let i = 0; i < this.state.responseData.length; i++) {

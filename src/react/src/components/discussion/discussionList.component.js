@@ -19,7 +19,6 @@ class DiscussionList extends Component {
         var thread = [];
         axios.post('http://127.0.0.1:8103/api/db_get_all_threads', {'community': this.state.community})
             .then(response => {
-                console.log(response.data);
                 for (var i = 0; i < response.data.length; i++){
                     resThread['id'] = response.data[i]._id;
                     resThread['title'] = response.data[i].title;
@@ -27,7 +26,6 @@ class DiscussionList extends Component {
                     resThread['date'] = response.data[i].timestamps[0];
                     thread[i] = JSON.parse(JSON.stringify(resThread));
                 }
-                console.log(thread);
                 this.setState({threads: thread})
             })
 			.catch((error) => {
@@ -35,7 +33,6 @@ class DiscussionList extends Component {
         });
     }
     createThreadToggle = () => {
-        console.log(this.state.community)
         this.setState({
             newThread: !this.state.newThread
         });

@@ -109,7 +109,6 @@ class UserProfilePage extends Component {
         username: this.state.username
       })
       .then(response => {
-        console.log(response.data);
         this.setState({ educations: response.data["educations"] });
         this.setState({ skills: response.data["skills"] });
         this.setState({ interests: response.data["interests"] });
@@ -120,7 +119,7 @@ class UserProfilePage extends Component {
         this.setState({ username: response.data["username"] });
         this.setState({ description: response.data["description"] });
         this.setState({ timeJoin: response.data["time_join"] });
-        this.setState({ totalDaysJoined: response.data["total_days_joined"] }, ()=> console.log(this.state.totalDaysJoined));
+        this.setState({ totalDaysJoined: response.data["total_days_joined"] });
         this.setState({ firstName: response.data["first_name"] });
         this.setState({ lastName: response.data["last_name"] });
         this.setState({ phoneNumber: response.data["phone_number"] });
@@ -144,7 +143,6 @@ class UserProfilePage extends Component {
         username: this.state.username
       })
       .then(response => {
-        console.log(response.data);
         this.setState({ email: response.data });
       })
       .catch(error => {

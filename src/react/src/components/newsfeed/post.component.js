@@ -139,7 +139,6 @@ class IndividualPost extends Component{
         axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username') , id: this.state.id})
         .then(res => {
             let responseData = Array(res.data);
-            console.log(responseData)
             this.setState({responseData : responseData})
         })
         .catch(err => console.log(err))
@@ -148,7 +147,6 @@ class IndividualPost extends Component{
         axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost[0].$oid})
         .then((res) => {
             let responseData = Array(res.data);
-            console.log(responseData)
             this.setState({responseData : responseData})
         })
         .catch(err => console.log(err))
@@ -157,7 +155,6 @@ class IndividualPost extends Component{
         axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost[0].$oid})
         .then((res) => {
             let responseData = Array(res.data);
-            console.log(responseData)
             this.setState({responseData : responseData})
         })
         .catch(err => console.log(err))
