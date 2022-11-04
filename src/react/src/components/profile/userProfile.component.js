@@ -271,7 +271,7 @@ class UserProfile extends Component {
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                                 </div>
-                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background)} />
+                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
                     </div>
                     </Link>
                     )}
