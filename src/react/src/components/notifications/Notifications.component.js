@@ -51,7 +51,7 @@ class NotificationComponent extends Component{
                             <Link style={{textDecoration: 'none', color : '#302c35'}} className="d-flex" to={"/profile/".concat(user.username)}>
                                 {user.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} className={style.profilePictureThumbnail}/>
+                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ user.profilePicture} className={style.profilePictureThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>

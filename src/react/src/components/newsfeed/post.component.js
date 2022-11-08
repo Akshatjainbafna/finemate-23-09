@@ -247,7 +247,7 @@ class IndividualPost extends Component{
                                 </p>
                             </span>
 
-                            <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
+                           <img id={responseData.background} src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ responseData.background} className={style.backgroundImage} />
 
                             <span name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}>
                                 <IconButton onClick={() => this.fetchPreviousPost()}>
