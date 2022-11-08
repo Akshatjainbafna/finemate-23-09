@@ -8,24 +8,23 @@ import correct from './correctBGicon.png';
 import semicorrect from './semicorrectBGicon.png';
 import incorrect from './incorrectBGicon.png';
 
-import axios from "axios";
-
 //All the material UI imports
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
 import { FormControl, RadioGroup, Radio, Tooltip, Button, MenuItem, Menu, IconButton } from "@material-ui/core";
 import { Link } from "react-router-dom";
+import AxiosBaseFile from "../AxiosBaseFile";
 
 function MenuList(props){
     const [anchorMenuList, setAnchorMenuList] = React.useState(null);
     const openMenuList = Boolean(anchorMenuList);
     
     function deletePost(){
-        axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        AxiosBaseFile.delete('/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
             if (res.data==true){
-                axios.post('http://127.0.0.1:8103/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: props.id})
+                AxiosBaseFile.post('/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: props.id})
                 .then(() => {
                     window.location.reload(true);
                 })
@@ -35,14 +34,14 @@ function MenuList(props){
         .catch(err => console.log(err))
     }
     function notInterested(){
-        axios.post('http://127.0.0.1:8103/api/add_not_interested_topic', { 'username' : localStorage.getItem('username'), 'topic': props.topic})
+        AxiosBaseFile.post('/api/add_not_interested_topic', { 'username' : localStorage.getItem('username'), 'topic': props.topic})
         .then(() => {
             const uninterestedAcknowledgeMessage = props.topic + ' is marked as uninterested topic!'
             alert(uninterestedAcknowledgeMessage)})
         .catch(err => console.log(err))
     }
     function showOften(){
-        axios.post('http://127.0.0.1:8103/api/show_often', { 'username' : localStorage.getItem('username'), 'id': props.id})
+        AxiosBaseFile.post('/api/show_often', { 'username' : localStorage.getItem('username'), 'id': props.id})
         .catch(err => console.log(err))
     }
 
@@ -108,7 +107,7 @@ function PreviousNextWindow(props){
     function fetchPreviousPost(){
         setAnchorPrevNext(null);
         try{
-            axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId.$oid})
+            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId.$oid})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -120,7 +119,7 @@ function PreviousNextWindow(props){
     function fetchNextPost(){
         setAnchorPrevNext(null);
         try{
-            axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId.$oid})
+            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId.$oid})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -288,7 +287,7 @@ class NewsFeed extends Component{
         //If-Else statement for different behaviour on correct answer and incorrect answer      
         if (e.target.value == this.state.correctOptions[index]){
             this.setState({correctMCQs:[...this.state.correctMCQs, this.state.responseData[index]._id.$oid]}, () => {
-                axios.post('http://127.0.0.1:8103/api/mcq_response', { 'username' : localStorage.getItem('username'), 'idAdd': this.state.responseData[index]._id.$oid})
+                AxiosBaseFile.post('/api/mcq_response', { 'username' : localStorage.getItem('username'), 'idAdd': this.state.responseData[index]._id.$oid})
                 .catch(
                     (error) => console.log(error)
                 )
@@ -297,7 +296,7 @@ class NewsFeed extends Component{
             //putting the _id.$oid of the post inCorrectMCQs state array so as to display the post on incorrect answer
             this.setState({inCorrectMCQs:[...this.state.inCorrectMCQs, this.state.responseData[index]._id.$oid]},  () => {
 
-            axios.post('http://127.0.0.1:8103/api/mcq_response', { 'username' : localStorage.getItem('username'), 'idSub': this.state.responseData[index]._id.$oid})
+            AxiosBaseFile.post('/api/mcq_response', { 'username' : localStorage.getItem('username'), 'idSub': this.state.responseData[index]._id.$oid})
                 .catch(
                     (error) => console.log(error)
                 )
@@ -326,7 +325,7 @@ class NewsFeed extends Component{
 
     componentDidMount() {
         const headers = { "Content-Type": "application/json" };
-        axios.post('http://127.0.0.1:8103/api/display_posts', { 'username' : localStorage.getItem('username')}, {headers})
+        AxiosBaseFile.post('/api/display_posts', { 'username' : localStorage.getItem('username')}, {headers})
             .then(res => {
 
                 const responseData= res.data;
@@ -412,7 +411,7 @@ class NewsFeed extends Component{
 
             /*sending a list of likes, lightens, and saved posts oid every 15 sec*/
             this.interactions = setInterval(()=> {
-                axios.post('http://127.0.0.1:8103/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : this.state.listOfLikedPosts, 'lighten' : this.state.listOfLightenPosts, 'savedPosts' : this.state.listOfSavedPosts })
+                AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : this.state.listOfLikedPosts, 'lighten' : this.state.listOfLightenPosts, 'savedPosts' : this.state.listOfSavedPosts })
                 .then(() =>{
                     this.setState({listOfLikedPosts : []});
                     this.setState({listOfLightenPosts : []});
@@ -638,7 +637,7 @@ render(){
         var idOfAllPosts=[];
         allThePosts.forEach((value, index, array) => { idOfAllPosts.push(allThePosts[index]._id.$oid)});
 
-        axios.post('http://127.0.0.1:8103/api/load_more_posts', { 'username' : localStorage.getItem('username'), 'allTheCurrentPosts' : idOfAllPosts}, { "Content-Type": "application/json" })
+        AxiosBaseFile.post('/api/load_more_posts', { 'username' : localStorage.getItem('username'), 'allTheCurrentPosts' : idOfAllPosts}, { "Content-Type": "application/json" })
         .then(res=>{
             let newResponseData= res.data;
 

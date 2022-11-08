@@ -1,20 +1,12 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
-import fb from "../../assets/fb.png";
-import li from "../../assets/li.png";
 import profilePic from "../../assets/profilePic.png";
-import tinyprofilePic from "../../assets/tinyprofile.png";
-import up from "../../assets/up.png";
-import edit from "../../assets/edit.png";
-import del from "../../assets/del.png";
-import editButton from "../../assets/editButton.png";
 import "./profile.css";
 import ColourText from "./colorText.component.js";
-import axios from "axios";
-import { Add, AddPhotoAlternateRounded } from "@material-ui/icons";
+import { AddPhotoAlternateRounded } from "@material-ui/icons";
 import { Button, Input, Menu, MenuItem, TextField } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
-import Axios from "axios";
+import AxiosBaseFile from "../AxiosBaseFile";
 
 class Profile extends Component {
   constructor(props) {
@@ -53,20 +45,20 @@ class Profile extends Component {
   }
 
   componentDidMount(){
-    Axios.post('http://127.0.0.1:8103/api/db_get_all_post_of_user', {username: localStorage.getItem('username')})
+    AxiosBaseFile.post('/api/db_get_all_post_of_user', {username: localStorage.getItem('username')})
     .then(res => {
         this.setState({recentPosts : res.data})
     })
     .catch(err => console.log(err))
 
-    Axios.post('http://127.0.0.1:8103/api/db_get_saved_post_of_user', {username: localStorage.getItem('username')})
+    AxiosBaseFile.post('/api/db_get_saved_post_of_user', {username: localStorage.getItem('username')})
     .then(res => {
         this.setState({savedPosts : res.data})
     })
     .catch(err => console.log(err))
   }
   removeFriend(username2){
-    Axios.post('http://127.0.0.1:8103/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2' : username2})
+    AxiosBaseFile.post('/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2' : username2})
     .then(() => {
       window.location.reload(true);
 
@@ -75,7 +67,7 @@ class Profile extends Component {
 }
 
 disconnect(username2){
-    Axios.post('http://127.0.0.1:8103/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2' : username2})
+    AxiosBaseFile.post('/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2' : username2})
     .then(() => {
       window.location.reload(true);
     })
@@ -514,8 +506,7 @@ disconnect(username2){
   submit(e, description, firstName, lastName, phoneNumber, profilePicture) {
     // e.preventdefault();
     if (this.state.newFirstName != firstName) {
-      axios
-        .post("http://127.0.0.1:8103/api/db_update_profile_first_name", {
+      AxiosBaseFile.post("/api/db_update_profile_first_name", {
           first_name: this.state.newFirstName,
           username: localStorage.getItem("username")
         })
@@ -524,8 +515,7 @@ disconnect(username2){
         });
     }
     if (this.state.newLastName != lastName) {
-      axios
-        .post("http://127.0.0.1:8103/api/db_update_profile_last_name", {
+      AxiosBaseFile.post("/api/db_update_profile_last_name", {
           last_name: this.state.newLastName,
           username: localStorage.getItem("username")
         })
@@ -534,8 +524,7 @@ disconnect(username2){
         });
     }
     if (this.state.newPhoneNumber != phoneNumber) {
-      axios
-        .post("http://127.0.0.1:8103/api/db_update_profile_phone_number", {
+      AxiosBaseFile.post("/api/db_update_profile_phone_number", {
           phone_number: this.state.newPhoneNumber,
           username: localStorage.getItem("username")
         })
@@ -544,8 +533,7 @@ disconnect(username2){
         });
     }
     if (this.state.newDescription != description) {
-      axios
-        .post("http://127.0.0.1:8103/api/db_update_profile_description", {
+      AxiosBaseFile.post("/api/db_update_profile_description", {
           description: this.state.newDescription,
           username: localStorage.getItem("username")
         })
@@ -562,7 +550,7 @@ disconnect(username2){
         console.log(key[0] + ', ' + key[1]);
     }
 
-      axios.post("http://127.0.0.1:8103/api/db_update_profile_picture", form_data, {headers: {'Content-Type': 'multipart/form-data'}})
+      AxiosBaseFile.post("/api/db_update_profile_picture", form_data, {headers: {'Content-Type': 'multipart/form-data'}})
         .catch(error => {
           console.log(error);
         });

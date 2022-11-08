@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
 import axios from 'axios';
-import Card from 'react-bootstrap/Card'
 import { Redirect } from 'react-router-dom'
-import { useHistory } from "react-router-dom";
 import './createEvent.css'
+import AxiosBaseFile from '../AxiosBaseFile';
 
 
 class CreateEvent extends Component {
@@ -43,8 +41,6 @@ class CreateEvent extends Component {
 		data[name] = value;
 
 		this.setState(data);
-
-
 	}
 
 	render() {
@@ -84,7 +80,7 @@ class CreateEvent extends Component {
 	submit(e) {
 		e.preventDefault();
 
-		axios.post('http://127.0.0.1:8103/api/db_add_dashevent', { dashevent_category: this.state.dashevent_category, dashevent_name: this.state.dashevent_name, dashevent_instructor: this.state.dashevent_instructor, extra_info: this.state.extra_info })
+		AxiosBaseFile.post('/api/db_add_dashevent', { dashevent_category: this.state.dashevent_category, dashevent_name: this.state.dashevent_name, dashevent_instructor: this.state.dashevent_instructor, extra_info: this.state.extra_info })
 			.then(response => {
 				console.log(response.data)
 				this.setState({ classCreated: true });

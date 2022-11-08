@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { Component } from "react";
 import styled from "styled-components";
 import backgroundAbout from "../../assets/backgroundAbout.svg";
@@ -8,6 +7,7 @@ import instructor from "../../assets/teacherInClassStandingUp.svg";
 import WhiteBoardPainPoints from '../../assets/whiteBoardPainPoints.png';
 import createMessage from '../../assets/createMessage.png';
 import "./about.css";
+import AxiosBaseFile from "../AxiosBaseFile";
 
 class About extends Component {
   constructor(props){
@@ -18,12 +18,12 @@ class About extends Component {
   }
   addPainPointToDatabase(event){
     event.preventDefault();
-    axios.post("http://127.0.0.1:8103/api/add_pain_point_to_database", {'painPoint' : this.state.addedPainPoint}).catch(err => console.log(err));
+    AxiosBaseFile.post("/api/add_pain_point_to_database", {'painPoint' : this.state.addedPainPoint}).catch(err => console.log(err));
   }
 
   render() {
     return (
-      <Container>
+      <ContainerAbout>
         <h3> About Finemate </h3>
         <Wrapper>
             <img className="macPicture" src={macPicture} alt="" />
@@ -32,8 +32,8 @@ class About extends Component {
             <p className="introFinemate">
             Finemate is a Mobile-friendly SaaS platform with services of a Learning management system, Social learning platform, Student management system, Content authoring tools, Access control system, Library management system, MarketPlace for students, etc and a <b>Retention Engine</b> on top of this. Retention Engine is Software System that will help you in cognition and long-term retention of anything and everything that you learn from various different sources online and offline. It helps you to deal with confusion and helps you in better cognition.
             </p>
-            <h3 className="title1">What are we aiming for?</h3>
-            
+
+            <h3 className="aimHeading">What are we aiming for?</h3>
             <div className="aimContainer">
               <div className="aimSocial">
                 <img className="social" src={social} alt="" />
@@ -71,7 +71,7 @@ class About extends Component {
           </div>
           <br />
           <div class="addPainPoint">
-            <div>As a Student, Professional or Institute if you face any problem please</div>
+            <div>As a Student, Professional or Inute if you face any problem please</div>
             <div className="d-flex">
               <input type="text" class="form-control" id="inlineFormPainPointInput" onChange={(e) => {this.setState({addedPainPoint: e.target.value})}} placeholder="Add one..." maxLength="25" />
               <button type="submit" className="border-0 bg-light"  onClick={(e)=> this.addPainPointToDatabase(e)}>
@@ -84,12 +84,12 @@ class About extends Component {
         <br />
           </Content>
         </Wrapper>
-      </Container>
+      </ContainerAbout>
     );
   }
 }
 
-const Container = styled.div`
+const ContainerAbout = styled.div`
   background: #fcfcfb;
   top: 0;
   bottom: 0;
@@ -98,6 +98,7 @@ const Container = styled.div`
   margin: 5vw 0;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
 
   h3 {
@@ -144,6 +145,13 @@ const Content = styled.div`
     color: #3e4345;
     font-family: Open Sans;
     font-size: 22px;
+  }
+  .aimHeading{
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.82);
+    font-family: Open Sans;
+    font-size: 2em;
+    margin: 8rem 5vw 4rem;
   }
 `;
 

@@ -1,12 +1,9 @@
 import React, { Component, useEffect, useState } from 'react';
 import style from "./todo.module.css";
-import addTodo from '../../assets/addTodo.png'
-import changeView from '../../assets/changeView.png'
-import Card from 'react-bootstrap/Card'
 import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputLabel, OutlinedInput, Radio, RadioGroup, useMediaQuery, useTheme } from '@material-ui/core';
 import { BsPatchPlus, BsToggle2Off, BsToggle2On } from 'react-icons/bs';
 import { IconContext } from 'react-icons/lib';
-import Axios from 'axios';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 
 function AddTodoComponent(props){
@@ -22,20 +19,20 @@ function AddTodoComponent(props){
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
     
     useEffect(() => {
-        Axios.post('http://127.0.0.1:8103/api/get_todo_images', {title: title})
+        AxiosBaseFile.post('/api/get_todo_images', {title: title})
         .then(response => {
             setImages(response.data)
         })
     })
 
     function onSubmitHandler(){
-        Axios.post('http://127.0.0.1:8103/api/add_todo', {'username' : localStorage.getItem('username'), 'title': title, 'importance': importance, 'inNewsfeed' : checked, 'imageName': bgImage})
+        AxiosBaseFile.post('/api/add_todo', {'username' : localStorage.getItem('username'), 'title': title, 'importance': importance, 'inNewsfeed' : checked, 'imageName': bgImage})
         .then(res => console.log(res.data))
         .catch(err => console.log(err))
         setTodoState(false);
     }
     function deleteTodo(event){
-        Axios.post('http://127.0.0.1:8103/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
+        AxiosBaseFile.post('/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
         .then(() => {
             settitle(null);
         })
@@ -91,7 +88,7 @@ function AddTodoComponent(props){
                             <div className="d-flex justify-content-around flex-wrap">
                             {imgaes.map((image) =>
                                 <div className={style.todoCard}> 
-                                    <FormControlLabel value={image} control={<Radio style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ image)} alt='todo image' className={style.todoImages} />} />
+                                    <FormControlLabel value={image} control={<Radio style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ image)} alt='todo' className={style.todoImages} />} />
                                 </div>
                              )}
                             </div>
@@ -139,7 +136,7 @@ class TodoComponent extends Component{
 
     deleteTodo(event, index){
         console.log(event.target.value)
-        Axios.post('http://127.0.0.1:8103/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
+        AxiosBaseFile.post('/api/delete_todo', {'username' : localStorage.getItem('username'), "title" : event.target.value})
         .then(() => {
             const allTodoList = this.state.allTodoList;
             allTodoList.splice(index, 1);
@@ -148,7 +145,7 @@ class TodoComponent extends Component{
         .catch(err => console.log(err))  
     }
     componentDidMount(){
-        Axios.post('http://127.0.0.1:8103/api/get_all_todo_for_user', {'username' : localStorage.getItem('username')})
+        AxiosBaseFile.post('/api/get_all_todo_for_user', {'username' : localStorage.getItem('username')})
         .then(res => {
             this.setState({allTodoList: res.data.todo}, () => console.log(this.state.allTodoList, res.data))
         })
@@ -197,7 +194,7 @@ class TodoComponent extends Component{
             <div className={style.todoCardContainer}>
                 {this.state.allTodoList.map((todo, index) =>
                     <div key={index}  className={style.todoCard}>
-                        <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ todo.image)} alt='todo image' className={style.todoImages} />} />
+                        <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ todo.image)} alt='todo' className={style.todoImages} />} />
                     </div>
                     )
                 }

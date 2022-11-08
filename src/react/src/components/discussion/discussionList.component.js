@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import './discussionList.css'
 import CreateThread from './createThread.component.js'
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-ui/core';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 class DiscussionList extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class DiscussionList extends Component {
     componentDidMount() {
         var resThread = {};
         var thread = [];
-        axios.post('http://127.0.0.1:8103/api/db_get_all_threads', {'community': this.state.community})
+        AxiosBaseFile.post('/api/db_get_all_threads', {'community': this.state.community})
             .then(response => {
                 for (var i = 0; i < response.data.length; i++){
                     resThread['id'] = response.data[i]._id;

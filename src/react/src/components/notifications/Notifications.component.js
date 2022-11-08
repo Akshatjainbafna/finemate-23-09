@@ -1,7 +1,7 @@
 import { Avatar, Button, List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText } from "@material-ui/core";
-import Axios from "axios";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import AxiosBaseFile from "../AxiosBaseFile";
 import style from './notifications.module.css';
 
 class NotificationComponent extends Component{
@@ -12,7 +12,7 @@ class NotificationComponent extends Component{
         }
     }
     componentDidMount(){
-        Axios.post('http://127.0.0.1:8103/api/db_get_pending', {'username' : localStorage.getItem('username')})
+        AxiosBaseFile.post('/api/db_get_pending', {'username' : localStorage.getItem('username')})
         .then(res => {
             this.setState({allThePending: res.data})
         })
@@ -20,7 +20,7 @@ class NotificationComponent extends Component{
     }
 
     addFriend(username2, index){
-        Axios.post('http://127.0.0.1:8103/api/db_add_friend', {'username1' : localStorage.getItem('username'), 'username2' : username2})
+        AxiosBaseFile.post('/api/db_add_friend', {'username1' : localStorage.getItem('username'), 'username2' : username2})
         .then(() => {
             var allThePending = this.state.allThePending;
             allThePending.splice(index);
@@ -30,7 +30,7 @@ class NotificationComponent extends Component{
     }
 
     disconnect(username2, index){
-        Axios.post('http://127.0.0.1:8103/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2' : username2})
+        AxiosBaseFile.post('/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2' : username2})
         .then(() => {
             var allThePending = this.state.allThePending;
             allThePending.splice(index);

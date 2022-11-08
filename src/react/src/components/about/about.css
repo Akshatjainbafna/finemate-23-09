@@ -56,7 +56,6 @@
   .macPicture{
     width: 75vw;
   }
-
   @media screen and (max-width: 600px) {
     .aimContainer{
       width: 100%;

@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import createMessage from '../../assets/createMessage.png'
@@ -6,6 +5,7 @@ import style from './user.module.css'
 import profilePic from '../../assets/profilePic.png'
 import Message from './Message'
 import { Avatar } from '@material-ui/core'
+import AxiosBaseFile from '../AxiosBaseFile'
 
 class User extends Component {
     constructor() {
@@ -28,7 +28,7 @@ class User extends Component {
     handleSubmit(e) {
         e.preventDefault()
         localStorage.setItem('targetUser', this.state.targetUser);
-        axios.post('http://127.0.0.1:8103/api/db_search_user', {'username': localStorage.getItem('targetUser')})
+        AxiosBaseFile.post('/api/db_search_user', {'username': localStorage.getItem('targetUser')})
         .then(res =>{
             let responseData = res.data;
             if (responseData == localStorage.getItem('targetUser')){
@@ -57,7 +57,7 @@ class User extends Component {
         })
     }
     componentDidMount(){
-        axios.post('http://127.0.0.1:8103/api/db_get_messaged_users', { 'username' : localStorage.getItem('username')})
+        AxiosBaseFile.post('/api/db_get_messaged_users', { 'username' : localStorage.getItem('username')})
             .then( res => {
                 var responseData =  res.data;
                 for (let i=0; i<responseData.length; i++){

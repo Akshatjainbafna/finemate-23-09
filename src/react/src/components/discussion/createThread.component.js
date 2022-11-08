@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import './createThread.css';
 import './discussionList.css';
-import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputLabel, OutlinedInput, TextField, useMediaQuery } from '@material-ui/core';
 import { useTheme } from '@material-ui/core/styles';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 class CreateThreadClass extends Component {
     constructor(props) {
@@ -31,7 +31,7 @@ class CreateThreadClass extends Component {
     }
     onSubmitHandler(){
         if (this.state.title && this.state.body){
-            axios.post('http://127.0.0.1:8103/api/db_create_thread', 
+            AxiosBaseFile.post('/api/db_create_thread', 
             {'username': localStorage.getItem('username'), 'title': this.state.title,'body': this.state.body, 'community': this.state.community})
         .then(response => {
             this.setState({newThread: response.data})

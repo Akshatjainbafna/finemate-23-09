@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import ReactDOM from "react-dom";
-import axios from 'axios'
 import Card from 'react-bootstrap/Card'
 import './enrollClass.css'
 import Modal from '../popUpClasses/Modal.js'
 import gradhat from '../../assets/gradhat.png'
 import youtube from '../../assets/youtube.png'
 import pen from '../../assets/pen.png'
+import AxiosBaseFile from '../AxiosBaseFile'
 
 class AllClassList extends Component {
     
@@ -33,7 +32,7 @@ class AllClassList extends Component {
     };
 
     componentDidMount() {
-        axios.get(`http://127.0.0.1:8103/api/get_all_courses`)
+        AxiosBaseFile.get(`/api/get_all_courses`)
             .then(res => {
                 const courses = res.data;
                 this.setState({ courses });

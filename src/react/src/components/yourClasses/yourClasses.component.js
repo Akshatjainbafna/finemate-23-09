@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import Card from 'react-bootstrap/Card'
 import './yourClasses.css'
-import gradhat from '../../assets/gradhat.png'
-import youtube from '../../assets/youtube.png'
-import pen from '../../assets/pen.png'
 import { Redirect } from 'react-router-dom'
+import AxiosBaseFile from '../AxiosBaseFile'
 
 class Classes extends Component {
     state = {
@@ -13,7 +10,7 @@ class Classes extends Component {
     }
 
     componentDidMount() {
-        axios.post(`http://127.0.0.1:8103/api/db_get_courses_of_student`, { 'student': localStorage.getItem('username') })
+        AxiosBaseFile.post('/api/db_get_courses_of_student', { 'student': localStorage.getItem('username') })
             .then(res => {
                 const courses = res.data;
                 this.setState({ courses });

@@ -8,7 +8,6 @@ import LeaderboardYouVsYou from '../leaderboard/leaderboard.component.js';
 import TodoComponent from '../todo/todo.component.js';
 import DiaryComponent from "../diary/diary.component.js";
 import TaskComponent from "../task/task.component.js";
-import axios from 'axios';
 
 import CalenderImg from '../../assets/calendar.png';
 import AssignmentsImg from '../../assets/assignment.png';
@@ -17,6 +16,7 @@ import LeaderboardImg from '../../assets/leaderboard.png';
 import CalenderLogImg from '../../assets/log list.png';
 import { Button, Tooltip } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 let vals;
 
@@ -92,7 +92,7 @@ class DashboardCalendarComponent extends Component {
 
 
 	componentDidMount() {
-		axios.post('http://127.0.0.1:8103/api/db_get_user_email', { 'username': localStorage.getItem('username') })
+		AxiosBaseFile.post('/api/db_get_user_email', { 'username': localStorage.getItem('username') })
 			.then(res => {
 				this.setState({email: res.data}, () => window.localStorage.setItem('email', this.state.email))
 			});
@@ -123,7 +123,7 @@ class DashboardCalendarComponent extends Component {
 		window.localStorage.setItem('date', date.toDateString());
 		this.state.selectedDay = (date.getFullYear() + ", " + date.getMonth() + ", " + date.getDate()).toString();
 		console.log(this.state.selectedDay);
-		axios.put('http://127.0.0.1:8103/api/db_get_schedule', { 'date': this.state.selectedDay, 'email': this.state.email })
+		AxiosBaseFile.put('/api/db_get_schedule', { 'date': this.state.selectedDay, 'email': this.state.email })
 			.then(res => {
 				window.localStorage.setItem('events', JSON.stringify(res.data));
 				vals = JSON.parse(window.localStorage.getItem('events'));

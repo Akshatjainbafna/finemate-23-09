@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import axios from 'axios';
 import createMessage from '../../assets/createMessage.png'
+import AxiosBaseFile from '../AxiosBaseFile'
 import style from './SendMessage.module.css'
 
 class SendMessage extends Component {
@@ -21,7 +21,7 @@ class SendMessage extends Component {
 
     handleSubmit(e) {
         e.preventDefault()
-        axios.post('http://127.0.0.1:8103/api/db_send_message', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser'), 'message': this.state.message})
+        AxiosBaseFile.post('/api/db_send_message', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser'), 'message': this.state.message})
         .catch(err => console.log(err))
         
         this.setState({message:''});

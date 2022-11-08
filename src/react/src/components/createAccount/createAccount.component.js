@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import Card from 'react-bootstrap/Card'
 import {Redirect} from 'react-router-dom'
 import { IconButton, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 
 class createAccount extends Component {
@@ -196,7 +196,7 @@ class createAccount extends Component {
         e.preventDefault();
 		document.getElementById('ErrorMessage').innerHTML="Wait A Second.";
 
-        axios.post('http://localhost:8103/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP })
+        AxiosBaseFile.post('/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP })
             .then(response => {
 				document.getElementById('ErrorMessage').innerHTML="";
 				this.setState({sendOTP:true, machineOTP: response.data});
@@ -209,7 +209,7 @@ class createAccount extends Component {
 	submit2(e) {
         e.preventDefault();
 
-        axios.post('http://localhost:8103/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP })
+        AxiosBaseFile.post('/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP })
             .then(response => {
 				this.setState({accountCreated:true});
 				})

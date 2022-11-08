@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import UserProfile from "../../components/profile/userProfile.component.js";
 import "./UserProfilePage.css";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 
 import HeaderBarForMobile from "../../components/headerbar/HeaderTaskbarForMobile";
 import FooterBarForMobile from "../../components/headerbar/FooterBarForMobile";
@@ -23,6 +22,7 @@ import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
 import settings from "../../assets/settings.png";
 import LoadingGif from "../../components/loadingGif.js";
+import AxiosBaseFile from "../../components/AxiosBaseFile.js";
 // End of pictures
 
 let headerItems = { link: "/profile", title: "Profile", profileImg: profile };
@@ -104,8 +104,8 @@ class UserProfilePage extends Component {
     username: this.props.match.params.username,
   };
   componentDidMount() {
-    axios
-      .post("http://127.0.0.1:8103/api/db_get_profile", {
+    AxiosBaseFile
+      .post("/api/db_get_profile", {
         username: this.state.username
       })
       .then(response => {
@@ -138,8 +138,8 @@ class UserProfilePage extends Component {
       .catch(error => {
         console.log(error);
       });
-    axios
-      .post("http://127.0.0.1:8103/api/db_get_user_email", {
+    AxiosBaseFile
+      .post("/api/db_get_user_email", {
         username: this.state.username
       })
       .then(response => {

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import './calendar.css';
 import Calendar, { MonthView } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 import TitleImage from '../../assets/schedule.png';
 import Schedule from './schedule.component';
 import Events from './events.component';
 import SmallCards from './smallCards.component';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 let size = 0;
 let times = [];
@@ -30,7 +30,7 @@ class CalendarComponent extends Component {
 	onChange = date => this.setState({ date })
 
 	componentDidMount() {
-		axios.post('http://127.0.0.1:8103/api/db_get_user_email', { 'username': localStorage.getItem('username') })
+		AxiosBaseFile.post('/api/db_get_user_email', { 'username': localStorage.getItem('username') })
 			.then(res => {
 				this.state.email = res.data;
 				window.localStorage.setItem('email', this.state.email);
@@ -41,7 +41,7 @@ class CalendarComponent extends Component {
 		this.state.selectedDay = (date.getFullYear() + ", " + date.getMonth() + ", " + date.getDate()).toString();
 		window.localStorage.setItem('date', date.toDateString());
 		window.localStorage.setItem('selectedDay', this.state.selectedDay);
-		axios.put('http://127.0.0.1:8103/api/db_get_schedule', { 'date': this.state.selectedDay, 'email': this.state.email })
+		AxiosBaseFile.put('/api/db_get_schedule', { 'date': this.state.selectedDay, 'email': this.state.email })
 			.then(res => {
 				window.localStorage.setItem('events', JSON.stringify(res.data));
 			})

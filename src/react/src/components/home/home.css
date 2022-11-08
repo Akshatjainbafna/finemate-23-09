@@ -65,7 +65,9 @@
   .carousel-indicators{
 	margin-top: 2vh;
   }
-
+  .deviceCompatibleContainer{
+	margin: 15vh 0;
+  }
   @media screen and (max-width: 600px) {
 	.whyRetention, .whySocialLearning, .whyStudentManagement{
 		width: 100vw;
@@ -77,5 +79,8 @@
 	  }
 	.carousel-inner{
 		width: 100%;
+	  }
+	  .allDeviceImage{
+		width: 75vw;
 	  }
   }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
-import axios from 'axios';
 import {Redirect} from 'react-router-dom'
 import { IconButton, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 
 class Login extends Component {
@@ -246,7 +246,7 @@ class Login extends Component {
 	forgetPassword(e){
 		e.preventDefault();
 		document.getElementById('ErrorMessage').innerHTML="Wait A Second.";
-		axios.post('http://127.0.0.1:8103/api/db_update_user_password', {email: this.state.email, username: this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP})
+		AxiosBaseFile.post('/api/db_update_user_password', {email: this.state.email, username: this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP})
 		.then(response => {
 			if (this.state.createNewPassword){
 				document.getElementById('ErrorMessage').innerHTML="New Password created successfully !!";
@@ -272,15 +272,15 @@ class Login extends Component {
     submit(e) {
 		e.preventDefault();
 		//Check if this is the first login
-		axios.post('http://127.0.0.1:8103/api/db_last_login', {username: this.state.username})
+		AxiosBaseFile.post('/api/db_last_login', {username: this.state.username})
 		.then(response => {
 			this.state.firstLogIn = (response.data == "N/A");
-			axios.post('http://127.0.0.1:8103/api/db_login', {username: this.state.username, password: this.state.password })
+			AxiosBaseFile.post('/api/db_login', {username: this.state.username, password: this.state.password })
 				.then(response => {
 					localStorage.setItem('token', response.data)
 					localStorage.setItem('username', (this.state.username))
 
-					axios.post('http://127.0.0.1:8103/api/db_get_user_type', {username: this.state.username})
+					AxiosBaseFile.post('/api/db_get_user_type', {username: this.state.username})
 					.then(response => {
 						localStorage.setItem('usertype', response.data)
 						this.setState({loggedIn:true});

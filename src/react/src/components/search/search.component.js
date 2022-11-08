@@ -1,7 +1,7 @@
 import { Avatar, Button, Dialog, DialogContent, DialogTitle, Divider, List, ListItem, ListItemAvatar, ListItemText, OutlinedInput, useMediaQuery, useTheme } from "@material-ui/core";
-import Axios from "axios";
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import AxiosBaseFile from "../AxiosBaseFile";
 import style from './search.module.css';
 
 export default function SearchComponent(props){
@@ -14,7 +14,7 @@ export default function SearchComponent(props){
 
     function search(event){
         if (category == 'People'){
-            Axios.post('http://127.0.0.1:8103/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
+            AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
             .then(response => {
                 if (response.data){
                     setSearchData(response.data);
@@ -26,7 +26,7 @@ export default function SearchComponent(props){
             })
         }
         if (category == 'Community'){
-            Axios.post('http://127.0.0.1:8103/api/db_search_thread', {'title': event.target.value})
+            AxiosBaseFile.post('/api/db_search_thread', {'title': event.target.value})
             .then(response => {
                 if (response.data){
                     setSearchData(response.data)
@@ -38,7 +38,7 @@ export default function SearchComponent(props){
             })
         }
         if (category == 'Topic'){
-            Axios.post('http://127.0.0.1:8103/api/db_search_posts_of_topic', {'topic': event.target.value})
+            AxiosBaseFile.post('/api/db_search_posts_of_topic', {'topic': event.target.value})
             .then(response => {
                 if (response.data){
                     console.log(response.data)
@@ -51,7 +51,7 @@ export default function SearchComponent(props){
             })
         }
         if (category == 'Course'){
-            Axios.post('http://127.0.0.1:8103/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
+            AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
             .then(response => {
                 if (response.data){
                     setSearchData(response.data)

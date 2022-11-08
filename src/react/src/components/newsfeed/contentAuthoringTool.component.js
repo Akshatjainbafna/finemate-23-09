@@ -6,6 +6,7 @@ import axios from "axios";
 import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl, Switch} from "@material-ui/core";
 import {AddPhotoAlternateRounded} from "@material-ui/icons";
 import { useTheme } from '@material-ui/core/styles';
+import AxiosBaseFile from "../AxiosBaseFile";
 
 
 class ContentAuthoringTool extends Component{
@@ -54,13 +55,13 @@ class ContentAuthoringTool extends Component{
       
 
     searchSubject(event){
-        axios.post('http://127.0.0.1:8103/api/db_search_a_subject', {subject: event.target.value})
+        AxiosBaseFile.post('/api/db_search_a_subject', {subject: event.target.value})
         .then(res => {
           this.setState({listOfSubjects: res.data})
         })
       }
       searchTopic(event){
-        axios.post('http://127.0.0.1:8103/api/db_search_a_topic', {topic: event.target.value})
+        AxiosBaseFile.post('/api/db_search_a_topic', {topic: event.target.value})
         .then(res => {
           this.setState({listOfTopics: res.data})
         })
@@ -213,7 +214,7 @@ class ContentAuthoringTool extends Component{
             document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Topic.";
         }
         else if(this.state.subject != this.state.topic != this.state.subtopic){
-            axios({method: "post", url: "http://localhost:8103/api/db_create_post", data: form_data, headers: { "Content-Type": "multipart/form-data" }})
+            AxiosBaseFile.post("/api/db_create_post", form_data)
             .then(response => {
                 localStorage.setItem('subject', this.state.subject);
                 localStorage.setItem('topic', this.state.topic);

@@ -1,68 +1,17 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
 import "./Questionaire.css";
 
 //images
 import BackImage from "../../assets/undraw_questions.png";
 import Confirm from "../../assets/confirm.png";
-import profile from "../../assets/profile.png";
-//sidebar images
-import dashboard from "../../assets/home.png";
-import courses from "../../assets/courses.png";
-import fees from "../../assets/fees.png";
-import library from "../../assets/library.png";
-import search from "../../assets/search 1.png";
-import attendance from "../../assets/attendance.png";
-import grades from "../../assets/grades.png";
-import forum from "../../assets/forum.png";
-import cart from "../../assets/cart.png";
-import navigation from "../../assets/navigation.png";
-
-//components
-import Headerbar from "../..//components/headerbar/HeaderTaskbar.js";
-import Sidebar from "../..//components/sidebar/sidebar.component.js";
-import { Add, TimerSharp } from "@material-ui/icons";
+//icons
+import { Add } from "@material-ui/icons";
 import { FormControlLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select } from "@material-ui/core";
+//components
 import LoadingGif from "../../components/loadingGif";
+import AxiosBaseFile from "../../components/AxiosBaseFile";
 
-let headerItems = {
-  link: "/profile",
-  title: "Questionaire",
-  profileImg: profile
-};
-
-let navItemsForNormalUser = [
-  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
-  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
-  { id: 3, link: "/search", imgSrc: search, title: "Search"},
-  { id: 4, link: "/communities", imgSrc: forum, title: "Community" },
-  { id: 5, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-];
-
-let navItemsForStudent = [
-  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
-  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
-  { id: 3,link: "/library",imgSrc: library,title: "Library"},
-  { id: 4, link: "/search", imgSrc: search, title: "Search"},
-  { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-  { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
-  { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-  { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
-];
-
-let navItemsForInstructorInstitute=[
-  { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
-  { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
-  { id: 3,link: "/library",imgSrc: library,title: "Library"},
-  { id: 4, link: "/search", imgSrc: search, title: "Search"},
-  { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-  { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
-  { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-  { id: 9, link: "/feesPayment", imgSrc: fees, title: "Salary" },
-]
 
 class Questionaire extends Component {
   constructor(props) {
@@ -131,13 +80,13 @@ class Questionaire extends Component {
 
   coreStream(event){
     this.setState({coreStream: event.target.value})
-    axios.post('http://127.0.0.1:8103/api/db_get_all_subjects_of_stream', {stream: event.target.value})
+    AxiosBaseFile.post('/api/db_get_all_subjects_of_stream', {stream: event.target.value})
     .then(res => {
       this.setState({arrayOfEducation: res.data})
     })
   }
   search(event){
-    axios.post('http://127.0.0.1:8103/api/db_search_a_subject', {subject: event.target.value})
+    AxiosBaseFile.post('/api/db_search_a_subject', {subject: event.target.value})
     .then(res => {
       this.setState({searchedSubjects: res.data})
     })
@@ -384,7 +333,7 @@ class Questionaire extends Component {
       document.getElementById("messageForNoEducation").innerHTML="Please Add Subjects that you have already Learnt and Subjects/Topics you want to learn."
     }
     else{
-    axios.post("http://127.0.0.1:8103/api/add_education_from_questionaire", {"username": localStorage.getItem("username"), "qualification": this.state.qualification, "coreStream" : this.state.coreStream, "listOfPreviousEducation": this.state.arrayOfEducation, "listOfLookingForwardToLearn": this.state.arrayOfLookingForwardToLearn})
+    AxiosBaseFile.post("/api/add_education_from_questionaire", {"username": localStorage.getItem("username"), "qualification": this.state.qualification, "coreStream" : this.state.coreStream, "listOfPreviousEducation": this.state.arrayOfEducation, "listOfLookingForwardToLearn": this.state.arrayOfLookingForwardToLearn})
     this.setState({ done: true });
     }
   }

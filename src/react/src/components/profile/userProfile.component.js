@@ -1,22 +1,13 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
-import fb from "../../assets/fb.png";
-import li from "../../assets/li.png";
 import profilePic from "../../assets/profilePic.png";
-import tinyprofilePic from "../../assets/tinyprofile.png";
-import up from "../../assets/up.png";
-import edit from "../../assets/edit.png";
-import del from "../../assets/del.png";
-import editButton from "../../assets/editButton.png";
 import "./profile.css";
-import axios from "axios";
-import { Add } from "@material-ui/icons";
-import { Button, Input, Menu, MenuItem, TextField } from "@material-ui/core";
+import { Button, Menu, MenuItem} from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
-import Axios from "axios";
 import {BsChatSquareTextFill} from 'react-icons/bs'
 import { IconContext } from "react-icons";
 import ColourTextUser from "./colourTextUserProfile.component.js";
+import AxiosBaseFile from "../AxiosBaseFile";
 
 
 class UserProfile extends Component {
@@ -36,7 +27,7 @@ class UserProfile extends Component {
     }else{
       var username2 =  this.state.username;
     }
-    Axios.post('http://127.0.0.1:8103/api/db_add_connection', {'username1' : localStorage.getItem('username'), 'username2': username2})
+    AxiosBaseFile.post('/api/db_add_connection', {'username1' : localStorage.getItem('username'), 'username2': username2})
     .then(res => {
       window.location.reload(true);
     })
@@ -45,14 +36,14 @@ class UserProfile extends Component {
 
   removeConnection(connections, friends){
     if (connections.includes(localStorage.getItem('username'))){
-      Axios.post('http://127.0.0.1:8103/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
+      AxiosBaseFile.post('/api/db_remove_connection', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
       .then(res => {
         window.location.reload(true);
     })
     .catch(err => console.log(err))
     }
     if (friends.includes(localStorage.getItem('username'))){
-      Axios.post('http://127.0.0.1:8103/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
+      AxiosBaseFile.post('/api/db_remove_friend', {'username1' : localStorage.getItem('username'), 'username2': this.state.username})
       .then(res => {
         window.location.reload(true);
     })
@@ -61,7 +52,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount(){
-    Axios.post('http://127.0.0.1:8103/api/db_get_public_post_of_user', {username: this.state.username})
+    AxiosBaseFile.post('/api/db_get_public_post_of_user', {username: this.state.username})
     .then(res => {
         console.log(res.data)
         this.setState({recentPosts : res.data})

@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom'
-import axios from 'axios';
-import Card from 'react-bootstrap/Card'
 import { Redirect } from 'react-router-dom'
-import { useHistory } from "react-router-dom";
 import './createClass.css'
+import AxiosBaseFile from '../AxiosBaseFile';
 
 
 class CreateClass extends Component {
@@ -84,7 +81,7 @@ class CreateClass extends Component {
 	submit(e) {
 		e.preventDefault();
 
-		axios.post('http://127.0.0.1:8103/api/db_create_course', { course_category: this.state.course_category, course_name: this.state.course_name, course_instructor: this.state.course_instructor, extra_info: this.state.extra_info })
+		AxiosBaseFile.post('/api/db_create_course', { course_category: this.state.course_category, course_name: this.state.course_name, course_instructor: this.state.course_instructor, extra_info: this.state.extra_info })
 			.then(response => {
 				console.log(response.data)
 				this.setState({ classCreated: true });

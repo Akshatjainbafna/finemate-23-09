@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import Card from 'react-bootstrap/Card'
-import axios from 'axios';
 import {Redirect} from 'react-router-dom'
 import './events.css'
+import AxiosBaseFile from '../AxiosBaseFile'
 
 
 class Events extends Component {
@@ -12,7 +12,7 @@ class Events extends Component {
     }
 
     componentDidMount() {
-        axios.post(`http://127.0.0.1:8103/api/db_get_dashevents_of_student`, { 'student': localStorage.getItem('username') })
+        AxiosBaseFile.post(`/api/db_get_dashevents_of_student`, { 'student': localStorage.getItem('username') })
             .then(res => {
                 const courses = res.data;
                 this.setState({ courses });

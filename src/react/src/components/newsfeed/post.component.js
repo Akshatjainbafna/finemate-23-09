@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { Component } from "react";
 import style from './newsfeed.module.css';
 
@@ -14,6 +13,7 @@ import correct from './correctBGicon.png';
 import semicorrect from './semicorrectBGicon.png';
 import incorrect from './incorrectBGicon.png';
 import { Link } from "react-router-dom";
+import AxiosBaseFile from "../AxiosBaseFile";
 
 class IndividualPost extends Component{
     constructor(props){
@@ -61,7 +61,7 @@ class IndividualPost extends Component{
     postLiked(){
         this.setState({likeState: !this.state.likeState});
         var idOfThePost = this.state.id;
-        axios.post('http://127.0.0.1:8103/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [idOfThePost], 'lighten': [], savedPosts: []})
+        AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [idOfThePost], 'lighten': [], savedPosts: []})
         .then(() =>{
             const responseData= this.state.responseData[0];
             if (this.state.likeState == true){
@@ -79,7 +79,7 @@ class IndividualPost extends Component{
     postLighten(){
         this.setState({lightState: !this.state.lightState});
         var idOfThePost = this.state.id;
-        axios.post('http://127.0.0.1:8103/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [], 'lighten': [idOfThePost], savedPosts: []})
+        AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [], 'lighten': [idOfThePost], savedPosts: []})
         .then(() =>{
             const responseData= this.state.responseData[0];
             if (this.state.lightState == true){
@@ -97,7 +97,7 @@ class IndividualPost extends Component{
     postSaved(){
         this.setState({saveState: !this.state.saveState});
         var idOfThePost = this.state.id;
-        axios.post('http://127.0.0.1:8103/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [], 'lighten': [], savedPosts: [idOfThePost]})
+        AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [], 'lighten': [], savedPosts: [idOfThePost]})
         .then(() =>{
             const responseData= this.state.responseData[0];
             if (this.state.saveState == true){
@@ -113,10 +113,10 @@ class IndividualPost extends Component{
         )
     }
     deletePost(postId){
-        axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        AxiosBaseFile.delete('/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
             if (res.data==true){
-                axios.post('http://127.0.0.1:8103/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: postId})
+                AxiosBaseFile.post('/api/db_delete_post', { 'username' : localStorage.getItem('username'), id: postId})
                 .then(() => this.setState({responseData: []}))
                 .catch((error) => console.log(error))
             }
@@ -124,19 +124,19 @@ class IndividualPost extends Component{
         .catch(err => console.log(err))
     }
     notInterested(postTopic){
-        axios.post('http://127.0.0.1:8103/api/add_not_interested_topic', { 'username' : localStorage.getItem('username'), 'topic': postTopic})
+        AxiosBaseFile.post('/api/add_not_interested_topic', { 'username' : localStorage.getItem('username'), 'topic': postTopic})
         .then(() => {
             const uninterestedAcknowledgeMessage = postTopic + ' is marked as uninterested topic!'
             alert(uninterestedAcknowledgeMessage)})
         .catch(err => console.log(err))
     }
     showOften(postId){
-        axios.post('http://127.0.0.1:8103/api/show_often', { 'username' : localStorage.getItem('username'), 'id': postId})
+        AxiosBaseFile.post('/api/show_often', { 'username' : localStorage.getItem('username'), 'id': postId})
         .catch(err => console.log(err))
     }
 
     componentDidMount(){
-        axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username') , id: this.state.id})
+        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username') , id: this.state.id})
         .then(res => {
             let responseData = Array(res.data);
             this.setState({responseData : responseData})
@@ -144,7 +144,7 @@ class IndividualPost extends Component{
         .catch(err => console.log(err))
     }
     fetchPreviousPost(){
-        axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost[0].$oid})
+        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost[0].$oid})
         .then((res) => {
             let responseData = Array(res.data);
             this.setState({responseData : responseData})
@@ -152,7 +152,7 @@ class IndividualPost extends Component{
         .catch(err => console.log(err))
     }
     fetchNextPost(){
-        axios.post('http://127.0.0.1:8103/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost[0].$oid})
+        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost[0].$oid})
         .then((res) => {
             let responseData = Array(res.data);
             this.setState({responseData : responseData})

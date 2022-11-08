@@ -12,7 +12,7 @@ import Leaderboard from '../../assets/leaderboardForMobile.png';
 import Setting from '../../assets/settings.png';
 import logo from '../../assets/finemateLatestin Angelina fontLogoForMobile.png';
 import profile from "../../assets/tinyprofile.png";
-import Axios from "axios";
+import AxiosBaseFile from "../AxiosBaseFile";
 
 
 function CustomListItems({id, link, imgSrc, title}) {
@@ -63,7 +63,7 @@ class HeaderBarForMobile extends Component{
       };
     
       componentDidMount(){
-        Axios.post('http://127.0.0.1:8103/api/db_get_profile_picture', {'username': localStorage.getItem('username')})
+        AxiosBaseFile.post('/api/db_get_profile_picture', {'username': localStorage.getItem('username')})
         .then(response => {
           this.setState({profilePicture: response.data.profilePicture});
         })

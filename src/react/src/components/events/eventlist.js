@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import ReactDOM from "react-dom";
-import axios from 'axios'
 import Card from 'react-bootstrap/Card'
 import './eventlist.css'
 import Modal from '../popUpEvents/Modal.js'
+import AxiosBaseFile from '../AxiosBaseFile';
 
 class AllEventsList extends Component {
     
@@ -29,7 +28,7 @@ class AllEventsList extends Component {
     };
 
     componentDidMount() {
-        axios.get(`http://127.0.0.1:8103/api/get_all_dashevents`)
+        AxiosBaseFile.get(`/api/get_all_dashevents`)
             .then(res => {
                 console.log(res.data)
                 const courses = res.data;

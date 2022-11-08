@@ -1,12 +1,9 @@
 import React,{ Component } from "react";
-import { Link, Redirect } from "react-router-dom";
 import style from './newsfeedHeader.module.css';
 import addPost from "../../assets/addPost.png";
-import axios from "axios";
-import { BsBorderMiddle, BsCaretLeftFill, BsCaretRightFill, BsChevronLeft, BsDot, BsSlash, BsTypeItalic, BsXCircleFill, BsXLg } from "react-icons/bs";
-import { Button, Dialog, Tooltip } from "@material-ui/core";
-import ContentAuthoringTool from './contentAuthoringTool.component';
+import { Button, Tooltip } from "@material-ui/core";
 
+//static images to be removed later after developing feature
 import Badminton from "../../assets/sampleImages/badminton.jpeg";
 import Coders from "../../assets/sampleImages/coders.jpeg";
 import Coaching from "../../assets/sampleImages/coaching.jpeg";

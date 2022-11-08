@@ -15,7 +15,7 @@ import WhatsForProfessionals from "../../assets/Whats for Professionals.png";
 import WhatsForCanteenOwners from "../../assets/Whats for Canteen Owners.png";
 import WhatsForInvestors from "../../assets/Whats for Investors.png";
 import FinemateMemeRepresentation from "../../assets/Finemate Meme representation.png";
-import AllDeviceSizes from '../../assets/allDeviceSizes.png';
+import AllDeviceSizes from '../../assets/allDeviceSizes2.png';
 import FinemateOnDesktop from '../../assets/finemateScreenForDesktop.png';
 import FinemateOnTablet from '../../assets/finemateScreenForTablet.png';
 import FinemateOnMobile from '../../assets/finemateScreenForMobile.png';
@@ -48,7 +48,7 @@ class Home extends Component {
 					
 					<div class="column" className="col2">
 						<MacPic>
-							<img className="macPicture" src={macPicture2} alt="" />
+							<img className="macPictureHome" src={macPicture2} alt="" />
 						</MacPic>
 					</div>
 			</div>
@@ -77,7 +77,7 @@ class Home extends Component {
 					Social Learning Platform
 					</h4>
 					<p>
-					It's said that one should learn from as many people as possible and share your knowledge to grow it. So finemate helps you to learn from people of different domains, age group, origin. Helping you to understand things with different teaching methodaology, different anamolies, different percepectives, and different Mnemonic Devices. Along with this it connects like minded people and students across classroom boundary.
+					Learn from people of different domains, expertise, experience, age group, origin. Helping you to understand things with different teaching methodaology, anamolies, percepectives, and Mnemonic Devices. And connect with like minded people and students across classroom boundary.
 					</p></div>
 			</div>
 			<div className="introCards">
@@ -86,7 +86,7 @@ class Home extends Component {
 					Student Management System
 					</h4>
 					<p>
-					A super app through which you can submit fees, check result, check attendance, get quick updates from institue, submit assignments in an organised manner, manage notes, instantly chat with friends and faculties and many more features that serves all the web requirements of an Institute.
+					A super app through which you can submit fees, check result, check attendance, get quick updates from institue, submit assignments in an organised manner, manage notes, instantly chat with friends and faculties and many more features that serves all the web requirements of an Institute with a student friendly user interface.
 					</p></div>
 			</div>
 			</Wrapper>
@@ -162,24 +162,16 @@ class Home extends Component {
 			<Content>
 				<h2 className="whyHeader">Where can you access Finemate?</h2>
 				<p>Finemate, On every Device</p>
-				<img src={AllDeviceSizes} />
-				<p>So you can use it...</p>
-				<br />
-				<br />
-				<br />
-				<br />
+				<img src={AllDeviceSizes} className='allDeviceImage' />
+				<p className="mt-5">So you can use it...</p>
 				<div className="whyContainer" >
-					<div>
+					<div className="deviceCompatibleContainer">
 						<img src={FinemateOnDesktop} />
 					</div>
-					<br />
-				<br />
-					<div>
+					<div className="deviceCompatibleContainer">
 						<img src={FinemateOnTablet} />
 					</div>
-					<br />
-				<br />
-					<div>
+					<div className="deviceCompatibleContainer">
 						<img src={FinemateOnMobile} />
 					</div>
 				</div>
@@ -284,7 +276,7 @@ const Wrapper = styled.div`
 
 
 const MacPic = styled.div`
-  .macPicture {
+  .macPictureHome {
     height: 25rem;
     margin-top: 0rem;
     margin-bottom: 4rem;

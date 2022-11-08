@@ -162,7 +162,7 @@ const User = styled.div`
     justify-content: center;
   }
   h3 {
-    font-size: 2.5em;
+    font-size: 2em;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
@@ -171,7 +171,7 @@ const User = styled.div`
     font-weight: normal;
     color: #3e4345;
     font-family: Open Sans;
-    font-size: 1.5em;
+    font-size: 1.25em;
   }
 
   .solutionsImage{

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import './discussionDetail.css'
-import CreateReply from './createReply.component.js'
-import axios from 'axios';
 import { Button, TextField } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 class DiscussionDetail extends Component {
     constructor(props) {
@@ -22,7 +21,7 @@ class DiscussionDetail extends Component {
     componentDidMount() {
         var resReply = {};
         var reply = [];
-        axios.post('http://127.0.0.1:8103/api/db_get_thread_id', {'_id': this.state.handle})
+        AxiosBaseFile.post('/api/db_get_thread_id', {'_id': this.state.handle})
             .then(response => {
                 console.log(response.data);
                 for (var i = 0; i < response.data.bodies.length; i++){
@@ -47,7 +46,7 @@ class DiscussionDetail extends Component {
     }
     onSubmitHandler(){
         if (this.state.body){
-            axios.put('http://127.0.0.1:8103/api/db_put_thread_reply', {'username': localStorage.getItem('username'), '_id': this.state.handle,'body': this.state.body})
+            AxiosBaseFile.put('/api/db_put_thread_reply', {'username': localStorage.getItem('username'), '_id': this.state.handle,'body': this.state.body})
             .catch((error) => {
                 console.log(error)
             });

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './profile.css';
 import {BsXCircleFill} from 'react-icons/bs';
-import Axios from 'axios';
 import { Add } from '@material-ui/icons';
+import AxiosBaseFile from '../AxiosBaseFile';
 
 class ColourText extends Component {
     constructor(props) {
@@ -15,13 +15,13 @@ class ColourText extends Component {
     }
     handleChange(event, field){
         event.preventDefault();
-        Axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        AxiosBaseFile.delete('/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
             if (res.data===true){
                 switch(String(field)){
                     case 'education':
                         if (this.state.listOfItems.includes(this.state.itemName)){
-                        Axios.put('http://127.0.0.1:8103/api/db_add_profile_education', { education : this.state.itemName, username: localStorage.getItem('username')})
+                        AxiosBaseFile.put('/api/db_add_profile_education', { education : this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
                             this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
                             this.setState({itemName: ''})
@@ -33,7 +33,7 @@ class ColourText extends Component {
                         }
                         break;
                     case 'skill':
-                        Axios.put('http://127.0.0.1:8103/api/db_add_profile_skill', {skill: this.state.itemName, username: localStorage.getItem('username')})
+                        AxiosBaseFile.put('/api/db_add_profile_skill', {skill: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
                             this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
                             this.setState({itemName: ''})
@@ -41,7 +41,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'language':
-                        Axios.put('http://127.0.0.1:8103/api/db_add_profile_language', {language: this.state.itemName, username: localStorage.getItem('username')})
+                        AxiosBaseFile.put('/api/db_add_profile_language', {language: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
                             this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
                             this.setState({itemName: ''})
@@ -49,7 +49,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'interest':
-                        Axios.put('http://127.0.0.1:8103/api/db_add_profile_interest', {interest: this.state.itemName, username: localStorage.getItem('username')})
+                        AxiosBaseFile.put('/api/db_add_profile_interest', {interest: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
                             this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
                             this.setState({itemName: ''})
@@ -57,7 +57,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'hate':
-                        Axios.put('http://127.0.0.1:8103/api/db_add_profile_hate', {hate: this.state.itemName, username: localStorage.getItem('username')})
+                        AxiosBaseFile.put('/api/db_add_profile_hate', {hate: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
                             this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
                             this.setState({itemName: ''})
@@ -75,40 +75,40 @@ class ColourText extends Component {
     }
     removeItem(event, item, field){
         event.preventDefault()
-        Axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        AxiosBaseFile.delete('/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
             if (res.data===true){
                 switch(String(field)){
                     case 'education':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
                         .then(() => {
                             window.location.reload(true);  
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'skill':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_skill', {skill: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_skill', {skill: item, username: localStorage.getItem('username')})
                         .then(() => {
                             window.location.reload(true);  
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'language':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_language', {language: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_language', {language: item, username: localStorage.getItem('username')})
                         .then(() => {
                             window.location.reload(true);  
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'interest':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_interest', {interest: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_interest', {interest: item, username: localStorage.getItem('username')})
                         .then(() => {
                             window.location.reload(true);  
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'hate':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_hate', {hate: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_hate', {hate: item, username: localStorage.getItem('username')})
                         .then(() => {
                             window.location.reload(true);  
                         })
@@ -125,12 +125,12 @@ class ColourText extends Component {
     }
     removeNewlyAddedItem(event, item, index, field){
         event.preventDefault()
-        Axios.delete('http://127.0.0.1:8103/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
+        AxiosBaseFile.delete('/api/db_authorization_check', {headers: { "Authorization": localStorage.getItem('token')}})
         .then(res => {
             if (res.data===true){
                 switch(String(field)){
                     case 'education':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
                         .then(() => {
                             const added = this.state.added;
                             added.splice(index, 1);
@@ -139,7 +139,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'skill':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_skill', {skill: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_skill', {skill: item, username: localStorage.getItem('username')})
                         .then(() => {
                             const added = this.state.added;
                             added.splice(index, 1);
@@ -148,7 +148,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'language':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_language', {language: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_language', {language: item, username: localStorage.getItem('username')})
                         .then(() => {
                             const added = this.state.added;
                             added.splice(index, 1);
@@ -157,7 +157,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'interest':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_interest', {interest: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_interest', {interest: item, username: localStorage.getItem('username')})
                         .then(() => {
                             const added = this.state.added;
                             added.splice(index, 1);
@@ -166,7 +166,7 @@ class ColourText extends Component {
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'hate':
-                        Axios.post('http://127.0.0.1:8103/api/db_delete_profile_hate', {hate: item, username: localStorage.getItem('username')})
+                        AxiosBaseFile.post('/api/db_delete_profile_hate', {hate: item, username: localStorage.getItem('username')})
                         .then(() => {
                             const added = this.state.added;
                             added.splice(index, 1);
@@ -187,7 +187,7 @@ class ColourText extends Component {
         this.setState({itemName: event.target.value});
         if (field === 'education'){
         document.getElementById('ErrorMessage').innerHTML='';
-        Axios.post('http://127.0.0.1:8103/api/db_search_a_subject', {subject: event.target.value})
+        AxiosBaseFile.post('/api/db_search_a_subject', {subject: event.target.value})
         .then(res => {
           this.setState({listOfItems: res.data}, () => console.log(this.state.listOfItems))
         })
