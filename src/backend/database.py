@@ -34,7 +34,7 @@ import message
 
 mode = 'production'
 
-app = Flask(__name__) 
+app = Flask(__name__, static_folder='../react/build', static_url_path='/') 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
@@ -66,7 +66,13 @@ s3 = session.resource('s3')
 def too_large(e):    
     return "File is too large", 413 
 
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
 
+@app.route('/')
+def index():
+        return app.send_static_file('index.html')
 
 
 @app.route('/api/add_pain_point_to_database', methods=['POST'])
@@ -744,6 +750,13 @@ def db_add_profile_completed_dashevent():
 @app.route('/api/db_delete_profile_completed_dashevent', methods=['DELETE'])
 def db_delete_profile_completed_dashevent():
     return ProfileObj(request.json).db_delete_profile_completed_dashevent()
+
+# We check if we are running directly or not
+if __name__ != '__main__':
+    # if we are not running directly, we set the loggers
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
 # you can put in your preferred port 
 if __name__ == '__main__':   
