@@ -32,7 +32,7 @@ import dashevent
 import profile
 import message
 
-mode = 'development'
+mode = 'production'
 
 app = Flask(__name__, static_folder='../react/build', static_url_path='/') 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
