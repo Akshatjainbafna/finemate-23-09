@@ -35,31 +35,27 @@
     align-content: space-around;
 }
 .todoCard{
-    width: 11vh;
-    height: 11vh;
-    overflow: hidden;
-    background-size: contain;
+    width: 12vh;
+    height: 12vh;
     border: 1px solid #a5c5c5;
-    box-shadow: 2px 2px 1px #a5c5c5;
+    box-shadow: 0px 2px 1px #a5c5c5;
     border-radius: 5px;
     margin: 0.5vh 0.5vw;
 }
 .todoImages{
-    margin-left: 0.8em;
+    margin-left: 0.85em;
+    margin-top: 0.25em;
 }
-
+.todoCard:hover{
+    transform: scale(1.1, 1.1);
+}
 @media screen and (max-width: 600px) {
-    .todoComponentContainer{
-        min-height: calc(100vh - 110px);
-    }
     .todoBlock{
         position: sticky !important;
-        top: 55px;
     }
     .todoCard{
         width: 17vh;
         height: 17vh;
         margin: 1vh 1vw;
-
     }
 }

@@ -9,23 +9,22 @@
 .searchedResults{
     width: 100%;
 }
-.input {
+.inputSearchOption{
     position: absolute;
     visibility: hidden;
   }
   
-  .label {
+  .labelSearchOption{
     padding: 5px 5px;
-    background-color: #ffffff;
     cursor: pointer;
     font-size: 14px;
     color: #7A7A7A;
     transition: background-color 0.1s, color 0.1s;
   }
-  .input:checked + .label{
-    background: #e9e4f0;
+  .inputSearchOption:checked + .labelSearchOption{
+    background-color: #e9e4f0;
   }
-  .input:hover + .label{
+  .inputSearchOption:hover + .labelSearchOption{
     background-color: #e9e4f0;
   }
   .profilePictureThumbnail{

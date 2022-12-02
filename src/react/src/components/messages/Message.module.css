@@ -1,6 +1,5 @@
 .chatBox{
     box-sizing: border-box;
-    margin-left: 1vw;
     min-width: 44vw;
 }
 .chatHeader{
@@ -28,7 +27,7 @@
 }
 @media screen and (max-width: 600px) {
     .chatBox{
-        height: max-content;
+        min-height: 84vh;
     }
     .profilePictureChatHeader{
         width: 35px;

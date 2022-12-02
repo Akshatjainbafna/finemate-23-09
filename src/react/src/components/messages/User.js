@@ -4,7 +4,7 @@ import createMessage from '../../assets/createMessage.png'
 import style from './user.module.css'
 import profilePic from '../../assets/profilePic.png'
 import Message from './Message'
-import { Avatar } from '@material-ui/core'
+import { Avatar, OutlinedInput } from '@material-ui/core'
 import AxiosBaseFile from '../AxiosBaseFile'
 
 class User extends Component {
@@ -95,7 +95,7 @@ class User extends Component {
                 <form
                     onSubmit={this.handleSubmit}
                     className={style.targetUser}>
-                    <input className={style.searchUser}
+                    <OutlinedInput className={style.searchUser}
                         onChange={this.handleChange}
                         value={this.state.targetUser}
                         placeholder='Search User...'

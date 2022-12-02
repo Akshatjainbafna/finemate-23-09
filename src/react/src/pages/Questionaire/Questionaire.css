@@ -23,8 +23,8 @@
 }
  .image {
     position: absolute;
-    right:10px;
-    top: 5vh;
+    right:16vw;
+    top: 4vh;
     opacity: 0.5;
     max-width: 100%;
     height: auto;
@@ -39,20 +39,13 @@
 body{
     background-color: #FCFCFB;
 }
-.picture{
-    background-color: #FCFCFB;
-    flex:1;
-}
 
 .inputQuestionairePage {
-    margin: auto 15px;
-    border-style: solid;
-    border-width: 2px;
-    border-color: darkgray;
-    border-radius: 5px;
-    border: hsl(270, 38%, 59%);
+    border-radius: 4px;
+    border: 2px solid rgb(175, 175, 175);
     width: 20vw !important;
     background-color: #F5F7FA;
+    height: 40px;
 }
 
 .Sidebar{
@@ -67,28 +60,35 @@ body{
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
 }
-
+.allTheSubjectsContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
 .newlyAddedSubject{
-    border: 1px solid grey;
+    border: 2px solid grey;
     border-radius: 5px;
-    margin: 2px;
-    padding: 2px;
+    margin: 5px;
+    padding: 4px;
 }
 .addSubjectButtonQuestionaire{
     border: 2px solid grey;
     border-radius: 100px;
     color: grey;
+    margin-left: 2vw;
 }
 @media screen and (max-width: 600px) {
     .page{
-        width: 90vw;
-        margin: auto;
+        width: 100vw;
     }
     .image{
-        top: 25vh;
-        right: -10vw;
+        width: 80%;
+        top: 15vh;
+        right: 0vw;
     }
     .inputQuestionairePage {
-        width: 75vw !important;
+        width: 69vw !important;
+    }
+    .questionairePage{
+        margin: 2vh 8vw;
     }
 }

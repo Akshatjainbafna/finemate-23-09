@@ -68,6 +68,9 @@
   .deviceCompatibleContainer{
 	margin: 15vh 0;
   }
+  .allDeviceImage{
+	width: 50vw;
+  }
   @media screen and (max-width: 600px) {
 	.whyRetention, .whySocialLearning, .whyStudentManagement{
 		width: 100vw;

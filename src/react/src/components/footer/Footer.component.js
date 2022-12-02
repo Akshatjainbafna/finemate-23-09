@@ -6,12 +6,12 @@ export default function Footer(){
 
     return(
         <div className={style.footer}>
-            <div>© 2022 Finemate India, Inc. All rights reserved</div>
+            <div>© 2022 Finemate, Inc. All rights reserved</div>
             <div className={style.socialLinks}>
                 <a href ="https://www.linkedin.com/in/akshat-jain-571435139/"> <LinkedIn /> </a>
                 <a href ="https://twitter.com/akshatjainbafna"> <Twitter /> </a>
                 <a href ="https://api.whatsapp.com/send?phone=9425919685&text=Hey,%20there!%20I%20just%20saw%20Finemate%20"> <WhatsApp /> </a>
-                <a href ="mailto:akshatbjain.aj@gmail.com? subject= Regarding Finemate"> <Mail /> </a>
+                <a href ="mailto:contact@finemate.co"> <Mail /> </a>
             </div>
         </div>
     )

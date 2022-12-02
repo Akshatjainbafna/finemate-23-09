@@ -25,6 +25,7 @@ from dashevent import dasheventObj
 from message import MessageObj
 from board import Board
 from post import PostObj, UserInteractions
+from notifications import Notification
 import user
 import calender
 import course
@@ -34,7 +35,7 @@ import message
 
 mode = 'development'
 
-app = Flask(__name__, static_folder='../react/build', static_url_path='/') 
+app = Flask(__name__) 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
 CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
@@ -66,13 +67,6 @@ s3 = session.resource('s3')
 def too_large(e):    
     return "File is too large", 413 
 
-@app.errorhandler(404)
-def not_found(e):
-    return app.send_static_file('index.html')
-
-@app.route('/')
-def index():
-        return app.send_static_file('index.html')
 
 
 @app.route('/api/add_pain_point_to_database', methods=['POST'])
@@ -286,14 +280,25 @@ def db_create_user():
                     OTP += digits[math.floor(random.random()*10)]
     
                 otpMessage = OTP + " is your Finemate Verification Code."
-                s = smtplib.SMTP('smtp.gmail.com', 587)
+                s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
                 s.starttls()
 
+                sender = "hello@finemate.co"
                 emailid = userData['email'].lower()
+                message = """From: Finemate Official<{0}>
+To: <{1}>
+MIME-Version: 1.0
+Content-type: text/html
+Subject: Verification Email
 
-                s.login("akshatbjain.aj@gmail.com", "ycjtgbhzmghbhfkt")
-                s.sendmail('&&&&&&', emailid, otpMessage)
-                return make_response(OTP, 200)
+<h4>{2}</h4>""".format(sender, emailid, otpMessage)
+
+                try:
+                    s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
+                    s.sendmail(sender, emailid, message)
+                    return make_response(OTP, 200)
+                except:
+                    return make_response("Server Side Error", 500)
             else:
                 return make_response("Username or Email already in use.", 400)
     else:
@@ -306,26 +311,48 @@ def db_create_user():
         else:
             return make_response('Entered OTP is incorrect.', 400)
 
-
-
 # connect a user with other user
 @app.route('/api/db_add_connection', methods=['POST'])
 def db_add_connection():
-    return ProfileObj(request.json).add_connection()
-
+    result = ProfileObj(request.json).add_connection()
+    if result == 'Done':
+        notificationData = request.json
+        notificationData['activity_type'] = 'connected with you'
+        Notification.create_notification(notificationData)
+        return make_response('Done', 200)
+    else:
+        return make_response('User Not Found', 404)
+        
 # disconnect a user with other user
 @app.route('/api/db_remove_connection', methods=['POST'])
 def db_remove_connection():
+    notificationData = request.json
+    notificationData['activity_type'] = 'connected with you'
+    Notification.delete_notification(notificationData)
     return ProfileObj(request.json).remove_connection()
 
 # add a user friend with other user
 @app.route('/api/db_add_friend', methods=['POST'])
 def db_add_friend():
-    return ProfileObj(request.json).add_friend()
+    result = ProfileObj(request.json).add_friend()
+    if result == 'Done':
+        notificationData = request.json
+        notificationData['activity_type'] = 'connected with you'
+        Notification.delete_notification(notificationData)
+
+        notificationDataForAddFriend = request.json
+        notificationDataForAddFriend['activity_type'] = 'added you friend'
+        Notification.create_notification(notificationDataForAddFriend)
+        return make_response('Done', 200)
+    else:
+        make_response('User Not Found', 404)
 
 # disconnect a user with other user
 @app.route('/api/db_remove_friend', methods=['POST'])
 def db_remove_friend():
+    notificationData = request.json
+    notificationData['activity_type'] = 'added you friend'
+    Notification.delete_notification(notificationData)
     return ProfileObj(request.json).remove_friend()
 
 
@@ -364,15 +391,28 @@ def db_update_user_password():
             for i in range (6):
                 OTP += digits[math.floor(random.random()*10)]
     
-            otpMessage = OTP + " is your Finemate Verification Code."
-            s = smtplib.SMTP('smtp.gmail.com', 587)
-            s.starttls()
-            emailid = userData['email'].lower()
-            s.login("akshatbjain.aj@gmail.com", "ycjtgbhzmghbhfkt")
-            s.sendmail('&&&&&&', emailid, otpMessage)
-            return make_response(jsonify({'machineOTP': OTP}), 200)
-        else:
-            return make_response("Unregistered Email", 400)
+                otpMessage = OTP + " is your Finemate Verification Code."
+                s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
+                s.starttls()
+
+                sender = "hello@finemate.co"
+                emailid = userData['email'].lower()
+                message = """From: Finemate Official<{0}>
+To: <{1}>
+MIME-Version: 1.0
+Content-type: text/html
+Subject: Verification Email
+
+<h4>{2}</h4>""".format(sender, emailid, otpMessage)
+
+                try:
+                    s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
+                    s.sendmail(sender, emailid, message)
+                    return make_response(OTP, 200)
+                except:
+                    return make_response("Server Side Error", 500)
+            else:
+                return make_response("Username or Email already in use.", 400)
     else:
         return UserObj(request.json).db_update_user_password()
 
@@ -661,6 +701,21 @@ def db_get_messages():
 def db_get_messaged_users():
     return MessageObj(request.json).db_get_messaged_users()
 
+# Get unseen users
+@app.route('/api/db_get_unseen_messages', methods = ['POST'])
+def db_get_unseen_user_number():
+    return MessageObj(request.json).db_get_unseen_user_number()
+
+# Get notifications
+@app.route('/api/db_get_notifications', methods = ['POST'])
+def db_get_notifications():
+    return Notification.get_all_notifications(request.json)
+
+# Get notifications
+@app.route('/api/db_get_number_of_unseen_notification', methods = ['POST'])
+def db_get_number_of_unseen_notification():
+    return Notification.get_number_of_unseen_notification(request.json)
+
 #Get all threads
 @app.route('/api/db_get_all_threads', methods=['POST'])
 def db_get_all_threads():
@@ -671,6 +726,23 @@ def db_get_all_threads():
 def db_search_thread():
     return Board(request.json).search_thread(request.json)
 
+#delete reply
+@app.route('/api/db_delete_reply', methods=['POST'])
+def db_delete_reply():
+    notificationData = request.json
+    notificationData['activity_type'] = 'replied to the discussion'
+    Notification.delete_notification(notificationData)
+    return Board(request.json).remove_reply(request.json)
+
+#delete thread
+@app.route('/api/db_delete_thread', methods=['POST'])
+def db_delete_thread():
+    notificationData = request.json
+    notificationData['activity_type'] = 'replied to the discussion'
+    notificationData['username'] = 'DELETE ALL THE NOTIFICATION FOR THIS THREAD'
+    Notification.delete_notification(notificationData)
+    return Board(request.json).delete_thread(request.json)
+
 #Get threads by id
 @app.route('/api/db_get_thread_id', methods=['POST'])
 def db_get_thread_id():
@@ -679,6 +751,9 @@ def db_get_thread_id():
 #Put a reply in a thread
 @app.route('/api/db_put_thread_reply', methods=['PUT'])
 def db_put_thread_reply():
+    notificationData = request.json
+    notificationData['activity_type'] = 'replied to the discussion'
+    Notification.create_notification(notificationData)
     return Board(request.json).db_put_thread_reply()
 
 #Create a thread

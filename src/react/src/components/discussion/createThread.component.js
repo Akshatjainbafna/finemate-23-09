@@ -71,7 +71,7 @@ class CreateThreadClass extends Component {
 
         <DialogContent>
                 <InputLabel htmlFor='titleOfThread'>Title</InputLabel>
-                <OutlinedInput id="titleOfThread" type="text" name='title' placeholder="Add a Intriguing title..." inputProps={{maxLength: "80"}} value={this.state.title} onChange={this.onChangeHandler} required/>
+                <OutlinedInput id="titleOfThread" type="text" name='title' placeholder="Add a Intriguing title..." fullWidth inputProps={{maxLength: "80"}} value={this.state.title} onChange={this.onChangeHandler} required/>
                 <p></p>
                 <InputLabel htmlFor='exampleFormControlTextarea1'>Description</InputLabel>
                 <TextField minRows={2}  multiline variant="outlined" placeholder="Add a description..." fullWidth name='body' value={this.state.body} onChange={this.onChangeHandler} inputProps={{maxLength: "365"}} required/>

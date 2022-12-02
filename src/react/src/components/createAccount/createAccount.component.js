@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Card from 'react-bootstrap/Card'
 import {Redirect} from 'react-router-dom'
-import { IconButton, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
+import { IconButton, InputAdornment, InputLabel, OutlinedInput, Tooltip } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import AxiosBaseFile from '../AxiosBaseFile';
 
@@ -14,7 +14,7 @@ class createAccount extends Component {
             username:'',
 			password: '',
 			user_type:'',
-			instituteId: '',
+			instituteId: null,
 			enteredOTP: '',
 			institute: false,
 			values: false,
@@ -73,7 +73,8 @@ class createAccount extends Component {
 			</div>
 			<div class="form-group">
 				<InputLabel htmlFor="inputUsername">Username</InputLabel>
-          				<OutlinedInput
+				  	<Tooltip title="Username can only contain lowercase letters (a-z), underscore (_), numbers (0-9) and should be of minimum 8 characters.">
+						<OutlinedInput
             				id="inputUsername"
 							type="text"
 							name='username'
@@ -83,13 +84,15 @@ class createAccount extends Component {
             				value={this.state.username}
             				onChange={this.handleChange}
 							required
-							inputProps={{pattern: "^[A-Za-z][A-Za-z0-9_]{8,20}$", maxLength:'20'}}	
+							inputProps={{pattern: "^[a-z][a-z0-9_]{8,20}$", maxLength:'20'}}	
           				/>
-
+				  	</Tooltip>
 			</div>
+			
 			<div class="form-group">
 				<InputLabel htmlFor="inputPassword">Password</InputLabel>
-          				<OutlinedInput
+					<Tooltip title="Password must contain a uppercase letter (A-Z), a lowercase letter (a-z), a special characters (@_-), a number (0-9) and should be of minimum 8 characters.">
+						<OutlinedInput
             				id="inputPassword"
 							type={this.state.values ? 'text' : 'password'}
 							name='password'
@@ -112,6 +115,7 @@ class createAccount extends Component {
 								</InputAdornment>
 						  }
           				/>
+					</Tooltip>
 			</div>
 			{this.state.institute ? 
 			<div class="form-group">
@@ -119,13 +123,13 @@ class createAccount extends Component {
           				<OutlinedInput
             				id="inputIdentity"
 							type="text"
-							name='identity'
+							name='instituteId'
 							className='outlinedInput'
 							aria-describedby="identityHelp"
 							style={{height: '40px', width: '300px'}}
             				value={this.state.instituteId}
             				onChange={this.handleChange}
-							inputProps={{pattern: "[0-9]{10}"}}
+							inputProps={{pattern: "[0-9]{10}", maxLength: '10'}}
           				/>
 			</div>
 	: null }
@@ -194,9 +198,12 @@ class createAccount extends Component {
 
     submit1(e) {
         e.preventDefault();
-		document.getElementById('ErrorMessage').innerHTML="Wait A Second.";
+		document.getElementById('ErrorMessage').innerHTML="Wait A Second";
 
-        AxiosBaseFile.post('/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP })
+		if (this.state.instituteId){
+			document.getElementById('ErrorMessage').innerHTML="Invalid Identity Number";
+		}else{
+			AxiosBaseFile.post('/api/db_create_user', {user_type:this.state.user_type, email: this.state.email,username:this.state.username, password: this.state.password, OTP: this.state.enteredOTP })
             .then(response => {
 				document.getElementById('ErrorMessage').innerHTML="";
 				this.setState({sendOTP:true, machineOTP: response.data});
@@ -205,6 +212,7 @@ class createAccount extends Component {
 				document.getElementById('ErrorMessage').innerHTML="Username or Email is Already in Use. Please Enter different Username and/or Email."
 			console.log(error)
 		});
+		}
     }
 	submit2(e) {
         e.preventDefault();

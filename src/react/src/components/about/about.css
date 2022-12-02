@@ -50,7 +50,7 @@
     position: absolute;
     left: 4vw ;
     bottom: 20vh;
-    color: black !important;
+    color: rgba(0, 0, 0, 0.9) !important;
     font-family: 'Comic Neue', cursive !important;
   }
   .macPicture{
@@ -78,10 +78,11 @@
     }
     .addedPainPoint{
       position: absolute;
-      left: 4vw ;
-      bottom: 2vh;
-      color: black !important;
+      left: 3.5vw;
+      bottom: 3.5vh;
+      color: rgba(0, 0, 0, 0.9) !important;
       font-family: 'Comic Neue', cursive !important;
+      font-size: xx-small !important;
     }
     .macPicture{
       width: 90vw;

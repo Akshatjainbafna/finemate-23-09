@@ -38,7 +38,8 @@ class SubjectsTopicsSubtopicsTags(me.Document):
         allTheSubjects = []
 
         for i in SubjectsTopicsSubtopicsTags.objects(stream=incomingData['stream']):
-            allTheSubjects.append(i.subject)
+            if i.subject not in allTheSubjects:
+                allTheSubjects.append(i.subject)
 
         return make_response(jsonify(allTheSubjects), 200)
 
@@ -51,8 +52,9 @@ class SubjectsTopicsSubtopicsTags(me.Document):
 
         allTheSubjects = []
 
-        for i in SubjectsTopicsSubtopicsTags.objects(subject=incomingData['subject']):
-            allTheSubjects.append(i.subject)
+        for i in SubjectsTopicsSubtopicsTags.objects.search_text(incomingData['subject']):
+            if i.subject not in allTheSubjects:
+                allTheSubjects.append(i.subject)
         
         return make_response(jsonify(allTheSubjects), 200)
 
@@ -65,7 +67,8 @@ class SubjectsTopicsSubtopicsTags(me.Document):
 
         allTheTopics = []
 
-        for i in SubjectsTopicsSubtopicsTags.objects(topic=incomingData['topic']):
-            allTheTopics.append(i.topic)
+        for i in SubjectsTopicsSubtopicsTags.objects.search_text(incomingData['topic']):
+            if i.topic not in allTheTopics:
+                allTheTopics.append(i.topic)
         
         return make_response(jsonify(allTheTopics), 200)     

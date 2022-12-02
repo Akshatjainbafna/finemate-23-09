@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
@@ -96,6 +96,9 @@ ReactDOM.render(
       </Route>
       {/* Landing Page*/}
       <Route exact path="/">
+        <LogInPage />
+      </Route>
+      <Route exact path="/home">
         <HomePage />
       </Route>
       {/* FAQ page*/}

@@ -20,10 +20,7 @@ class IndividualPost extends Component{
         super(props);
         this.state ={
             responseData: [],
-            id: this.props.id,
-            lightState : false,
-            likeState: false,
-            saveState: false
+            id: this.props.id
         }
     }
 
@@ -59,17 +56,17 @@ class IndividualPost extends Component{
         this.setState({silderValue: event.target.value})
     }
     postLiked(){
-        this.setState({likeState: !this.state.likeState});
         var idOfThePost = this.state.id;
         AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [idOfThePost], 'lighten': [], savedPosts: []})
         .then(() =>{
             const responseData= this.state.responseData[0];
-            if (this.state.likeState == true){
-                responseData.totalLikes = responseData.totalLikes + 1;
-            }
-            else{
+            if (this.state.responseData[0].liked == true){
                 responseData.totalLikes = responseData.totalLikes - 1;
             }
+            else{
+                responseData.totalLikes = responseData.totalLikes + 1;
+            }
+            responseData.liked = ! responseData.liked;
             this.setState(responseData);
         })
         .catch(
@@ -77,17 +74,17 @@ class IndividualPost extends Component{
         )
     }
     postLighten(){
-        this.setState({lightState: !this.state.lightState});
         var idOfThePost = this.state.id;
         AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [], 'lighten': [idOfThePost], savedPosts: []})
         .then(() =>{
             const responseData= this.state.responseData[0];
-            if (this.state.lightState == true){
-                responseData.totalLights = responseData.totalLights + 1;
-            }
-            else{
+            if (this.state.responseData[0].lighten == true){
                 responseData.totalLights = responseData.totalLights - 1;
             }
+            else{
+                responseData.totalLights = responseData.totalLights + 1;
+            }
+            responseData.lighten = ! responseData.lighten;
             this.setState(responseData);
         })
         .catch(
@@ -95,17 +92,17 @@ class IndividualPost extends Component{
         )
     }
     postSaved(){
-        this.setState({saveState: !this.state.saveState});
         var idOfThePost = this.state.id;
         AxiosBaseFile.post('/api/user_interactions', { 'username' : localStorage.getItem('username'), 'liked' : [], 'lighten': [], savedPosts: [idOfThePost]})
         .then(() =>{
             const responseData= this.state.responseData[0];
-            if (this.state.saveState == true){
-                responseData.totalSaves = responseData.totalSaves + 1;
-            }
-            else{
+            if (this.state.responseData[0].saved == true){
                 responseData.totalSaves = responseData.totalSaves - 1;
             }
+            else{
+                responseData.totalSaves = responseData.totalSaves + 1;
+            }
+            responseData.saved = ! responseData.saved;
             this.setState(responseData);
         })
         .catch(
@@ -169,15 +166,66 @@ class IndividualPost extends Component{
                     
                     <form id="postInteraction">
                         <div className={style.postHeader} id="postHeader">
+
                             <div className={style.postMetaData}>
                                 <p className={style.subject}>
-                                    {responseData.subject} 
+                                <Link to={'/topic/'.concat(responseData.subject)} title={responseData.subject}>
+                                    {(() => {
+                                        if (responseData.subject.length >= 30){
+                                            var subject = responseData.subject.match(/\b(\w)/g);
+                                            var subject = subject.join('');
+                                            return subject
+                                        }
+                                        else if (responseData.subject.length >= 26){
+                                            var subject = responseData.subject.slice(0, 26);
+                                            var subject = subject + "..";
+                                            return subject
+                                        }else{
+                                            return responseData.subject
+                                        }
+                                    })()}
+                                </Link>
                                 </p>
+
                                 <p>
-                                    <span className={style.topic}> <Link to={'/topic/'.concat(responseData.topic)}> {responseData.topic} </Link> </span>
+                                    <span className={style.topic} > 
+                                        <Link to={'/topic/'.concat(responseData.topic)} title={responseData.topic}>
+                                        {(() => {
+                                            if (responseData.topic.length >= 26){
+                                                var topic = responseData.topic.match(/\b(\w)/g);
+                                                var topic = topic.join('');
+                                                return topic
+                                            }
+                                            else if (responseData.topic.length >= 13){
+                                                var topic = responseData.topic.slice(0, 13);
+                                                var topic = topic + "..";
+                                                return topic
+                                            }else{
+                                                return responseData.topic
+                                            }
+                                        })()}
+                                        </Link>
+                                    </span>
                                     <BsArrowRightShort/> 
-                                    <span className={style.subTopic}> <Link to={'/topic/'.concat(responseData.subtopic)}> {responseData.subtopic} </Link> </span>
-                                </p> 
+                                    <span className={style.subTopic}>
+                                        <Link to={'/topic/'.concat(responseData.subtopic)} title={responseData.subtopic}>
+                                        {(() => {
+                                            if (responseData.subject.subtopic >= 26){
+                                                var subtopic = responseData.subtopic.match(/\b(\w)/g);
+                                                var subtopic = subtopic.join('');
+                                                return subtopic
+                                            }
+                                            else if (responseData.subtopic.length >= 13){
+                                                var subtopic = responseData.subtopic.slice(0, 13);
+                                                var subtopic = subtopic + "..";
+                                                return subtopic
+                                            }else{
+                                                return responseData.subtopic
+                                            }
+                                        })()}
+                                        </Link>
+                                    </span>
+                                </p>
                             </div>
 
                             <Tooltip title="Intrigrity Slider"><div className={style.integritySlider}> <input type="range" aria-label="Intrigrity Slider" value={this.state.silderValue} min="0" step="1" max="2" onChange={(event) => this.slider(event)}/></div></Tooltip>
@@ -247,7 +295,8 @@ class IndividualPost extends Component{
                                 </p>
                             </span>
 
-                           <img id={responseData.background} src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ responseData.background} className={style.backgroundImage} />
+                            <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
+                           
 
                             <span name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}>
                                 <IconButton onClick={() => this.fetchPreviousPost()}>
@@ -267,7 +316,7 @@ class IndividualPost extends Component{
                                         icon={ <FilterCenterFocusRounded /> } 
                                         checkedIcon={ <FilterCenterFocusRounded /> }
                                         name="viewBackground" 
-                                        onMouseDownCapture={() => this.showBackgroundImage(responseData.background)} onMouseUpCapture={()=> this.hideBackgroundImage(responseData.background)}
+                                        onClickCapture={() => this.showBackgroundImage(responseData.background)} onMouseLeave={()=> this.hideBackgroundImage(responseData.background)}
                                     />
                                     }
                                 /> 
@@ -283,7 +332,7 @@ class IndividualPost extends Component{
                                 <FormControlLabel
                                     control={
                                     <Checkbox 
-                                        checked={responseData.liked ? responseData.liked : this.state.likeState}
+                                        checked={responseData.liked}
                                         icon={ <FavoriteBorder style={{ fontSize: 26 }} /> } 
                                         checkedIcon={ <Favorite style={{ fontSize: 26 }}/> }
                                         name="likedPost" 
@@ -301,7 +350,7 @@ class IndividualPost extends Component{
                                 <FormControlLabel
                                     control={
                                     <Checkbox
-                                    checked={responseData.lighten ? responseData.lighten : this.state.lightState}
+                                    checked={responseData.lighten}
                                     icon={ <EmojiObjectsOutlined style={{ fontSize: 26 }}/> } 
                                     checkedIcon={ <EmojiObjects style={{ fontSize: 26, color: 'yellow' }} />}
                                     name="lightPost"
@@ -317,7 +366,7 @@ class IndividualPost extends Component{
                             <span className={style.engagementCount}>{responseData.totalSaves}</span>
                             <Tooltip title="Save">  
                                 <FormControlLabel 
-                                    checked={responseData.saved ? responseData.saved : this.state.saveState}
+                                    checked={responseData.saved}
                                     control={
                                         <Checkbox 
                                             icon={  <BookmarkBorder 

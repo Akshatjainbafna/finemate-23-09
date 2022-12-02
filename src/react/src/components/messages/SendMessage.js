@@ -1,3 +1,4 @@
+import { OutlinedInput } from '@material-ui/core'
 import React, { Component } from 'react'
 import createMessage from '../../assets/createMessage.png'
 import AxiosBaseFile from '../AxiosBaseFile'
@@ -33,7 +34,7 @@ class SendMessage extends Component {
                 <form
                     onSubmit={this.handleSubmit}
                     className={style.formInlineMessage}>
-                    <input className={style.formControlMessage}
+                    <OutlinedInput className={style.formControlMessage}
                         onChange={this.handleChange}
                         value={this.state.message}
                         placeholder='Enter your message'

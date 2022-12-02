@@ -8,9 +8,11 @@ import Confirm from "../../assets/confirm.png";
 //icons
 import { Add } from "@material-ui/icons";
 import { FormControlLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select } from "@material-ui/core";
+import { BsXCircleFill } from "react-icons/bs";
 //components
 import LoadingGif from "../../components/loadingGif";
 import AxiosBaseFile from "../../components/AxiosBaseFile";
+
 
 
 class Questionaire extends Component {
@@ -58,6 +60,9 @@ class Questionaire extends Component {
     if (arrayOfEducation.includes(education)){
       console.log("Aleady Added!")
     }
+    else if(! this.state.searchedSubjects.includes(education)){
+      alert('Please Enter a valid subject.')
+    }
     else{
       this.setState({arrayOfEducation: [...this.state.arrayOfEducation, education]});
     }
@@ -71,6 +76,9 @@ class Questionaire extends Component {
 
     if (arrayOfLookingForwardToLearn.includes(newSubject)){
       console.log("Aleady Added")
+    }
+    else if(! this.state.searchedSubjects.includes(newSubject)){
+      alert('Please Enter a valid subject.')
     }
     else{
       this.setState({arrayOfLookingForwardToLearn: [...this.state.arrayOfLookingForwardToLearn, newSubject]});
@@ -91,6 +99,8 @@ class Questionaire extends Component {
       this.setState({searchedSubjects: res.data})
     })
   }
+
+
 
   render() {
     if (this.state.done) {
@@ -122,6 +132,7 @@ class Questionaire extends Component {
 'Communications Engineering',
 'Production Engineering',
 'Computer Science Engineering',
+'Information Technology',
 'Robotics Engineering',
 'Construction Engineering',
 'Structural Engineering',
@@ -133,27 +144,25 @@ class Questionaire extends Component {
 'Tool Engineering',
 'Environmental Engineering',
 'Transportation Engineering',
-'BSc Agriculture',
-'BSc Biotechnology',
-'BSc Zoology',
-'BSc Clinical Research & Healthcare Management',
-'BSc Forestry',
-'BSc Microbiology',
-'BSc Nursing',
-'B.Sc. Physiotherapy',
-'B.Sc. Radiology',
-'B.Sc. Bioinformatics',
-'B.Sc. Physics',
-'B.Sc. Chemistry',
-'B.Sc. Botany',
-'B.Sc. IT',
-'B.Sc. Computer Science',
+'Agriculture',
+'Biotechnology',
+'Zoology',
+'Clinical Research & Healthcare Management',
+'Forestry',
+'Microbiology',
+'Nursing',
+'Physiotherapy',
+'Radiology',
+'Bioinformatics',
+'Physics',
+'Botany',
+'Computer Science',
 'Business Administration',
 'Management Science',
 'Computer Applications',
 'Fine Arts',
 'Event Management',
-'LL.B',
+'Law',
 'Journalism and Mass Communication',
 'Fashion Designing',
 'Social Work',
@@ -162,9 +171,8 @@ class Questionaire extends Component {
 'Aviation Courses',
 'Interior Design',
 'Hospitality and Hotel Administration',
-'BA in Design',
+'Design',
 'Performing Arts',
-'BA in History',
 'Chartered Accountancy',
 'Company Secretary',
 'Foreign Language',
@@ -174,7 +182,6 @@ class Questionaire extends Component {
 'Marketing',
 'Data Science',
 'Economics',
-'Physics', 
 'Philosophy',
 'Mathematics',
 'Chemistry',
@@ -183,13 +190,18 @@ class Questionaire extends Component {
 'Psychology',
 'Political Science & International Relations',
 'Statistics',
-'Zoology',
 'Anthropology',
 'Geology',
-'Psychology',
 'Sociology',
-'Commerce'
-    ]
+'Commerce',
+'Science',
+'Arts',
+'UPSC',
+'SSC',
+'Foreign Trade',
+'Hindi',
+'English'
+]
 
     return (
       <React.Fragment>
@@ -213,8 +225,8 @@ class Questionaire extends Component {
                             >
                     <div className="d-flex">
                       <div className="d-flex flex-column">
-                    <FormControlLabel value="Working Professional" control={<Radio required={true}/>} label="Post Graduation" />
-                    <FormControlLabel value="PhD" control={<Radio required={true}/>} label="Post Graduation" />
+                    <FormControlLabel value="Working Professional" control={<Radio required={true}/>} label="Working Professional" />
+                    <FormControlLabel value="PhD" control={<Radio required={true}/>} label="PhD" />
                     <FormControlLabel value="Post Graduation" control={<Radio required={true}/>} label="Post Graduation" />
                     <FormControlLabel value="Graduation" control={<Radio required={true}/>} label="Graduation" />
                     <FormControlLabel value="Undergraducation" control={<Radio required={true}/>} label="Undergraduation" />
@@ -256,12 +268,12 @@ class Questionaire extends Component {
 
 
               <h3 class="text-dark font-weight-bold">
-                All the subjects of your core streams are added, want to remove some or add more subjects that you know?(select all that apply)
+                All the subjects of your core streams are added, you can add and remove subjects. (select all that apply)
               </h3>
               <br />  
               <div className="allTheTopics">
                 <div className="d-flex">
-                  <input list="subjects" type='search' name="subject" className="form-control inputQuestionairePage" placeholder="Add Subjects..." value={this.state.education} onChange={(e) => {this.search(e); this.setState({education : e.target.value})}} size='30' maxLength='30'/>
+                  <input list="subjects" type='search' name="subject" className="form-control inputQuestionairePage" placeholder="Add Subjects..." value={this.state.education} onChange={(e) => {this.search(e); this.setState({education : e.target.value})}} size='30' maxLength='45'/>
                   <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addEducation}> <Add /> </button>
                 </div>
                 
@@ -269,12 +281,23 @@ class Questionaire extends Component {
                   {this.state.searchedSubjects.map((name) => 
                     <option key={name} value={name}/>
                   )}
-                 </datalist>
+                </datalist>
               </div>
               <br />
-              {this.state.arrayOfEducation.map((item, index) => {
-                return <span className="newlyAddedSubject" key={index}>{item}</span>
-              })}
+              <div className="allTheSubjectsContainer">
+                {this.state.arrayOfEducation.map((item, index) => {
+                  return <div className="newlyAddedSubject" key={index}>
+                    <span>{item}</span>
+                    <BsXCircleFill onClick={() => {
+                      var arrayOfEducation = this.state.arrayOfEducation;
+                      arrayOfEducation.splice(index, 1);
+                      this.setState(arrayOfEducation);
+                      }}
+                      style={{color: 'grey', marginLeft: '4px'}}
+                    />
+                  </div>
+                })}
+              </div>
               <br />
               <br />
               <br />
@@ -284,12 +307,12 @@ class Questionaire extends Component {
                 What do you want to learn more about? (select all that apply)
               </h3>
                 <h3 class="note">
-                  You may change your answers afterward in the Profile page.
+                  You may change your answers afterward on the Profile page.
                 </h3>
               <br />
               <div className="allTheTopics">
                 <div className="d-flex">
-                  <input list="subjects" className="form-control inputQuestionairePage" name="subject" placeholder="Add Subjects..." value={this.state.newSubject} onChange={(e) => {this.search(e); this.setState({newSubject : e.target.value})}} size='20' maxLength='20'/>
+                  <input list="subjects" className="form-control inputQuestionairePage" name="subject" placeholder="Add Subjects..." value={this.state.newSubject} onChange={(e) => {this.search(e); this.setState({newSubject : e.target.value})}} size='30' maxLength='45'/>
                   <button type="submit" className="addSubjectButtonQuestionaire" onClick={this.addNewSubject}> <Add /> </button>
                 </div>
                   
@@ -297,13 +320,24 @@ class Questionaire extends Component {
                   {this.state.searchedSubjects.map((name) => 
                     <option key={name} value={name}/>
                   )}
-                 </datalist>
+                </datalist>
 
               </div>
               <br />
-              {this.state.arrayOfLookingForwardToLearn.map((item, index) => {
-                return <span className="newlyAddedSubject" key={index}>{item}</span>
-              })}
+              <div className="allTheSubjectsContainer">
+                {this.state.arrayOfLookingForwardToLearn.map((item, index) => {
+                  return <div className="newlyAddedSubject" key={index}>
+                    <span>{item}</span>
+                    <BsXCircleFill onClick={() => {
+                      var arrayOfLookingForwardToLearn = this.state.arrayOfLookingForwardToLearn;
+                      arrayOfLookingForwardToLearn.splice(index, 1);
+                      this.setState(arrayOfLookingForwardToLearn);
+                      }}
+                      style={{color: 'grey', marginLeft: '4px'}}
+                    />
+                  </div>
+                })}
+              </div>
               <br />
               <br />
               <br />

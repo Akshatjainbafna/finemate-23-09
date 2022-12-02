@@ -22,9 +22,14 @@ import forum from "../../assets/forum.png";
 import cart from "../../assets/cart.png";
 import fees from "../../assets/fees.png";
 import navigation from "../../assets/navigation.png";
+import {FiShoppingCart} from 'react-icons/fi';
+import {ImLibrary} from 'react-icons/im';
+import {BsUiChecksGrid} from 'react-icons/bs';
+import {BsCashStack} from 'react-icons/bs';
+import {FaRegChartBar} from 'react-icons/fa';
 // End of pictures
 
-let headerItems = { link: "/profile", title: "Discussion Board", profileImg: profileee };
+let headerItems = { link: "/profile", title: "Communitites", profileImg: profileee };
 
 
 let navItemsForNormalUser = [
@@ -60,29 +65,29 @@ let navItemsForInstructorInstitute=[
 ]
 
 let navItemsMobileForNormalUser = [
-  { id: 1, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 1, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
 ];
 
 let navItemsMobileForStudent = [
-  { id: 1,link: "/library",imgSrc: library,title: "Library"},
-  { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-  { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-  { id: 5, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
+  { id: 1,link: "/library",imgSrc: <ImLibrary />,title: "Library"},
+  { id: 2, link: "/attendanceUser", imgSrc: <BsUiChecksGrid />, title: "Attendance"},
+  { id: 3, link: "/gradesUser", imgSrc: <FaRegChartBar />, title: "Grades"},
+  { id: 4, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
+  { id: 5, link: "/feesPayment", imgSrc: <BsCashStack />, title: "Fees Payment" },
 ];
 
 let navItemsMobileForInstructorInstitute=[
-  { id: 1,link: "/library",imgSrc: library,title: "Library"},
-  { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-  { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-  { id: 5, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+  { id: 1,link: "/library",imgSrc: <ImLibrary />,title: "Library"},
+  { id: 2, link: "/attendanceUser", imgSrc: <BsUiChecksGrid />, title: "Attendance"},
+  { id: 3, link: "/gradesUser", imgSrc: <FaRegChartBar />, title: "Grades"},
+  { id: 4, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
+  { id: 5, link: "/feesPayment", imgSrc: <BsCashStack />, title: "Salary" },
 ]
 
 
 function Communities(){
     let allTheComunitities =[
-        "EntrepreneurShip",
+        "Entrepreneurs",
         "Engineers",
         "Developers",
         "Data Analyst",
@@ -96,9 +101,11 @@ function Communities(){
         'Architects',
         'Interior Designers',
         'Business Analysts',
-        'Machine Learning',
-        'Gamers',
-        'Makeup Artists'
+        'ML Developers',
+        'Web3 Developers',
+        'AI Developers',
+        'Economists',
+        'Fashion Designers'
     ]
     let m = allTheComunitities.length, yo, t;
     // While there remain elements to shuffle…
@@ -118,10 +125,10 @@ function Communities(){
         {allTheComunitities.map(
             (community, index) => 
                 <Link key={index} to={'/discussionList/'.concat(community)} style={{backgroundColor: "#" + ((1<<24)*Math.random() | 0).toString(16)}} title={"Community of ".concat(community)} className="community">
-                    <span className="mr-2">
+                    <span className="communityName">
                         {community}
                     </span>
-                    <span><img src={profile} alt=""/></span>
+                    <span><img src={profile} alt="" className="communityImage"/></span>
                 </Link>
             
         )}
@@ -140,7 +147,7 @@ class DiscussionCommunitiesPage extends Component {
 
 
     if (window.innerWidth <= 600){
-      if(localStorage.getItem("usertype")=="noraml"){
+      if(localStorage.getItem("usertype")=="normal"){
         return (
           <>
             <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />

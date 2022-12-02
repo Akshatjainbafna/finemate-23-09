@@ -68,24 +68,23 @@ export default function SearchPageComponent(props){
             
                 <OutlinedInput fullWidth autoFocus autoComplete="off" id="searchbar" type="text" name='search' placeholder="search" inputProps={{maxLength: "80"}} onChange={(event) => search(event)}/>
             
-                <Divider />
             <div className="d-flex justify-content-around mt-2">
-                            <span>
-                                <input name="tabNews" type="radio" id="tabNews-1" className={style.input} onChange={() => setCategory("People")} />
-                                <label for="tabNews-1" className={style.label}>People</label>
-                            </span>
-                            <span>
-                                <input name="tabNews" type="radio" id="tabNews-2" className={style.input} onChange={() => setCategory("Community")}/>
-                                <label for="tabNews-2" className={style.label}>Community</label>
-                            </span>
-                            <span>
-                                <input name="tabNews" type="radio" id="tabNews-3" className={style.input} onChange={() => setCategory("Topic")}/>
-                                <label for="tabNews-3" className={style.label}>Topic</label>
-                            </span>
-                            <span>
-                                <input name="tabNews" disabled type="radio" id="tabNews-4" className={style.input} onChange={() => setCategory("Course")}/>
-                                <label for="tabNews-4" className={style.label}>Course</label>
-                            </span>
+                            
+                                <input name="tabNews" type="radio" id="tabNews-1" className={style.inputSearchOption} onChange={() => setCategory("People")} />
+                                <label for="tabNews-1" className={style.labelSearchOption}>People</label>
+                            
+                            
+                                <input name="tabNews" type="radio" id="tabNews-2" className={style.inputSearchOption} onChange={() => setCategory("Community")}/>
+                                <label for="tabNews-2" className={style.labelSearchOption}>Community</label>
+                            
+                            
+                                <input name="tabNews" type="radio" id="tabNews-3" className={style.inputSearchOption} onChange={() => setCategory("Topic")}/>
+                                <label for="tabNews-3" className={style.labelSearchOption}>Topic</label>
+                            
+                            
+                                <input name="tabNews" disabled type="radio" id="tabNews-4" className={style.inputSearchOption} onChange={() => setCategory("Course")}/>
+                                <label for="tabNews-4" className={style.labelSearchOption}>Course</label>
+                            
                         </div>
                         <Divider />
              {(() =>{
@@ -99,7 +98,7 @@ export default function SearchPageComponent(props){
                                 <ListItem>
                                     {user.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ user.profilePicture} alt="Profile" className={style.profilePictureThumbnail}/>
+                                        <img src={require('../../assets/profilePictures/'+ user.profilePicture)} alt="Profile" className={style.profilePictureThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>
@@ -146,7 +145,7 @@ export default function SearchPageComponent(props){
                           <p className="subTopicThumbnail">{post.subtopic}</p>
                           <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} alt="Post Background" />
+                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} alt="Post Background" />
                       </div>
                     </Link>
                     )}

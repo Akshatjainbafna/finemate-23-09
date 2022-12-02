@@ -56,7 +56,7 @@ class TodoDocument(me.Document):
         return make_response("Done", 200)
 
     def db_get_todo_images(incomingData):
-        listOfImage = ['work', 'hard drive', 'computer', 'network', 'server', 'internet', 'system', 'radio', 'lock', 'memory', 'connection', 'document', 'folder', 'cloud', 'chart', 'camera', 'prize', 'web', 'talk', 'data', 'data transfer', 'monitor', 'write', 'secure', 'paint', 'foot', 'phone', 'gift', 'travel', 'perfume', 'visit', 'play', 'chemical', 'milk', 'setting', 'shoe', 'sport', 'outdoor', 'practice', 'groceries', 'luggage', 'flight', 'draw', 'relax', 'peace', 'car', 'card', 'notebook', 'ball', 'mobile', 'industry', 'bag', 'transport', 'doctor', 'bus', 'bill', 'goal', 'money', 'temperature', 'barcode', 'direction', 'umbrella', 'time', 'note', 'study', 'water', 'television', 'identity' , 'shopping', 'party', 'drink', 'pendrive', 'train', 'cab', 'bike', 'bath', 'files', 'sail', 'science']
+        listOfImage = ['bottle','work', 'hard drive', 'computer', 'network', 'server', 'internet', 'system', 'radio', 'lock', 'memory', 'connection', 'document', 'folder', 'cloud', 'chart', 'camera', 'prize', 'web', 'talk', 'data', 'data transfer', 'monitor', 'write', 'secure', 'paint', 'foot', 'phone', 'gift', 'travel', 'perfume', 'visit', 'play', 'chemical', 'milk', 'setting', 'shoe', 'sport', 'outdoor', 'practice', 'groceries', 'luggage', 'flight', 'draw', 'relax', 'peace', 'car', 'card', 'notebook', 'ball', 'mobile', 'industry', 'bag', 'transport', 'doctor', 'bus', 'bill', 'goal', 'money', 'temperature', 'barcode', 'direction', 'umbrella', 'time', 'note', 'study', 'water', 'television', 'identity' , 'shopping', 'party', 'drink', 'pendrive', 'train', 'cab', 'bike', 'bath', 'files', 'sail', 'science']
 
         try:
             title = incomingData['title'].lower()
@@ -86,6 +86,7 @@ class TodoDocument(me.Document):
         todoAccountOfUser = TodoDocument.objects(username=incomingData['username']).first()
 
         if todoAccountOfUser:
+            print(incomingData)
             todoAccountOfUser.update(__raw__={'$pull': {'todo': {'title': incomingData['title']}}})
         else:
             print('No account found')

@@ -10,4 +10,6 @@
     align-items: center;
     padding: 3%;
     border-top: 1px solid #dfd6e98f;
+    height: 8.2vh;
+    z-index: 100;
 }

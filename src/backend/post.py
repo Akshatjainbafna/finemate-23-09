@@ -20,14 +20,14 @@ class PostObj():
     class Posts(me.Document):
 
         username=me.StringField(required=True)
-        subject=me.StringField(required=True, max_length=20, min_length=3)
-        topic=me.StringField(required=True, max_length=20, min_length=3)
-        subtopic=me.StringField(required=True, max_length=25, min_length=3)
+        subject=me.StringField(required=True, max_length=45, min_length=3)
+        topic=me.StringField(required=True, max_length=45, min_length=3)
+        subtopic=me.StringField(required=True, max_length=45, min_length=3)
         type=me.StringField(required=True, choices=['News', 'Information' , 'News & Information'])
         question=me.StringField(max_length=50)
         fact=me.StringField(required=True, min_length=30, max_length=365)
         background=me.StringField()
-        mcq1=me.StringField(required=True, max_length=60)
+        mcq1=me.StringField(required=True)
         mcq1Options=me.ListField(required=True, unique=False)
         #to store date in iso formate datetimefield can be used instead of string field by passing just datetime.now() object instead of converting it into string and passing ans also remember don't pass datetime.now() object directly or by default coz datetime object can't be iterated 
         creation_date_time=me.StringField()
@@ -61,16 +61,14 @@ class PostObj():
         if len(self.content['mcq1opt4']) > 0:
             mcq1Opts.append(self.content['mcq1opt4'])
         
-        publicState= True if self.content['public'] == 'true' else False
+        publicState = True if self.content['public'] == 'true' else False
 
-        createPost= self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcq1Opts, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState).save()
-        print(createPost, createPost.to_json(), sep="\n")
+        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcq1Opts, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState).save()
 
-        objectOfTherecordOfTheUser= Profile.objects(username=self.content['username']).first()
+        objectOfTherecordOfTheUser = Profile.objects(username=self.content['username']).first()
 
-        allSubjectsOfUser= objectOfTherecordOfTheUser.educations
+        allSubjectsOfUser = objectOfTherecordOfTheUser.educations
 
-        print(allSubjectsOfUser)
         if self.content['subject'] not in allSubjectsOfUser:
             Profile.objects(username=self.content['username']).update_one(push__educations = self.content['subject'])
         else: 
@@ -660,8 +658,17 @@ class UserInteractions(me.Document):
                 return make_response(jsonify(objectOfTheCombinedString), 200)
             
             else:
-                
-                return make_response(jsonify(post), 200)
+                timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                objectOfTherecordOfTheUser= Profile.objects(username=incomingData['username']).first()
+                user_interaction=UserInteractions(userReference=objectOfTherecordOfTheUser, username=incomingData['username'], postId=post, timeList=[timeRytNow]).save()
+
+                #Combining the post data with the user interaction 
+                addThePostStr=post.to_json()
+                addTheInteractionStr=user_interaction.to_json()
+                combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
+                objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+
+                return make_response(jsonify(objectOfTheCombinedString), 200)
             
         else:
 

@@ -1,12 +1,13 @@
 .discussion-list-container {
     flex-direction: column;
     border-radius: 5px;
+    margin: 2%;
 }
 .divStyle{
     margin: 1%;
     border: 2px solid #77737a;
     border-radius: 5px;
-    width: 75vw;
+    width: auto;
     padding: 1%;
     text-overflow: ellipsis !important;
 }
@@ -33,6 +34,5 @@
     }
     .discussion-list-container{
         margin-top: 2vh;
-        height: calc(100vh - 110px);
     }
 }

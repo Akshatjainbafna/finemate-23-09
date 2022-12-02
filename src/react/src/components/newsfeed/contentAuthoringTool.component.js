@@ -16,13 +16,13 @@ class ContentAuthoringTool extends Component{
             subject: localStorage.getItem('subject'),
             topic: localStorage.getItem('topic'),
             subtopic: localStorage.getItem('subtopic'),
-            type: localStorage.getItem('type'),
+            type: '',
             question: '',
             fact: '',
             background: '',
             mcq1: '',
-            mcq1opt1: '',
-            mcq1opt2: '',
+            mcq1opt1: 'True',
+            mcq1opt2: 'False',
             mcq1opt3: '',
             mcq1opt4: '',
             setOpen: this.props.createpost,
@@ -66,7 +66,13 @@ class ContentAuthoringTool extends Component{
           this.setState({listOfTopics: res.data})
         })
       }
-
+      componentDidMount(){
+        if (localStorage.getItem('type')){
+            this.setState({type: localStorage.getItem('type')})
+        }else{
+            this.setState({type: 'Information'})
+        }
+      }
     render(){
         if (!localStorage.getItem("token")) {
             return <Redirect to="/login" />;
@@ -111,21 +117,21 @@ class ContentAuthoringTool extends Component{
                 </div> 
             </div>
 
-                <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={(e) => {this.searchSubject(e); this.handleChange(e)}} size='20' maxLength='20' required/>
+                <input list="subjects" name="subject" placeholder="Subject" form="formPost" value={this.state.subject} onChange={(e) => {this.searchSubject(e); this.handleChange(e)}} size='20' maxLength='45' required/>
                  <datalist id="subjects">
                  {this.state.listOfSubjects.map((name) => 
                     <option key={name} value={name}/>
                   )}
                  </datalist>
                 
-                 <input list="topics" name="topic" placeholder="Topic" form="formPost" value={this.state.topic} onChange={ (e) => {this.searchTopic(e); this.handleChange(e)}} size='20' maxLength='20' required/>
+                 <input list="topics" name="topic" placeholder="Topic" form="formPost" value={this.state.topic} onChange={ (e) => {this.searchTopic(e); this.handleChange(e)}} size='20' maxLength='45' required/>
                  <datalist id="topics">
                  {this.state.listOfTopics.map((name) => 
                     <option key={name} value={name}/>
                   )}
                  </datalist>
 
-                 <input name="subtopic" placeholder="Subtopic" form="formPost" value={this.state.subtopic} onChange={this.handleChange} size='20' maxLength='25' required/>
+                 <input name="subtopic" placeholder="Subtopic" form="formPost" value={this.state.subtopic} onChange={this.handleChange} size='20' maxLength='45' required/>
 
                  <select name="type" form="formPost" value={this.state.type} onChange={this.handleChange} required>     
                     <option value="Information"> Information </option>
@@ -140,9 +146,9 @@ class ContentAuthoringTool extends Component{
                     <span className={style.addPostFormHeading}>Create Post</span>
                     <br />
                     
-                    <TextField variant="outlined" placeholder="Add a Question, if applicable..." fullWidth type="text" label="Question" name="question" inputProps={{ maxLength: 40 }} value={this.state.question} onChange={this.handleChange}/>
+                    <TextField variant="outlined" placeholder="Add a Question, if applicable..." fullWidth type="text" label="Question" name="question" inputProps={{ maxLength: 50 }} value={this.state.question} onChange={this.handleChange}/>
                         <p></p>
-                    <TextField multiline variant="outlined" placeholder="Write a post of Max. 365 letters..." fullWidth type="text" label="Fact" form="formPost" name="fact" inputProps={{ maxLength: 365 }}  value={this.state.fact} onChange={this.handleChange} required/>
+                    <TextField multiline variant="outlined" placeholder="Write a post of Max. 365 letters..." fullWidth type="text" label="Fact/News" form="formPost" name="fact" inputProps={{ maxLength: 365 }}  value={this.state.fact} onChange={this.handleChange} required/>
                     
                         <p></p>
                         <br />
@@ -152,13 +158,13 @@ class ContentAuthoringTool extends Component{
 
                 <span className={style.addPostFormHeading}>Add Multiple Choice Answer</span>
                 <br />
-                    <TextField variant="outlined" fullWidth size="small" label="Multiple Choice Question" name="mcq1" type="text" placeholder="Ask a Question related to this Post"  form="formPost" inputProps={{ maxLength: 60 }} value={this.state.mcq1} onChange={this.handleChange} required/>  <p></p>
-                    <TextField variant="outlined" fullWidth size="small" label="Option 1" name="mcq1opt1" type="text" placeholder="Enter correct option here" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt1} onChange={this.handleChange} required/>  <p></p>
-                    <TextField variant="outlined" fullWidth size="small" label="Option 2" name="mcq1opt2" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt2} onChange={this.handleChange}required/>  <p></p>
-                    <TextField variant="outlined" fullWidth size="small" label="Option 3" name="mcq1opt3" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt3} onChange={this.handleChange}/>  <p></p>
-                    <TextField variant="outlined" fullWidth size="small" label="Option 4" name="mcq1opt4" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 40 }} value={this.state.mcq1opt4} onChange={this.handleChange}/>  <p></p>
+                    <TextField variant="outlined" fullWidth size="small" label="Multiple Choice Question" name="mcq1" type="text" placeholder="Ask a Question related to this Post"  form="formPost" inputProps={{ maxLength: 100 }} value={this.state.mcq1} onChange={this.handleChange} required/>  <p></p>
+                    <TextField variant="outlined" fullWidth size="small" label="Option 1" name="mcq1opt1" type="text" placeholder="Enter correct option here" form="formPost" inputProps={{ maxLength: 60 }} value={this.state.mcq1opt1} onChange={this.handleChange} required/>  <p></p>
+                    <TextField variant="outlined" fullWidth size="small" label="Option 2" name="mcq1opt2" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 60 }} value={this.state.mcq1opt2} onChange={this.handleChange} required/>  <p></p>
+                    <TextField variant="outlined" fullWidth size="small" label="Option 3" name="mcq1opt3" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 60 }} value={this.state.mcq1opt3} onChange={this.handleChange}/>  <p></p>
+                    <TextField variant="outlined" fullWidth size="small" label="Option 4" name="mcq1opt4" type="text" placeholder="Incorrect Option" form="formPost" inputProps={{ maxLength: 60 }} value={this.state.mcq1opt4} onChange={this.handleChange}/>  <p></p>
 
-                {this.state.background ? <div><img id='previewBackground' alt='not found'/></div> : null}
+                {this.state.background ? <div className="d-flex justify-content-between"><img id='previewBackground' alt='not found'/></div> : null}
 
                 <p></p> <br /> <p id="fillTheFormCompleteMessage"></p>
                 <div className="d-flex justify-content-between">                  

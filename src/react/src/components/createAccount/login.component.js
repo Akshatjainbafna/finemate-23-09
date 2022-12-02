@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Card from 'react-bootstrap/Card'
 import {Redirect} from 'react-router-dom'
-import { IconButton, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
+import { IconButton, InputAdornment, InputLabel, OutlinedInput, Tooltip } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import AxiosBaseFile from '../AxiosBaseFile';
 
@@ -45,7 +45,7 @@ class Login extends Component {
 		 data[name]=value;
   
 		 this.setState(data);
-
+		 document.getElementById('ErrorMessage').innerHTML="";
 	}
 	createNewPassword(event) {
 		let name=event.target.name;
@@ -82,7 +82,9 @@ class Login extends Component {
 					this.state.createNewPassword ? 
 					<form class="flex-column" onSubmit = {this.forgetPassword}>
 						<div class="form-group">
-							<InputLabel htmlFor="outlined-adornment-new-password">Create New Password</InputLabel>
+						  <InputLabel htmlFor="outlined-adornment-new-password">Create New Password</InputLabel>
+							
+						   <Tooltip title="Password must contain a uppercase letter (A-Z), a lowercase letter (a-z), a special characters (@_-), a number (0-9) and should be of minimum 8 characters.">
           					<OutlinedInput
             					id="outlined-adornment-new-password"
 								name='password'
@@ -106,6 +108,7 @@ class Login extends Component {
 									</InputAdornment>
 							  }
           					/>
+						   </Tooltip>
 						</div>
 						<div class="form-group">
 							<InputLabel htmlFor="outlined-adornment-confirm-password">Confirm Password</InputLabel>

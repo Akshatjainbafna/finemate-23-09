@@ -20,6 +20,9 @@ class MessageObj():
         username2 = me.StringField(required=True)
         message = me.StringField(required=True)
         time = me.StringField(required=True)
+        user1seen = me.BooleanField(default = True)
+        user2seen = me.BooleanField(default = False)
+
 
         def to_json(self):
             """
@@ -80,6 +83,8 @@ class MessageObj():
         raw = self.Message.objects(username2=self.content['username1'],username1=self.content['username2']).all()
 
         for message in raw:
+            if message.user2seen == False:
+                message.update(set__user2seen = True)
             messages.append(message.to_json())
 
         if len(messages) == 0:
@@ -111,3 +116,17 @@ class MessageObj():
                 uniqueUsers.append(i.username1 if i.username2==self.content['username'] else i.username2)
 
         return make_response(jsonify(messages), 200)
+
+    def db_get_unseen_user_number(self):
+        x = checkFields(self.content, fields=['username'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        uniqueUsers=[self.content['username']]
+        
+        for i in self.Message.objects(me.Q(username2=self.content['username']) & me.Q(user2seen= False)).all():
+            if i.username2 not in uniqueUsers or i.username1 not in uniqueUsers:
+                uniqueUsers.append(i.username1 if i.username2==self.content['username'] else i.username2)
+
+        totalNumberOfUnseenUsers = str(len(uniqueUsers) - 1)
+        return make_response(totalNumberOfUnseenUsers, 200)

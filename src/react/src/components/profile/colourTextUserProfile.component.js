@@ -20,7 +20,7 @@ class ColourTextUser extends Component {
                 <div className="listed_educations_list" >
                     {array.map(
                         (texts, index) => 
-                            <li key={index} className='colourTextListItems'>{texts.text}</li>
+                            <div key={index} className='colourTextListItems'>{texts.text}</div>
                     )}
                 </div>
             )

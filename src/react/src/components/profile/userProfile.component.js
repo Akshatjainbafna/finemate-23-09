@@ -59,7 +59,17 @@ class UserProfile extends Component {
     })
     .catch(err => console.log(err))
   }
-  
+  displayPanel(panel){
+    for (let x=1; x<=2; x++){
+        var panelId= 'panel'+String(x);
+        if (panelId == panel){
+            document.getElementById(panelId).style.display="block";
+        }
+        else{
+            document.getElementById(panelId).style.display="none";
+        }
+    }
+  }
   render() {
     if (this.state.redirectDashboard){
       return <Redirect to="/leaderboard" />
@@ -95,7 +105,7 @@ class UserProfile extends Component {
                     <div className="leftBlockofInfoCard">
                         <div className="profile_pic_slot">
                             <div>{profilePicture ? 
-                                  <div><img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ profilePicture} className="elementPic" /> </div>  
+                                  <div><img src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>
                                   :
                                   <div><img src={profilePic} className="elementPic" /> </div>
                                 }</div>
@@ -240,35 +250,47 @@ class UserProfile extends Component {
 
 
         <Card className="info"> 
-            <Card.Body className="profileElements">
-              <Card.Title className="profileElementsTitle">
-                Achievements
-              </Card.Title>
+
+        
+        <div className="d-flex justify-content-around mt-3">
+              <span>
+                <input name="tabNews" type="radio" id="tabNews-1" className="radioProfilePage" onChange={() => this.displayPanel("panel1")} />
+                <label for="tabNews-1" className="profileElementsTitle">
+                      Recent Posts
+                </label>
+              </span>
+              <span>
+                <input name="tabNews" type="radio" id="tabNews-2" className="radioProfilePage" onChange={() => this.displayPanel("panel2")}/>
+                <label for="tabNews-2" className="profileElementsTitle">
+                  Achievements
+                </label>
+              </span>
+          </div>
+
+          <div>
+            <Card.Body className="profileElements" id="panel1">
+              <div className="profileElementContainer">
+                {this.state.recentPosts.map((post, index) => 
+                  <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
+                      <div className="postThumbnail">
+                        <div className="factThumbnail" name="factName" ref={this.referenceToPostFact}>
+                            <p className="subTopicThumbnail">{post.subtopic}</p>
+                            <p className="fact"> {post.fact}</p>
+                        </div>
+                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                      </div>
+                    </Link>
+                )}
+              </div>
+            </Card.Body>
+
+            <Card.Body className="profileElements" id="panel2">
               <div className="profileElementContainer">
                 
               </div>
             </Card.Body>
-            <Card.Body className="profileElementsUserPosts">
-              <Card.Title className="profileElementsTitle">
-                Recent Posts
-              </Card.Title>
-              <div className="profileElementContainerUserPosts">
-                
-                    {this.state.recentPosts.map((post, index) =>
-                    <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
-                        <div className="postThumbnail">
-                        
-                        <div className="factThumbnail" name="factName" ref={this.referenceToPostFact}>
-                            <p className="subTopicThumbnail">{post.subtopic}</p>
-                            <p className="fact"> {post.fact}</p>
-                                </div>
-                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
-                    </div>
-                    </Link>
-                    )}
-            
-              </div>
-            </Card.Body>
+            </div>
+
         </Card>
     </div>
     );

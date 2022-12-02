@@ -30,7 +30,7 @@ class MessageList extends Component {
                 {this.props.messages.map((message, index) => {
                     if (message.username1 === localStorage.getItem('username')){
                         return (
-                            <li key={message.time}>
+                            <li key={message.time} style={{listStyleType: 'none'}}>
                                 <div className='d-flex flex-row justify-content-end'>
                                     <div className='time mr-2 mt-1 text-right'>
                                         {message.time}
@@ -52,7 +52,7 @@ class MessageList extends Component {
                     )
                     } else {
                         return (
-                            <li key={message.time}>
+                            <li key={message.time} style={{listStyleType: 'none'}}>
                                 <div className="d-flex flex-row justify-content-start">
                                     <div className="user2 mt-1 mb-1 text-left">{message.username1}</div>
                                     <div className="time ml-2 mt-1 text-left">{message.time}</div>

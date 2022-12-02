@@ -2,7 +2,7 @@
     box-sizing: border-box;
     padding: 0 0 0 10px;
     margin: 0;
-    height: 65vh;
+    height: 68vh;
     overflow-y: scroll;
     border: none;
     border-color: white;
@@ -63,7 +63,7 @@
 
 @media screen and (max-width: 600px) {
     .message-list {
-        height: 68vh;
+        min-height: 70vh;
     }
     .profilePic1 {
         width: 4vh;

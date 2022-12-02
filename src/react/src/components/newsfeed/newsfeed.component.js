@@ -186,7 +186,7 @@ function PreviousNextWindow(props){
 class NewsFeed extends Component{
     constructor(props){
         super(props);
-        this.state={ responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], likeState: [], lightState: [], saveState:[], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
+        this.state={ responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
         this.slider=this.silder.bind(this);
         this.loadMorePosts = this.loadMorePosts.bind(this);
     }
@@ -218,15 +218,18 @@ class NewsFeed extends Component{
     }
 
     postLiked(index){
+        var currentPost = this.state.responseData[index];
+        currentPost.liked = ! currentPost.liked;
+
         this.setState(update(this.state, {
-            likeState:{
+            responseData:{
                 [index]: {
-                    $set: !this.state.likeState[index]
+                    $set: currentPost
                         }
                     }
                 }
             ), ()=> {
-                    if (this.state.likeState[index] === true){
+                    if (currentPost.liked === true){
                         this.setState({listOfLikedPosts:[...this.state.listOfLikedPosts, this.state.responseData[index]._id.$oid]}, ()=>
                         console.log("liked successfully", this.state.responseData[index]._id.$oid))
                     } else{
@@ -238,15 +241,18 @@ class NewsFeed extends Component{
     }
 
     postLighten(index){
+        var currentPost = this.state.responseData[index];
+        currentPost.lighten = ! currentPost.lighten;
+
         this.setState(update(this.state, {
-            lightState:{
+            responseData:{
                 [index]: {
-                    $set: !this.state.lightState[index]
+                    $set: currentPost
                         }
                     }
                 }
         ), ()=> {
-            if (this.state.lightState[index] === true){
+            if (currentPost.lighten === true){
                 this.setState({listOfLightenPosts:[...this.state.listOfLightenPosts, this.state.responseData[index]._id.$oid]}, ()=>
                 console.log("interesting", this.state.responseData[index]._id.$oid))
             } else{
@@ -257,17 +263,20 @@ class NewsFeed extends Component{
     }
 
     postSaved(index){
+        var currentPost = this.state.responseData[index];
+        currentPost.saved = ! currentPost.saved;
+
         this.setState(update(this.state, {
-            saveState:{
+            responseData:{
                 [index]: {
-                    $set: !this.state.saveState[index]
+                    $set: currentPost
                 }
             }
         }
         ), ()=>{
-            if (this.state.saveState[index] === true){
+            if (currentPost.saved === true){
                 this.setState({listOfSavedPosts:[...this.state.listOfSavedPosts, this.state.responseData[index]._id.$oid]}, ()=>
-            console.log("saved successfully",  this.state.responseData[index]._id.$oid))
+                console.log("saved successfully",  this.state.responseData[index]._id.$oid))
             } else{
                 this.setState({listOfSavedPosts: this.state.listOfSavedPosts.filter(item => item !==  this.state.responseData[index]._id.$oid)}, ()=>
                 console.log("unsaved successfully",  this.state.responseData[index]._id.$oid))
@@ -329,7 +338,7 @@ class NewsFeed extends Component{
             .then(res => {
 
                 const responseData= res.data;
-                
+                console.log(responseData)
                 let m = responseData.length, yo, t;
                     // While there remain elements to shuffle…
                         while (m) {
@@ -356,29 +365,6 @@ class NewsFeed extends Component{
                     let allTheCorrectOptions = this.state.correctOptions;
                     allTheCorrectOptions.push(this.state.responseData[i].mcq1Options[0]);
                     
-
-
-                    /* This code creates 3 states of lists which contains whether a post is liked, lighten or saved or not, if its lighten it passes a boolean true to mark the icon/checkbox checked*/
-                    let likeStateList= this.state.likeState;
-                    if (this.state.responseData[i].liked !== true){
-                        likeStateList.push(false);
-                    }else{
-                        likeStateList.push(true);
-                    }
-
-                    let lightStateList= this.state.lightState;
-                    if (this.state.responseData[i].lighten !== true){
-                        lightStateList.push(false);
-                    }else{
-                        lightStateList.push(true);
-                    }
-
-                    let saveStateList= this.state.saveState;
-                    if (this.state.responseData[i].saved !== true){
-                        saveStateList.push(false);
-                    }else{
-                        saveStateList.push(true);
-                    }
 
                     //shuffling all the options for a mcq in mcq1Options array of the state.responseData object of the MCQ's[Posts with points less than 9]
                     if (this.state.responseData[i].points < 9 ){
@@ -445,9 +431,66 @@ render(){
                     
                     <form id="postInteraction">
                         <div className={style.postHeader} id="postHeader">
+                            
                             <div className={style.postMetaData}>
-                               <p className={style.subject} >{responseData.subject}</p>
-                               <p><span className={style.topic}  > <Link to={'/topic/'.concat(responseData.topic)}>{responseData.topic}</Link></span><BsArrowRightShort/> <span className={style.subTopic} ><Link to={'/topic/'.concat(responseData.subtopic)}> {responseData.subtopic} </Link></span></p> 
+                                <p className={style.subject}>
+                                    <Link to={'/topic/'.concat(responseData.subject)} title={responseData.subject}>
+                                    {(() => {
+                                        if (responseData.subject.length >= 30){
+                                            var subject = responseData.subject.match(/\b(\w)/g);
+                                            var subject = subject.join('');
+                                            return subject
+                                        }
+                                        else if (responseData.subject.length >= 26){
+                                            var subject = responseData.subject.slice(0, 26);
+                                            var subject = subject + "..";
+                                            return subject
+                                        }else{
+                                            return responseData.subject
+                                        }
+                                    })()}
+                                    </Link>
+                                </p>
+
+                                <p>
+                                    <span className={style.topic} > 
+                                        <Link to={'/topic/'.concat(responseData.topic)} title={responseData.topic}>
+                                        {(() => {
+                                            if (responseData.topic.length >= 26){
+                                                var topic = responseData.topic.match(/\b(\w)/g);
+                                                var topic = topic.join('');
+                                                return topic
+                                            }
+                                            else if (responseData.topic.length >= 13){
+                                                var topic = responseData.topic.slice(0, 13);
+                                                var topic = topic + "..";
+                                                return topic
+                                            }else{
+                                                return responseData.topic
+                                            }
+                                        })()}
+                                        </Link>
+                                    </span>
+                                    <BsArrowRightShort/> 
+                                    <span className={style.subTopic}>
+                                        <Link to={'/topic/'.concat(responseData.subtopic)} title={responseData.subtopic}>
+                                        {(() => {
+                                            if (responseData.subject.subtopic >= 26){
+                                                var subtopic = responseData.subtopic.match(/\b(\w)/g);
+                                                var subtopic = subtopic.join('');
+                                                return subtopic
+                                            }
+                                            else if (responseData.subtopic.length >= 13){
+                                                var subtopic = responseData.subtopic.slice(0, 13);
+                                                var subtopic = subtopic + "..";
+                                                return subtopic
+                                            }else{
+                                                return responseData.subtopic
+                                            }
+                                        })()}
+                                        </Link>
+                                    </span>
+                                </p>
                             </div>
 
                             <Tooltip title="Intrigrity Slider">
@@ -495,7 +538,7 @@ render(){
                                 </p>
                             </span>
 
-                            <img id={"backgroundImage"+String(index)} src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ responseData.background} className={style.backgroundImage} />
+                            <img id={"backgroundImage"+String(index)} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
                             
                             <Tooltip title="View Background" > 
                                 <FormControlLabel
@@ -507,7 +550,7 @@ render(){
                                         icon={ <FilterCenterFocusRounded /> } 
                                         checkedIcon={ <FilterCenterFocusRounded /> }
                                         name="viewBackground" 
-                                        onMouseDownCapture={() => this.showBackgroundImage(index, "backgroundImage"+String(index))} onMouseUpCapture={()=> this.hideBackgroundImage(index, "backgroundImage"+String(index))}
+                                        onClickCapture={() => this.showBackgroundImage(index, "backgroundImage"+String(index))} onMouseLeave={()=> this.hideBackgroundImage(index, "backgroundImage"+String(index))}
                                     />
                                     }
                                 /> 
@@ -523,7 +566,7 @@ render(){
                                     control={
 
                                     <Checkbox 
-                                        checked={(responseData.liked ? responseData.liked : this.state.likeState[index]) || false}
+                                        checked={responseData.liked}
                                         icon={ <FavoriteBorder style={{ fontSize: 26 }} /> } 
                                         checkedIcon={ <Favorite style={{ fontSize: 26 }} /> }
                                         name="likedPost" 
@@ -540,7 +583,7 @@ render(){
                                 <FormControlLabel
                                     control={
                                     <Checkbox
-                                    checked={(responseData.lighten ? responseData.lighten : this.state.lightState[index]) || false}
+                                    checked={responseData.lighten}
                                     icon={ <EmojiObjectsOutlined style={{ fontSize: 26 }}/> } 
                                     checkedIcon={ <EmojiObjects style={{ fontSize: 26, color: 'yellow' }} />}
                                     name="lightPost"
@@ -555,7 +598,7 @@ render(){
                             <span>
                             <Tooltip title="Save">  
                                 <FormControlLabel 
-                                    checked={(responseData.saved ? responseData.saved : this.state.saveState[index]) || false}
+                                    checked={responseData.saved}
                                     control={
                                         <Checkbox 
                                             icon={  <BookmarkBorder 
@@ -669,27 +712,6 @@ render(){
                 let allTheCorrectOptions = this.state.correctOptions;
                 allTheCorrectOptions.push(this.state.responseData[i].mcq1Options[0]);
 
-                /* This code creates 3 states of lists which contains whether a post is liked, lighten or saved or not, if its lighten it passes a boolean true to mark the icon/checkbox checked*/
-                let likeStateList= this.state.likeState;
-                if (this.state.responseData[i].liked !== true){
-                    likeStateList.push(false);
-                }else{
-                    likeStateList.push(true);
-                }
-
-                let lightStateList= this.state.lightState;
-                if (this.state.responseData[i].lighten !== true){
-                    lightStateList.push(false);
-                }else{
-                    lightStateList.push(true);
-                }
-
-                let saveStateList= this.state.saveState;
-                if (this.state.responseData[i].saved !== true){
-                    saveStateList.push(false);
-                }else{
-                    saveStateList.push(true);
-                }
 
                 //shuffling all the options for a mcq in mcq1Options array of the state.responseData object of the MCQ's[Posts with points less than 7]
                 if (this.state.responseData[i].points < 9 ){

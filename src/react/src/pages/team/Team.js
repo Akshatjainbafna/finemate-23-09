@@ -8,7 +8,7 @@ import LoadingGif from "../../components/loadingGif";
 
 export default function Team(){
     const [loading, setLoading] = useState(true);
-    const textLines= ["Respected Investors, Developers, Startup Enthusiasts &amp; Entreprenurs,   <br />    <br />    I am Akshat Jain Bafna an IT Engineer and a Solopreneur who is intrisincally motivated to solve the problem of Retention and Cognition as I myself and many people like me face it on daily basis in there acedemics, professional life and personal life.    I have invested a lot of time to understand the problem itself(Cognitive Science) and deriving the <b>Complex Solution</b> to make learning easy for others.    <br />    Their isn't a Medicinal formula to solve this problem but their are multiple small solutions to solve this problem and make learning &amp; retention a piece of cake.    I don't know why even in 2022 there are this many loopholes in our education system, why nobody tried to make a product on this micro-requirement(there are solutions but not upto that mark).    If you see this as a problem and want to Join me in this journey you can connect with me on Finemate itself or below mentioned social networks."];
+    const textLines= ["Respected Investors, Developers, Startup Enthusiasts &amp; Entreprenurs,   <br />    <br />    I am Akshat Jain Bafna an IT Engineer and a Solopreneur who is intrisincally motivated to solve the problem of Poor Retention and Incomplete Cognition. I myself and many people like me face it on daily basis in there acedemics, professional life and personal life.    I have invested a lot of time to understand the problem itself(Cognitive Science) and deriving the <b>Complex Solution</b> to make learning easy for others.    <br />    Their isn't a Medicinal formula to solve this problem but their are multiple small solutions to solve this problem and make learning &amp; retention a piece of cake.    I don't know why even in 2022 there are this many loopholes in our education system, why nobody tried to make a product on this micro-requirement(there are solutions but not upto that mark).    If you see this as a problem and want to Join me in this journey you can connect with me on Finemate itself or below mentioned social networks."];
     
     useEffect(() =>{
         setTimeout(() => {
@@ -24,7 +24,7 @@ export default function Team(){
         <OutsideNavbar />
         <div className={style.teamPageContainer}>
         <div className={style.aboutTeam}>
-            <Typed strings={textLines} typeSpeed={40} />
+            <Typed strings={textLines} typeSpeed={25} />
         </div>
         <div className={style.linksContainer}>
             <div className={style.links}>

@@ -2,6 +2,7 @@
     min-height: 84vh;
     max-width: 100vw !important;
     border: 1px solid red;
+    overflow-y: auto;
 }
 .profileBox{
     background-color: #FCFCFB;

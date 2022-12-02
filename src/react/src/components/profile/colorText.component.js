@@ -212,19 +212,32 @@ class ColourText extends Component {
                 <div className="listed_educations_list" >
                     {array.map(
                         (texts, index) => 
-                        <div key={index} className='d-flex'>
-                            <li className='colourTextListItems'>{texts.text}</li>
-                            {editMode ? <BsXCircleFill onClick={(event) => this.removeItem(event, texts.text, field)} className='removeEducations' /> : ''}
+                        <div key={index} className='colourTextListItems'>
+                            <span>{texts.text}</span>
+                            {editMode ? 
+                                <BsXCircleFill 
+                                    onClick={(event) => this.removeItem(event, texts.text, field)} 
+                                    style={{color: 'rgb(142, 130, 151)', marginLeft: '4px', height: '0.8em'}}
+                                /> 
+                                :  
+                                null
+                            }
                         </div>
                     )}
                 </div>
 
-                    <div className='d-flex'>
+                    <div className='d-flex flex-wrap'>
                     {this.state.added.map(
                        (texts, index) => 
-                       <div key={index} className='d-flex'>
-                           <li className='colourTextListItems'>{texts}</li>
-                           {editMode ? <BsXCircleFill onClick={(event) => this.removeNewlyAddedItem(event, texts, index, field)} className='removeEducations' /> : ''}
+                       <div key={index} className='colourTextListItems'>
+                            <span>{texts}</span>
+                            {editMode ? <BsXCircleFill 
+                                            onClick={(event) => this.removeNewlyAddedItem(event, texts, index, field)} 
+                                            style={{color: 'rgb(142, 130, 151)', marginLeft: '4px', height: '0.8em'}} 
+                                        /> 
+                                      : 
+                                        ''
+                            }
                        </div> 
                     )}
                     </div>

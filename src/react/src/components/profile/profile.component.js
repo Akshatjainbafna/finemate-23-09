@@ -74,6 +74,17 @@ disconnect(username2){
     .catch(err => console.log(err))
 }
 
+displayPanel(panel){
+  for (let x=1; x<=3; x++){
+      var panelId= 'panel'+String(x);
+      if (panelId == panel){
+          document.getElementById(panelId).style.display="block";
+      }
+      else{
+          document.getElementById(panelId).style.display="none";
+      }
+  }
+}
   render() {
     if (this.state.redirectToLeaderboard){
       return <Redirect to='/leaderboard' />
@@ -186,8 +197,8 @@ disconnect(username2){
               <div className="profile_pic_slot">
                 {this.state.displaying ? 
                   profilePicture ? 
-                    <div><img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ profilePicture} alt="not found" className="elementPic" /> </div> 
-                    :
+                    <div><img src={require('../../assets/profilePictures/'+ profilePicture)} alt="not found" className="elementPic" /> </div>   
+                  :
                     <div><img src={profilePic} alt="not found" className="elementPic" /> </div>
                 :
                 <div>
@@ -380,20 +391,33 @@ disconnect(username2){
         </Card>
 
         {this.state.displaying ? 
-        <Card className="info"> 
-            <Card.Body className="profileElements">
-              <Card.Title className="profileElementsTitle">
-                Achievements
-              </Card.Title>
-              <div className="profileElementContainer">
-                
-              </div>
-            </Card.Body>
 
-            <Card.Body className="profileElements">
-              <Card.Title className="profileElementsTitle">
-                Recent Posts
-              </Card.Title>
+
+        <Card className="info"> 
+
+          <div className="d-flex justify-content-around mt-3">
+              <span>
+                <input name="tabNews" type="radio" id="tabNews-1" className="radioProfilePage" onChange={() => this.displayPanel("panel1")} />
+                <label for="tabNews-1" className="profileElementsTitle">
+                      Recent Posts
+                </label>
+              </span>
+              <span>
+                <input name="tabNews" type="radio" id="tabNews-2" className="radioProfilePage" onChange={() => this.displayPanel("panel2")}/>
+                <label for="tabNews-2" className="profileElementsTitle">
+                  Saved Posts
+                </label>
+              </span>
+              <span>
+                <input name="tabNews" type="radio" id="tabNews-3" className="radioProfilePage" onChange={() => this.displayPanel("panel3")}/>
+                <label for="tabNews-3" className="profileElementsTitle">
+                  Achievements
+                </label>
+              </span>
+          </div>
+
+            <div>
+            <Card.Body className="profileElements" id="panel1">
               <div className="profileElementContainer">
                 {this.state.recentPosts.map((post, index) => 
                   <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
@@ -402,17 +426,14 @@ disconnect(username2){
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                         </div>
-                       <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
+                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
                       </div>
                     </Link>
                 )}
               </div>
             </Card.Body>
 
-            <Card.Body className="profileElements">
-              <Card.Title className="profileElementsTitle">
-                Saved Posts
-              </Card.Title>
+            <Card.Body className="profileElements" id="panel2">
               <div className="profileElementContainer">
               {this.state.savedPosts.map((post, index) => 
                 <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
@@ -421,12 +442,19 @@ disconnect(username2){
                       <p className="subTopicThumbnail">{post.subtopic}</p>
                       <p className="fact"> {post.fact}</p>
                     </div>
-                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
+                    <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
                   </div>
                 </Link>
               )}
               </div>
             </Card.Body>
+
+            <Card.Body className="profileElements" id="panel3">
+              <div className="profileElementContainer">
+                
+              </div>
+            </Card.Body>
+            </div>
         </Card>
       :
         

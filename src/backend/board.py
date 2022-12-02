@@ -51,7 +51,7 @@ class Board():
         if (User.objects(username=self.content['username']).count() <= 0):
             return make_response("Username does not exist.", 404)
 
-        theCreatedThread = self.Thread(users=[self.content['username']], bodies=[self.content['body']], timestamps=[datetime.now().strftime("%m/%d/%Y, %H:%M:%S")], title = self.content['title'], community = self.content['community']).save()
+        theCreatedThread = self.Thread(users=[self.content['username']], bodies=[self.content['body']], timestamps=[datetime.now().strftime("%d/%m/%Y, %H:%M:%S")], title = self.content['title'], community = self.content['community']).save()
         return make_response(jsonify(theCreatedThread), 200)
 
     def db_put_thread_reply(self):
@@ -66,13 +66,18 @@ class Board():
         if thread:
             thread.users.append(self.content["username"])
             thread.bodies.append(self.content["body"])
-            thread.timestamps.append(datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+            thread.timestamps.append(datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
             thread.save()
             return make_response("", 200)
         else:
             return make_response("Thread does not exist.", 404)
 
     def db_get_thread_id(self):
+        
+        x = checkFields(self.content, fields=['_id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
         thread = self.Thread.objects(pk=self.content['_id']).first()
         if thread:
             return make_response(jsonify(thread.to_json()), 200)
@@ -80,6 +85,9 @@ class Board():
             return make_response("Thread does not exist.", 404)
 
     def db_get_all_threads(self):
+        x = checkFields(self.content, fields=['community'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
 
         thread = self.Thread.objects(community=self.content['community']).all()
         if len(thread) > 0:
@@ -92,6 +100,10 @@ class Board():
 
     def search_thread(self, incomingData):
 
+        x = checkFields(incomingData, fields=['title'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
         findThreadTitle= self.Thread.objects.search_text(incomingData['title']).all()
         
         if findThreadTitle:
@@ -99,3 +111,37 @@ class Board():
         else:
             return make_response("No Threads", 404)
 
+    def remove_reply(self, incomingData):
+
+        x = checkFields(incomingData, fields=['_id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+        findThread = self.Thread.objects(pk=incomingData['_id']).first()
+        index = incomingData['index']
+
+        if findThread:
+            user = findThread.users
+            user.pop(index)
+            timestamps = findThread.timestamps
+            timestamps.pop(index)
+            bodies = findThread.bodies
+            bodies.pop(index)
+            findThread.update(set__users = user, set__timestamps = timestamps, set__bodies = bodies)
+            return make_response('Done', 200)
+        else:
+            return make_response("No Threads", 404)
+
+    def delete_thread(self, incomingData):
+
+        x = checkFields(incomingData, fields=['_id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+        
+        findThread = self.Thread.objects(pk=incomingData['_id']).first()
+
+        if findThread:
+            findThread.delete()
+            return make_response('Done', 200)
+        else:
+            return make_response('No Threads', 404)

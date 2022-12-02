@@ -20,9 +20,13 @@ import grades from "../../assets/grades.png";
 import forum from "../../assets/forum.png";
 import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
-import settings from "../../assets/settings.png";
 import LoadingGif from "../../components/loadingGif.js";
 import AxiosBaseFile from "../../components/AxiosBaseFile.js";
+import {FiShoppingCart} from 'react-icons/fi';
+import {ImLibrary} from 'react-icons/im';
+import {BsUiChecksGrid} from 'react-icons/bs';
+import {BsCashStack} from 'react-icons/bs';
+import {FaRegChartBar} from 'react-icons/fa';
 // End of pictures
 
 let headerItems = { link: "/profile", title: "Profile", profileImg: profile };
@@ -60,23 +64,23 @@ let navItemsForInstructorInstitute=[
 ]
 
 let navItemsMobileForNormalUser = [
-  { id: 1, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+  { id: 1, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
 ];
 
 let navItemsMobileForStudent = [
-  { id: 1,link: "/library",imgSrc: library,title: "Library"},
-  { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-  { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-  { id: 5, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
+  { id: 1,link: "/library",imgSrc: <ImLibrary />,title: "Library"},
+  { id: 2, link: "/attendanceUser", imgSrc: <BsUiChecksGrid />, title: "Attendance"},
+  { id: 3, link: "/gradesUser", imgSrc: <FaRegChartBar />, title: "Grades"},
+  { id: 4, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
+  { id: 5, link: "/feesPayment", imgSrc: <BsCashStack />, title: "Fees Payment" },
 ];
 
 let navItemsMobileForInstructorInstitute=[
-  { id: 1,link: "/library",imgSrc: library,title: "Library"},
-  { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-  { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-  { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-  { id: 5, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+  { id: 1,link: "/library",imgSrc: <ImLibrary />,title: "Library"},
+  { id: 2, link: "/attendanceUser", imgSrc: <BsUiChecksGrid />, title: "Attendance"},
+  { id: 3, link: "/gradesUser", imgSrc: <FaRegChartBar />, title: "Grades"},
+  { id: 4, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
+  { id: 5, link: "/feesPayment", imgSrc: <BsCashStack />, title: "Salary" },
 ]
 
 
@@ -153,7 +157,7 @@ class ProfilePage extends Component {
     }
 
     if (window.innerWidth <= 600){
-      if(localStorage.getItem("usertype")=="noraml"){
+      if(localStorage.getItem("usertype")=="normal"){
         return (
           <>
             <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />

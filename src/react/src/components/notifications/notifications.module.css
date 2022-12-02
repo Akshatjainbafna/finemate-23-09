@@ -1,6 +1,35 @@
+.notificationContainer, .notificationList{
+  padding: 1.5%;
+}
+.notification{
+  padding: 1%;
+  border-bottom: 1px solid rgb(222, 222, 222);
+}
+.notification:hover{
+  background-color: rgb(240, 240, 240);
+}
 .profilePictureThumbnail{
-    height: 2rem;
-    width: 2rem;
+    height: 2.4rem;
+    width: 2.4rem;
     object-fit: cover;
     border-radius: 100%;
-  }
+}
+.inputSearchOption{
+    position: absolute;
+    visibility: hidden;
+}
+.labelSearchOption{
+    padding: 5px 5px;
+    cursor: pointer;
+    color: #7A7A7A;
+    margin-bottom: 0;
+    border-bottom: 2px solid #fcfcfb;
+}
+.inputSearchOption:checked + .labelSearchOption{
+    font-weight: 600;
+    color: black;
+    border-bottom: 2px solid #834bc4;
+}
+.inputSearchOption:hover + .labelSearchOption{
+   border-bottom: 2px solid #834bc4;
+}

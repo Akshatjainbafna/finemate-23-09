@@ -20,6 +20,11 @@ import forum from "../../assets/forum.png";
 import cart from "../../assets/cart.png";
 import navigation from "../../assets/navigation.png";
 import { Redirect } from "react-router-dom";
+import {FiShoppingCart} from 'react-icons/fi';
+import {ImLibrary} from 'react-icons/im';
+import {BsUiChecksGrid} from 'react-icons/bs';
+import {BsCashStack} from 'react-icons/bs';
+import {FaRegChartBar} from 'react-icons/fa';
 
 
 let headerItems = { link: "/profile", title: "Grade Chart", profileImg: profile };
@@ -57,25 +62,24 @@ let navItemsForNormalUser = [
   ]
   
   let navItemsMobileForNormalUser = [
-    { id: 1, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
+    { id: 1, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
   ];
   
   let navItemsMobileForStudent = [
-    { id: 1,link: "/library",imgSrc: library,title: "Library"},
-    { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-    { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-    { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-    { id: 5, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
+    { id: 1,link: "/library",imgSrc: <ImLibrary />,title: "Library"},
+    { id: 2, link: "/attendanceUser", imgSrc: <BsUiChecksGrid />, title: "Attendance"},
+    { id: 3, link: "/gradesUser", imgSrc: <FaRegChartBar />, title: "Grades"},
+    { id: 4, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
+    { id: 5, link: "/feesPayment", imgSrc: <BsCashStack />, title: "Fees Payment" },
   ];
   
   let navItemsMobileForInstructorInstitute=[
-    { id: 1,link: "/library",imgSrc: library,title: "Library"},
-    { id: 2, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
-    { id: 3, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-    { id: 4, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
-    { id: 5, link: "/feesPayment", imgSrc: fees, title: "Salary" },
+    { id: 1,link: "/library",imgSrc: <ImLibrary />,title: "Library"},
+    { id: 2, link: "/attendanceUser", imgSrc: <BsUiChecksGrid />, title: "Attendance"},
+    { id: 3, link: "/gradesUser", imgSrc: <FaRegChartBar />, title: "Grades"},
+    { id: 4, link: "/marketplace", imgSrc: <FiShoppingCart />, title: "Marketplace" },
+    { id: 5, link: "/feesPayment", imgSrc: <BsCashStack />, title: "Salary" },
   ]
-
 
 class GradesManagementSystem extends React.Component{
     render() {
@@ -85,7 +89,7 @@ class GradesManagementSystem extends React.Component{
     
     
         if (window.innerWidth <= 600){
-          if(localStorage.getItem("usertype")=="noraml"){
+          if(localStorage.getItem("usertype")=="normal"){
             return (
               <>
                 <HeaderBarForMobile className="headerForMobile" books={navItemsMobileForNormalUser} />

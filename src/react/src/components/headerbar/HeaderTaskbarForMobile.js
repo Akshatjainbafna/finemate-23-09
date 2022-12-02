@@ -3,16 +3,16 @@ import { ExtensionRounded, Inbox, Mail } from "@material-ui/icons";
 import React, { Component } from "react";
 import { BsBell, BsEmojiSunglasses } from "react-icons/bs";
 import { IconContext } from "react-icons/lib";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import style from './HeaderTaskbarForMobile.module.css';
-import Createpost from '../../assets/addPostForMobile.png';
-import Notice from '../../assets/noticeformobile.png';
-import Todo from '../../assets/todoForMobile.png';
-import Leaderboard from '../../assets/leaderboardForMobile.png';
-import Setting from '../../assets/settings.png';
-import logo from '../../assets/finemateLatestin Angelina fontLogoForMobile.png';
+import logo from '../../assets/finemateLatestin Angelina fontLogo.png';
 import profile from "../../assets/tinyprofile.png";
 import AxiosBaseFile from "../AxiosBaseFile";
+import {HiOutlineSpeakerphone} from 'react-icons/hi';
+import {BsUiChecks} from 'react-icons/bs';
+import {RiSettings2Line} from 'react-icons/ri';
+import {MdOutlineLeaderboard} from 'react-icons/md'
+import {BiPlus} from 'react-icons/bi';
 
 
 function CustomListItems({id, link, imgSrc, title}) {
@@ -20,7 +20,9 @@ function CustomListItems({id, link, imgSrc, title}) {
       <Link to={link} title={title} className={style.sidebarListLink} key={id}>
         <ListItem className={style.sidebarListItem}>
           <ListItemIcon className={style.sidebarListIcon}>
-            <img src={imgSrc} alt={title} />
+          <IconContext.Provider value={{ size: '26px' }}>
+              {imgSrc}
+            </IconContext.Provider>
           </ListItemIcon>
           <ListItemText primary={title} />
         </ListItem>
@@ -35,7 +37,9 @@ function PermanentListItems({id, link, imgSrc, title}){
             <Link to={link} title={title} className={style.sidebarListLink} key={id}>
         <ListItem className={style.sidebarListItem}>
           <ListItemIcon className={style.sidebarListIcon}>
-            <img src={imgSrc} alt={title} />
+            <IconContext.Provider value={{ size: '26px' }}>
+              {imgSrc}
+            </IconContext.Provider>
           </ListItemIcon>
           <ListItemText primary={title} />
         </ListItem>
@@ -49,7 +53,8 @@ class HeaderBarForMobile extends Component{
         super(props);
         this.state = {
             sidebarOpened: false,
-            profilePicture: ''
+            profilePicture: '',
+            totalUnseenNotifications: 0
         }
         this.toggleDrawer=this.toggleDrawer.bind(this);
  
@@ -68,17 +73,20 @@ class HeaderBarForMobile extends Component{
           this.setState({profilePicture: response.data.profilePicture});
         })
         .catch(err => console.log(err))
+        AxiosBaseFile.post('/api/db_get_number_of_unseen_notification', {username: localStorage.getItem('username')})
+        .then(res => this.setState({totalUnseenNotifications : res.data}))
+        .catch(err => console.log(err))
       }
        
       
     render(){
       const { books } = this.props;
       const permanentListItems=[
-        { id: 1, link: "/createpost", imgSrc: Createpost, title: "Create Post" },
-        { id: 2, link: "/notice", imgSrc: Notice, title: "Notice" },
-        { id: 3, link: "/todolist", imgSrc: Todo, title: "ToDo"},
-        { id: 4, link: "/leaderboard", imgSrc: Leaderboard, title: "Leaderboard"},
-        { id: 5, link: "/settings", imgSrc: Setting, title: "Settings" },
+        { id: 1, link: "/createpost", imgSrc: <BiPlus /> , title: "Create Post" },
+        { id: 2, link: "/notice", imgSrc: <HiOutlineSpeakerphone />, title: "Notice" },
+        { id: 3, link: "/todolist", imgSrc: <BsUiChecks />, title: "ToDo"},
+        { id: 4, link: "/leaderboard", imgSrc: <MdOutlineLeaderboard />, title: "Leaderboard"},
+        { id: 5, link: "/settings", imgSrc: <RiSettings2Line />, title: "Settings" },
       ];
         return(
                     <React.Fragment>
@@ -90,9 +98,12 @@ class HeaderBarForMobile extends Component{
                         </Button>
                         <Button>
                             <Link to="/allnotifications" title="Notifications">
-                            <IconContext.Provider value={{ color: '#834bc4', size: '20px' }} >
-                                <div> <BsBell /> </div>
-                            </IconContext.Provider>
+                              <button className='headerIcons'>
+                                {this.state.totalUnseenNotifications ? <div className='notificationCount'>{this.state.totalUnseenNotifications}</div> : null}
+                                  <IconContext.Provider value={{ color: '#834bc4', size: '20px' }} >
+                                    <div> <BsBell /> </div>
+                                  </IconContext.Provider>
+                              </button>
                             </Link>
                         </Button>
                         </div>
@@ -108,7 +119,7 @@ class HeaderBarForMobile extends Component{
                           </div>
                           <Link to="/profile" title="Profile Page" style={{color: "rgba(0, 0, 0, 0.8)", textDecoration: "none"}}>
                             <div className="d-flex align-items-center">
-                              <span className="ml-3">
+                              <span className={style.mobileSideBarProfilePic}>
                               {this.state.profilePicture ?
                                     <ListItemAvatar>
                                         <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureSidebarThumbnail}/>
@@ -119,8 +130,10 @@ class HeaderBarForMobile extends Component{
                                     </ListItemAvatar>
                                     }
                               </span>
-                              <span  className="ml-3"><b>{localStorage.getItem('username')}</b></span></div>
+                              <span><b>{localStorage.getItem('username')}</b></span></div>
                           </Link>
+                          <p> </p>
+                          <Divider />
                             <List>
                               {books.map((book)=>
                               <CustomListItems 
@@ -131,7 +144,7 @@ class HeaderBarForMobile extends Component{
                               title={book.title}
                               />
                               )}
-                            <Divider />
+                            
                             {permanentListItems.map((book)=>
                             <PermanentListItems
                             key={book.id}

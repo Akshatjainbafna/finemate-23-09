@@ -445,9 +445,9 @@ class ProfileObj():
 					user_obj2.update(push__connections = user_obj1.username)
 					user_obj2.update(push__pending = user_obj1.username)
 
-				return make_response("Done", 200)
+				return "Done"
 			else:
-				return make_response("User Not Found", 200)
+				return "User Not Found"
 	
 	def remove_connection(self):
 
@@ -488,9 +488,9 @@ class ProfileObj():
 					user_obj1.update(push__friends = user_obj2.username)
 					user_obj2.update(push__friends = user_obj1.username)
 
-				return make_response("Done", 200)
+				return "Done"
 			else:
-				return make_response("User Not Found", 200)
+				return "User Not Found"
 
 	def remove_friend(self):
 

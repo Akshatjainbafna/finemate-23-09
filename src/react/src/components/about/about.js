@@ -102,7 +102,7 @@ const ContainerAbout = styled.div`
   align-items: center;
 
   h3 {
-    font-size: 3.5em;
+    font-size: 2.5em;
     font-weight: 700;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;

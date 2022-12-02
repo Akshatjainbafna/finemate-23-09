@@ -1,6 +1,7 @@
 .discussion-detail-container {
     flex-direction: column;
     border-radius: 5px;
+    margin: 2%;
 }
 
 .discussion-detail-li{
@@ -29,6 +30,5 @@
      }
     .discussion-detail-container{
         margin-top: 2vh;
-        min-height: calc(100vh - 110px);
     }
 }

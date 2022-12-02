@@ -22,7 +22,7 @@ class News extends Component {
         for (let x=1; x<=4; x++){
             var panelId= 'panel'+String(x);
             if (panelId == panel){
-                document.getElementById(panel).style.display="block";
+                document.getElementById(panelId).style.display="block";
             }
             else{
                 document.getElementById(panelId).style.display="none";

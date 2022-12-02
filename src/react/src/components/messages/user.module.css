@@ -20,8 +20,9 @@
 }
 .searchUser{
     display: inline-block;
-    height: 6vh;
+    height: 2.5em;
     padding: 1vw;
+    width: 80%;
 }
 .writeButton {
     background-color: #FCFCFB;
@@ -39,16 +40,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 7vh;
+    height: 3em;
     margin: 1vh 2vw;
     border-bottom: 0.1px solid #dfd6e98f;
-    
 }
-.userChatThumbnailImage img{
-    margin: auto;
-    height: 5vh;
-    width: 5vh;
-}
+
 .userNameAndRecentMessage{
     display: flex;
     flex-direction: column;
@@ -70,16 +66,9 @@
 }
 .userChatThumbnailTime{
     color: #ccc4d6d0;
+    font-size: small;
 }
 
-@media screen and (max-width: 991px) {
-    .searchUser{
-        display: inline-block;
-        height: 6vh;
-        width: 80%;
-        padding: 1vw;
-    }
-}
 @media screen and (max-width: 600px) {
     .recentChats{
         height: auto;

@@ -30,7 +30,7 @@ export const Solution = () => {
     <Container>
       <Wrapper>
         <TextBox>
-          <h3 className="ml-1">Solutions</h3>
+          <h3>Solutions</h3>
         </TextBox>
         <Image>
           <img src={main} alt="" />
@@ -120,7 +120,7 @@ const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   margin-bottom: 10vh;
 `;
@@ -133,16 +133,10 @@ const Image = styled.div`
 
 const TextBox = styled.div`
   h3 {
-    font-size: 4em;
-    font-weight: 600;
+    font-size: 2.5em;
+    font-weight: 700;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
-  }
-  p {
-    font-weight: normal;
-    color: #3e4345;
-    font-family: Open Sans;
-    font-size: 1.5em;
   }
 `;
 
@@ -157,6 +151,7 @@ const User = styled.div`
   flex-direction: column;
   align-items: center;
   margin-top: 4vh;
+
   .solutionsImageContainer{
     display: flex;
     justify-content: center;
@@ -168,7 +163,6 @@ const User = styled.div`
     font-family: Open Sans;
   }
   p {
-    font-weight: normal;
     color: #3e4345;
     font-family: Open Sans;
     font-size: 1.25em;

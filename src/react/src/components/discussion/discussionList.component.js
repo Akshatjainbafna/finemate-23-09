@@ -19,6 +19,7 @@ class DiscussionList extends Component {
         var thread = [];
         AxiosBaseFile.post('/api/db_get_all_threads', {'community': this.state.community})
             .then(response => {
+                console.log(response.data)
                 for (var i = 0; i < response.data.length; i++){
                     resThread['id'] = response.data[i]._id;
                     resThread['title'] = response.data[i].title;

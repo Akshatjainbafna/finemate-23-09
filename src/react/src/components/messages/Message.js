@@ -27,15 +27,24 @@ class Message extends Component {
               this.setState({profilePicture: response.data.profilePicture});
             })
             .catch(err => console.log(err))
-    }
-
-    componentDidUpdate() {
-        AxiosBaseFile.post('/api/db_get_messages', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser')})
+        
+        this.checkNewMessage = setInterval(() => {
+            AxiosBaseFile.post('/api/db_get_messages', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser')})
             .then(res => {
                 this.setState({
                     messages: res.data
                 })
             })
+        }, 1000)
+    }
+
+
+    componentWillUnmount() {
+        clearInterval(this.checkNewMessage);
+        // fix Warning: Can't perform a React state update on an unmounted component
+        this.setState = (state,callback)=>{
+            return;
+        };
     }
 
     render() {
@@ -46,10 +55,10 @@ class Message extends Component {
                 return <div className={style.chatBox}>
                 <div className={style.chatHeader}>
                     <span>
-                    <Link to={"/profile/".concat(localStorage.getItem('targetUser'))}>
+                    <Link to={"/profile/".concat(localStorage.getItem('targetUser'))} style={{textDecoration: 'none'}}>
                         {this.state.profilePicture ?
                             <ListItemAvatar>
-                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ this.state.profilePicture} className={style.profilePictureChatHeader}/>
+                                <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureChatHeader}/>
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>

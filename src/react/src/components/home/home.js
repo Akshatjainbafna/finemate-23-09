@@ -25,13 +25,13 @@ class Home extends Component {
   render() {
     return (
       	<Container>
-			<div class="row">
-					<div class="column" className="col1">
+			<div class="d-flex flex-wrap">
+					<div class="column">
 						<br/>
 						<br/>
 						<br/>
 						<h6> What is Finemate?</h6>
-						<h3> A Software-as-a-service packed with<br/> Retention Engine <br/> Social Learning Platform <br/> &amp; Student Management System. </h3>
+						<h3> A Software-as-a-service packed with<br/>Retention Engine,<br/>Social Learning Platform,<br/> &amp; Student Management System.</h3>
 						<br/>
 						<td>
 							<Link to="/create">
@@ -46,7 +46,7 @@ class Home extends Component {
 						</td>
 					</div>
 					
-					<div class="column" className="col2">
+					<div class="column">
 						<MacPic>
 							<img className="macPictureHome" src={macPicture2} alt="" />
 						</MacPic>
@@ -160,7 +160,7 @@ class Home extends Component {
 			<br />
 			
 			<Content>
-				<h2 className="whyHeader">Where can you access Finemate?</h2>
+				<h2 className="whyHeader2">Where can you access Finemate?</h2>
 				<p>Finemate, On every Device</p>
 				<img src={AllDeviceSizes} className='allDeviceImage' />
 				<p className="mt-5">So you can use it...</p>
@@ -197,7 +197,7 @@ class Home extends Component {
 									<br/>
 								</td>
 								<td>
-									<h6> Request an instant demo </h6>
+									<h6>Request an instant demo</h6>
 								</td>
 							</div>
 						</div>
@@ -223,13 +223,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
-	
-	.col3 {
-		width: 10rem
-	}
+
   h3 {
-    font-size: 2.2em;
+    font-size: 2em;
     font-weight: 700;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
@@ -301,6 +297,13 @@ height: 100%;
     font-family: Open Sans;
     font-size: 2em;
     margin-bottom: 4rem;
+	text-align: center;
+  }
+  .whyHeader2{
+	font-weight: 600;
+    color: rgba(0, 0, 0, 0.82);
+    font-family: Open Sans;
+    font-size: 2em;
 	text-align: center;
   }
   .title1 {

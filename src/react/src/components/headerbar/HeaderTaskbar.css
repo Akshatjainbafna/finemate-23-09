@@ -6,7 +6,18 @@
     align-items: center;
     box-shadow: 0px 2px 10px -1px rgba(0,0,0,.3) !important;
 }
-
+.notificationCount{
+    position: absolute;
+    top: 0px;
+    right: 0;
+    height: 16px;
+    width: 16px;
+    background-color:  #834bc4;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.75);
+    border-radius: 100%;
+    font-size: 10px;
+    color: #fff;
+}
 .Navbar{
     margin-left: 22vw;
     margin-top: 0px;
@@ -14,7 +25,8 @@
 .header {
     color: #A78EC3;
     text-decoration-color: #A78EC3;
-    font-size: 25px !important;
+    font-size: 1.5em !important;
+    margin-left: 1vw;
 }
 .searchIcon {
     margin-top: 3px;
@@ -24,6 +36,7 @@
     width: 80%;
 }
 .headerIcons {
+    position: relative;
     background-color: #fff;
     border-radius: 10px;
     border-style: none;
