@@ -33,7 +33,7 @@ import dashevent
 import profile
 import message
 
-mode = 'development'
+mode = 'production'
 
 app = Flask(__name__) 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]

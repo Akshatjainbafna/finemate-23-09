@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
-import profilePic from "../../assets/profilePic.png";
 import "./profile.css";
 import { Button, Menu, MenuItem} from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
@@ -107,7 +106,7 @@ class UserProfile extends Component {
                             <div>{profilePicture ? 
                                   <div><img src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>
                                   :
-                                  <div><img src={profilePic} className="elementPic" /> </div>
+                                  <div><img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/profilePic.png'} className="elementPic" /> </div>
                                 }</div>
                             <div className="usernameBlocky">{username}</div>
                         </div>
