@@ -122,7 +122,7 @@ class HeaderBarForMobile extends Component{
                               <span className={style.mobileSideBarProfilePic}>
                               {this.state.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureSidebarThumbnail}/>
+                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ this.state.profilePicture} className={style.profilePictureSidebarThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>
