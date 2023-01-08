@@ -18,6 +18,18 @@ function AddTodoComponent(props){
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
     
+    function selectBgImage(image){
+        setBgImg(image);
+        for (let x=0; x < imgaes.length; x++){
+            if (imgaes[x] == image){
+                document.getElementById(imgaes[x]).style.border="1px solid green";document.getElementById(imgaes[x]).style.boxShadow="0px 2px 1px green";
+            }
+            else{
+                document.getElementById(imgaes[x]).style.border="1px solid #a5c5c5";document.getElementById(imgaes[x]).style.boxShadow="0px 2px 1px #a5c5c5";
+            }
+        }
+    }
+    
     function onChangeHandler(event){
         settitle(event.target.value);
         AxiosBaseFile.post('/api/get_todo_images', {title: event.target.value})
@@ -43,14 +55,14 @@ function AddTodoComponent(props){
                         onClose={() => setTodoState(false)}
                         aria-labelledby="responsive-dialog-title"
                         >
-                        <DialogTitle color="primary"><b>Add Todo</b></DialogTitle>
+                        <DialogTitle><b>Add To-Do</b></DialogTitle>
                         <DialogContent>
-                            <div>
+                            <div className='mb-4'>
                                 <InputLabel htmlFor='titleOfThread'>Title</InputLabel>
                                 <OutlinedInput fullWidth id="titleOfThread" type="text" name='title' placeholder="ex. Get 1 lt. Milk" inputProps={{maxLength: "80"}} value={title} onChange={(event) => onChangeHandler(event)} required/>
                             </div>
-                            <p></p>
 
+                            <div className='mb-4'>
                             <InputLabel htmlFor='importanceOfTodo'>Importance</InputLabel>
                             <RadioGroup
                             id="importanceOfTodo"
@@ -65,25 +77,30 @@ function AddTodoComponent(props){
                                     <FormControlLabel value="Moderate Important" control={<Radio style={{color: 'green'}} />} label="Moderate Important" />
                                 </div>
                             </RadioGroup>
-                            <p></p>
+                            </div>
 
 
+                        <div className='mb-4'>
+
+                               
+                            {imgaes.length > 0 ? 
+                                <InputLabel>Select Picture for To-Do</InputLabel>: null}
                         <RadioGroup
                             aria-labelledby="bgImage"
                             value={bgImage}
-                            onChange={(event) => {setBgImg(event.target.value)}}
+                            onChange={(event) => {selectBgImage(event.target.value)}}
                             name='bgImage'
                             >
-
                             <div className="d-flex justify-content-around flex-wrap">
                             {imgaes.map((image, index) =>
-                                <div key={index} id={image} onChange={() => {document.getElementById(image).style.border="1px solid green";document.getElementById(image).style.boxShadow="0px 2px 1px green";}} className={style.todoCard}> 
+                                <div key={index} id={image} className={style.todoCard}> 
                                     <FormControlLabel value={image} control={<Radio style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ image)} alt='todo' className={style.todoImages} />} />
                                 </div>
                              )}
                             </div>
 
                         </RadioGroup>
+                        </div>
 
                         </DialogContent>
                         <DialogActions>
@@ -128,8 +145,9 @@ class TodoComponent extends Component{
             allTodoList.splice(index, 1);
             this.setState({allTodoList: allTodoList})
             for(let x=0; x < allTodoList.length; x++){
-                document.getElementById(x).style.border = '1px solid #a5c5c5';
-                document.getElementById(x).style.boxShadow = '0px 2px 1px #a5c5c5';
+                let todoId = 'todo' + x;
+                document.getElementById(todoId).style.border = '1px solid #a5c5c5';
+                document.getElementById(todoId).style.boxShadow = '0px 2px 1px #a5c5c5';
             }
         })
         .catch(err => console.log(err)) 
@@ -184,7 +202,11 @@ class TodoComponent extends Component{
             
             <div className={style.todoCardContainer}>
                 {this.state.allTodoList.map((todo, index) =>
-                    <div key={index} id={index} className={style.todoCard} onClick={() => {document.getElementById(index).style.border="1px solid red";document.getElementById(index).style.boxShadow="0px 2px 1px red";}}>
+                    <div key={index} id={'todo'+index} className={style.todoCard} onClick={() => {
+                        const todoId = 'todo' + index;
+                        document.getElementById(todoId).style.border="1px solid red";
+                        document.getElementById(todoId).style.boxShadow="0px 2px 1px red";
+                        }}>
                         <Tooltip title={todo.title}>
                             <FormControlLabel value={todo.title} onChange={(event) => this.deleteTodo(event, index) } control={<Checkbox style={{display: 'none'}} />} label={<img src={require('../../assets/todoImages/'+ todo.image)} alt='todo image' className={style.todoImages} />} />
                         </Tooltip>

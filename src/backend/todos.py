@@ -16,7 +16,7 @@ class Todo(me.EmbeddedDocument):
 
 class TodoDocument(me.Document):
     userId=me.ReferenceField(profile, reverse_delete_rule=me.CASCADE)
-    username=me.StringField()
+    username=me.StringField(required= True, unique = True)
     todo=me.EmbeddedDocumentListField(Todo)
 
     def db_create_todo_profile(incomingData):
@@ -56,7 +56,7 @@ class TodoDocument(me.Document):
         return make_response("Done", 200)
 
     def db_get_todo_images(incomingData):
-        listOfImage = ['bottle','work', 'hard drive', 'computer', 'network', 'server', 'internet', 'system', 'radio', 'lock', 'memory', 'connection', 'document', 'folder', 'cloud', 'chart', 'camera', 'prize', 'web', 'talk', 'data', 'data transfer', 'monitor', 'write', 'secure', 'paint', 'foot', 'phone', 'gift', 'travel', 'perfume', 'visit', 'play', 'chemical', 'milk', 'setting', 'shoe', 'sport', 'outdoor', 'practice', 'groceries', 'luggage', 'flight', 'draw', 'relax', 'peace', 'car', 'card', 'notebook', 'ball', 'mobile', 'industry', 'bag', 'transport', 'doctor', 'bus', 'bill', 'goal', 'money', 'temperature', 'barcode', 'direction', 'umbrella', 'time', 'note', 'study', 'water', 'television', 'identity' , 'shopping', 'party', 'drink', 'pendrive', 'train', 'cab', 'bike', 'bath', 'files', 'sail', 'science']
+        listOfImage = ['bottle','work', 'hard drive', 'computer', 'network', 'server', 'internet', 'system', 'radio', 'lock', 'memory', 'connection', 'document', 'folder', 'cloud', 'chart', 'camera', 'prize', 'web', 'pay', 'talk', 'data', 'data transfer', 'monitor', 'write', 'secure', 'paint', 'foot', 'phone', 'gift', 'travel', 'perfume', 'visit', 'play', 'chemical', 'milk', 'setting', 'shoe', 'sport', 'outdoor', 'practice', 'groceries', 'luggage', 'flight', 'draw', 'relax', 'peace', 'car', 'card', 'notebook', 'ball', 'mobile', 'industry', 'bag', 'transport', 'doctor', 'bus', 'bill', 'goal', 'money', 'temperature', 'barcode', 'direction', 'umbrella', 'time', 'note', 'study', 'water', 'television', 'identity' , 'shopping', 'party', 'drink', 'pendrive', 'train', 'cab', 'bike', 'bath', 'files', 'sail', 'science']
 
         try:
             title = incomingData['title'].lower()

@@ -57,9 +57,8 @@ class Sidebar extends Component {
                 <span className={style.logoContainer}>
                     <Link to="/dashboard" title="Home">
                     <picture> 
-                        <source media='(min-width: 992px)' className={style.menuIcon} srcSet={LogoDesktop} />
-                        <source media='(min-width: 601px)' className={style.menuIcon}  srcSet={LogoTablet} />
-                        <img className={style.menuIcon} src={LogoTablet} alt='icon'/>
+                        <source media='(max-width: 992px)' srcSet={LogoTablet} />
+                        <img style={{width: "150px"}} src={LogoDesktop} alt='logo'/>
                     </picture>
                     </Link>
                 </span>

@@ -12,7 +12,11 @@ import boto3
 from botocore.exceptions import NoCredentialsError
 from botocore.client import Config as ConfigAWS
 from email_validator import validate_email, EmailNotValidError
-
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.utils import formataddr
+import logging
+from PIL import Image
 
 from metaData import SubjectsTopicsSubtopicsTags
 from problems import Problems
@@ -33,7 +37,7 @@ import dashevent
 import profile
 import message
 
-mode = 'production'
+mode = 'development'
 
 app = Flask(__name__) 
 allowed_extensions = ['.png', '.jpeg', '.webp', '.gif', '.jpg', '.svg' ]
@@ -41,8 +45,8 @@ CORS(app)
 # set the database name and the database user's name and password or you can assign it separatley host: localhost, db:uimpactify,port: 27017 or assign app.config("MONGODB_HOST") with a DB_URI as a string instead of object
 
 if mode=="production":
-    DB_URI = "mongodb://3.111.18.160:27017/finemate"
-    app.config["MONGODB_SETTINGS"] = {"host":"mongodb://3.111.18.160:27017/finemate"}
+    DB_URI = "mongodb://43.204.62.82:27017/finemate"
+    app.config["MONGODB_SETTINGS"] = {"host":"mongodb://43.204.62.82:27017/finemate"}
 else:
     DB_URI = "mongodb://localhost:27017/uimpactify"
     app.config["MONGODB_SETTINGS"] = {"host":"mongodb://localhost:27017/uimpactify"}
@@ -79,6 +83,9 @@ def db_create_post():
     try:
         if request.files['background']:
             image=request.files['background']
+            backgroundImage = Image.open(image)
+            backgroundImage.thumbnail((1920, 1080))
+
             filenameOfImage=secure_filename(image.filename)
 
             filename_without_extension = os.path.splitext(filenameOfImage)[0]
@@ -93,9 +100,7 @@ def db_create_post():
             complete_file_path = '../react/src/assets/postBackgroundImages/'
             folderName = 'postBackgroundImages/'
             
-            backgroundImagePath = open(f"{complete_file_path}{filenameOfImage}", "wb")
-            backgroundImagePath.write(image.read())
-            backgroundImagePath.close()
+            backgroundImage.save(f"{complete_file_path}{filenameOfImage}")
 
             if mode == 'production':
                 try:
@@ -107,7 +112,7 @@ def db_create_post():
                     print("Error: Credentials not available")
                     return ""
                 os.remove(complete_file_path+filenameOfImage)
-            return PostObj(request.form).create_a_post(image, filenameOfImage)
+            return PostObj(request.form).create_a_post(filenameOfImage)
         else:
             return make_response("Insert a image", 400)
     except:
@@ -117,7 +122,7 @@ def db_create_post():
 @app.route('/api/db_delete_post', methods=['POST'])
 def db_delete_post():
     backgroundImage = PostObj(request.json).delete_a_post()
-    if mode=='production':
+    if mode=='production' and backgroundImage:
         s3.Bucket(aws_bucket_name).delete_objects(
             Delete = {
                 'Objects' : [  
@@ -127,7 +132,7 @@ def db_delete_post():
                 ] 
             }  
         )
-    else:
+    elif backgroundImage:
         os.remove("../react/src/assets/postBackgroundImages/" + backgroundImage)
     return make_response('Post Deleted!', 200)
     
@@ -141,16 +146,49 @@ def db_get_all_post_of_user():
 def db_get_public_post_of_user():
     return PostObj(request.json).get_public_post_of_user()
 
-# add previous post
-@app.route('/api/db_add_previous_post', methods = ['POST'])
-def db_add_previous_post():
-    print(request.json)
-    return PostObj(request.json).add_previous_post()
-
 # add next post
 @app.route('/api/db_add_next_post', methods = ['POST'])
 def db_add_next_post():
-    return PostObj(request.json).add_next_post()
+    formData = request.form
+    try:
+        print(formData)
+        if request.files['background'] and not formData['previousBackground']:
+            image = request.files['background']
+            backgroundImage = Image.open(image)
+            backgroundImage.thumbnail((1920, 1080))
+
+            filenameOfImage=secure_filename(image.filename)
+
+            filename_without_extension = os.path.splitext(filenameOfImage)[0]
+            extension = os.path.splitext(filenameOfImage)[1]
+
+            # Check if the file is of proper extension
+            if len(extension) > 0 and extension.lower() not in allowed_extensions:
+                return make_response("Invalid file type", 400)
+
+            timestamp = time.strftime('_%Y-%m-%d-%H-%M-%S')
+            filenameOfImage = filename_without_extension[:10] + timestamp + extension
+            complete_file_path = '../react/src/assets/postBackgroundImages/'
+            folderName = 'postBackgroundImages/'
+            
+            backgroundImage.save(f"{complete_file_path}{filenameOfImage}")
+
+            if mode == 'production':
+                try:
+                    s3.Bucket(aws_bucket_name).upload_file(complete_file_path + filenameOfImage, folderName + filenameOfImage)
+                except FileNotFoundError:
+                    print("Error: The file was not found")
+                    return ""
+                except NoCredentialsError:
+                    print("Error: Credentials not available")
+                    return ""
+                os.remove(complete_file_path+filenameOfImage)
+            return PostObj(request.form).add_next_post(filenameOfImage)
+        else:
+            nameOfImage = formData['previousBackground']
+            return PostObj(request.form).add_next_post(nameOfImage)
+    except:
+        return make_response("Internal Server Error, something went wrong", 500)
 
 # all the posts of a particular subjext, topic, subtopic
 @app.route('/api/db_search_posts_of_topic', methods = ['POST'])
@@ -264,6 +302,10 @@ def db_search_user_profile():
 def db_create_user():
     userData = request.json
     userOTP = userData['OTP'] if userData['OTP'] else False
+    sender = 'hello@finemate.co'
+    emailid = userData['email'].lower()
+    username = userData['username']
+
     if not(userOTP):
         try:
             validation = validate_email(userData['email'])
@@ -283,15 +325,14 @@ def db_create_user():
                 s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
                 s.starttls()
 
-                sender = "hello@finemate.co"
-                emailid = userData['email'].lower()
-                message = """From: Finemate Official<{0}>
+                message = """From: Finemate Admin<{0}>
 To: <{1}>
 MIME-Version: 1.0
 Content-type: text/html
 Subject: Verification Email
 
-<h4>{2}</h4>""".format(sender, emailid, otpMessage)
+<h4>{2}</h4>
+<p>Please ignore the email if you have not initiated an account creation.</p>""".format(sender, emailid, otpMessage)
 
                 try:
                     s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
@@ -307,7 +348,26 @@ Subject: Verification Email
             UserObj(request.json).db_create_user()
             ProfileObj(request.json).db_create_profile()
             TodoDocument.db_create_todo_profile(request.json)
-            return make_response("", 200)
+
+            s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
+            s.starttls()
+
+            multipart = MIMEMultipart()
+            multipart['Subject'] = 'Welcome to Finemate'
+            multipart['From'] = formataddr(('Finemate', sender))
+            multipart['To'] = formataddr(( username, emailid))
+
+            bodytemp = r'newRegistrationEmail.html'
+            with open(bodytemp, "r", encoding='utf-8') as emailTemplate:
+                file = emailTemplate.read()
+
+            multipart.attach(MIMEText(file, 'html'))
+            try:
+                s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
+                s.sendmail(sender, emailid, multipart.as_string())
+                return make_response('Done', 200)
+            except:
+                return make_response('Done', 200)
         else:
             return make_response('Entered OTP is incorrect.', 400)
 
@@ -397,7 +457,7 @@ def db_update_user_password():
 
                 sender = "hello@finemate.co"
                 emailid = userData['email'].lower()
-                message = """From: Finemate Official<{0}>
+                message = """From: Finemate Admin<{0}>
 To: <{1}>
 MIME-Version: 1.0
 Content-type: text/html
@@ -411,8 +471,8 @@ Subject: Verification Email
                     return make_response(OTP, 200)
                 except:
                     return make_response("Server Side Error", 500)
-            else:
-                return make_response("Username or Email already in use.", 400)
+        else:
+            return make_response("Email not registered", 400)
     else:
         return UserObj(request.json).db_update_user_password()
 
@@ -497,6 +557,9 @@ def db_update_profile_picture():
     try:
         if request.files['profilePicture']:
             profileImage = request.files['profilePicture']
+            profileImageThumbnail = Image.open(profileImage)
+            profileImageThumbnail.thumbnail((250, 250))
+            
             cleanfilenameOfImage=secure_filename(profileImage.filename)
 
             filename_without_extension = os.path.splitext(cleanfilenameOfImage)[0]
@@ -512,12 +575,9 @@ def db_update_profile_picture():
             complete_file_path = '../react/src/assets/profilePictures/'
             folderName = 'profilePictures/'
 
+            profileImageThumbnail.save(f"{complete_file_path}{cleanfilenameOfImage}")
 
-            profileImagePath = open(f"{complete_file_path}{cleanfilenameOfImage}", "wb")
-            profileImagePath.write(profileImage.read())
-            profileImagePath.close()
             old_profile_picture = ProfileObj(request.form).delete_old_profile_picture()
-            print(old_profile_picture)
 
             if mode == 'production':
                 try:
@@ -536,7 +596,8 @@ def db_update_profile_picture():
                     print("Error: Credentials not available")
                     return ""
                 os.remove(complete_file_path + cleanfilenameOfImage)
-            else: os.remove(complete_file_path + old_profile_picture)
+            else: 
+                os.remove(complete_file_path + old_profile_picture)
 
             return ProfileObj(request.form).set_profile_picture(cleanfilenameOfImage)
         else:

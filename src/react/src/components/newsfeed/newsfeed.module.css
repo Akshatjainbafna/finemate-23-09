@@ -1,6 +1,13 @@
 .postCardContainer{
     margin: 2vh 2vw;
 }
+.postCardContainerIndividual{
+  width: 50vw;
+  margin: 2vh auto;
+}
+.postNotFound{
+  width: min(100% - 8rem, 300px);
+}
 .postHeader{
     display: flex;
     flex-direction: row;
@@ -11,6 +18,7 @@
     border: 1px solid rgb(187, 187, 187);
     padding: 0.5vw 2vw 0;
     border-radius: 30px 30px 0 0;
+    position: relative;
 }
 .postMetaData{
     flex-basis: 75%;
@@ -33,10 +41,6 @@
 .subTopic{
   font-size: medium;
 }
-
-.menuIcon{
-    margin-right: -3vw ;
-}
 .menuListVisible{
     position: absolute;
     right: 1vw;
@@ -52,7 +56,7 @@
     padding: 1vh 1vw;
 }
 .menuListVisible div{
-    border-bottom: 0.1px solid grey;
+    border-bottom: 1px solid grey;
 }
 .menuListVisible div button:hover, .menuListVisible div button:focus{
   background-color: #A78EC3;
@@ -76,10 +80,8 @@
 .quesFactBlock{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     position: absolute;
-    text-align: center;
 }
 .question{    
     font-size: 1.3em !important;
@@ -91,12 +93,12 @@
     margin-top: auto;
 }
 
-
 .postImg .fact{
-    color: rgba(0, 0, 0, 0.849);
+    color: rgba(0, 0, 0, 0.8);
     margin: auto 5vw;
     font-size: 1.2em;
-    font-weight: bolder;
+    font-weight: bold;
+    word-break: break-word;
 }
 
 .backgroundImage{
@@ -110,7 +112,7 @@
     margin: 0 1vw;
     height: 8vh;
     border: 1px solid rgb(187, 187, 187);
-    padding: 0.5vw 2vw 0;
+    padding: 0 2vw;
     border-radius: 0 0 30px 30px;
 }
 .viewPostBtn{
@@ -145,18 +147,41 @@
 }*/
 .leftSectionFooter{
   display: flex;
-  margin-left: 2vw;
 }
-.viewPreviousNextPost{
-  margin-top: -8px;
-  color: grey;
-  margin-right: 2vw;
+.rightSectionFooter{
+
+}
+.likeFormControlLabel:hover{
+  border-radius: 100%;
+  background-color: rgba(245, 0, 86, 0.05);
+}
+.insightfulFormControlLabel:hover{
+  border-radius: 100%;
+  background-color: rgba(255, 255, 125, 0.25);
+}
+.saveFormControlLabel:hover, .viewImageIcon:hover{
+  border-radius: 100%;
+  background-color: rgba(205, 205, 205, 0.25);
 }
 .viewImageIcon{
   position: absolute;
   bottom: 0;
   right: 0;
   color: grey;
+}
+.postCount{
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: small;
+  color: white;
+  background-color: #746f70;
+  padding: 0.25em 0.5em;
+  opacity: 0.75;
+  border-radius: 15px;
+  margin: 1.2em 1.6em;
+  min-width: 2.75em;
+  text-align: center; 
 }
 
 .engagement{
@@ -170,16 +195,16 @@
 }
 .engagement:nth-child(1) .engagementCount{
   color: rgb(255, 138, 138);
-  margin-left: 0.5em;
+  margin-left: 0.8em;
   margin-bottom: 0;
 }
 .engagement:nth-child(2) .engagementCount{
   color: rgb(255, 245, 101);
-  margin-left: 0.5em;
+  margin-left: 0.8em;
 }
 .engagement:nth-child(3) .engagementCount{
   color: rgb(134, 134, 134);
-  margin-left: 0.5em;
+  margin-left: 0.8em;
 
 }
 .previousNextWindow{
@@ -187,20 +212,23 @@
     color: white;
     background-color: #A78EC3;
     border-radius: 100px;
-    padding: 0.6vh 0.8vw;
+    padding: 0.5vh 0.5vw;
     position: absolute;
-    bottom: 1vh;
-    right: 3.5vw;
+    bottom: 0vh;
+    right: 1.25vw;
     z-index: 99;
     font-weight: 600;
     box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.2);
 }
-
+.menuIcon{
+  margin-right: -3.2vw;
+  margin-left: 1vw;
+}
 .accuracyIcon{
-    width: 2.5vw;
+    width: 2vw;
 }
 .intrigrityMarker{
-  transform: translate(2.5vw, -1.5vw);
+  transform: translate(2.4vw, -1.4vw);
 }
 /*Range Integrity Slider*/
 .integritySlider input[type=range] {
@@ -386,7 +414,7 @@
     max-height: 75vh;
     min-height: 60vh;
     margin: 2vh 2vw;
-    border: 0.1px solid rgb(226, 226, 226);
+    border: 1px solid rgb(226, 226, 226);
     background-color: #dfd6e98f;
     border-radius: 30px;
   }
@@ -433,11 +461,29 @@ div.correctGesture{
 div.correctGesture > p{
   color: black;
   font-weight: bold;
-  font-family: Poppins, sans-serif;
   font-size: 3vh;
 }
 
+@media screen and (max-width: 991px) {
+  .postCardContainerIndividual{
+    width: 75vw;
+    margin: 2vh auto;
+  }
+}
 @media screen and (max-width: 600px) {
+  .postMCQ div.mcqQuestion, div.mcqOptions{
+    margin: 2em 1em;
+    padding: 1em;
+  }
+  .question{    
+    font-size: 1.1em !important;
+  }
+  .postImg .fact{
+    font-size: 1em;
+  }
+  .postFooter{
+    padding: 0 4vw;
+  }
   .viewPostBtn{
     height: 4vh;
     width: 24vw;
@@ -446,11 +492,16 @@ div.correctGesture > p{
   .integritySlider input[type=range] {
     width: 20vw;
   }
+  .menuIcon{
+    margin-right: -2vw;
+}
 .accuracyIcon{
-  width: 4vh;
+  width: 1.5em;
 }
 .intrigrityMarker{
-transform: translate(3.3vw, -2vw);
+position: absolute;
+top: 0.25vh;
+right: 1.75vw;
 }
 .integritySlider input[type=range][value="2"]::-webkit-slider-thumb {
   -webkit-appearance: none ;
@@ -497,22 +548,26 @@ background-repeat: no-repeat;
 
 }
 .menuListVisible{
-  width: 35vw;
+  width: 40vw;
 }
 .postMetaData{
   padding-left: 2vw;
   padding-top: 1vh;
 }
 .previousNextWindow{
-  right: 1.5vw;
-  padding: 0.6vh 1.5vw;
+  right: 0;
+  padding: 0.4vh 1vw;
 }
 .postCardContainer{
   margin: 2vh 0vw;
 }
+.postCardContainerIndividual{
+  width: 100vw;
+  margin: 2vh 0vw;
+}
 .postImg{
   max-height: 65vh;
-  min-height: 55vh;
+  min-height: 50vh;
 }
 div.mcqOptions{
   animation: mcqOptions 1s ease 2s none ;

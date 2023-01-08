@@ -8,7 +8,7 @@ import LoadingGif from "../../components/loadingGif";
 
 export default function Team(){
     const [loading, setLoading] = useState(true);
-    const textLines= ["Respected Investors, Developers, Startup Enthusiasts &amp; Entreprenurs,   <br />    <br />    I am Akshat Jain Bafna an IT Engineer and a Solopreneur who is intrisincally motivated to solve the problem of Poor Retention and Incomplete Cognition. I myself and many people like me face it on daily basis in there acedemics, professional life and personal life.    I have invested a lot of time to understand the problem itself(Cognitive Science) and deriving the <b>Complex Solution</b> to make learning easy for others.    <br />    Their isn't a Medicinal formula to solve this problem but their are multiple small solutions to solve this problem and make learning &amp; retention a piece of cake.    I don't know why even in 2022 there are this many loopholes in our education system, why nobody tried to make a product on this micro-requirement(there are solutions but not upto that mark).    If you see this as a problem and want to Join me in this journey you can connect with me on Finemate itself or below mentioned social networks."];
+    const textLines= ["Dear esteemed investors, developers, startup enthusiasts, and entrepreneurs, <br />  <br />  I am Akshat Jain Bafna, an IT engineer and solopreneur who is driven to address the issue of poor retention and incomplete cognition. This is a problem that I, along with many others, experience on a daily basis in our academic, professional, and personal lives. I have dedicated a significant amount of time studying the problem and developing a comprehensive solution to make learning easier for others. <br />    While there is no one-size-fits-all solution to solve this problem, there are multiple strategies that can help improve retention and make learning more effective. I am puzzled as to why, even in 2022, there are so many shortcomings in our education system and why more solutions have not been developed to address this important issue. If you share my concern and would like to join me in addressing this problem, please feel free to contact me on Finemate or through the social networks mentioned below. <br /> <br />   Sincerely, <br />   Akshat Jain Bafna"];
     
     useEffect(() =>{
         setTimeout(() => {
@@ -24,17 +24,17 @@ export default function Team(){
         <OutsideNavbar />
         <div className={style.teamPageContainer}>
         <div className={style.aboutTeam}>
-            <Typed strings={textLines} typeSpeed={25} />
+            <Typed strings={textLines} typeSpeed={10} />
         </div>
         <div className={style.linksContainer}>
             <div className={style.links}>
                 <Tooltip title="Click to download Powerpoint Presentation a 3 minutes Read">
-                <a href={require("../../assets/Finemate Presentation 25-10-22.pptx")} download="Finemate Presentation 25-10-22"><img src={require("../../assets/leftCapsuleAllopethic.png")} alt =""/></a>
+                <a href={require("../../assets/Finemate Presentation Pitch Deck.pdf")} download="Finemate Pitch Deck"><img src={require("../../assets/leftCapsuleAllopethic.png")} alt =""/></a>
                 </Tooltip>
             </div>
             <div className={style.links}>
                 <Tooltip title= "Click to download Document a 6 minutes Read">
-                <a href={require("../../assets/Finemate Draft 25-10-22.pdf")} download="Finemate Draft 25-10-22"> <img src={require("../../assets/rightHomepathic.png")} alt =""/> </a>
+                <a href={require("../../assets/Finemate Draft.pdf")} download="Finemate Draft"> <img src={require("../../assets/rightHomepathic.png")} alt =""/> </a>
                 </Tooltip>
             </div>
         </div>

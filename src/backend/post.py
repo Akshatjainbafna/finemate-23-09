@@ -37,8 +37,10 @@ class PostObj():
         totalLikes= me.IntField(default=0)
         totalLights=me.IntField(default=0)
         totalSaves=me.IntField(default=0)
-        previousPost=me.ListField(me.ReferenceField('self'), default=[])
-        nextPost=me.ListField(me.ReferenceField('self'), default=[])
+        previousPost=me.ReferenceField('self')
+        nextPost=me.ReferenceField('self')
+        thread=me.ListField(me.StringField(), default = [])
+        mainPost = me.StringField(required = True)
 
     def __init__(self, content):
         """
@@ -46,24 +48,24 @@ class PostObj():
 		"""
         self.content=content
     
-    def create_a_post(self, image, nameOfImage):
+    def create_a_post(self, nameOfImage):
         """
 		Saves the post to the database.
 		"""
-        
+
         if (self.Posts.objects(fact=self.content['fact']).count() > 0):
             return make_response("Plagiarism Detected", 400)
-
-        mcq1Opts=[self.content['mcq1opt1'], self.content['mcq1opt2']]
-        if len(self.content['mcq1opt3']) > 0:
-            mcq1Opts.append(self.content['mcq1opt3'])
-
-        if len(self.content['mcq1opt4']) > 0:
-            mcq1Opts.append(self.content['mcq1opt4'])
         
+        mcqOptions = self.content['mcq1Opts'].split(',')
         publicState = True if self.content['public'] == 'true' else False
 
-        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcq1Opts, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState).save()
+        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcqOptions, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = '', nextPost = '', mainPost = '').save()
+        createPost.update(set__previousPost = createPost)
+        createPost.update(set__nextPost = createPost)
+        idOfCreatePost = str(createPost.id)
+        createPost.update(set__mainPost = idOfCreatePost)
+        createPost.update(push__thread = idOfCreatePost)
+
 
         objectOfTherecordOfTheUser = Profile.objects(username=self.content['username']).first()
 
@@ -71,10 +73,8 @@ class PostObj():
 
         if self.content['subject'] not in allSubjectsOfUser:
             Profile.objects(username=self.content['username']).update_one(push__educations = self.content['subject'])
-        else: 
-            pass
 
-        return make_response("", 200)
+        return make_response(jsonify(createPost), 200)
     
     def delete_a_post(self):
         x = checkFields(self.content, fields=['username', 'id'])
@@ -82,6 +82,12 @@ class PostObj():
             return make_response("Missing required field: " + x, 400)
         
         postToBeDeleted = self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id=self.content['id'])).first()
+        mainPost = self.Posts.objects(id = postToBeDeleted.mainPost).first()
+
+        idOfThePreviousPostOfCurrentPost =  postToBeDeleted.previousPost.id
+        idOfTheNextPostOfCurrentPost = postToBeDeleted.nextPost.id
+        previousPostOfTheCurrentPost = self.Posts.objects(pk = idOfThePreviousPostOfCurrentPost).first()
+        nextPostOfTheCurrentPost = self.Posts.objects(pk = idOfTheNextPostOfCurrentPost).first()
 
         if postToBeDeleted:
             background = postToBeDeleted.background
@@ -89,7 +95,40 @@ class PostObj():
             allTheInteractions = UserInteractions.objects(postId=self.content['id']).all()
             allTheInteractions.delete()
 
-            return background
+            listOfAllThePostIds = mainPost.thread
+            idOfThePostToBeDeleted = str(postToBeDeleted.id)
+            listOfAllThePostIds.remove(idOfThePostToBeDeleted)
+            mainPost.update(set__thread = listOfAllThePostIds)
+            listOfAllThePostIds =  list(listOfAllThePostIds)
+
+            if str(postToBeDeleted.id)==postToBeDeleted.mainPost and len(listOfAllThePostIds) > 0:
+                newMainPost = self.Posts.objects(id = listOfAllThePostIds[0]).first()
+                newMainPost.update(set__thread = listOfAllThePostIds)
+                
+                for x in listOfAllThePostIds:
+                    post = self.Posts.objects(id = x).first()
+                    post.update(set__mainPost = listOfAllThePostIds[0])
+
+            #Suppose their are 3 post in a thread named a b c
+            #when post b is deleted so to change the nextPost field of post a and previousPost field of post b
+            if idOfThePreviousPostOfCurrentPost != postToBeDeleted.id and idOfTheNextPostOfCurrentPost != postToBeDeleted.id:
+                nextPostOfTheCurrentPost.update(set__previousPost = previousPostOfTheCurrentPost)
+                previousPostOfTheCurrentPost.update(set__nextPost = nextPostOfTheCurrentPost)
+            #when post a is deleted so to change the previousPost field of post b (referencing itself)
+            elif idOfTheNextPostOfCurrentPost != postToBeDeleted.id:
+                nextPostOfTheCurrentPost.update(set__previousPost = nextPostOfTheCurrentPost)
+            #when post c is deleted so to change the nextPost field of post b (referencing itself)
+            elif idOfThePreviousPostOfCurrentPost != postToBeDeleted.id:
+                previousPostOfTheCurrentPost.update(set__nextPost = previousPostOfTheCurrentPost)
+
+
+            if postToBeDeleted.id == idOfThePreviousPostOfCurrentPost == idOfTheNextPostOfCurrentPost:
+                return background
+            else:
+                if (postToBeDeleted.background != previousPostOfTheCurrentPost.background != nextPostOfTheCurrentPost.background):
+                    return background
+                else:
+                    return False
         else:
             return make_response('Post Not Found', 404)
 
@@ -99,7 +138,7 @@ class PostObj():
         if (x):
             return make_response("Missing required field: " + x, 400)
         
-        postOfUser = self.Posts.objects(username = self.content['username']).only('username', 'background', 'subtopic', 'fact').order_by('-creation_date_time')[:12]
+        postOfUser = self.Posts.objects(username = self.content['username']).only('username', 'background', 'subtopic', 'fact').order_by('-$natural')[:30]
 
         return make_response(jsonify(postOfUser), 200)
 
@@ -109,43 +148,63 @@ class PostObj():
         if (x):
             return make_response("Missing required field: " + x, 400)
         
-        postOfUser = self.Posts.objects(me.Q(username = self.content['username']) & me.Q(public = True)).only('username', 'background', 'subtopic', 'fact').order_by('-creation_date_time')[:12]
+        postOfUser = self.Posts.objects(me.Q(username = self.content['username']) & me.Q(public = True)).only('username', 'background', 'subtopic', 'fact').order_by('-$natural')[:30]
 
         return make_response(jsonify(postOfUser), 200)
-    
-    def add_previous_post(self):
-        x = checkFields(self.content, fields=['username', 'prevPostId', 'currentPostId', 'topic'])
+
+    def add_next_post(self, nameOfImage):
+        x = checkFields(self.content, fields=['username', 'currentPostId', 'listOfPosts'])
         if (x):
             return make_response("Missing required field: " + x, 400)
+
+        publicState = True if self.content['public'] == 'true' else False
         
-        currentPost=self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id = self.content['currentPostId'])).first()
+        currentPost = self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id = self.content['currentPostId'])).first()
+        idOfTheCurrentPost = currentPost.id
+        idOfTheNextPostOfCurrentPost =  currentPost.nextPost.id
+        nextPostOfCurrentPost = False
 
         if currentPost:
-            prevPost=self.Posts.objects(me.Q(public = True) & me.Q(id = self.content['prevPostId']) & me.Q(id = self.content['topic'])).first()
-            if prevPost:
-                currentPost.update(push__previousPost = prevPost)
-                return make_response('Post linked successfully!', 200)
-            else:
-                return make_response('Post is either of different topic, private or deleted.', 404)
-        else:
-            return make_response('Either post not found or you are not authorized to link a post of other user.', 404)
+            incomingData = json.loads(self.content['listOfPosts'])
+            for post in incomingData:
 
+                if self.content['topic'] == currentPost.topic:
 
-    def add_next_post(self):
-        x = checkFields(self.content, fields=['username', 'nextPostId', 'currentPostId', 'topic'])
-        if (x):
-            return make_response("Missing required field: " + x, 400)
-        
-        currentPost=self.Posts.objects(me.Q(username = self.content['username']) & me.Q(id = self.content['currentPostId'])).first()
+                    if (self.Posts.objects(fact = post['fact']).count() > 0):
+                        return make_response("Plagiarism Detected", 400)
 
-        if currentPost:
-            nextPost=self.Posts.objects(me.Q(public = True) & me.Q(id = self.content['nextPostId']) & me.Q(id = self.content['topic'])).first()
+                    mainPost = self.Posts.objects(id = currentPost.mainPost).first()
+                    idOfTheMainPost = str(mainPost.id)
+                    listOfAllThePostIds = list(mainPost.thread)
+                    indexToPlaceNextPostInTheList = listOfAllThePostIds.index(str(idOfTheCurrentPost)) + 1
 
-            if nextPost:
-                currentPost.update(push__nextPost = nextPost)
-                return make_response( 'Post linked successfully!', 200)
-            else:
-                return make_response('Post is either of different topic, private or deleted.', 404)
+                    if idOfTheNextPostOfCurrentPost != idOfTheCurrentPost:
+                        nextPostOfCurrentPost = self.Posts.objects(id = currentPost.nextPost.id).first() 
+                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = nextPostOfCurrentPost, mainPost = idOfTheMainPost).save()
+                        currentPost.update(set__nextPost = nextPost)
+                        currentPost = nextPost
+                        idOfTheCurrentPost = currentPost.id
+                        idOfTheNextPostOfCurrentPost = nextPost.id
+                    else:
+                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = '', mainPost = idOfTheMainPost).save()
+                        nextPost.update(set__nextPost = nextPost)
+                        currentPost.update(set__nextPost = nextPost)
+                        currentPost = nextPost
+                        idOfTheCurrentPost = currentPost.id
+                        idOfTheNextPostOfCurrentPost = nextPost.id
+                        
+                    if incomingData.index(post) == (len(incomingData) -1) and nextPostOfCurrentPost:
+                        nextPost.update(set__nextPost = nextPostOfCurrentPost)
+                        nextPostOfCurrentPost.update(set__previousPost = nextPost)
+
+                    listOfAllThePostIds.insert(indexToPlaceNextPostInTheList, str(idOfTheNextPostOfCurrentPost))
+                    mainPost.update(set__thread = listOfAllThePostIds)
+
+                else:
+                    return make_response('Post is either of different topic, private or deleted.', 400)
+            
+            return make_response( 'Post linked successfully!', 200)
+
         else:
             return make_response('Post Not Found', 404)
 
@@ -348,12 +407,18 @@ class UserInteractions(me.Document):
                         timeList=[timeRytNow]
                         ).save()
 
+                        if post.mainPost != str(post.id):
+                            mainPost = PostObj.Posts.objects(id = post.mainPost).only('thread').first()
+                            listOfAllThePostIds = mainPost.thread
+                        else:
+                            listOfAllThePostIds = post.thread
 
                         #Combining the post data with the user interaction 
                         addThePostStr=post.to_json()
                         addTheInteractionStr=user_interaction.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                        objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -377,11 +442,18 @@ class UserInteractions(me.Document):
                     #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
                     addThePost=PostObj.Posts.objects(id=yo).first()
 
+                    if addThePost.mainPost != str(addThePost.id):
+                        mainPost = PostObj.Posts.objects(id = addThePost.mainPost).only('thread').first()
+                        listOfAllThePostIds = mainPost.thread
+                    else:
+                        listOfAllThePostIds = addThePost.thread
+
                     #Combining the post data with the user interaction 
                     addThePostStr=addThePost.to_json()
                     addTheInteractionStr=post.to_json()
                     combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                     objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                    objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                     #appending the combined object build from two different strings to the postData List to send to client
                     postData.append(objectOfTheCombinedString)
@@ -402,11 +474,18 @@ class UserInteractions(me.Document):
                     #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
                     addThePost=PostObj.Posts.objects(id=yo).first()
 
+                    if addThePost.mainPost != str(addThePost.id):
+                        mainPost = PostObj.Posts.objects(id = addThePost.mainPost).only('thread').first()
+                        listOfAllThePostIds = mainPost.thread
+                    else:
+                        listOfAllThePostIds = addThePost.thread
+
                     #Combining the post data with the user interaction 
                     addThePostStr=addThePost.to_json()
                     addTheInteractionStr=post.to_json()
                     combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                     objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                    objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                     #appending the combined object build from two different strings to the postData List to send to client
                     postData.append(objectOfTheCombinedString)
@@ -432,12 +511,18 @@ class UserInteractions(me.Document):
                         timeList=[timeRytNow]
                         ).save()
 
+                        if post.mainPost != str(post.id):
+                            mainPost = PostObj.Posts.objects(id = post.mainPost).only('thread').first()
+                            listOfAllThePostIds = mainPost.thread
+                        else:
+                            listOfAllThePostIds = post.thread
 
                         #Combining the post data with the user interaction 
                         addThePostStr=post.to_json()
                         addTheInteractionStr=user_interaction.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                        objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -452,10 +537,8 @@ class UserInteractions(me.Document):
         if (x):
             return make_response("Missing required field: " + x, 400)
         if 'idAdd' in incomingData.keys():
-            print("DoneAdded")
             UserInteractions.objects(me.Q(username=incomingData['username']) & me.Q(postId=incomingData['idAdd'])).update_one(inc__points=3)
         else:
-            print("DoneSubstracted")
             UserInteractions.objects(me.Q(username=incomingData['username']) & me.Q(postId=incomingData['idSub'])).update_one(dec__points=1)
         
         return make_response("", 200)
@@ -501,12 +584,19 @@ class UserInteractions(me.Document):
                         timeList=[timeRytNow]
                         ).save()
 
+                        if post.mainPost != str(post.id):
+                            mainPost = PostObj.Posts.objects(id = post.mainPost).only('thread').first()
+                            listOfAllThePostIds = mainPost.thread
+                        else:
+                            listOfAllThePostIds = post.thread
 
                         #Combining the post data with the user interaction 
                         addThePostStr=post.to_json()
                         addTheInteractionStr=user_interaction.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                        objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -537,11 +627,19 @@ class UserInteractions(me.Document):
                         #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
                         addThePost=PostObj.Posts.objects(id=yo).first()
 
+                        if addThePost.mainPost != str(addThePost.id):
+                            mainPost = PostObj.Posts.objects(id = addThePost.mainPost).only('thread').first()
+                            listOfAllThePostIds = mainPost.thread
+                        else:
+                            listOfAllThePostIds = addThePost.thread
+
                         #Combining the post data with the user interaction 
                         addThePostStr=addThePost.to_json()
                         addTheInteractionStr=mcqPost.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                        objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -565,11 +663,19 @@ class UserInteractions(me.Document):
                         #searching the post the user ever interacted with using the 24 character hexadecimal oid/objectId of the primary index key
                         addThePost=PostObj.Posts.objects(id=yo).first()
 
+                        if addThePost.mainPost != str(addThePost.id):
+                            mainPost = PostObj.Posts.objects(id = addThePost.mainPost).only('thread').first()
+                            listOfAllThePostIds = mainPost.thread
+                        else:
+                            listOfAllThePostIds = addThePost.thread
+
                         #Combining the post data with the user interaction 
                         addThePostStr=addThePost.to_json()
                         addTheInteractionStr=mcqPost.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                        objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -595,12 +701,19 @@ class UserInteractions(me.Document):
                         timeList=[timeRytNow]
                         ).save()
 
+                        if post.mainPost != str(post.id):
+                            mainPost = PostObj.Posts.objects(id = post.mainPost).only('thread').first()
+                            listOfAllThePostIds = mainPost.thread
+                        else:
+                            listOfAllThePostIds = post.thread
 
                         #Combining the post data with the user interaction 
                         addThePostStr=post.to_json()
                         addTheInteractionStr=user_interaction.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                        objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -615,7 +728,7 @@ class UserInteractions(me.Document):
         if (x):
             return make_response("Missing required field: " + x, 400)
         
-        postOfUser = UserInteractions.objects(me.Q(username = incomingData['username']) & me.Q(saved = True))[:12]
+        postOfUser = UserInteractions.objects(me.Q(username = incomingData['username']) & me.Q(saved = True)).only('postId').order_by('-$natural')[:30]
 
         postData=[]
 
@@ -648,12 +761,19 @@ class UserInteractions(me.Document):
 
             userInteraction = UserInteractions.objects(me.Q(username = incomingData['username']) & me.Q(postId = incomingData['id'])).first()
             
+            if post.mainPost != str(post.id):
+                mainPost = PostObj.Posts.objects(id = post.mainPost).only('thread').first()
+                listOfAllThePostIds = mainPost.thread
+            else:
+                listOfAllThePostIds = post.thread
+
             if userInteraction:
 
                 addThePostStr=post.to_json()
                 addTheInteractionStr=userInteraction.to_json()
                 combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                 objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                 return make_response(jsonify(objectOfTheCombinedString), 200)
             
@@ -667,6 +787,8 @@ class UserInteractions(me.Document):
                 addTheInteractionStr=user_interaction.to_json()
                 combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                 objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
+                objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
 
                 return make_response(jsonify(objectOfTheCombinedString), 200)
             

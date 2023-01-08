@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Card } from "react-bootstrap";
 import "./profile.css";
-import { Button, Menu, MenuItem} from "@material-ui/core";
+import profilePic from "../../assets/profilePic.png";
+import { Button, Divider, Menu, MenuItem} from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import {BsChatSquareTextFill} from 'react-icons/bs'
 import { IconContext } from "react-icons";
@@ -104,9 +105,9 @@ class UserProfile extends Component {
                     <div className="leftBlockofInfoCard">
                         <div className="profile_pic_slot">
                             <div>{profilePicture ? 
-                                  <div><img src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>
+                                  <div><img alt='profile' src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>
                                   :
-                                  <div><img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/profilePic.png'} className="elementPic" /> </div>
+                                  <div><img alt='profile' src={profilePic} className="elementPic" /> </div>
                                 }</div>
                             <div className="usernameBlocky">{username}</div>
                         </div>
@@ -251,7 +252,7 @@ class UserProfile extends Component {
         <Card className="info"> 
 
         
-        <div className="d-flex justify-content-around mt-3">
+        <div className="d-flex justify-content-around mt-3" style={{marginTop: '1vh'}}>
               <span>
                 <input name="tabNews" type="radio" id="tabNews-1" className="radioProfilePage" onChange={() => this.displayPanel("panel1")} />
                 <label for="tabNews-1" className="profileElementsTitle">
@@ -265,7 +266,7 @@ class UserProfile extends Component {
                 </label>
               </span>
           </div>
-
+          <Divider />
           <div>
             <Card.Body className="profileElements" id="panel1">
               <div className="profileElementContainer">
@@ -276,7 +277,7 @@ class UserProfile extends Component {
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                        <img alt='post thumbnail' src={require('../../assets/postBackgroundImages/'+ post.background)} />
                       </div>
                     </Link>
                 )}

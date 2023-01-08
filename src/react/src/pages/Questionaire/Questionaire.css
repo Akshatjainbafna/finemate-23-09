@@ -8,13 +8,20 @@
 }
 .questionairePage{
     margin: 2vh 4vw;
+    z-index: 99;
 }
 .button {
-    background-color: #FCFCFB;
-    color: none;
-    box-shadow: none;
-    border: none;
-    border-radius: none;
+  border: none;
+	border-radius: 10px;
+	width: 8em;
+  height: 3em;
+	color: #FCFCFB;
+	background-color: #A78EC3;
+  font-size: large;
+}
+.button:hover{
+	color: #e6e6e6;
+	background-color: #9781b1;
 }
 
 .header {
@@ -76,13 +83,112 @@ body{
     color: grey;
     margin-left: 2vw;
 }
+.yearSliderQuestionaireContainer{
+    position: relative;
+    height: 5px;
+}
+.yearSliderQuestionaire{
+    -webkit-appearance: none;
+    width: 60%;
+    height: 0;
+    position: absolute;
+    top: 2px;
+}
+.yearSliderQuestionaireContainer input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    margin: -8px 0 0;
+    border-radius: 60%;
+    background: #9ed9d9;
+    cursor: pointer;
+    border: 0 !important;
+    box-shadow: 0px 2px 3px rgb(160, 160, 160);
+    z-index: 99;
+
+  }
+  .yearSliderQuestionaireContainer input::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    margin: -8px 0 0;
+    border-radius: 60%;
+    background: #9ed9d9;
+    cursor: pointer;
+    border: 0 !important;
+    box-shadow: 0px 2px 3px rgb(160, 160, 160);
+    z-index: 99;
+  }
+  .yearSliderQuestionaireContainer input::-ms-thumb {
+    width: 18px;
+    height: 18px;
+    margin: -8px 0 0;
+    border-radius: 60%;
+    background: #9ed9d9;
+    cursor: pointer;
+    border: 0 !important;
+    box-shadow: 0px 2px 3px rgb(160, 160, 160);
+    z-index: 99;
+  }
+  .yearSliderQuestionaireContainer input::-webkit-slider-runnable-track {
+    width: 60%;
+    height: 2px;
+    cursor: pointer;
+    background: #929699;
+  }
+  .yearSliderQuestionaireContainer input::-moz-range-track {
+    width: 60%;
+    height: 2px;
+    cursor: pointer;
+    background: #929699;
+  }
+  .yearSliderQuestionaireContainer input::-ms-track {
+    width: 60%;
+    height: 2px;
+    cursor: pointer;
+    background: #929699;
+  }
+  .yearSliderQuestionaireContainer input:focus {
+    background: none;
+    outline: none;
+  }
+  .yearSliderQuestionaireContainer input::-ms-track {
+    width: 60%;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  
+  .numberOfYears-labels {
+    margin: 18px -30px 0;
+    padding: 0;
+    list-style: none;
+  }
+  .numberOfYears-labels li {
+    position: relative;
+    float: left;
+    width: 6vw;
+    text-align: center;
+    color: #929699;
+    font-size: 12px;
+    cursor: pointer;
+  }
 @media screen and (max-width: 600px) {
+    .numberOfYears-labels {
+        margin: 10px -12px 0;
+      }
+      .numberOfYears-labels li {
+        width: 15vw;
+      }
+    .yearSliderQuestionaire{
+        width: 100%;
+    }
     .page{
         width: 100vw;
     }
     .image{
-        width: 80%;
-        top: 15vh;
+        height: 50vh;
+        top: 25vh;
         right: 0vw;
     }
     .inputQuestionairePage {

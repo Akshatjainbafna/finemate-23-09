@@ -27,7 +27,7 @@ import {BsCashStack} from 'react-icons/bs';
 import {FaRegChartBar} from 'react-icons/fa';
 
 
-let headerItems = { link: "/profile", title: "Todos", profileImg: profile };
+let headerItems = { link: "/profile", title: "To-Do's", profileImg: profile };
 
 let navItemsForNormalUser = [
     { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },

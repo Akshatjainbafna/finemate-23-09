@@ -13,22 +13,16 @@
 
   .aimSocial > img, .aimInstitute > img {
     height: 20rem;
-    margin-top: 0rem;
   }
 
   .aimSocial h4, .aimInstitute h4{
     font-weight: 600;
     color: rgba(0, 0, 0, 0.8);
     font-family: Open Sans;
-    font-size: 2em;
+    font-size: 1.25em;
+    margin-top: 1em;
   }
 
-  .aimSocial p, .aimInstitute p{
-    font-weight: normal;
-    color: #3e4345;
-    font-family: Open Sans;
-    font-size: 1.2em;
-  }
   .aimContainer{
     width: 100%;
     display: flex;
@@ -50,13 +44,78 @@
     position: absolute;
     left: 4vw ;
     bottom: 20vh;
-    color: rgba(0, 0, 0, 0.9) !important;
+    color: #1a1a1a !important;
     font-family: 'Comic Neue', cursive !important;
+    font-size: 1.4em;
   }
   .macPicture{
     width: 75vw;
   }
+  .addPainPoint input{
+    margin-right: 1em;
+  }
+  .introFinemate{
+    width: 80%;
+  }
+  .homepageMemeContainer{
+    width: 50%;
+  }
+  .allDeviceImage{
+    width: 50vw;
+    }
+  .deviceCompatibleContainer{
+    display: flex;
+    align-items: center;
+    height: 125vh;
+  }
+  .blueBg{
+    background-color: #2aa6a8;
+  }
+  .whyRetention{
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	width: 25vw;
+	height: 25vw;
+	background-image: url('../../assets/Mask\ groupwhyBGSmall\ Size1.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+  }
+  .whySocialLearning{
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	width: 25vw;
+	height: 25vw;
+	background-image: url('../../assets/Mask\ groupwhyBGSmall\ Size2.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+  }
+  .whyStudentManagement{
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	width: 25vw;
+	height: 25vw;
+	background-image: url('../../assets/Mask\ groupwhyBGSmall\ Size3.png');
+	background-repeat: no-repeat;
+	background-size: contain;
+  }
+  .textWhy{
+	font-size: 1em;
+	width: 75%;
+	color: white;
+	text-align: center;
+	text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);;
+  }
   @media screen and (max-width: 600px) {
+    .painPoints{
+      text-align: center;
+      width: 100%;
+    }
+    .introFinemate{
+      width: 80%;
+    }
     .aimContainer{
       width: 100%;
       display: flex;
@@ -65,26 +124,42 @@
     }
     .aimSocial, .aimInstitute{
       width: 80%;
+      margin-bottom: 5vh;
     }
     .addPainPoint{
       display: flex;
       flex-direction: column;
-    }
-    .addPainPoint > div{
-      margin-bottom: 2vh;
+      width: 80%;
+      margin: auto;
     }
     .addPainPoint input{
-      width : 75vw !important;
+      width : 60vw !important;
+      margin-right: 1em;
+    }
+    .addPainPointForm{
+      margin-top: 1em;
     }
     .addedPainPoint{
       position: absolute;
-      left: 3.5vw;
-      bottom: 3.5vh;
-      color: rgba(0, 0, 0, 0.9) !important;
+      left: 5vw;
+      bottom: 5vh;
       font-family: 'Comic Neue', cursive !important;
       font-size: xx-small !important;
     }
     .macPicture{
       width: 90vw;
     }
+    .homepageMemeContainer{
+      width: 80%;
+      }
+      .allDeviceImage{
+        width: 75vw;
+        }
+        .deviceCompatibleContainer{
+          height: 85vh;
+        }
+        .whyRetention, .whySocialLearning, .whyStudentManagement{
+          width: 100vw;
+          height: 100vw;
+        }
   }

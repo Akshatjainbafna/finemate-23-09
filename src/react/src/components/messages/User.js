@@ -46,12 +46,13 @@ class User extends Component {
 
     openChatBox(e, index){
         if (this.state.recentChatUsers[index].username1 == localStorage.getItem('username')){
-            localStorage.setItem('targetUser', this.state.recentChatUsers[index].username2);
+            localStorage.setItem('targetUser', this.state.recentChatUsers[index].username2)
         }
         else{
             localStorage.setItem('targetUser', this.state.recentChatUsers[index].username1);
         }
-
+        localStorage.setItem('profilePictureTargetUser', this.state.recentChatUsers[index].profilePicture);
+        
         this.setState({
             submitted: true
         })
@@ -60,6 +61,7 @@ class User extends Component {
         AxiosBaseFile.post('/api/db_get_messaged_users', { 'username' : localStorage.getItem('username')})
             .then( res => {
                 var responseData =  res.data;
+                console.log(responseData)
                 for (let i=0; i<responseData.length; i++){
 
                     var time = res.data[i].time.split(':');
@@ -109,8 +111,14 @@ class User extends Component {
 
                 <div className={style.recentChats}> {this.state.recentChatUsers.map((user, index) => 
                     <div className={style.userChatThumbnail} key={index} onClick={(e)=>{this.openChatBox(e, index)}}>
-                        <div className={style.userChatThumbnailImage}>  <Avatar> {user.username2==localStorage.getItem('username') ? user.username1[0] : user.username2[0] } </Avatar></div>
-                        <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2==localStorage.getItem('username') ? user.username1 : user.username2 }</div> <div className={style.lastMessage}>{user.message}</div>   </div>
+                        <div className={style.userChatThumbnailImage}> 
+                            {user.profilePicture ?
+                                    <img src={require('../../assets/profilePictures/'+ user.profilePicture)} className={style.profilePictureChatHeader}/>
+                                :
+                                    <Avatar className={style.profilePictureChatHeader}> {user.username2==localStorage.getItem('username') ? user.username1[0] : user.username2[0] } </Avatar>
+                            }
+                        </div>
+                        <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2==localStorage.getItem('username') ? user.username1 : user.username2 }</div> {( !user.user1seen && localStorage.getItem('username') == user.username1) || ( !user.user2seen && localStorage.getItem('username') == user.username2) ? <div style={{color: 'rgba(0, 0, 0, 0.85)'}} className={style.lastMessage}>{user.message}</div> : <div style={{color: '#919699'}} className={style.lastMessage}>{user.message}</div>}   </div>
                         <div className={style.userChatThumbnailTime}>  {user.time} </div>
                     </div>
                 )}  

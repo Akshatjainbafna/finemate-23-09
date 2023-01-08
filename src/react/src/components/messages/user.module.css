@@ -1,6 +1,13 @@
 *{
     box-sizing: border-box;
 }
+.profilePictureChatHeader{
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 100%;
+    border: 1px solid #bdbdbd;
+}
 .recentUserList{
     display: flex;
     flex-direction: column;
@@ -56,7 +63,6 @@
 .userChatThumbnailUsername{
     font-size: medium;
     font-weight: 600;
-    font-family: Popins, sans-serif;
     color: #919699;
 }
 .lastMessage{

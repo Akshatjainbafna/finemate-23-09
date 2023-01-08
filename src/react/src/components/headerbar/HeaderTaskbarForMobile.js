@@ -3,7 +3,7 @@ import { ExtensionRounded, Inbox, Mail } from "@material-ui/icons";
 import React, { Component } from "react";
 import { BsBell, BsEmojiSunglasses } from "react-icons/bs";
 import { IconContext } from "react-icons/lib";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import style from './HeaderTaskbarForMobile.module.css';
 import logo from '../../assets/finemateLatestin Angelina fontLogo.png';
 import profile from "../../assets/tinyprofile.png";
@@ -16,6 +16,26 @@ import {BiPlus} from 'react-icons/bi';
 
 
 function CustomListItems({id, link, imgSrc, title}) {
+  function HeaderView() {
+    const location = useLocation();
+    return location.pathname
+}
+
+//returning the active list item or say current selected sidebar menu
+if (HeaderView()===link) {
+    return (
+      <Link to={link} title={title} className={style.sidebarListLink} key={id}>
+      <ListItem className={style.sidebarListItemActive}>
+        <ListItemIcon className={style.sidebarListIcon}>
+        <IconContext.Provider value={{ size: '26px', color: "#834bc4" }}>
+            {imgSrc}
+          </IconContext.Provider>
+        </ListItemIcon>
+        <ListItemText primary={title} />
+      </ListItem>
+  </Link>
+    )
+}
     return (
       <Link to={link} title={title} className={style.sidebarListLink} key={id}>
         <ListItem className={style.sidebarListItem}>
@@ -31,7 +51,26 @@ function CustomListItems({id, link, imgSrc, title}) {
 }
 
 function PermanentListItems({id, link, imgSrc, title}){
-    
+  function HeaderView() {
+    const location = useLocation();
+    return location.pathname
+}
+
+//returning the active list item or say current selected sidebar menu
+if (HeaderView()===link) {
+    return (
+      <Link to={link} title={title} className={style.sidebarListLink} key={id}>
+      <ListItem className={style.sidebarListItemActive}>
+        <ListItemIcon className={style.sidebarListIcon}>
+        <IconContext.Provider value={{ size: '26px', color: "#834bc4" }}>
+            {imgSrc}
+          </IconContext.Provider>
+        </ListItemIcon>
+        <ListItemText primary={title} />
+      </ListItem>
+  </Link>
+    )
+}
     return(
         <>
             <Link to={link} title={title} className={style.sidebarListLink} key={id}>
@@ -114,15 +153,15 @@ class HeaderBarForMobile extends Component{
                         onClose={this.toggleDrawer(false)}
                       >
                         <div style={{width:"75vw"}}>
-                          <div className="d-flex justify-content-center">
-                            <img src={logo} alt="logo" />
+                          <div className="d-flex justify-content-center m-2">
+                            <img src={logo} alt="Finemate Logo" style={{width: '130px'}} />
                           </div>
                           <Link to="/profile" title="Profile Page" style={{color: "rgba(0, 0, 0, 0.8)", textDecoration: "none"}}>
                             <div className="d-flex align-items-center">
                               <span className={style.mobileSideBarProfilePic}>
                               {this.state.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ this.state.profilePicture} className={style.profilePictureSidebarThumbnail}/>
+                                        <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureSidebarThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>

@@ -3,10 +3,7 @@
 .logoContainer{
     display: flex;
     justify-content: center;
-    margin: 0px;
-}
-.menuIcon {
-    cursor: pointer;
+    margin: 5px auto;
 }
 .sideBar {
     display: flex;
@@ -126,7 +123,8 @@
     }
 
     .logoContainer{
-        margin: 2vh 0;
+        margin: 2vh auto 0;
+        width: 70%;
     }
     .sideBar ul a li{
         width: fit-content;

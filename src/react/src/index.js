@@ -69,6 +69,7 @@ import UserProfilePage from "./pages/userProfilePage/UserProfilePage";
 import IndividualPostPage from "./pages/post/Post";
 import SettingPage from "./pages/settings/settings";
 import SearchPageForTopic from "./pages/searchPage/SearchPageForTopic";
+import PageNotFound from "./components/pageNotFound";
 
 
 window.token = localStorage.getItem("token");
@@ -262,6 +263,10 @@ ReactDOM.render(
       <Route path="/sidebar">
         <Sidebar books={navItems} />
         <Headerbar icons={headerItems} />
+      </Route>
+
+      <Route path="*">
+        <PageNotFound />
       </Route>
     </Switch>
   </Router>,

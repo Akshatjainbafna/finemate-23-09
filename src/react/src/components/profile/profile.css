@@ -336,28 +336,10 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
-    border: 1px solid #dfd6e9;
-    border-radius: 15px;
+    border: 1px solid #dfdfdf;
+    border-radius: 10px;
     max-height: 75vh;
-    padding: 1%;
-    overflow-y: auto;
-}
-.profileElementsUserPosts{
-    display: flex;
-    flex-direction: column;
-    height: 60vh;
-    width: 100%;
-    padding: 1vw;
-}
-.profileElementContainerUserPosts{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    border-radius: 15px;
-    justify-content: space-between;
-    border: 0.1px solid #dfd6e9;
-    height: 50vh;
-    padding: 1%;
+    padding: 2%;
     overflow-y: auto;
 }
 .edit_button_profile{
@@ -380,17 +362,22 @@
 }
 .postThumbnail{
     display: flex;
-    margin-left: 2px;
-    margin-bottom: 2px;
-    border: 0.1px solid rgb(226, 226, 226);
+    margin-bottom: 9px;
+    border: 1px solid #dfdfdf;
+    border-radius: 10px;
     position: relative;
     align-items: center;
 }
+.postThumbnail:hover{
+    border: 1px solid #bbbbbb;
+    outline: 3px solid #dfdfdf;
+}
 .postThumbnail img{
+    border-radius: 10px;
     object-fit: cover;
     opacity: 0.4;
-    height: 24vh;
-    width: 24vh;
+    height: 25vh;
+    width: 25vh;
 }
 
 .factThumbnail{
@@ -399,18 +386,20 @@
     max-height: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: auto 1vw;
 }
 .subTopicThumbnail{
     font-weight: 600;
     margin:auto;
-    font-size: 0.5em;
-    color: rgba(0, 0, 0, 0.9);
+    font-size: 0.65em;
+    color: rgba(0, 0, 0, 0.85);
 }
 .fact{
-    color: rgba(0, 0, 0, 0.85);
+    color: rgba(0, 0, 0, 0.7);
     font-weight: 600;
-    margin:auto;
-    font-size: 0.4em;
+    margin: 0.5em auto;
+    font-size: 0.5em;
+    word-break: break-word;
 }
 
 .changeProfilePictureBtn{
@@ -426,20 +415,15 @@
 .profileElementsTitle{
     cursor: pointer;
     transition: color 0.5s;
-    font-size: larger;
     font-weight: bolder;
-    font-family: Poppins, sans-serif;
-    color: rgba(0, 0, 0, 0.5);
-    margin-bottom: 0;
+    color: #787d80;
+    margin-bottom: 1vh;
   }
   
-  .radioProfilePage:checked + .profileElementsTitle{
-    color: rgba(0, 0, 0, 0.85);
+  .radioProfilePage:checked + .profileElementsTitle, .radioProfilePage:hover + .profileElementsTitle{
+    color: rgba(0, 0, 0, 0.9);
   }
   
-  .radioProfilePage:hover + .profileElementsTitle{
-    color: rgba(0, 0, 0, 0.85);
-  }
 
 @media screen and (max-width: 600px) {
     .info, .edu {
@@ -479,20 +463,21 @@
         width: 40vw;
     }
     .postThumbnail img{
-        height: 29vw;
-        width: 29vw;
+        height: 30vw;
+        width: 30vw;
     }
-    .profileElementsUserPosts, .profileElements{
+    .profileElements{
         height: fit-content;
         padding: 2vw;
         border: none;
     }
-    .profileElementContainerUserPosts, .profileElementContainer{
+    .profileElementContainer{
         display: flex;
         height: fit-content;
         padding: 0;
         border: none;
         justify-content: space-between;
+        border-radius: 0;
     }
     .selectFormColortext{
         width: 70vw !important;
@@ -502,6 +487,8 @@
     }
     .profileElementsTitle{
         font-size: small;
-        margin-bottom: 2vh;
       }
+      .postThumbnail{
+        margin-bottom: 2px;
+    }
 }

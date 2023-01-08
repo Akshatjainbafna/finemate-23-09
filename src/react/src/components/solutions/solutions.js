@@ -12,7 +12,7 @@ export const Solution = () => {
   const [title, setTitle] = useState("Learn Better and Retain Better");
 
   const [text, setText] = useState(
-    "Making Learning and Revising just a piece of Cake."
+    "Learning and Revising is a piece of cake"
   );
 
   const [image, setImage] = useState("studentsSolution.svg");
@@ -48,7 +48,7 @@ export const Solution = () => {
                   "solutions--btn--secondary",
                   "solutions--btn--secondary",
                   "Learn Better and Retain Better",
-                  "Making Learning and Revising just a piece of Cake.",
+                  "Learning and Revising is a piece of cake",
                   "studentsSolution.svg"
                 );
               }}
@@ -63,8 +63,8 @@ export const Solution = () => {
                   "solutions--btn--secondary",
                   "solutions--btn--primary",
                   "solutions--btn--secondary",
-                  "An Application that fullfills all the Digital requirements",
-                  "Making Managing students just a piece of Cake.",
+                  "Fulfilling all the digital requirements of institutes",
+                  "Managing students is a piece of cake",
                   "instituteSolution.svg"
                 );
               }}
@@ -79,8 +79,8 @@ export const Solution = () => {
                   "solutions--btn--secondary",
                   "solutions--btn--secondary",
                   "solutions--btn--primary",
-                  "Learn Better and Retain Better",
-                  "Enhance your skills sets and knowledges to advance your business.",
+                  "Practice makes a professional perfect",
+                  "Practicing is a piece of cake",
                   "professionalsSolution.svg"
                 );
               }}
@@ -94,7 +94,7 @@ export const Solution = () => {
           
       <User>
         <h3>{title}</h3>
-        <p>{text}</p>
+        <p>{text}🎂</p>
         <div className="solutionsImageContainer"> 
         <img className="solutionsImage" src={require(`../../assets/${image}`)} alt="" />  
         </div>

@@ -7,7 +7,7 @@ import BackImage from "../../assets/undraw_questions.png";
 import Confirm from "../../assets/confirm.png";
 //icons
 import { Add } from "@material-ui/icons";
-import { FormControlLabel, MenuItem, OutlinedInput, Radio, RadioGroup, Select } from "@material-ui/core";
+import { FormControlLabel, Input, MenuItem, OutlinedInput, Radio, RadioGroup, Select } from "@material-ui/core";
 import { BsXCircleFill } from "react-icons/bs";
 //components
 import LoadingGif from "../../components/loadingGif";
@@ -28,7 +28,8 @@ class Questionaire extends Component {
       qualification: "",
       coreStream: "",
       loading: true,
-      searchedSubjects: []
+      searchedSubjects: [],
+      numberOfYears: 0
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -88,7 +89,7 @@ class Questionaire extends Component {
 
   coreStream(event){
     this.setState({coreStream: event.target.value})
-    AxiosBaseFile.post('/api/db_get_all_subjects_of_stream', {stream: event.target.value})
+    AxiosBaseFile.post('/api/db_get_all_subjects_of_stream', {stream: event.target.value, numberOfYears: this.state.numberOfYears})
     .then(res => {
       this.setState({arrayOfEducation: res.data})
     })
@@ -225,23 +226,42 @@ class Questionaire extends Component {
                             >
                     <div className="d-flex">
                       <div className="d-flex flex-column">
-                    <FormControlLabel value="Working Professional" control={<Radio required={true}/>} label="Working Professional" />
-                    <FormControlLabel value="PhD" control={<Radio required={true}/>} label="PhD" />
-                    <FormControlLabel value="Post Graduation" control={<Radio required={true}/>} label="Post Graduation" />
-                    <FormControlLabel value="Graduation" control={<Radio required={true}/>} label="Graduation" />
-                    <FormControlLabel value="Undergraducation" control={<Radio required={true}/>} label="Undergraduation" />
+                    <FormControlLabel value="Working Professional" control={<Radio style={{color: '#929699'}} required={true}/>} label="Working Professional" />
+                    <FormControlLabel value="PhD" control={<Radio style={{color: '#929699'}} required={true}/>} label="PhD" />
+                    <FormControlLabel value="Post Graduation" control={<Radio style={{color: '#929699'}} required={true}/>} label="Post Graduation" />
+                    <FormControlLabel value="Graduation" control={<Radio style={{color: '#929699'}} required={true}/>} label="Graduation" />
+                    <FormControlLabel value="Undergraducation" control={<Radio style={{color: '#929699'}} required={true}/>} label="Undergraduation" />
                     </div>
                     <div className="d-flex flex-column">
-                    <FormControlLabel value="Senior Secondary" control={<Radio required={true}/>} label="Senior Secondary" />
-                    <FormControlLabel value="Higher Secondary" control={<Radio required={true}/>} label="Higher Secondary" />
-                    <FormControlLabel value="Diploma" control={<Radio required={true}/>} label="Diploma" />
-                    <FormControlLabel value="Crash Course" control={<Radio required={true}/>} label="Crash Course" />
-                    <FormControlLabel value="Exam Preparation" control={<Radio required={true}/>} label="Exam Preparation" />
+                    <FormControlLabel value="Senior Secondary" control={<Radio style={{color: '#929699'}} required={true}/>} label="Senior Secondary" />
+                    <FormControlLabel value="Higher Secondary" control={<Radio style={{color: '#929699'}} required={true}/>} label="Higher Secondary" />
+                    <FormControlLabel value="Diploma" control={<Radio style={{color: '#929699'}} required={true}/>} label="Diploma" />
+                    <FormControlLabel value="Crash Course" control={<Radio style={{color: '#929699'}} required={true}/>} label="Crash Course" />
+                    <FormControlLabel value="Exam Preparation" control={<Radio style={{color: '#929699'}} required={true}/>} label="Exam Preparation" />
                     </div>
                     </div>
                 </RadioGroup>
-                <p><br /></p>
+                <p></p>
 
+                {this.state.qualification ? 
+
+                  <div className="mb-5">
+                    <div className="yearSliderQuestionaireContainer">
+                      <input className='yearSliderQuestionaire' value={this.state.numberOfYears} type="range" min= "0" max= "5" onChange={(e) => this.setState({numberOfYears: e.target.value})}/>
+                    </div>
+                    <ul class="numberOfYears-labels">
+                      <li>Just Started</li>
+                      <li>1st yr</li>
+                      <li>2nd yr</li>
+                      <li>3rd yr</li>
+                      <li>4th yr</li>
+                      <li>4+ yr</li>
+                    </ul>
+                  </div>
+                : 
+                null
+                }
+                <p><br /></p>
 
               <h3 class="text-dark font-weight-bold">
                 What is your most recent stream?
@@ -345,9 +365,7 @@ class Questionaire extends Component {
               <p id="messageForNoEducation"></p>
               <div className="d-flex justify-content-end">
                 <button class="button">
-                  <span className="confirm">
-                    <img src={Confirm} alt="Map"></img>
-                  </span>
+                    CONFIRM
                 </button>
               </div>
             </div>
@@ -367,7 +385,7 @@ class Questionaire extends Component {
       document.getElementById("messageForNoEducation").innerHTML="Please Add Subjects that you have already Learnt and Subjects/Topics you want to learn."
     }
     else{
-    AxiosBaseFile.post("/api/add_education_from_questionaire", {"username": localStorage.getItem("username"), "qualification": this.state.qualification, "coreStream" : this.state.coreStream, "listOfPreviousEducation": this.state.arrayOfEducation, "listOfLookingForwardToLearn": this.state.arrayOfLookingForwardToLearn})
+    AxiosBaseFile.post("/api/add_education_from_questionaire", {"username": localStorage.getItem("username"), "qualification": this.state.qualification, "coreStream" : this.state.coreStream, "listOfPreviousEducation": this.state.arrayOfEducation, "listOfLookingForwardToLearn": this.state.arrayOfLookingForwardToLearn, "numberOfYears": this.state.numberOfYears})
     this.setState({ done: true });
     }
   }

@@ -12,7 +12,8 @@ import {Button, IconButton, Tooltip} from "@material-ui/core";
 import correct from './correctBGicon.png';
 import semicorrect from './semicorrectBGicon.png';
 import incorrect from './incorrectBGicon.png';
-import { Link } from "react-router-dom";
+import postNotFound from '../../../../react/src/assets/postNotFoundScreen.png';
+import { Link, Redirect } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 
 class IndividualPost extends Component{
@@ -20,7 +21,8 @@ class IndividualPost extends Component{
         super(props);
         this.state ={
             responseData: [],
-            id: this.props.id
+            id: this.props.id,
+            createNewPost: false,
         }
     }
 
@@ -136,32 +138,52 @@ class IndividualPost extends Component{
         AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username') , id: this.state.id})
         .then(res => {
             let responseData = Array(res.data);
-            this.setState({responseData : responseData})
+            this.setState({responseData : responseData});
+            localStorage.setItem('id', this.state.id)
         })
         .catch(err => console.log(err))
     }
     fetchPreviousPost(){
-        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost[0].$oid})
+        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost.$oid})
         .then((res) => {
             let responseData = Array(res.data);
-            this.setState({responseData : responseData})
+            this.setState({responseData : responseData, id : responseData[0]._id.$oid});
+            localStorage.setItem('id', res.data._id.$oid);
         })
         .catch(err => console.log(err))
     }
     fetchNextPost(){
-        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost[0].$oid})
+        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost.$oid})
         .then((res) => {
             let responseData = Array(res.data);
-            this.setState({responseData : responseData})
+            this.setState({responseData : responseData, id : responseData[0]._id.$oid});
+            localStorage.setItem('id', res.data._id.$oid);
         })
         .catch(err => console.log(err))
     }
+    addNextPost(){
+        localStorage.setItem('subject', this.state.responseData[0].subject);
+        localStorage.setItem('topic', this.state.responseData[0].topic);
+        localStorage.setItem('subtopic', this.state.responseData[0].subtopic);
+        localStorage.setItem('type', this.state.responseData[0].type);
+        this.setState({createNewPost: true});
+    }
+    componentWillUnmount(){
+        if (! this.state.createNewPost){
+            localStorage.removeItem('id')
+        }
+    }
     render(){
+        if (this.state.createNewPost){
+            return <Redirect to="/createpost" />
+        }
         return(
-            <>
-            {this.state.responseData.map((responseData, index) =>
+        <>
+        {this.state.responseData.length > 0 ? 
+
+            this.state.responseData.map((responseData, index) =>
              
-            <div className={style.postCardContainer} key={index} onMouseLeave={() => {this.hideMoreOptions(); this.hidePreviousNextPostWindow()}}>
+                <div className={style.postCardContainerIndividual} key={index} onMouseLeave={() => {this.hideMoreOptions(); this.hidePreviousNextPostWindow()}}>
                 {/* If the points for a particular post is equal to or greater than 7 then the post will be of PostCard type */}
                     
                     <form id="postInteraction">
@@ -231,7 +253,11 @@ class IndividualPost extends Component{
                             <Tooltip title="Intrigrity Slider"><div className={style.integritySlider}> <input type="range" aria-label="Intrigrity Slider" value={this.state.silderValue} min="0" step="1" max="2" onChange={(event) => this.slider(event)}/></div></Tooltip>
                             
                             <div className={style.menuIcon}>
-                                <div className={style.menuList}  onClick={() => this.viewMoreOptions()}><BsThreeDotsVertical size={20} cursor={"pointer"}/></div>
+                                <div className={style.menuList}  onClick={() => this.viewMoreOptions()}>
+                                    <IconButton>
+                                        <BsThreeDotsVertical size={20} cursor={"pointer"}/>
+                                    </IconButton>
+                                </div>
                             </div>
 
                             <div className={style.intrigrityMarker}>{(() => {
@@ -254,28 +280,39 @@ class IndividualPost extends Component{
                         </div>
     
                         <div className={style.postImg} onDoubleClick={() => this.postLiked()}  id="imageLocation">
+
+                            <div>{
+                                (() => {
+                                    let postNumber = responseData.listOfAllThePostIds.indexOf(responseData._id.$oid) + 1;
+                                    let totalPostsInThread = responseData.listOfAllThePostIds.length;
+                                    if (totalPostsInThread > 1){
+                                        return(<span className={style.postCount}>
+                                            {postNumber}/{totalPostsInThread}
+                                        </span>
+                                        ) 
+                                    }
+                                })()
+                            }
+                            </div>
+
                             {responseData.username==localStorage.getItem('username') ?
                             
                             <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
-                                <div className="d-flex justify-content-around"><span><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid)}><Add style={{fontSize: 'medium'}} /> Previous</Button></span><span><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => this.deletePost(responseData.postId.$oid)}>Next <Add style={{fontSize: 'medium'}} /></Button></span></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.deletePost(responseData.postId.$oid); this.hideMoreOptions();}}>Delete Post</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={(() => this.addNextPost())}>Add Next Post</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.deletePost(responseData.postId.$oid); this.hideMoreOptions();}}>Delete Post</Button></div>
                             </div>
 
                             :
 
                             <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Hashtags</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Glossaries</Button></div>
-                                <div><Button className={style.menuListButtons} style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
                             
                             </div>
 
@@ -284,9 +321,9 @@ class IndividualPost extends Component{
                            
                             <span className={style.quesFactBlock} ref={this.referenceToPostQuestion}>
                                 {responseData.question ? <p name="questionOfPost" className={style.question}>{responseData.question}</p> : ""} 
-                                <p className={style.fact} id='factId1' name="factName" ref={this.referenceToPostFact}> {responseData.fact.split('\n').map(function(item) {
+                                <p className={style.fact} id='factId1' name="factName" ref={this.referenceToPostFact}> {responseData.fact.split('\n').map(function(item, index) {
                                     return (
-                                        <span>
+                                        <span key={index}>
                                             {item}
                                             <br/>
                                         </span>
@@ -299,10 +336,10 @@ class IndividualPost extends Component{
                            
 
                             <span name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}>
-                                <IconButton onClick={() => this.fetchPreviousPost()}>
+                                <IconButton style={{padding: '0.25em'}} onClick={() => this.fetchPreviousPost()}>
                                     <BsArrowLeft size={22} cursor="pointer"/>
                                 </IconButton> 
-                                <IconButton onClick={() => this.fetchNextPost()}>
+                                <IconButton style={{padding: '0.25em'}} onClick={() => this.fetchNextPost()}>
                                     <BsArrowRight size={22} cursor="pointer"/>
                                 </IconButton>
                             </span> 
@@ -332,6 +369,7 @@ class IndividualPost extends Component{
                                 <FormControlLabel
                                     control={
                                     <Checkbox 
+                                        style={{ padding: '0', marginLeft: '1em'}}
                                         checked={responseData.liked}
                                         icon={ <FavoriteBorder style={{ fontSize: 26 }} /> } 
                                         checkedIcon={ <Favorite style={{ fontSize: 26 }}/> }
@@ -350,6 +388,7 @@ class IndividualPost extends Component{
                                 <FormControlLabel
                                     control={
                                     <Checkbox
+                                    style={{padding: '0', marginLeft: '1em'}}
                                     checked={responseData.lighten}
                                     icon={ <EmojiObjectsOutlined style={{ fontSize: 26 }}/> } 
                                     checkedIcon={ <EmojiObjects style={{ fontSize: 26, color: 'yellow' }} />}
@@ -366,9 +405,10 @@ class IndividualPost extends Component{
                             <span className={style.engagementCount}>{responseData.totalSaves}</span>
                             <Tooltip title="Save">  
                                 <FormControlLabel 
-                                    checked={responseData.saved}
                                     control={
-                                        <Checkbox 
+                                        <Checkbox
+                                            checked={responseData.saved}
+                                            style={{padding: '0', marginLeft: '1em'}}
                                             icon={  <BookmarkBorder 
                                                     style={{ fontSize: 26 }}/>} 
                                             checkedIcon={<Bookmark style={{ fontSize: 26, color: 'black'}}/>}
@@ -382,13 +422,19 @@ class IndividualPost extends Component{
                             </div>
 
                             <div className={style.rightSectionFooter}>
-                            <span className={style.viewPreviousNextPost} onClick={() => this.viewPreviousNextPostWindow()} onMouseUpCapture={() => this.hidePreviousNextPostWindow()} onMouseOver={() => this.viewPreviousNextPostWindow()} ><SwapHorizOutlined style={{ fontSize: 30 }}/></span>
+                                <IconButton style={{marginTop: '-8px', marginRight: '-0.5em' }} onClick={() => this.viewPreviousNextPostWindow()} onMouseUpCapture={() => this.hidePreviousNextPostWindow()} onMouseOver={() => this.viewPreviousNextPostWindow()}>
+                                    <SwapHorizOutlined style={{ fontSize: 32, color: '#746F70'}}/>
+                                </IconButton>
                             </div>
                         </div>
-                        
                     </form>
-                    </div>
-                    )}
+                </div>
+            )
+        :
+                <div className='d-flex justify-content-center'>
+                    <img className={style.postNotFound} src={postNotFound} alt='post not found' />
+                </div>
+        }
             </>
         )
     }

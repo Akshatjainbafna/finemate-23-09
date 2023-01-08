@@ -112,7 +112,7 @@ class NotificationComponent extends Component{
                                                         <Link style={{textDecoration: 'none', color : 'rgb(140, 140, 140)', display: 'flex', alignItems: 'center'}} to={"/profile/".concat(notification.sender)}>
                                                             <span>
                                                                 {notification.profilePicture ? 
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ notification.profilePicture} className={style.profilePictureThumbnail}/>
+                                                                    <img src={require('../../assets/profilePictures/'+ notification.profilePicture)} className={style.profilePictureThumbnail}/>
                                                                 :
                                                                     <Avatar> {notification.sender[0]} </Avatar>
                                                                 }
@@ -146,11 +146,7 @@ class NotificationComponent extends Component{
                                                     <div className="d-flex align-items-center">
                                                         <span>
                                                                 {notification.profilePicture ? 
-<<<<<<< HEAD
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ notification.profilePicture} className={style.profilePictureThumbnail}/>
-=======
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + notification.profilePicture} className={style.profilePictureThumbnail}/>
->>>>>>> 7ab048f919ee87308f3f910bc1e5f2a8bb5f1aa3
+                                                                    <img src={require('../../assets/profilePictures/'+ notification.profilePicture)} className={style.profilePictureThumbnail}/>
                                                                 :
                                                                     <Avatar> {notification.sender[0]} </Avatar>
                                                                 }
@@ -190,11 +186,7 @@ class NotificationComponent extends Component{
                                                         <ListItem>
                                                             <Link style={{textDecoration: 'none', color : 'rgb(140, 140, 140)'}} className="d-flex" to={"/profile/".concat(user.username)}>
                                                                 {user.profilePicture ?
-<<<<<<< HEAD
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ user.profilePicture} className={style.profilePictureThumbnail}/>
-=======
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + user.profilePicture} className={style.profilePictureThumbnail}/>
->>>>>>> 7ab048f919ee87308f3f910bc1e5f2a8bb5f1aa3
+                                                                    <img src={require('../../assets/profilePictures/'+ user.profilePicture)} className={style.profilePictureThumbnail}/>
                                                                 :
                                                                     <Avatar> {user.username[0]} </Avatar>
                                                                 }

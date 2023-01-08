@@ -1,19 +1,45 @@
 import React, { Component } from "react";
 import "./outsideNavbar.css";
 import Logo from "../../assets/finemateLatestin Angelina fontLogo.png";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
+function OutsideNavbarPageLinks(props){
+  const header = useLocation();
+  const pathName = header.pathname;
+  console.log(props.linkAddress, pathName)
+
+    if (pathName === props.linkAddress){
+      return (<li className="nav-item">
+        <Link to={props.linkAddress} className="nav-item nav-link custom-link activeOutsideNavbarLink">
+          {props.title}
+        </Link>
+    </li>)
+    }else{
+      return (<li className="nav-item">
+      <Link to={props.linkAddress} className="nav-item nav-link custom-link">
+        {props.title}
+      </Link>
+  </li>)
+  
+  }
+}
 class OutsideNavbar extends Component {
   render() {
+    const arrayOfHeaderLink = [
+      {id: 1, linkAddress: "/home", title: "Home"},
+      {id: 2, linkAddress: "/about", title: "About"},
+      {id: 3, linkAddress: "/solutions", title: "Solutions"},
+      {id: 4, linkAddress: "/team", title: "Team"}
+    ]
     return (
-      <nav className="navbar navbar-light navbar-expand-sm sticky-top outsideNav mt-2 d-flex align-content-between">
-        <Link to="/home" className="nav-link navbar-brand">
-            <span className="custom-logo">
-              <img
+      <nav className="navbar navbar-light navbar-expand-sm sticky-top outsideNav d-flex align-content-between">
+        <Link to="/home">
+          <span className="navbar-brand">
+          <img
                   src={Logo}
                   alt='finemate logo'
                   />
-            </span>
+          </span>
         </Link>
         <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" aria-label="Toggle navigation" aria-controls="navbarSupportedContent" aria-expanded="false" >
           <span className="navbar-toggler-icon "></span>
@@ -22,26 +48,12 @@ class OutsideNavbar extends Component {
       <div className="collapse navbar-collapse" id="collapsibleNavbar" >
         <div>
           <ul className="navbar-nav p-0">
-          <li className="nav-item">
-              <Link to="/home" className="nav-item nav-link custom-link">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/about" className="nav-item nav-link custom-link">
-                About
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/solutions" className="nav-item nav-link custom-link">
-                Solutions
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/team" className="nav-item nav-link custom-link">
-                Team
-              </Link>
-            </li>
+            {arrayOfHeaderLink.map((item, index) => 
+              <OutsideNavbarPageLinks
+                linkAddress= {item.linkAddress}
+                title= {item.title}
+              />
+            )}
           </ul>
         </div>
         <div className="ml-auto buttonContainer">

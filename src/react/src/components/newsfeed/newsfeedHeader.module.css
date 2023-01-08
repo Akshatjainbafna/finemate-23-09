@@ -245,13 +245,19 @@
     color: grey;
   }
   .addPostFormHeading ~ input, .addPostFormHeading ~ select{
-    min-width: 50%;
-    height: 2em;
+    height: 2.5em;
     margin-left: 0;
-    border: 1px solid rgb(200, 200, 200);
-    border-radius: 2px;
+    border: 1px solid #cdcdcd;
+    border-radius: 3px;
+    padding-left: 0.8em;
   }
 
+  .addPostFormHeading ~ input:hover, .addPostFormHeading ~ select:hover{
+    border: 1px solid #212121;
+  }
+  .addPostFormHeading ~ input:focus, .addPostFormHeading ~ select:focus{
+    border: 2px solid #3145b0 !important;
+  }
 
   @media screen and (max-width: 991px) {
     .story{

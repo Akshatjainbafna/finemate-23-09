@@ -11,22 +11,15 @@ class Message extends Component {
         super()
         this.state = {
             messages: [],
-            profilePicture: ''
         }
     }
 
     componentDidMount() {
         AxiosBaseFile.post('/api/db_get_messages', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser')})
-            .then(res => {
-                this.setState({
-                    messages: res.data
-                })
-            })
-        AxiosBaseFile.post('/api/db_get_profile_picture', {'username': localStorage.getItem('targetUser')})
-            .then(response => {
-              this.setState({profilePicture: response.data.profilePicture});
-            })
-            .catch(err => console.log(err))
+        .then(res => {
+            this.setState({messages: res.data})
+        })
+        .catch(err => console.log(err));
         
         this.checkNewMessage = setInterval(() => {
             AxiosBaseFile.post('/api/db_get_messages', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser')})
@@ -56,9 +49,9 @@ class Message extends Component {
                 <div className={style.chatHeader}>
                     <span>
                     <Link to={"/profile/".concat(localStorage.getItem('targetUser'))} style={{textDecoration: 'none'}}>
-                        {this.state.profilePicture ?
+                        {localStorage.getItem('profilePictureTargetUser') ?
                             <ListItemAvatar>
-                                <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureChatHeader}/>
+                                <img src={require('../../assets/profilePictures/'+ localStorage.getItem('profilePictureTargetUser'))} className={style.profilePictureChatHeader}/>
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>

@@ -80,20 +80,18 @@ function MenuList(props){
                     height: 'fit-content',
                     borderRadius: '10px',
                     backgroundColor: '#A78EC3',
-                    boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)',
+                    boxShadow: '0px 2px 4px 2px rgba(0,0,0,0.2)',
                     padding: '0 10px',
                     color: 'whitesmoke',
                 },
             }}
         >
         
-            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => {setAnchorMenuList(null); notInterested()}}> Not Interested </MenuItem>
-            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => {setAnchorMenuList(null); showOften()}}> Show Often </MenuItem>
-            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Prerequisite </MenuItem>
-            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Hashtags </MenuItem>
-            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Glossaries </MenuItem>
-            <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => setAnchorMenuList(null)}> Read More </MenuItem>
-            {props.username == localStorage.getItem('username') ? <MenuItem style={{borderBottom: "0.1px solid grey", fontFamily: 'poppins', color: 'white', fontSize: 'small'}} onClick={() => {setAnchorMenuList(null); deletePost()}}> Delete Post </MenuItem> : null }
+            <MenuItem onClick={() => {setAnchorMenuList(null); notInterested()}}> Not Interested </MenuItem>
+            <MenuItem onClick={() => {setAnchorMenuList(null); showOften()}}> Show Often </MenuItem>
+            <MenuItem onClick={() => setAnchorMenuList(null)}> Prerequisite </MenuItem>
+            <MenuItem onClick={() => setAnchorMenuList(null)}> Read More </MenuItem>
+            {props.username == localStorage.getItem('username') ? <MenuItem  onClick={() => {setAnchorMenuList(null); deletePost()}}> Delete Post </MenuItem> : null }
                                 
         </Menu>
         </>                     
@@ -107,7 +105,7 @@ function PreviousNextWindow(props){
     function fetchPreviousPost(){
         setAnchorPrevNext(null);
         try{
-            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId.$oid})
+            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -119,7 +117,7 @@ function PreviousNextWindow(props){
     function fetchNextPost(){
         setAnchorPrevNext(null);
         try{
-            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId.$oid})
+            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -138,10 +136,10 @@ function PreviousNextWindow(props){
             aria-haspopup="true"
             onClick={(event) => setAnchorPrevNext(event.currentTarget)}
             style={{
-                marginTop: '-8px', color: 'grey', marginRight: '2vw'
+                marginTop: '-8px', marginRight: '-0.5em'
             }}
         >
-            <SwapHorizOutlined style={{ fontSize: 30 }}/>
+            <SwapHorizOutlined style={{ fontSize: 30, color: '#746F70' }}/>
         </IconButton>
         <Menu
             id="prevNextWindow"
@@ -525,6 +523,20 @@ render(){
 
                         <div className={style.postImg} onDoubleClick={() => {this.postLiked(index)}}  id="imageLocation">
 
+                        <div>{
+                                (() => {
+                                    let postNumber = responseData.listOfAllThePostIds.indexOf(responseData._id.$oid) + 1;
+                                    let totalPostsInThread = responseData.listOfAllThePostIds.length;
+                                    if (totalPostsInThread > 1){
+                                        return(<span className={style.postCount}>
+                                            {postNumber}/{totalPostsInThread}
+                                        </span>
+                                        ) 
+                                    }
+                                })()
+                            }
+                            </div>
+
                             <span className={style.quesFactBlock}>
                                 {responseData.question ? <p name="questionOfPost" className={style.question}>{responseData.question}</p> : ""} 
                                 <p className={style.fact} id={index}> {responseData.fact.split('\n').map(function(item, indexOfFactSpan) {
@@ -538,13 +550,12 @@ render(){
                                 </p>
                             </span>
 
-                            <img id={"backgroundImage"+String(index)} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
+                            <img id={"backgroundImage"+String(index)} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} alt='post' />
                             
                             <Tooltip title="View Background" > 
                                 <FormControlLabel
                                     className={style.viewImageIcon}
                                     control={
-                                        
                                     <Checkbox 
                                         checked={false}
                                         icon={ <FilterCenterFocusRounded /> } 
@@ -563,13 +574,13 @@ render(){
                             <span>
                             <Tooltip title="Nice Explaination"> 
                                 <FormControlLabel
+                                    className={style.likeFormControlLabel}
                                     control={
-
                                     <Checkbox 
                                         checked={responseData.liked}
                                         icon={ <FavoriteBorder style={{ fontSize: 26 }} /> } 
                                         checkedIcon={ <Favorite style={{ fontSize: 26 }} /> }
-                                        name="likedPost" 
+                                        name="likedPost"
                                         onChange={() => {this.postLiked(index)}}
                                     />
                                     }
@@ -581,6 +592,7 @@ render(){
                             <span>
                             <Tooltip title="Insightful"> 
                                 <FormControlLabel
+                                    className={style.insightfulFormControlLabel}
                                     control={
                                     <Checkbox
                                     checked={responseData.lighten}
@@ -598,12 +610,12 @@ render(){
                             <span>
                             <Tooltip title="Save">  
                                 <FormControlLabel 
-                                    checked={responseData.saved}
+                                    className={style.saveFormControlLabel}
                                     control={
                                         <Checkbox 
-                                            icon={  <BookmarkBorder 
-                                                    style={{ fontSize: 26 }}/>} 
-                                            checkedIcon={<Bookmark style={{ fontSize: 26, color: 'black'}}/>}
+                                            checked={responseData.saved}
+                                            icon={  <BookmarkBorder style={{ fontSize: 26 }}/>  } 
+                                            checkedIcon={  <Bookmark style={{ fontSize: 26, color: 'black'}}/>  }
                                             name="savedPost"
                                             onChange={() => {this.postSaved(index)}}
                                         />
@@ -614,7 +626,7 @@ render(){
                             </div>
 
                             <div className={style.rightSectionFooter}>
-                                <PreviousNextWindow previousId={responseData.previousPost[0]} nextId={responseData.nextPost[0]} onUpdate={(data) => this.onUpdate(data, index)} />
+                                <PreviousNextWindow previousId={responseData.previousPost.$oid} nextId={responseData.nextPost.$oid} onUpdate={(data) => this.onUpdate(data, index)} />
                             </div>
                         </div>
                         

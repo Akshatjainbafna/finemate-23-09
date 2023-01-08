@@ -4,7 +4,7 @@ import profilePic from "../../assets/profilePic.png";
 import "./profile.css";
 import ColourText from "./colorText.component.js";
 import { AddPhotoAlternateRounded } from "@material-ui/icons";
-import { Button, Input, Menu, MenuItem, TextField } from "@material-ui/core";
+import { Button, Divider, Input, Menu, MenuItem, TextField } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 
@@ -197,7 +197,7 @@ displayPanel(panel){
               <div className="profile_pic_slot">
                 {this.state.displaying ? 
                   profilePicture ? 
-                    <div><img src={require('../../assets/profilePictures/'+ profilePicture)} alt="not found" className="elementPic" /> </div>   
+                    <div><img alt='profile' src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>   
                   :
                     <div><img src={profilePic} alt="not found" className="elementPic" /> </div>
                 :
@@ -395,7 +395,7 @@ displayPanel(panel){
 
         <Card className="info"> 
 
-          <div className="d-flex justify-content-around mt-3">
+          <div className="d-flex justify-content-around" style={{marginTop: '1vh'}}>
               <span>
                 <input name="tabNews" type="radio" id="tabNews-1" className="radioProfilePage" onChange={() => this.displayPanel("panel1")} />
                 <label for="tabNews-1" className="profileElementsTitle">
@@ -416,6 +416,7 @@ displayPanel(panel){
               </span>
           </div>
 
+          <Divider />
             <div>
             <Card.Body className="profileElements" id="panel1">
               <div className="profileElementContainer">
@@ -426,7 +427,7 @@ displayPanel(panel){
                             <p className="subTopicThumbnail">{post.subtopic}</p>
                             <p className="fact"> {post.fact}</p>
                         </div>
-                        <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                        <img alt='post thumbnail' src={require('../../assets/postBackgroundImages/'+ post.background)} />
                       </div>
                     </Link>
                 )}
@@ -442,7 +443,7 @@ displayPanel(panel){
                       <p className="subTopicThumbnail">{post.subtopic}</p>
                       <p className="fact"> {post.fact}</p>
                     </div>
-                    <img src={require('../../assets/postBackgroundImages/'+ post.background)} />
+                    <img alt='post thumbnail' src={require('../../assets/postBackgroundImages/'+ post.background)} />
                   </div>
                 </Link>
               )}

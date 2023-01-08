@@ -35,6 +35,7 @@ class ProfileObj():
 		pending = me.ListField(StringField(), default=list)
 		profilePicture = me.StringField()
 		notInterestedTopics=me.ListField(me.StringField(), default=list)
+		year = me.IntField(default = 0)
 
 		def to_json(self):
 			"""
@@ -401,7 +402,7 @@ class ProfileObj():
 	
 	def db_add_education_from_questionaire(self):
 
-		x = checkFields(self.content, fields=['listOfPreviousEducation', 'username', "coreStream", "listOfLookingForwardToLearn", "qualification"])
+		x = checkFields(self.content, fields=['listOfPreviousEducation', 'username', "coreStream", "listOfLookingForwardToLearn", "qualification", "numberOfYears"])
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 		
@@ -412,6 +413,7 @@ class ProfileObj():
 			prof_obj.update(set__coreStream=self.content['coreStream'])
 			prof_obj.update(push_all__educations=self.content['listOfPreviousEducation'])
 			prof_obj.update(push_all__lookingForwardToLearn=self.content['listOfLookingForwardToLearn'])
+			prof_obj.update(set__year = self.content['numberOfYears'])
 			return make_response("", 200)
 		else:
 			return make_response("User does not exist.", 404)

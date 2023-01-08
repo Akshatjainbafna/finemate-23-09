@@ -2,9 +2,8 @@
     display: flex;
     justify-content: space-between;
     padding: 2%;
-    background-color: white;
-    border-bottom: 1px solid #dfd6e98f;
-    box-shadow: 0px 1px 1px #dfd6e98f;
+    background-color: rgb(252, 252, 252);
+    box-shadow: 0px 1px 3px #dddddd;
     position: sticky;
     top: 0;
     text-decoration: none;
@@ -27,7 +26,14 @@
     color: rgba(0, 0, 0, 0.8);
 }
 .sidebarListItem:hover, .sidebarListItem:focus{
-    background-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 0 10px 10px 0;
+}
+.sidebarListItemActive{
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 0 10px 10px 0;
 }
 .profilePictureSidebarThumbnail{
     height: 35px;

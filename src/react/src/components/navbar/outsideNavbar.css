@@ -1,20 +1,38 @@
 .outsideNav {
 	background-color: #fcfcfb;
-}
-.custom-logo {
-	max-width: 100%;
-	max-height: 100%;
+	height: 15vh;
+	margin-top: 1vh;
 }
 .custom-link {
-	color: rgba(0, 0, 0, 0.8);
+	color: rgba(0, 0, 0, 0.7) !important;
 	font-family: 'Open Sans';
-	border-bottom: 2px solid #fcfcfb;
 	font-weight: 600;
 }
-.custom-link:hover {
-	color: rgba(0, 0, 0, 0.9);
+.custom-link:hover{
+	color: rgba(0, 0, 0, 0.85) !important;
+}
+.custom-link:hover::after {
+	content: "";
+	display: block;
 	border-bottom: 2px solid #A78EC3;
-	transition: border-bottom 0.5s ease-in-out;
+	animation: border_anim 0.5s linear;
+}
+.activeOutsideNavbarLink{
+	color: rgba(0, 0, 0, 0.85) !important;
+}
+.activeOutsideNavbarLink::after{
+	content: "";
+	display: block;
+	border-bottom: 2px solid #A78EC3;
+	width: 1.25em;
+}
+@keyframes border_anim {
+	0%{
+		width: 0%;
+	}
+	100%{
+		width: 100%;
+	}
 }
 .btn-sign {
 	border-color: #A78EC3;
@@ -39,10 +57,14 @@
 .custom-div {
 	flex-direction: column;
 }
-.nav-item, .navbar-brand{
+.nav-item{
 	margin-left: 2vw;
 }
-
+.navbar-brand{
+	margin-left: 4vw;
+	margin-right: 0;
+	width: 160px;
+}
 @media screen and (max-width: 575px) {
 	.buttonContainer{
 		display: flex;
@@ -58,20 +80,33 @@
 	}
 	.custom-link {
 		font-size: medium;
-		border-bottom: 1px solid rgb(150, 150, 150);
-		margin: auto 2vw !important;
+		margin: 1vh 2vw !important;
 	}
-	.custom-link:hover {
-		color: #834bc4 !important;
-		font-weight: 700;
-		border-bottom: 1px solid rgb(150, 150, 150);
+	.outsideNav{
+		height: max-content;
+		margin-top: 0 !important;
 	}
 	.navbar-collapse{
 		height: 100vh;
+		animation: heightChange 2s;
+		border-bottom: 2px dashed rgb(150, 150, 150);
 	}
-	.navbar-brand{
-		padding: 0%;
-		margin-left: -5vw;
+	@keyframes heightChange{
+		0%{
+			height: 0;
+		}
+		100%{
+			height: 100vh;
+		}
+	}
+	.navbar-toggler-icon {
+		background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(150, 150, 150)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E") !important;
+	  }
+	  .navbar-toggler{
+		border: none !important;
+	  }
+	  .navbar-brand{
+		margin-left: -1vw;
 	}
 	.nav-item{
 		margin-left: 0vw;

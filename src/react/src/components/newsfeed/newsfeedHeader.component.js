@@ -41,22 +41,22 @@ class NewsfeedHeader extends Component{
             <>
             <div className={style.newsfeedFeatures}>
             
-            <Tooltip title="Add Post"><Button style={{padding: "0", borderRadius: '100%'}} className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}><img style={{width:"5.5vw", height: "5.5vw"}} src={addPost}></img></Button></Tooltip>
+            <Tooltip title="Add Post"><Button style={{padding: "0", borderRadius: '100%'}} className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}><img alt='group' style={{width:"5.5vw", height: "5.5vw"}} src={addPost}></img></Button></Tooltip>
             
             {this.state.setOpen ? <ContentAuthoringToolWindow /> : null }
 
                <Tooltip title="Scroll horizontally"><section className={style.story}><ul className={style.list}>
     
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Badminton}/> </div>   <div className={style.circleName}>Badmint</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Shadi}/> </div>   <div className={style.circleName}>Shadi</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={College}/> </div>   <div className={style.circleName}> College </div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={School}/> </div>   <div className={style.circleName}> School </div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Indore}/> </div>   <div className={style.circleName}>Indore</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Coaching}/> </div>   <div className={style.circleName}>Coaching</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Project}/> </div>   <div className={style.circleName}>Project</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Multi}/> </div>   <div className={style.circleName}>Project</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Cousins}/> </div>   <div className={style.circleName}>Cousins</div> </div> </li>
-               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img src={Coders}/> </div>   <div className={style.circleName}>Coders</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Badminton}/> </div>   <div className={style.circleName}>Badmint</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Shadi}/> </div>   <div className={style.circleName}>Shadi</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={College}/> </div>   <div className={style.circleName}> College </div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={School}/> </div>   <div className={style.circleName}> School </div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Indore}/> </div>   <div className={style.circleName}>Indore</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Coaching}/> </div>   <div className={style.circleName}>Coaching</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Project}/> </div>   <div className={style.circleName}>Project</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Multi}/> </div>   <div className={style.circleName}>Project</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Cousins}/> </div>   <div className={style.circleName}>Cousins</div> </div> </li>
+               <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Coders}/> </div>   <div className={style.circleName}>Coders</div> </div> </li>
 
                  </ul> </section></Tooltip>
 

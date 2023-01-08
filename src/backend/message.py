@@ -5,8 +5,9 @@ import hashlib
 from flask import Flask, make_response, request, jsonify
 from Exceptions.MissingRequiredField import checkFields
 from datetime import datetime
-from user import UserObj
-User = UserObj.User 
+from profile import ProfileObj
+Profile = ProfileObj.Profile
+
 
 class MessageObj():
     """
@@ -34,6 +35,8 @@ class MessageObj():
                 "username2": self.username2,
                 "message": self.message, 
                 "time": self.time,
+                "user1seen" : self.user1seen,
+                "user2seen": self.user2seen
             }
 
     def __init__(self, content):
@@ -50,9 +53,9 @@ class MessageObj():
         if (x):
             return make_response("Missing required field: " + x, 400)
 
-        if (User.objects(username=self.content['username1']).count() <= 0):
+        if (Profile.objects(username=self.content['username1']).count() <= 0):
             return make_response("Username1 does not exist.", 404)
-        if (User.objects(username=self.content['username2']).count() <= 0):
+        if (Profile.objects(username=self.content['username2']).count() <= 0):
             return make_response("Username2 does not exist.", 404)
 
         self.Message(username1=self.content['username1'], username2=self.content['username2'], message=self.content['message'], time=datetime.now().strftime("%Y/%m/%d, %H:%M:%S")).save()
@@ -65,13 +68,6 @@ class MessageObj():
         x = checkFields(self.content, fields=['username1','username2'])
         if (x):
             return make_response("Missing required field: " + x, 400)
-
-        #in case if want messages from a name irrespective the case the username is stored
-        lowercaseTargetUserName=self.content['username2'].lower()
-        uppercaseTargetUserName=self.content['username2'].upper()
-        swapcaseTargetUserName=self.content['username2'].swapcase()
-        titlecaseTargetUserName=self.content['username2'].title()
-        capitalcaseTargetUserName=self.content['username2'].capitalize()
         
         messages = []
 
@@ -102,7 +98,7 @@ class MessageObj():
 
         uniqueUsers=[self.content['username']]
 
-        raw = self.Message.objects(me.Q(username1=self.content['username']) | me.Q(username2=self.content['username'])).order_by('-time').all()
+        raw = self.Message.objects(me.Q(username1=self.content['username']) | me.Q(username2=self.content['username'])).order_by('-$natural').all()
         
         for i in raw:
             if len(messages)==10:
@@ -112,8 +108,17 @@ class MessageObj():
                 timeOfMessage = datetime.strptime(latestMessage['time'] , "%Y/%m/%d, %H:%M:%S")
                 timeDifference = datetime.now() - timeOfMessage
                 latestMessage['time'] = str(timeDifference)
+
+                if i.username2 == self.content['username']:
+                    profilePicture = Profile.objects(username = i.username1).only('profilePicture').first()
+                    uniqueUsers.append(i.username1)
+                else:
+                    profilePicture = Profile.objects(username = i.username2).only('profilePicture').first()
+                    uniqueUsers.append(i.username2)
+
+                latestMessage['profilePicture'] = profilePicture.profilePicture
+
                 messages.append(latestMessage)
-                uniqueUsers.append(i.username1 if i.username2==self.content['username'] else i.username2)
 
         return make_response(jsonify(messages), 200)
 
