@@ -162,42 +162,49 @@ class DashboardCalendarComponent extends Component {
 		return (
 			<>
 			<div className={styles.dashCard4Style}>
+				{localStorage.getItem('usertype') == 'student' ? 
 				<div className={styles.windowHiddenHeader}>
-				<Tooltip title ="Calendar"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu1")}> <img src={CalenderImg} alt='not found' /> </Button></Tooltip>
-				<Tooltip title ="Diary"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu2")}><img src={CalenderLogImg} alt='not found' /> </Button></Tooltip>
-				<Tooltip title ="Assignments"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu3")}><img src={AssignmentsImg} alt='not found'/> </Button></Tooltip>
-				<Tooltip title ="Todo List"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectTodo: true})} onClick={() => this.displayDashMenu("dashMenu4")}><img src={TodoImg} alt='not found'/> </Button></Tooltip>
-				<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectLeaderboard: true})} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
-				
+					<Tooltip title ="Todo List"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectTodo: true})} onClick={() => this.displayDashMenu("dashMenu1")}><img src={TodoImg} alt='not found'/> </Button></Tooltip>
+					<Tooltip title ="Calendar"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu2")}> <img src={CalenderImg} alt='not found' /> </Button></Tooltip>
+					<Tooltip title ="Diary"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu3")}><img src={CalenderLogImg} alt='not found' /> </Button></Tooltip>
+					<Tooltip title ="Assignments"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu4")}><img src={AssignmentsImg} alt='not found'/> </Button></Tooltip>
+					<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectLeaderboard: true})} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
 				</div>
+				:
+				<div className={styles.windowHiddenHeader}>
+					<Tooltip title ="Todo List"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectTodo: true})} onClick={() => this.displayDashMenu("dashMenu1")}><img src={TodoImg} alt='not found'/> </Button></Tooltip>
+					<Tooltip title ="Calendar"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu2")}> <img src={CalenderImg} alt='not found' /> </Button></Tooltip>
+					<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectLeaderboard: true})} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
+				</div>
+				}
 
 				<div>
-				    		<div className={styles.windowHidden} id="dashMenu1">
-								<Calendar
-									className={styles.reactCalendar}
-									onChange={this.onChange}
-									value={value}
-									locale={'en-US'}
-									returnValue={"start"}
-									maxDetail={"month"}
-									minDetail={"year"}
-									calendarType={"US"}
-									showDoubleView={false}
-									onClickDay={this.clickDay(this.state.date)}
-								/>
-							</div>
-							<div className={styles.windowHidden} id="dashMenu2">
-								<DiaryComponent/>
-							</div>
-							<div className={styles.windowHidden} id="dashMenu3">
-								<TaskComponent />
-							</div>
-							<div className={styles.windowHidden} id="dashMenu4">
-								<TodoComponent />
-							</div>
-							<div className={styles.windowHidden} id="dashMenu5">
-								<LeaderboardYouVsYou />
-							</div>
+					<div className={styles.windowHidden} id="dashMenu1">
+						<TodoComponent />
+					</div>
+				    <div className={styles.windowHidden} id="dashMenu2">
+						<Calendar
+							className={styles.reactCalendar}
+							onChange={this.onChange}
+							value={value}
+							locale={'en-US'}
+							returnValue={"start"}
+							maxDetail={"month"}
+							minDetail={"year"}
+							calendarType={"US"}
+							showDoubleView={false}
+							onClickDay={this.clickDay(this.state.date)}
+						/>
+					</div>
+					<div className={styles.windowHidden} id="dashMenu3">
+						<DiaryComponent/>
+					</div>
+					<div className={styles.windowHidden} id="dashMenu4">
+						<TaskComponent />
+					</div>
+					<div className={styles.windowHidden} id="dashMenu5">
+						<LeaderboardYouVsYou />
+					</div>
 				</div>
 			</div>
 			</>

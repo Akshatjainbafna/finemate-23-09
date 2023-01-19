@@ -39,7 +39,7 @@ img {
     margin-left: 22vw;
   }
 .leftHalf {
-    padding: 0 1rem;
+    padding: 4vh 2vw;
     width: 50vw;
   }
   .rightHalf {
@@ -99,8 +99,9 @@ img {
     width: calc(100vw - 80px);
   }
   .newsFeedPageForMobile{
-   height: 84vh;
+    height: 84vh;
     max-width: 100vw !important;
     overflow-y: auto;
+    padding: 2vh 0;
   }
 }

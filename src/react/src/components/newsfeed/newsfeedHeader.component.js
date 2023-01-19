@@ -1,7 +1,7 @@
 import React,{ Component } from "react";
 import style from './newsfeedHeader.module.css';
 import addPost from "../../assets/addPost.png";
-import { Button, Tooltip } from "@material-ui/core";
+import { Button, IconButton, Tooltip } from "@material-ui/core";
 
 //static images to be removed later after developing feature
 import Badminton from "../../assets/sampleImages/badminton.jpeg";
@@ -15,6 +15,7 @@ import College from "../../assets/sampleImages/coll.jpeg";
 import Multi from "../../assets/sampleImages/coll.jpeg";
 import Indore from "../../assets/sampleImages/indore.jpeg";
 import ContentAuthoringToolWindow from "./contentAuthoringTool.component";
+import { Add, AddCircleOutline } from "@material-ui/icons";
 
 
 
@@ -41,10 +42,10 @@ class NewsfeedHeader extends Component{
             <>
             <div className={style.newsfeedFeatures}>
             
-            <Tooltip title="Add Post"><Button style={{padding: "0", borderRadius: '100%'}} className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}><img alt='group' style={{width:"5.5vw", height: "5.5vw"}} src={addPost}></img></Button></Tooltip>
+            <Button className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}>Post</Button>
             
             {this.state.setOpen ? <ContentAuthoringToolWindow /> : null }
-
+{/*
                <Tooltip title="Scroll horizontally"><section className={style.story}><ul className={style.list}>
     
                <li className={style.item}> <div className={style.userStoryThumbnail}> <div className={style.imgThumbnail}> <img alt='group' src={Badminton}/> </div>   <div className={style.circleName}>Badmint</div> </div> </li>
@@ -61,7 +62,7 @@ class NewsfeedHeader extends Component{
                  </ul> </section></Tooltip>
 
 
-{/*  Toggle Buttons for Post Categories and MCQ-Post toggling
+  Toggle Buttons for Post Categories and MCQ-Post toggling
                 <section className={style.newsfeedSettings}>
                     <div className={style.button} id={style.button4}>
                         <input type="checkbox" className={style.checkbox} />

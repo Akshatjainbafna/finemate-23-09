@@ -5,8 +5,8 @@ import style from './newsfeed.module.css';
 import {BsArrowLeft,BsArrowRight, BsArrowRightShort, BsPlus, BsThreeDotsVertical} from 'react-icons/bs'
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded, PlusOne, Add} from '@material-ui/icons';
-import {Button, IconButton, Tooltip} from "@material-ui/core";
+import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded, PlusOne, Add, ArrowDropDown, ArrowDropDownCircle, ArrowDropDownCircleOutlined, ArrowDropUp} from '@material-ui/icons';
+import {Avatar, Button, IconButton, ListItem, ListItemAvatar, ListItemText, Tooltip} from "@material-ui/core";
 
 //images
 import correct from './correctBGicon.png';
@@ -23,6 +23,7 @@ class IndividualPost extends Component{
             responseData: [],
             id: this.props.id,
             createNewPost: false,
+            dropDown: false
         }
     }
 
@@ -135,7 +136,9 @@ class IndividualPost extends Component{
     }
 
     componentDidMount(){
-        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username') , id: this.state.id})
+        AxiosBaseFile.get('/api/db_get_particular_post', {params: {
+            username: localStorage.getItem('username') , id: this.state.id
+        }})
         .then(res => {
             let responseData = Array(res.data);
             this.setState({responseData : responseData});
@@ -144,7 +147,9 @@ class IndividualPost extends Component{
         .catch(err => console.log(err))
     }
     fetchPreviousPost(){
-        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].previousPost.$oid})
+        AxiosBaseFile.get('/api/db_get_particular_post', {params: {
+            username: localStorage.getItem('username') , id: this.state.responseData[0].previousPost.$oid
+        }})
         .then((res) => {
             let responseData = Array(res.data);
             this.setState({responseData : responseData, id : responseData[0]._id.$oid});
@@ -153,7 +158,9 @@ class IndividualPost extends Component{
         .catch(err => console.log(err))
     }
     fetchNextPost(){
-        AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: this.state.responseData[0].nextPost.$oid})
+        AxiosBaseFile.get('/api/db_get_particular_post', {params: {
+            username: localStorage.getItem('username') , id: this.state.responseData[0].nextPost.$oid
+        }})
         .then((res) => {
             let responseData = Array(res.data);
             this.setState({responseData : responseData, id : responseData[0]._id.$oid});
@@ -426,6 +433,41 @@ class IndividualPost extends Component{
                                     <SwapHorizOutlined style={{ fontSize: 32, color: '#746F70'}}/>
                                 </IconButton>
                             </div>
+                        </div>
+                        <div className={style.postCredits} id='postCredits'>
+                            <div>
+                            <Link style={{textDecoration: "none", color: "grey"}} to={"/profile/".concat(responseData.username)}>
+                                        <ListItem>
+                                            {responseData.profilePicture ?
+                                            <ListItemAvatar>
+                                                <img src={require('../../assets/profilePictures/'+ responseData.profilePicture)} alt="Profile" className={style.profilePictureChatHeader}/>
+                                            </ListItemAvatar>
+                                            :
+                                            <ListItemAvatar>
+                                                <Avatar> {responseData.username[0]} </Avatar>
+                                            </ListItemAvatar>
+                                            }
+                                            
+                                            <ListItemText style={{color: 'white'}}>
+                                                {responseData.username}
+                                            </ListItemText>
+                                        </ListItem>
+                                        </Link>
+                            </div>
+                            <div style={{fontSize: 'small', marginRight: '16px'}}>
+                                {(responseData.creation_date_time.split(','))[0]}
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            {this.state.dropDown ? 
+                                <IconButton className={style.dropBtn} style={{marginTop: '-30px'}} onClick={() => {document.getElementById('postCredits').style.display = 'none'; this.setState({dropDown: false})}}>
+                                    <ArrowDropUp style={{fontSize: '1.25em', color: 'white'}} />
+                                </IconButton>
+                            :
+                                <IconButton className={style.dropBtn} style={{marginTop: '-25px'}} onClick={() => {document.getElementById('postCredits').style.display = 'flex'; this.setState({dropDown: true})}}>
+                                    <ArrowDropDown style={{fontSize: '1.25em'}} />
+                                </IconButton>
+                            }
                         </div>
                     </form>
                 </div>

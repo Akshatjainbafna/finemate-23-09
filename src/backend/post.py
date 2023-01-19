@@ -59,7 +59,7 @@ class PostObj():
         mcqOptions = self.content['mcq1Opts'].split(',')
         publicState = True if self.content['public'] == 'true' else False
 
-        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcqOptions, creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = '', nextPost = '', mainPost = '').save()
+        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcqOptions, creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = '', nextPost = '', mainPost = '').save()
         createPost.update(set__previousPost = createPost)
         createPost.update(set__nextPost = createPost)
         idOfCreatePost = str(createPost.id)
@@ -163,6 +163,7 @@ class PostObj():
         idOfTheCurrentPost = currentPost.id
         idOfTheNextPostOfCurrentPost =  currentPost.nextPost.id
         nextPostOfCurrentPost = False
+        counter = 0
 
         if currentPost:
             incomingData = json.loads(self.content['listOfPosts'])
@@ -180,13 +181,13 @@ class PostObj():
 
                     if idOfTheNextPostOfCurrentPost != idOfTheCurrentPost:
                         nextPostOfCurrentPost = self.Posts.objects(id = currentPost.nextPost.id).first() 
-                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = nextPostOfCurrentPost, mainPost = idOfTheMainPost).save()
+                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = nextPostOfCurrentPost, mainPost = idOfTheMainPost).save()
                         currentPost.update(set__nextPost = nextPost)
                         currentPost = nextPost
                         idOfTheCurrentPost = currentPost.id
                         idOfTheNextPostOfCurrentPost = nextPost.id
                     else:
-                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d/%m/%Y %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = '', mainPost = idOfTheMainPost).save()
+                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = '', mainPost = idOfTheMainPost).save()
                         nextPost.update(set__nextPost = nextPost)
                         currentPost.update(set__nextPost = nextPost)
                         currentPost = nextPost
@@ -200,10 +201,16 @@ class PostObj():
                     listOfAllThePostIds.insert(indexToPlaceNextPostInTheList, str(idOfTheNextPostOfCurrentPost))
                     mainPost.update(set__thread = listOfAllThePostIds)
 
+                    counter += 1
+
+                    if counter == 1:
+                        redirectPostId = str(nextPost.id)
+                        print(redirectPostId)
+
                 else:
                     return make_response('Post is either of different topic, private or deleted.', 400)
             
-            return make_response( 'Post linked successfully!', 200)
+            return make_response(jsonify(redirectPostId), 200)
 
         else:
             return make_response('Post Not Found', 404)
@@ -215,7 +222,7 @@ class PostObj():
         if (x):
             return make_response("Missing required field: " + x, 400)
 
-        postsOfParticualarTopicSubtopic = self.Posts.objects(public = True).search_text(self.content['topic']).only('username', 'background', 'subtopic', 'fact').order_by('-creation_date_time')[:12]
+        postsOfParticualarTopicSubtopic = self.Posts.objects(public = True).search_text(self.content['topic']).only('username', 'background', 'subtopic', 'fact').order_by('-$natural')[:12]
         
         return make_response(jsonify(postsOfParticualarTopicSubtopic), 200)
 
@@ -273,7 +280,7 @@ class PostObj():
                 #appending post in a list to send to client
                 postData.append(post)
                 #storing time in string, at which the user saw the post inside a timeList listfield
-                timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                timeRytNow=str(datetime.now().strftime("%d %b %Y, %H:%M:%S"))
                 
                 #storing the reference inside a user_interactions collection inside a interaction list
                 postToString=post.to_json()
@@ -384,7 +391,7 @@ class UserInteractions(me.Document):
         postData=[]
 
         #storing time in string, at which the user saw the post inside a timeList listfield
-        timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        timeRytNow=str(datetime.now().strftime("%d %b %Y, %H:%M:%S"))
         
         # make a change here count() < 50:
         if UserInteractions.objects(username=self['username']).count()<10:
@@ -413,12 +420,17 @@ class UserInteractions(me.Document):
                         else:
                             listOfAllThePostIds = post.thread
 
+
                         #Combining the post data with the user interaction 
                         addThePostStr=post.to_json()
                         addTheInteractionStr=user_interaction.to_json()
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
+                        #join user profileImage with the post 
+                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        objectOfTheCombinedString['profilePicture'] = profile.profilePicture
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -455,6 +467,10 @@ class UserInteractions(me.Document):
                     objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                     objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
+                    #join user profileImage with the post 
+                    profile = Profile.objects(username = post.username).only("profilePicture").first()
+                    objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+
                     #appending the combined object build from two different strings to the postData List to send to client
                     postData.append(objectOfTheCombinedString)
 
@@ -486,6 +502,10 @@ class UserInteractions(me.Document):
                     combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                     objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                     objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
+                    #join user profileImage with the post 
+                    profile = Profile.objects(username = post.username).only("profilePicture").first()
+                    objectOfTheCombinedString['profilePicture'] = profile.profilePicture
 
                     #appending the combined object build from two different strings to the postData List to send to client
                     postData.append(objectOfTheCombinedString)
@@ -524,6 +544,10 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
+                        #join user profileImage with the post 
+                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
 
@@ -561,7 +585,7 @@ class UserInteractions(me.Document):
         postData=[]
 
         #storing time in string, at which the user saw the post inside a timeList listfield
-        timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+        timeRytNow=str(datetime.now().strftime("%d %b %Y, %H:%M:%S"))
         
         # make a change here count() < 50:
         if UserInteractions.objects(username=self['username']).count()<10:
@@ -597,6 +621,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
+                        #join user profileImage with the post 
+                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        objectOfTheCombinedString['profilePicture'] = profile.profilePicture
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -640,6 +667,10 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
+                        #join user profileImage with the post 
+                        profile = Profile.objects(username = addThePost.username).only("profilePicture").first()
+                        objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -675,6 +706,10 @@ class UserInteractions(me.Document):
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
+                        #join user profileImage with the post 
+                        profile = Profile.objects(username = addThePost.username).only("profilePicture").first()
+                        objectOfTheCombinedString['profilePicture'] = profile.profilePicture
 
 
                         #appending the combined object build from two different strings to the postData List to send to client
@@ -713,6 +748,10 @@ class UserInteractions(me.Document):
                         combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                         objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
+
+                        #join user profileImage with the post 
+                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        objectOfTheCombinedString['profilePicture'] = profile.profilePicture
 
 
                         #appending the combined object build from two different strings to the postData List to send to client
@@ -756,6 +795,7 @@ class UserInteractions(me.Document):
             return make_response("Missing required field: " + x, 400)
 
         post = PostObj.Posts.objects(id=incomingData['id']).first()
+        profile = Profile.objects(username = post.username).only("profilePicture").first()
 
         if post:
 
@@ -775,10 +815,9 @@ class UserInteractions(me.Document):
                 objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                 objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
-                return make_response(jsonify(objectOfTheCombinedString), 200)
             
             else:
-                timeRytNow=str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+                timeRytNow=str(datetime.now().strftime("%d %b %Y, %H:%M:%S"))
                 objectOfTherecordOfTheUser= Profile.objects(username=incomingData['username']).first()
                 user_interaction=UserInteractions(userReference=objectOfTherecordOfTheUser, username=incomingData['username'], postId=post, timeList=[timeRytNow]).save()
 
@@ -788,9 +827,9 @@ class UserInteractions(me.Document):
                 combinedPost_InteractionDocument = addTheInteractionStr[:-1] + ", " + addThePostStr[1:]
                 objectOfTheCombinedString=json.loads(combinedPost_InteractionDocument)
                 objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
-
-
-                return make_response(jsonify(objectOfTheCombinedString), 200)
+            
+            objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+            return make_response(jsonify(objectOfTheCombinedString), 200)
             
         else:
 

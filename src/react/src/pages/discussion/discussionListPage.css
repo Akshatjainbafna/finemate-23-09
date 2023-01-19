@@ -30,6 +30,7 @@
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
   text-shadow: 1px 1px 1px #77777771;
   transition: transform ease-in-out 0.5s;
+  background-color: rgb(79, 200, 167);
 }
 .community:hover{
   text-decoration: none;

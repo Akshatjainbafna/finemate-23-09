@@ -219,7 +219,7 @@ class UserObj():
 
 		user_obj = self.User.objects(username=self.content['username'], password=self.content['password']).first()
 		if user_obj:
-			user_obj.update(last_login=datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+			user_obj.update(last_login=datetime.now().strftime("%d %b %Y, %H:%M:%S"))
 			return make_response(jsonify("true"), 200)
 		else:
 			return make_response(jsonify("false"), 401)
@@ -235,7 +235,7 @@ class UserObj():
 
 		user_obj = self.User.objects(username=self.content['username']).first()
 		if user_obj:
-			user_obj.update(last_logout=datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+			user_obj.update(last_logout=datetime.now().strftime("%d %b %Y, %H:%M:%S"))
 			return make_response("", 200)
 		else:
 			return make_response("", 401)

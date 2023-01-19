@@ -88,7 +88,7 @@ class ProfileObj():
 					first_name='',
 					last_name='',
 					name='',
-					time_join=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+					time_join=datetime.now().strftime("%d %b %Y, %H:%M:%S"),
 					description='').save()
 		return make_response("", 200)
 	
@@ -104,10 +104,10 @@ class ProfileObj():
 		prof_obj = self.Profile.objects(username=self.content['username']).first()
 
 		joinedOn = prof_obj.time_join
-		print(type(joinedOn))
-		joinedOn=datetime.strptime(joinedOn, "%Y-%m-%d %H:%M:%S")
+
+		joinedOn=datetime.strptime(joinedOn, "%d %b %Y, %H:%M:%S")
 		todayDate= datetime.now()
-		print(todayDate-joinedOn)
+
 		if prof_obj:
 			prof_obj_to_dict=prof_obj.to_json()
 			if str(todayDate-joinedOn).find(",") != -1:

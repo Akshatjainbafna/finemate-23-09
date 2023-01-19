@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import style from "./todo.module.css";
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputLabel, OutlinedInput, Radio, RadioGroup, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, InputLabel, OutlinedInput, Radio, RadioGroup, Snackbar, Tooltip, useMediaQuery, useTheme } from '@material-ui/core';
 import { BsPatchPlus, BsToggle2Off, BsToggle2On } from 'react-icons/bs';
 import { IconContext } from 'react-icons/lib';
 import AxiosBaseFile from '../AxiosBaseFile';
@@ -13,6 +13,7 @@ function AddTodoComponent(props){
     const [bgImage, setBgImg] = useState(false);
     const [checked, setChecked] = useState(false);
     const [imgaes, setImages] = useState([]);
+    const [snackbarShow, setSnackbarShow] = useState(false);
 
 
     const theme = useTheme();
@@ -20,8 +21,10 @@ function AddTodoComponent(props){
     
     function selectBgImage(image){
         setBgImg(image);
+        console.log(image)
         for (let x=0; x < imgaes.length; x++){
             if (imgaes[x] == image){
+                console.log(imgaes[x], image)
                 document.getElementById(imgaes[x]).style.border="1px solid green";document.getElementById(imgaes[x]).style.boxShadow="0px 2px 1px green";
             }
             else{
@@ -40,7 +43,8 @@ function AddTodoComponent(props){
     function onSubmitHandler(){
         AxiosBaseFile.post('/api/add_todo', {'username' : localStorage.getItem('username'), 'title': title, 'importance': importance, 'inNewsfeed' : checked, 'imageName': bgImage})
         .then(response =>{
-            window.location.reload(true);
+            setSnackbarShow(true);
+            sessionStorage.setItem('todoCreated', true);
         })
         .catch(err => console.log(err))
         setTodoState(false);
@@ -48,6 +52,17 @@ function AddTodoComponent(props){
 
     return (
     <>
+        <Snackbar
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+            open={snackbarShow} 
+            autoHideDuration={4000} 
+            message='To-Do added Successfully!' 
+            onClose={() => setSnackbarShow(false)}
+        >
+        </Snackbar> 
         <Dialog
                         fullScreen={fullScreen}
                         fullWidth={true}
@@ -104,10 +119,10 @@ function AddTodoComponent(props){
 
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => setTodoState(false)}>
+                            <Button style={{color : '#A78EC3'}} onClick={() => setTodoState(false)}>
                                 Cancel
                             </Button>
-                            <Button type="submit" onClick={() => onSubmitHandler()}>
+                            <Button style={{backgroundColor : '#A78EC3', color: '#ffffff'}} type="submit" onClick={() => onSubmitHandler()}>
                                 Add Todo
                             </Button>
                         </DialogActions>
@@ -123,7 +138,8 @@ class TodoComponent extends Component{
         this.state ={
             addTodo: false,
             toggle: false,
-            allTodoList: []
+            allTodoList: [],
+            todoDeleted: false
         }
         this.addTodoWindow = this.addTodoWindow.bind(this);
         this.switchTodoList = this.switchTodoList.bind(this);
@@ -143,7 +159,7 @@ class TodoComponent extends Component{
         .then(() => {
             const allTodoList = this.state.allTodoList;
             allTodoList.splice(index, 1);
-            this.setState({allTodoList: allTodoList})
+            this.setState({allTodoList: allTodoList, todoDeleted: true})
             for(let x=0; x < allTodoList.length; x++){
                 let todoId = 'todo' + x;
                 document.getElementById(todoId).style.border = '1px solid #a5c5c5';
@@ -159,11 +175,35 @@ class TodoComponent extends Component{
             this.setState({allTodoList: res.data.todo})
         })
         .catch(err => console.log(err))
-    }
+        this.todoCreated = setInterval(()=> {
+            if (sessionStorage.getItem('todoCreated') == 'true'){
 
+                AxiosBaseFile.post('/api/get_all_todo_for_user', {'username' : localStorage.getItem('username')})
+                .then(res => {
+                    sessionStorage.setItem('todoCreated', false)
+                this.setState({allTodoList: res.data.todo})
+        })
+        .catch(err => console.log(err))
+            }
+        }, 2000);
+}
+componentWillUnmount(){
+    clearInterval(this.todoCreated)
+}
     render(){
         return(
             <>
+            <Snackbar
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+              }}
+            open={this.state.todoDeleted} 
+            autoHideDuration={4000} 
+            message='To-Do deleted Successfully!' 
+            onClose={() => this.setState({todoDeleted: false})}
+        >
+        </Snackbar> 
             <div className={style.todoComponentContainer}>
             <div className={style.todoBlock}>
                 Do it Quickly

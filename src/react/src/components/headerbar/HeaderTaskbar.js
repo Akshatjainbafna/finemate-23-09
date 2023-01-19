@@ -30,24 +30,24 @@ function HeaderIcon(props) {
     //returning the active list item or say current selected sidebar menu
     if (HeaderView()==props.link) {
         return (
-            <div className=''>
-        <Link to={props.link} title={props.title}>
-            <button className='headerIcons'>
-                {props.unseenUser && props.title == 'Messages' ? <div className='notificationCount' >{props.unseenUser}</div> : null}
-                {props.unseenNotifications && props.title == 'Notifications' ? <div className='notificationCount' >{props.unseenNotifications}</div> : null}
-            
-                <IconContext.Provider value={{ color: '#834bc4', size: '26px' }} >
-                    <div> {props.activeIcon} </div>
-                </IconContext.Provider>
-            </button>
-        </Link>
-        </div>
+            <div>
+                <Link to={props.link} title={props.title}>
+                    <button className='headerIcons'>
+                        {props.unseenUser && props.title == 'Messages' ? <div className='notificationCount' >{props.unseenUser}</div> : null}
+                        {props.unseenNotifications && props.title == 'Notifications' ? <div className='notificationCount' >{props.unseenNotifications}</div> : null}
+
+                        <IconContext.Provider value={{ color: '#834bc4', size: '26px' }} >
+                            <div> {props.activeIcon} </div>
+                        </IconContext.Provider>
+                    </button>
+                </Link>
+            </div>
         )
     }
 
     //else the arrow function will return normal list item without a classname .active
     return (
-        <div className=''>
+        <div>
         <Link to={props.link} title={props.title}>
             <button className='headerIcons'>
                 {props.unseenUser && props.title == 'Messages' ? <div className='notificationCount' >{props.unseenUser}</div> : null}
@@ -111,10 +111,15 @@ class HeaderTaskbar extends Component {
                 <Header
                         title={icons.title}
                     />
-                <div className='icons d-flex flex-row align-items-center'>
+                <div className='d-flex flex-row align-items-center'>
                     <div>
-                        <form className='form-inline'>
-                            <Button className='form-control' style={{color: "#d1c6dd", fontSize: "0.8em", border: '1px solid #d1c6dd'}} onClick={() => this.setState({openDialog: !this.state.openDialog})}> <div className='d-flex justify-content-around'> <div>Search</div> <IconContext.Provider value={{color: "#bdc4cce8", size: "16px"}}><BsSearch className='searchIcon' /></IconContext.Provider></div> </Button>
+                        <form>
+                            <Button className='seacrhButtonHeader' style={{color: "#bdbdbd", border: '1px solid #bdbdbd'}} onClick={() => this.setState({openDialog: !this.state.openDialog})}> 
+                                Search
+                                <IconContext.Provider value={{color: "#bdbdbd"}}>
+                                    <BsSearch className='searchIcon' />
+                                </IconContext.Provider>
+                            </Button>
                         </form>
                         {this.state.openDialog? <SearchComponent search={true} /> : null }
                     </div>

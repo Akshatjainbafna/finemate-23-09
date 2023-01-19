@@ -414,16 +414,20 @@
 
 .profileElementsTitle{
     cursor: pointer;
-    transition: color 0.5s;
-    font-weight: bolder;
     color: #787d80;
-    margin-bottom: 1vh;
+    border-bottom: 2px solid #fcfcfb;
+    padding-bottom: 0.75vh;
+    margin-bottom: 0;
   }
-  
-  .radioProfilePage:checked + .profileElementsTitle, .radioProfilePage:hover + .profileElementsTitle{
-    color: rgba(0, 0, 0, 0.9);
+  .radioProfilePage:checked + .profileElementsTitle{
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.85);
+    border-bottom: 2px solid #834bc4;
   }
-  
+  .radioProfilePage:hover + .profileElementsTitle{
+    color: rgba(0, 0, 0, 0.85);
+    border-bottom: 2px solid #834bc4;
+  }
 
 @media screen and (max-width: 600px) {
     .info, .edu {

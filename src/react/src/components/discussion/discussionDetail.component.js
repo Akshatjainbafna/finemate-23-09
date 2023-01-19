@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import './discussionDetail.css'
-import { Button, TextField } from '@material-ui/core';
+import { Button, IconButton, Menu, MenuItem, Snackbar, TextField } from '@material-ui/core';
 import { Link, Redirect} from 'react-router-dom';
 import AxiosBaseFile from '../AxiosBaseFile';
-import { Delete } from '@material-ui/icons';
+import { Delete, MoreHoriz } from '@material-ui/icons';
+import { MdDelete } from 'react-icons/md';
+import { HiClipboardCopy } from 'react-icons/hi';
 
 class DiscussionDetail extends Component {
     constructor(props) {
@@ -15,7 +17,10 @@ class DiscussionDetail extends Component {
             body: "",
             addReply:[],
             threadDeleted: false,
-            community: ''
+            community: '',
+            threadMenu: false,
+            snackbarMessage: '',
+            snackbarShow: false
         }
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
@@ -26,7 +31,6 @@ class DiscussionDetail extends Component {
         var reply = [];
         AxiosBaseFile.post('/api/db_get_thread_id', {'_id': this.state.handle})
             .then(response => {
-                console.log(response.data);
                 for (var i = 0; i < response.data.bodies.length; i++){
                     resReply['bodies'] = response.data.bodies[i];
                     resReply['timestamps'] = response.data.timestamps[i];
@@ -78,6 +82,7 @@ class DiscussionDetail extends Component {
         .then(res => {
             var replies = this.state.replies;
             replies.splice(indexToBeDeleted, 1)
+            this.setState({snackbarMessage: 'Reply deleted Successfully!', snackbarShow: true})
             this.setState(replies)
         })
         .catch(err => console.log(err))
@@ -107,7 +112,7 @@ class DiscussionDetail extends Component {
                         {this.state.replies[0].bodies}
                     </div>
                     <div className='d-flex justify-content-between'>
-                    <div className='d-flex flex-grow-1 mt-2'>
+                    <div className='d-flex flex-grow-1 mt-3'>
                     <div style={{marginLeft: "2%", color: "#aaa", fontSize: "small"}}>
                         <Link style={{color: "#aaa"}} to={"/profile/".concat(this.state.replies[0].users)}>
                             {this.state.replies[0].users}
@@ -117,7 +122,51 @@ class DiscussionDetail extends Component {
                         {this.state.replies[0].timestamps}
                     </div>
                     </div>
-                    {this.state.replies[0].users == localStorage.getItem('username') ? <div style={{marginRight: "2%"}}><Delete style={{color: '#aaa', fontSize: 'medium'}} onClick={() => this.deleteThread()} /></div> : null}
+                    <IconButton style={{marginRight: "1%"}} onClick={() => this.setState({threadMenu: true})}>
+                        <MoreHoriz style={{color: '#aaa'}} />
+                    </IconButton>
+                    <Menu
+                                id="basic-menu"
+                                anchorEl={this.state.threadMenu}
+                                open={Boolean(this.state.threadMenu)}
+                                onClose={() => this.setState({threadMenu: false})}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                  }}
+                                  transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                  }}
+                                  PaperProps={{
+                                    style: {
+                                        boxShadow: '0px 0px 5px 1px rgba(180, 180, 180, 0.15)',
+                                        borderRadius: '5px'
+                                    }
+                                }}
+                              >
+                                {this.state.replies[0].users == localStorage.getItem('username') ? <MenuItem onClick={() => {this.deleteThread(); this.setState({threadMenu: false, snackbarShow: true, snackbarMessage: 'Thread Deleted Successfully!'})}}><MdDelete size={20} style={{marginRight: '1em'}} />Delete Thread</MenuItem> : null}
+                                <MenuItem onClick={() => {
+                                    navigator.clipboard.writeText(this.state.replies[0].bodies);
+                                    this.setState({snackbarShow: true, snackbarMessage: 'Message Copied Successfully!'})
+                                    }}>
+                                    <HiClipboardCopy size={20} style={{marginRight: '1em'}}/>Copy Message
+                                </MenuItem>
+
+                            </Menu>
+                            
+                            <Snackbar 
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'center',
+                                  }}
+                                open={this.state.snackbarShow} 
+                                autoHideDuration={4000} 
+                                message={this.state.snackbarMessage} 
+                                onClose={() => this.setState({snackbarShow: false})}
+                            >
+                            </Snackbar> 
+                    
                     </div>
                 </div>
 

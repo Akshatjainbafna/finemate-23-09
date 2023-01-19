@@ -4,6 +4,7 @@ from flask import Flask, make_response, request, jsonify
 from Exceptions.MissingRequiredField import checkFields
 from datetime import datetime
 from user import UserObj
+import json
 User = UserObj.User 
 
 class Board():
@@ -19,20 +20,15 @@ class Board():
         bodies = me.ListField(me.StringField(required=True))
         timestamps = me.ListField(me.StringField(required=True))
         community = me.StringField(required=True)
+        time_of_creation = me.DateTimeField(default=datetime.utcnow)
 
-        def to_json(self):
-            """
-            Returns the message object as a json.
-            """
+        #the thread will be deleted after 1.5 days or 36.5 hours
+        meta = {'indexes':[{
+          'fields': ['time_of_creation'],
+          'expireAfterSeconds': 131400
+        }
+        ]}
 
-            return {
-                "title": self.title,
-                "users": self.users,
-                "bodies": self.bodies, 
-                "timestamps": self.timestamps,
-                "_id": str(self.pk),
-                "community": self.community
-            }
 
     def __init__(self, content):
         """
@@ -51,7 +47,7 @@ class Board():
         if (User.objects(username=self.content['username']).count() <= 0):
             return make_response("Username does not exist.", 404)
 
-        theCreatedThread = self.Thread(users=[self.content['username']], bodies=[self.content['body']], timestamps=[datetime.now().strftime("%d/%m/%Y, %H:%M:%S")], title = self.content['title'], community = self.content['community']).save()
+        theCreatedThread = self.Thread(users=[self.content['username']], bodies=[self.content['body']], timestamps=[datetime.now().strftime("%d %b %Y, %H:%M:%S")], title = self.content['title'], community = self.content['community']).save()
         return make_response(jsonify(theCreatedThread), 200)
 
     def db_put_thread_reply(self):
@@ -66,7 +62,7 @@ class Board():
         if thread:
             thread.users.append(self.content["username"])
             thread.bodies.append(self.content["body"])
-            thread.timestamps.append(datetime.now().strftime("%d/%m/%Y, %H:%M:%S"))
+            thread.timestamps.append(datetime.now().strftime("%d %b %Y, %H:%M:%S"))
             thread.save()
             return make_response("", 200)
         else:
@@ -80,7 +76,7 @@ class Board():
 
         thread = self.Thread.objects(pk=self.content['_id']).first()
         if thread:
-            return make_response(jsonify(thread.to_json()), 200)
+            return make_response(jsonify(thread), 200)
         else:
             return make_response("Thread does not exist.", 404)
 
@@ -93,7 +89,11 @@ class Board():
         if len(thread) > 0:
             board = []
             for t in thread:
-                board.append(t.to_json())
+                timeLeftInSeconds = (datetime.now() - datetime.strptime(t.timestamps[0], "%d %b %Y, %H:%M:%S")).total_seconds()
+                t = t.to_json()
+                t = json.loads(t)
+                t['timePassedInPercent'] = int(timeLeftInSeconds / 131400 * 100)
+                board.append(t)
             return make_response(jsonify(board), 200)
         else:
             return make_response("No Threads", 404)

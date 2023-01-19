@@ -13,6 +13,8 @@ export default function SearchComponent(props){
     const redirectToProfile = useHistory();
 
     function search(event){
+        if (event.target.value.length > 4){
+            
         if (category == 'People'){
             AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
             .then(response => {
@@ -61,6 +63,7 @@ export default function SearchComponent(props){
                 console.log(err);
                 setSearchData([]);
             })
+        }
         }
     }
 

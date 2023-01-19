@@ -1,8 +1,8 @@
 import React,{ Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import style from './newsfeedHeader.module.css';
-import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl, Switch, IconButton} from "@material-ui/core";
-import {Add, AddPhotoAlternateRounded} from "@material-ui/icons";
+import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl, Switch, IconButton, Snackbar, Divider} from "@material-ui/core";
+import { AddCircleOutline, AddPhotoAlternateRounded, RemoveCircleOutline} from "@material-ui/icons";
 import { useTheme } from '@material-ui/core/styles';
 import AxiosBaseFile from "../AxiosBaseFile";
 
@@ -26,7 +26,10 @@ class ContentAuthoringTool extends Component{
             listOfSubjects: [],
             listOfTopics: [],
             numberOfPosts: 1,
-            maximumNumberOfPosts: 10
+            maximumNumberOfPosts: 10,
+            snackbarShow: false,
+            dashoffset: 91.25,
+            lengthOfCurrentFact: 0
         }
         this.submit=this.submit.bind(this);
         this.handleChange=this.handleChange.bind(this);
@@ -37,8 +40,11 @@ class ContentAuthoringTool extends Component{
         let value = event.target.value;
         let data = {};
         data[name] = value;
+        if (name.substr(0, 4) == 'fact'){
+            const dashoffset = 91.25 - value.length / 6;
+            this.setState({dashoffset: dashoffset, lengthOfCurrentFact: value.length})
+        }
         this.setState(data, () => {
-            console.log(this.state[name])
             if (name == 'background' && value){
                 const bgImage = document.querySelector('#uploadMedia > input[type="file"]').files[0];
                 const idOfPreview = document.getElementById('previewBackground');
@@ -118,9 +124,26 @@ class ContentAuthoringTool extends Component{
         
         const {fullScreen} = this.props;
         if (!this.state.setOpen && !localStorage.getItem('id')){
-            return <Redirect to="/dashboard" />
-        }
-        else if (!this.state.setOpen && localStorage.getItem('id')){
+            console.log(this.state.redirectPostId)
+            return (
+                <div>
+                    <Link to={'/post/'.concat(this.state.redirectPostId)}>
+                        <Snackbar 
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                              }}
+                            open={this.state.snackbarShow} 
+                            autoHideDuration={6000} 
+                            message='Post created Successfully! Click to View.' 
+                            onClose={() => this.setState({snackbarShow: false})}
+                        >
+                    </Snackbar> 
+                    </Link>
+                    <Redirect to="/dashboard" />
+                </div>
+            )
+        } else if (!this.state.setOpen && localStorage.getItem('id')){
             return <Redirect to={'/post/'.concat(localStorage.getItem('id'))} />
         }
         return (
@@ -134,8 +157,8 @@ class ContentAuthoringTool extends Component{
         aria-labelledby="responsive-dialog-title"
         >
         
-        <DialogTitle><b>Create Post</b></DialogTitle>
-
+        <DialogTitle ><b>Create Post</b></DialogTitle>
+            <Divider />
         <DialogContent>
             <FormControl fullWidth autoComplete="on" className={style.formPost} method="post" id="formPost" encType="multipart/form-data" onSubmit={this.submit}>
             
@@ -189,10 +212,35 @@ class ContentAuthoringTool extends Component{
                     
                     {this.generateFields()}
                     {this.state.numberOfPosts < this.state.maximumNumberOfPosts && 
-                        <div className="d-flex justify-content-center">
-                            <Button onClick={() => this.setState({numberOfPosts: this.state.numberOfPosts + 1})}>
-                                <Add />
-                            </Button>
+                        <div className="d-flex justify-content-center align-items-center">
+
+                                <Tooltip title = {this.state.lengthOfCurrentFact+ " / 365"}>
+                                    <svg height="100%" viewBox="0 0 20 20" width="1.75em" style={{overflow: "visible", transform: 'rotate(-90deg)', marginRight: '1em'}}>
+                                        <defs><clipPath><rect height="100%" width="0" x="0"></rect></clipPath></defs>
+                                        <circle cx="50%" cy="50%" fill="none" r="10" stroke="#eeeeee" stroke-width="2"></circle>
+                                        <circle cx="50%" cy="50%" fill="none" r="10" stroke="#A78EC3" stroke-dasharray="91.25" stroke-dashoffset={this.state.dashoffset} stroke-linecap="round" stroke-width="2"></circle>
+                                        <circle cx="50%" cy="50%" fill="#A78EC3" r="0"></circle>
+                                    </svg>
+                                </Tooltip>
+
+                                <Divider orientation="vertical" flexItem/>
+
+                                <IconButton onClick={() => {this.setState({numberOfPosts: this.state.numberOfPosts + 1, dashoffset: 91.25, lengthOfCurrentFact: 0})}}>
+                                    <AddCircleOutline />
+                                </IconButton>
+
+                                {this.state.numberOfPosts > 1 ? 
+                                    <IconButton onClick={() => this.setState({numberOfPosts: this.state.numberOfPosts - 1}, () => {
+                                        const fact = 'fact' + this.state.numberOfPosts;
+                                        const lengthOfCurrentFact = this.state[fact];
+                                        const dashoffset = 91.25 - lengthOfCurrentFact.length / 6; 
+                                        this.setState({dashoffset: dashoffset, lengthOfCurrentFact: lengthOfCurrentFact});
+                                    })}>
+                                        <RemoveCircleOutline />
+                                    </IconButton>
+                                    :
+                                    null
+                                }
                         </div>
                     }
                         <br />
@@ -208,26 +256,26 @@ class ContentAuthoringTool extends Component{
                 {this.state.background ? <div className="d-flex justify-content-center"><img id='previewBackground' alt='not found'/></div> : null}
 
                 <p></p> <br /> <p id="fillTheFormCompleteMessage"></p>
-                <div className="d-flex justify-content-between">                  
+            
+            </FormControl>
+            </DialogContent>
+            <Divider />
+            <div  className="d-flex justify-content-between">                  
                     <Button component="label" id='uploadBgBtn' style={{color: "red"}} >
                         <AddPhotoAlternateRounded />
                         <div id="uploadMedia"> <input hidden type="file" name="background"  onChange={this.handleChange} form="formPost" accept="image/*" required /></div>
                     </Button>
 
-            <DialogActions>
-                <Button onClick={() => this.handleClose()}>
+            <DialogActions >
+                <Button style={{color: '#A78EC3'}} onClick={() => this.handleClose()}>
                     Cancel
                 </Button>
-                <Button onClick={this.submit}>
-                    Save
+                <Button style={{backgroundColor : '#A78EC3', color: '#ffffff'}} onClick={this.submit}>
+                    Post
                 </Button>
             </DialogActions>
 </div>
-            
-            </FormControl>
-            </DialogContent>
         </Dialog>
-
         </>
 );
 }
@@ -311,12 +359,14 @@ class ContentAuthoringTool extends Component{
                         if (listOfPosts.length == this.state.numberOfPosts - 1){
                             AxiosBaseFile.post("/api/db_create_post", form_data)
                             .then(response => {
+                                    this.setState({redirectPostId: response.data._id.$oid})
                                     form_data_list_of_posts.append('currentPostId', response.data._id.$oid)
                                     form_data_list_of_posts.append('previousBackground', response.data.background)
                                 
                                     AxiosBaseFile.post('/api/db_add_next_post', form_data_list_of_posts)
                                     .then(res =>{
-                                        this.setState({setOpen: false})
+                                        console.log(res.data)
+                                        this.setState({setOpen: false, snackbarShow: true})
                                     })
                                     .catch(err => {
                                         document.getElementById('fillTheFormCompleteMessage').innerHTML="Could not process this task.";
@@ -335,7 +385,7 @@ class ContentAuthoringTool extends Component{
                     else{
                         AxiosBaseFile.post("/api/db_create_post", form_data)
                         .then(response => {
-                            this.setState({setOpen: false})
+                            this.setState({setOpen: false, snackbarShow: true, redirectPostId: response.data._id.$oid})
                         })
                         .catch((error) => {
                             console.log(error);
@@ -406,8 +456,9 @@ class ContentAuthoringTool extends Component{
                     if (listOfPosts.length == this.state.numberOfPosts){
                         AxiosBaseFile.post('/api/db_add_next_post', form_data_list_of_posts)
                         .then(res =>{
+                            console.log(res.data)
                             localStorage.removeItem('id');
-                            this.setState({setOpen: false})
+                            this.setState({setOpen: false, snackbarShow: true, redirectPostId: res.data})
                         })
                         .catch((error) => {
                             console.log(error);

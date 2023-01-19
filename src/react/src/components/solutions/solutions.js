@@ -12,7 +12,7 @@ export const Solution = () => {
   const [title, setTitle] = useState("Learn Better and Retain Better");
 
   const [text, setText] = useState(
-    "Learning and Revising is a piece of cake"
+    "Learning is a piece of cake"
   );
 
   const [image, setImage] = useState("studentsSolution.svg");
@@ -30,7 +30,10 @@ export const Solution = () => {
     <Container>
       <Wrapper>
         <TextBox>
-          <h3>Solutions</h3>
+          <h3>Practice makes a man perfect.</h3>
+          <p>- English Proverb </p>
+          <h3>We make Practicing Easier.</h3>
+          <p>- Finemate </p>
         </TextBox>
         <Image>
           <img src={main} alt="" />
@@ -48,7 +51,7 @@ export const Solution = () => {
                   "solutions--btn--secondary",
                   "solutions--btn--secondary",
                   "Learn Better and Retain Better",
-                  "Learning and Revising is a piece of cake",
+                  "Learning is a piece of cake",
                   "studentsSolution.svg"
                 );
               }}
@@ -114,6 +117,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media screen and (max-width: 600px){
+    margin: 5vh 0;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -122,12 +128,17 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10vh;
+  margin-bottom: 15vh;
 `;
 
 const Image = styled.div`
   img {
-    width: 100%;
+    width: 40vw;
+  }
+  @media screen and (max-width: 600px){
+    img {
+      width: 80vw;
+    }
   }
 `;
 
@@ -137,6 +148,9 @@ const TextBox = styled.div`
     font-weight: 700;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
+  }
+  @media screen and (max-width: 600px){
+    margin: auto 5vw;
   }
 `;
 
@@ -150,32 +164,41 @@ const User = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 4vh;
+  margin-top: 5vh;
+  text-align: center;
 
   .solutionsImageContainer{
     display: flex;
     justify-content: center;
   }
   h3 {
-    font-size: 2em;
+    font-size: 1.75em;
     font-weight: 600;
     color: rgba(0, 0, 0, 0.82);
     font-family: Open Sans;
   }
   p {
     color: #3e4345;
-    font-family: Open Sans;
+    font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 1.25em;
   }
 
   .solutionsImage{
     width: 75vw;
-    margin-top: 4rem;
   }
   @media screen and (max-width: 600px){
     .solutionsImage{
       width: 100vw;
-      margin-top: 0;
+      margin: 5vh 0;
+    }
+    h3 {
+      font-size: 1.25em;
+    }
+    p {
+      font-size: 1em;
+    }
+    p, h3{
+    margin: auto 5vw;
     }
   }
 `;

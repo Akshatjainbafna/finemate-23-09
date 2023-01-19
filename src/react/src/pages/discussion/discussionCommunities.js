@@ -124,7 +124,7 @@ function Communities(){
         <div className="communityContainer">
         {allTheComunitities.map(
             (community, index) => 
-                <Link key={index} to={'/discussionList/'.concat(community)} style={{backgroundColor: "#" + ((1<<24)*Math.random() | 0).toString(16)}} title={"Community of ".concat(community)} className="community">
+                <Link onClick={() => {sessionStorage.setItem('communityName', community)} } key={index} to={'/discussionList/'.concat(community)} style={{backgroundColor: "#" + ((1<<24)*Math.random() | 0).toString(16)}} title={"Community of ".concat(community)} className="community">
                     <span className="communityName">
                         {community}
                     </span>

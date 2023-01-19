@@ -130,6 +130,7 @@ class createAccount extends Component {
             				value={this.state.instituteId}
             				onChange={this.handleChange}
 							inputProps={{pattern: "[0-9]{10}", maxLength: '10'}}
+							required
           				/>
 			</div>
 	: null }

@@ -157,6 +157,7 @@ const Wrapper = styled.div`
   	.instantBreakdown{
 		color: #ff0000;
 		font: bold 1.8em 'Bangers', cursive;
+		text-shadow: 1px 1px #000000c0;
 	}
 	.introCards{
 		min-height: 75vh;

@@ -6,7 +6,6 @@ import { Link, useLocation } from "react-router-dom";
 function OutsideNavbarPageLinks(props){
   const header = useLocation();
   const pathName = header.pathname;
-  console.log(props.linkAddress, pathName)
 
     if (pathName === props.linkAddress){
       return (<li className="nav-item">

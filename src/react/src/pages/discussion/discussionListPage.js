@@ -29,7 +29,6 @@ import {BsCashStack} from 'react-icons/bs';
 import {FaRegChartBar} from 'react-icons/fa';
 // End of pictures
 
-let headerItems = { link: "/profile", title: "Community", profileImg: profile };
 
 
 let navItemsForNormalUser = [
@@ -88,6 +87,8 @@ let navItemsMobileForInstructorInstitute=[
 class DiscussionListPage extends Component {
 
   render() {
+    let headerItems = { link: "/profile", title: sessionStorage.getItem('communityName'), profileImg: profile };
+    
     if (!localStorage.getItem("token")) {
       return <Redirect to="/login" />;
     }

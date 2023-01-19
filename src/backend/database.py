@@ -211,9 +211,9 @@ def db_get_saved_post_of_user():
     return UserInteractions.get_saved_post_of_user(request.json)
 
 # get particular post of user
-@app.route('/api/db_get_particular_post', methods=['POST'])
+@app.route('/api/db_get_particular_post', methods=['GET'])
 def db_get_particular_post():
-    return UserInteractions.get_particular_post(request.json)
+    return UserInteractions.get_particular_post(request.args.to_dict())
 
 #setup educations and qualifications from questionaire
 @app.route('/api/add_education_from_questionaire', methods=['POST'])
@@ -522,9 +522,9 @@ def db_create_profile():
     return ProfileObj(request.json).db_create_profile()
 
 # returns the profile requested from the database when provided with a json text formatted as {username: username}
-@app.route('/api/db_get_profile', methods=['POST'])
+@app.route('/api/db_get_profile', methods=['GET'])
 def db_get_profile():
-    return ProfileObj(request.json).db_get_profile()
+    return ProfileObj(request.args.to_dict()).db_get_profile()
 
 # returns the profile requested from the database when provided with a json text formatted as {username: username}
 @app.route('/api/db_get_profile_picture', methods=['POST'])
@@ -751,6 +751,11 @@ def db_get_all_courses():
 @app.route('/api/db_send_message', methods=['POST'])
 def db_send_message():
     return MessageObj(request.json).db_send_message()
+
+# Delete a message from a user to another
+@app.route('/api/db_delete_message', methods=['POST'])
+def db_delete_message():
+    return MessageObj(request.json).db_delete_message()
 
 # Gets all messages for two users
 @app.route('/api/db_get_messages', methods=['POST'])

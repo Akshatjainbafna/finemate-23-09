@@ -2,20 +2,26 @@
   box-sizing: border-box;
 }
 .newsfeedFeatures{
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    width: 100%;
-    align-items: center;
-    margin: 1vh 0; 
+    position: fixed;
+    bottom: 2vh;
+    left: 6vw;
   }
   .newsfeedFeatures > section{
 }
 
 /* 1. Add icon*/
 .addPostIcon{
-    width: 6vw !important;
-    height: 6vw !important;
+  width: 10vw;
+  border-radius: 100px !important;
+  border: 2px solid #A78EC3 !important;
+  color: #A78EC3!important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  padding: 4px !important;
+}
+.addPostIcon img{
+  width: 3vw;
+  height: 3vw;
   }
 /* 2. stories*/
   .story{
@@ -223,7 +229,7 @@
   }
   .formPost input, .formPost textarea, .mediaUploadOptions{
     display: block;
-    margin: 1vw;
+    margin: 1vw; 
   }
   .linkNext{
     color: black;
@@ -268,6 +274,8 @@
     }
 }
 
-@media screen and (max-width: 600px) {
-    
+@media screen and (max-width: 991px) {
+  .newsfeedFeatures{
+    display: none;
+  }
 }

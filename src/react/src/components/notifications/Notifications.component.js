@@ -146,11 +146,7 @@ class NotificationComponent extends Component{
                                                     <div className="d-flex align-items-center">
                                                         <span>
                                                                 {notification.profilePicture ? 
-<<<<<<< HEAD
                                                                     <img src={require('../../assets/profilePictures/'+ notification.profilePicture)} className={style.profilePictureThumbnail}/>
-=======
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + notification.profilePicture} className={style.profilePictureThumbnail}/>
->>>>>>> 4446f9e9b55658d083323ba41f9de35bdab05008
                                                                 :
                                                                     <Avatar> {notification.sender[0]} </Avatar>
                                                                 }
@@ -190,11 +186,7 @@ class NotificationComponent extends Component{
                                                         <ListItem>
                                                             <Link style={{textDecoration: 'none', color : 'rgb(140, 140, 140)'}} className="d-flex" to={"/profile/".concat(user.username)}>
                                                                 {user.profilePicture ?
-<<<<<<< HEAD
                                                                     <img src={require('../../assets/profilePictures/'+ user.profilePicture)} className={style.profilePictureThumbnail}/>
-=======
-                                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + user.profilePicture} className={style.profilePictureThumbnail}/>
->>>>>>> 4446f9e9b55658d083323ba41f9de35bdab05008
                                                                 :
                                                                     <Avatar> {user.username[0]} </Avatar>
                                                                 }

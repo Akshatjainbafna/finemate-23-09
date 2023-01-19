@@ -108,10 +108,9 @@ class UserProfilePage extends Component {
     username: this.props.match.params.username,
   };
   componentDidMount() {
-    AxiosBaseFile
-      .post("/api/db_get_profile", {
+      AxiosBaseFile.get("/api/db_get_profile", {params: {
         username: this.state.username
-      })
+      }})
       .then(response => {
         this.setState({ educations: response.data["educations"] });
         this.setState({ skills: response.data["skills"] });

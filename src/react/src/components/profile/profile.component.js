@@ -351,6 +351,7 @@ displayPanel(panel){
                 name="newDescription"
                 placeholder="Update Bio"
                 onChange={this.onChangeHandler}
+                inputProps={{ maxLength: 365 }}
               />
             } </div>
           </div>

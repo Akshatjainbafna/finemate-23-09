@@ -27,7 +27,7 @@ if (HeaderView()===link) {
       <Link to={link} title={title} className={style.sidebarListLink} key={id}>
       <ListItem className={style.sidebarListItemActive}>
         <ListItemIcon className={style.sidebarListIcon}>
-        <IconContext.Provider value={{ size: '26px', color: "#834bc4" }}>
+        <IconContext.Provider value={{ size: '26px', color: "#8c52ff" }}>
             {imgSrc}
           </IconContext.Provider>
         </ListItemIcon>
@@ -62,7 +62,7 @@ if (HeaderView()===link) {
       <Link to={link} title={title} className={style.sidebarListLink} key={id}>
       <ListItem className={style.sidebarListItemActive}>
         <ListItemIcon className={style.sidebarListIcon}>
-        <IconContext.Provider value={{ size: '26px', color: "#834bc4" }}>
+        <IconContext.Provider value={{ size: '26px', color: "#8c52ff" }}>
             {imgSrc}
           </IconContext.Provider>
         </ListItemIcon>

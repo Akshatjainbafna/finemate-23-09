@@ -114,7 +114,10 @@ class Notification(me.Document):
                 return
             else:
                 notificationToBeDeleted = Notification.objects(me.Q(object_id = incomingData['_id']) & me.Q(sender = incomingData['username'])).order_by('-$natural').first()
-                notificationToBeDeleted.delete()
+                
+                if notificationToBeDeleted:
+                    notificationToBeDeleted.delete()
+                    
                 return
         elif incomingData['activity_type'] == 'connected with you':
 

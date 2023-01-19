@@ -42,10 +42,11 @@ class News extends Component {
             <>
         
                 <div className={style.tabs}>
+                    { localStorage.getItem('usertype') == 'student' ?
                         <div className="d-flex justify-content-around mt-2">
                             <span>
                                 <input name="tabNews" type="radio" id="tabNews-1" className={style.input} onChange={() => this.displayPanel("panel1")} />
-                                <label for="tabNews-1" className={style.label}>Course Related</label>
+                                <label for="tabNews-1" className={style.label}>Course Updates</label>
                             </span>
                             <span>
                                 <input name="tabNews" type="radio" id="tabNews-2" className={style.input} onChange={() => this.displayPanel("panel2")}/>
@@ -60,6 +61,14 @@ class News extends Component {
                                 <label for="tabNews-4" className={style.label}>Other</label>
                             </span>
                         </div>
+                        :
+                        <div className="d-flex justify-content-center mt-2">
+                            <span>
+                                <input name="tabNews" type="radio" id="tabNews-1" className={style.input} checked onChange={() => this.displayPanel("panel1")} />
+                                <label for="tabNews-1" className={style.label}>Course Updates</label>
+                            </span>
+                        </div>
+                    }
 
 
                         <div className={style.panelContainer}>

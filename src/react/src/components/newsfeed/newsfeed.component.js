@@ -11,8 +11,8 @@ import incorrect from './incorrectBGicon.png';
 //All the material UI imports
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded} from '@material-ui/icons';
-import { FormControl, RadioGroup, Radio, Tooltip, Button, MenuItem, Menu, IconButton } from "@material-ui/core";
+import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, EmojiObjectsOutlined, EmojiObjects, FilterCenterFocusRounded, ArrowDropUp, ArrowDropDown} from '@material-ui/icons';
+import { FormControl, RadioGroup, Radio, Tooltip, Button, MenuItem, Menu, IconButton, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 
@@ -105,7 +105,9 @@ function PreviousNextWindow(props){
     function fetchPreviousPost(){
         setAnchorPrevNext(null);
         try{
-            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.previousId})
+        AxiosBaseFile.get('/api/db_get_particular_post', {params: {
+            username: localStorage.getItem('username') , id: props.previousId
+        }})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -117,7 +119,9 @@ function PreviousNextWindow(props){
     function fetchNextPost(){
         setAnchorPrevNext(null);
         try{
-            AxiosBaseFile.post('/api/db_get_particular_post', {username: localStorage.getItem('username'), id: props.nextId})
+        AxiosBaseFile.get('/api/db_get_particular_post', {params: {
+            username: localStorage.getItem('username') , id: props.nextId
+        }})
         .then((res) => {
             props.onUpdate(res.data);
         })
@@ -184,7 +188,7 @@ function PreviousNextWindow(props){
 class NewsFeed extends Component{
     constructor(props){
         super(props);
-        this.state={ responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
+        this.state={ dropDown: false, responseData: [], correctOptions: [], selectedOptions: [], correctMCQs:[], inCorrectMCQs: [], listOfLikedPosts:[], listOfLightenPosts:[], listOfSavedPosts:[]};
         this.slider=this.silder.bind(this);
         this.loadMorePosts = this.loadMorePosts.bind(this);
     }
@@ -336,7 +340,7 @@ class NewsFeed extends Component{
             .then(res => {
 
                 const responseData= res.data;
-                console.log(responseData)
+                
                 let m = responseData.length, yo, t;
                     // While there remain elements to shuffle…
                         while (m) {
@@ -424,7 +428,7 @@ render(){
         <div className={style.postTypeDecider} key={index}> 
         {(() =>{ if (responseData.points >= 9 || this.state.inCorrectMCQs.includes(responseData._id.$oid)) {
                                
-                return <div className={style.postCardContainer} key={index}>
+                return <div className={style.postCardContainer} key={index} onMouseLeave={() => {document.getElementById('postCredits'+index).style.display = 'none'; this.setState({dropDown: false})}}>
                 {/* If the points for a particular post is equal to or greater than 7 then the post will be of PostCard type */}
                     
                     <form id="postInteraction">
@@ -629,7 +633,41 @@ render(){
                                 <PreviousNextWindow previousId={responseData.previousPost.$oid} nextId={responseData.nextPost.$oid} onUpdate={(data) => this.onUpdate(data, index)} />
                             </div>
                         </div>
-                        
+                        <div className={style.postCredits} id={'postCredits'+index}>
+                            <div>
+                            <Link style={{textDecoration: "none", color: "grey"}} to={"/profile/".concat(responseData.username)}>
+                                        <ListItem>
+                                            {responseData.profilePicture ?
+                                            <ListItemAvatar>
+                                                <img src={require('../../assets/profilePictures/'+ responseData.profilePicture)} alt="Profile" className={style.profilePictureChatHeader}/>
+                                            </ListItemAvatar>
+                                            :
+                                            <ListItemAvatar>
+                                                <Avatar> {responseData.username[0]} </Avatar>
+                                            </ListItemAvatar>
+                                            }
+                                            
+                                            <ListItemText style={{color: 'white'}}>
+                                                {responseData.username}
+                                            </ListItemText>
+                                        </ListItem>
+                                        </Link>
+                            </div>
+                            <div style={{fontSize: 'small', marginRight: '16px'}}>
+                                {(responseData.creation_date_time.split(','))[0]}
+                            </div>
+                        </div>
+                        <div className="d-flex justify-content-center">
+                            {this.state.dropDown ? 
+                                <IconButton className={style.dropBtn} style={{marginTop: '-30px'}} onClick={() => {document.getElementById('postCredits'+index).style.display = 'none'; this.setState({dropDown: false})}}>
+                                    <ArrowDropUp style={{fontSize: '1.25em', color: 'white'}} />
+                                </IconButton>
+                            :
+                                <IconButton className={style.dropBtn} style={{marginTop: '-25px'}} onClick={() => {document.getElementById('postCredits'+index).style.display = 'flex'; this.setState({dropDown: true})}}>
+                                    <ArrowDropDown style={{fontSize: '1.25em'}} />
+                                </IconButton>
+                            }
+                        </div>
                     </form>
                     </div>
 

@@ -28,10 +28,11 @@
     background-color: #e9e4f0;
   }
   .profilePictureThumbnail{
-    height: 2rem;
-    width: 2rem;
+    width: 40px;
+    height: 40px;
     object-fit: cover;
     border-radius: 100%;
+    border: 1px solid #bdbdbd;
   }
   .divStyleForSearchBar{
     margin: 1%;

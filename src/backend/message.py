@@ -25,20 +25,6 @@ class MessageObj():
         user2seen = me.BooleanField(default = False)
 
 
-        def to_json(self):
-            """
-            Returns the message object as a json.
-            """
-
-            return {
-                "username1": self.username1,
-                "username2": self.username2,
-                "message": self.message, 
-                "time": self.time,
-                "user1seen" : self.user1seen,
-                "user2seen": self.user2seen
-            }
-
     def __init__(self, content):
         """
         Instantiates a new instance of MessageObj
@@ -58,8 +44,27 @@ class MessageObj():
         if (Profile.objects(username=self.content['username2']).count() <= 0):
             return make_response("Username2 does not exist.", 404)
 
-        self.Message(username1=self.content['username1'], username2=self.content['username2'], message=self.content['message'], time=datetime.now().strftime("%Y/%m/%d, %H:%M:%S")).save()
+        self.Message(username1=self.content['username1'], username2=self.content['username2'], message=self.content['message'], time=datetime.now().strftime("%d %b %Y, %H:%M:%S")).save()
         return make_response("", 200)
+
+    def db_delete_message(self):
+        """
+        Delete a message
+        """
+        x = checkFields(self.content, fields=['id'])
+        if (x):
+            return make_response("Missing required field: " + x, 400)
+
+
+        messageToBeDeleted = self.Message.objects(id=self.content['id']).first()
+        currentTime = datetime.now() - datetime.strptime(messageToBeDeleted.time, "%d %b %Y, %H:%M:%S")
+
+        if messageToBeDeleted and currentTime.total_seconds() < 600:
+            messageToBeDeleted.delete()
+            return make_response("", 200)
+        else:
+            print('here')
+            return make_response("Message is 10 Mins older", 400)
     
     def db_get_messages(self):
         """
@@ -71,22 +76,20 @@ class MessageObj():
         
         messages = []
 
-        raw = self.Message.objects(username1=self.content['username1'],username2=self.content['username2']).all()
+        raw = self.Message.objects(me.Q(username1=self.content['username1'],username2=self.content['username2']) | me.Q(username2=self.content['username1'],username1=self.content['username2'])).all()
 
         for message in raw:
-            messages.append(message.to_json())
+            messages.append(message)
 
         raw = self.Message.objects(username2=self.content['username1'],username1=self.content['username2']).all()
 
         for message in raw:
             if message.user2seen == False:
                 message.update(set__user2seen = True)
-            messages.append(message.to_json())
 
         if len(messages) == 0:
             return make_response("Messages between users does not exist", 404)
         else:
-            messages = sorted(messages, key=lambda k: k['time'], reverse=False)
             return make_response(jsonify(messages), 200)
 
     def db_get_messaged_users(self):
@@ -105,7 +108,8 @@ class MessageObj():
                 break
             if i.username2 not in uniqueUsers or i.username1 not in uniqueUsers:
                 latestMessage = i.to_json()
-                timeOfMessage = datetime.strptime(latestMessage['time'] , "%Y/%m/%d, %H:%M:%S")
+                latestMessage = json.loads(latestMessage)
+                timeOfMessage = datetime.strptime(latestMessage['time'] , "%d %b %Y, %H:%M:%S")
                 timeDifference = datetime.now() - timeOfMessage
                 latestMessage['time'] = str(timeDifference)
 

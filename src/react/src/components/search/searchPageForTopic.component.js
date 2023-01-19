@@ -25,56 +25,57 @@ export default function SearchPageForTopicComponent(props){
     }, [])
 
     function search(event){
-        if (category === 'People'){
-            AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
-            .then(response => {
-                if (response.data){
-                    setSearchData(response.data);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                setSearchData([]);
-            })
+        if (event.target.value.length > 4){
+            if (category === 'People'){
+                AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
+                .then(response => {
+                    if (response.data){
+                        setSearchData(response.data);
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    setSearchData([]);
+                })
+            }
+            if (category === 'Community'){
+                AxiosBaseFile.post('/api/db_search_thread', {'title': event.target.value})
+                .then(response => {
+                    if (response.data){
+                        setSearchData(response.data)
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    setSearchData([]);
+                })
+            }
+            if (category === 'Topic'){
+                AxiosBaseFile.post('/api/db_search_posts_of_topic', {'topic': event.target.value})
+                .then(response => {
+                    if (response.data){
+                        console.log(response.data)
+                        setSearchData(response.data)
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    setSearchData([]);
+                })
+            }
+            if (category === 'Course'){
+                AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
+                .then(response => {
+                    if (response.data){
+                        setSearchData(response.data)
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    setSearchData([]);
+                })
+            }
         }
-        if (category === 'Community'){
-            AxiosBaseFile.post('/api/db_search_thread', {'title': event.target.value})
-            .then(response => {
-                if (response.data){
-                    setSearchData(response.data)
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                setSearchData([]);
-            })
-        }
-        if (category === 'Topic'){
-            AxiosBaseFile.post('/api/db_search_posts_of_topic', {'topic': event.target.value})
-            .then(response => {
-                if (response.data){
-                    console.log(response.data)
-                    setSearchData(response.data)
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                setSearchData([]);
-            })
-        }
-        if (category === 'Course'){
-            AxiosBaseFile.post('/api/db_search_user_profile', {'username': event.target.value, 'whoSearched' : localStorage.getItem('username')})
-            .then(response => {
-                if (response.data){
-                    setSearchData(response.data)
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                setSearchData([]);
-            })
-        }
-
     }
 
     return (
