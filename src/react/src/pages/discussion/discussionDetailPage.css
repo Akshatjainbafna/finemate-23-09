@@ -1,5 +1,5 @@
 .profileBox{
-    background-color: #FCFCFB;
+    background-color: var(--lightBackgroundPrimary);
     margin-left: 22vw;
     margin-top: 0px;
 }

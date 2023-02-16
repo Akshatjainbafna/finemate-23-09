@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import style from './newsfeed.module.css';
 
 //icons & mui components
@@ -15,6 +15,28 @@ import incorrect from './incorrectBGicon.png';
 import postNotFound from '../../../../react/src/assets/postNotFoundScreen.png';
 import { Link, Redirect } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
+import ReactQuill from "react-quill";
+
+
+function Fact(props){
+    let quillRef = useRef();
+    let modules = {
+        syntax: true,
+        toolbar: false
+    }
+
+    useEffect(() => {
+        let data = JSON.parse(props.fact);
+        console.log(data)
+        quillRef.current.getEditor().setContents(data)
+    }, [props.fact]);
+    
+    return(
+        <ReactQuill ref={quillRef} theme='bubble' modules={modules} readOnly/>
+    )
+
+}
+
 
 class IndividualPost extends Component{
     constructor(props){
@@ -27,22 +49,6 @@ class IndividualPost extends Component{
         }
     }
 
-    hideBackgroundImage(imgId){
-        document.getElementById('factId1').style.display="block";
-        document.getElementById(imgId).style.opacity=0.12;
-        if(this.state.responseData[0].question){
-            let allTheQuestion = document.getElementsByName('questionOfPost');
-            allTheQuestion[0].style.display='block';
-        }
-    }
-    showBackgroundImage(imgId){
-        document.getElementById('factId1').style.display="none";
-        document.getElementById(imgId).style.opacity=1;
-        if(this.state.responseData[0].question){
-            let allTheQuestion = document.getElementsByName('questionOfPost');
-            allTheQuestion[0].style.display='none';
-        }
-    }
     hidePreviousNextPostWindow(){
         document.getElementById('idPreviousNextWindow1').style.display="none";
     }
@@ -270,15 +276,15 @@ class IndividualPost extends Component{
                             <div className={style.intrigrityMarker}>{(() => {
                                 if (responseData.accuracy>= 0.75) {
                                     return (
-                                    <img className={style.accuracyIcon} src={correct}/>
+                                    <img className={style.accuracyIcon} src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/correctBGicon.png' />
                                     )
                                     } else if (responseData.accuracy< 0.75 && responseData.accuracy> 0.25) {
                                     return (
-                                    <img className={style.accuracyIcon} src={semicorrect}/>
+                                    <img className={style.accuracyIcon} src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/semicorrectBGicon.png' />
                                     )
                                     } else {
                                     return (
-                                    <img className={style.accuracyIcon} src={incorrect}/>
+                                    <img className={style.accuracyIcon} src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/incorrectBGicon.png' />
                                     )
                                     }
                                     })()}</div>
@@ -305,66 +311,39 @@ class IndividualPost extends Component{
                             {responseData.username==localStorage.getItem('username') ?
                             
                             <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={(() => this.addNextPost())}>Add Next Post</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.deletePost(responseData.postId.$oid); this.hideMoreOptions();}}>Delete Post</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}}>Prerequisite</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}}>Read More</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}} onClick={(() => this.addNextPost())}>Add Next Post</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}} onClick={() => {this.deletePost(responseData.postId.$oid); this.hideMoreOptions();}}>Delete Post</Button></div>
                             </div>
 
                             :
 
                             <div name="menuListName" id='idMenuListVisible1' className={style.menuListVisible} >
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Prerequisite</Button></div>
-                                <div><Button style={{fontFamily: 'poppins', color: 'white', padding: '0.2em'}}>Read More</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}} onClick={() => {this.notInterested(responseData.topic); this.hideMoreOptions();}}>Not Interested</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}} onClick={() => {this.showOften(responseData.postId.$oid); this.hideMoreOptions();}}>Show Often</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}}>Prerequisite</Button></div>
+                                <div><Button style={{fontFamily: 'poppins', color: 'var(--pureWhite)', padding: '0.2em'}}>Read More</Button></div>
                             
                             </div>
 
                             }
 
-                           
-                            <span className={style.quesFactBlock} ref={this.referenceToPostQuestion}>
-                                {responseData.question ? <p name="questionOfPost" className={style.question}>{responseData.question}</p> : ""} 
-                                <p className={style.fact} id='factId1' name="factName" ref={this.referenceToPostFact}> {responseData.fact.split('\n').map(function(item, index) {
-                                    return (
-                                        <span key={index}>
-                                            {item}
-                                            <br/>
-                                        </span>
-                                        )
-                                    })}
-                                </p>
-                            </span>
+                            <img id={responseData.background} src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ responseData.background} className={style.backgroundImage} />
+                            <div id='factId1' className={style.quesFactBlock}>
+                                <Fact fact={responseData.fact} />
+                            </div>
 
-                            <img id={responseData.background} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} />
-                           
-
-                            <span name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}>
+                            <div name="previousNextWindowName" id="idPreviousNextWindow1" className={style.previousNextWindow} onMouseOver={() => this.viewPreviousNextPostWindow()}>
                                 <IconButton style={{padding: '0.25em'}} onClick={() => this.fetchPreviousPost()}>
                                     <BsArrowLeft size={22} cursor="pointer"/>
                                 </IconButton> 
                                 <IconButton style={{padding: '0.25em'}} onClick={() => this.fetchNextPost()}>
                                     <BsArrowRight size={22} cursor="pointer"/>
                                 </IconButton>
-                            </span> 
-                            
-                            <Tooltip title="View Background" > 
-                                <FormControlLabel
-                                    className={style.viewImageIcon}
-                                    control={
-                                    <Checkbox 
-                                        checked={false}
-                                        icon={ <FilterCenterFocusRounded /> } 
-                                        checkedIcon={ <FilterCenterFocusRounded /> }
-                                        name="viewBackground" 
-                                        onClickCapture={() => this.showBackgroundImage(responseData.background)} onMouseLeave={()=> this.hideBackgroundImage(responseData.background)}
-                                    />
-                                    }
-                                /> 
-                            </Tooltip>
+                            </div> 
                         </div>
 
 
@@ -440,7 +419,7 @@ class IndividualPost extends Component{
                                         <ListItem>
                                             {responseData.profilePicture ?
                                             <ListItemAvatar>
-                                                <img src={require('../../assets/profilePictures/'+ responseData.profilePicture)} alt="Profile" className={style.profilePictureChatHeader}/>
+                                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ responseData.profilePicture} alt="Profile" className={style.profilePictureChatHeader}/>
                                             </ListItemAvatar>
                                             :
                                             <ListItemAvatar>
@@ -448,7 +427,7 @@ class IndividualPost extends Component{
                                             </ListItemAvatar>
                                             }
                                             
-                                            <ListItemText style={{color: 'white'}}>
+                                            <ListItemText style={{color: 'var(--pureWhite)'}}>
                                                 {responseData.username}
                                             </ListItemText>
                                         </ListItem>
@@ -461,7 +440,7 @@ class IndividualPost extends Component{
                         <div className="d-flex justify-content-center">
                             {this.state.dropDown ? 
                                 <IconButton className={style.dropBtn} style={{marginTop: '-30px'}} onClick={() => {document.getElementById('postCredits').style.display = 'none'; this.setState({dropDown: false})}}>
-                                    <ArrowDropUp style={{fontSize: '1.25em', color: 'white'}} />
+                                    <ArrowDropUp style={{fontSize: '1.25em', color: 'var(--pureWhite)'}} />
                                 </IconButton>
                             :
                                 <IconButton className={style.dropBtn} style={{marginTop: '-25px'}} onClick={() => {document.getElementById('postCredits').style.display = 'flex'; this.setState({dropDown: true})}}>
@@ -474,7 +453,7 @@ class IndividualPost extends Component{
             )
         :
                 <div className='d-flex justify-content-center'>
-                    <img className={style.postNotFound} src={postNotFound} alt='post not found' />
+                    <img className={style.postNotFound} src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/postNotFoundScreen.png' alt='post not found' />
                 </div>
         }
             </>

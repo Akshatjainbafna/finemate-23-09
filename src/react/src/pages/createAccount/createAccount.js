@@ -14,7 +14,7 @@ class CreateAccountPage extends Component {
           <div className={style.pictureCreate}>
               <img src={Picture} alt="Map"></img>
           </div>
-          <div className={style.createAccount}>
+          <div>
               <CreateAccount />
           </div>
         </div>

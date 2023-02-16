@@ -41,10 +41,6 @@ class NewsfeedHeader extends Component{
         return(
             <>
             <div className={style.newsfeedFeatures}>
-            
-            <Button className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}>Post</Button>
-            
-            {this.state.setOpen ? <ContentAuthoringToolWindow /> : null }
 {/*
                <Tooltip title="Scroll horizontally"><section className={style.story}><ul className={style.list}>
     

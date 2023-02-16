@@ -1,11 +1,57 @@
 import React,{ Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import style from './newsfeedHeader.module.css';
-import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl, Switch, IconButton, Snackbar, Divider} from "@material-ui/core";
+import { Dialog, Tooltip, Button, useMediaQuery, DialogActions, DialogTitle, DialogContent, TextField, OutlinedInput, FormControlLabel, InputLabel, FormControl, Switch, IconButton, Snackbar, Divider, CircularProgress} from "@material-ui/core";
 import { AddCircleOutline, AddPhotoAlternateRounded, RemoveCircleOutline} from "@material-ui/icons";
 import { useTheme } from '@material-ui/core/styles';
 import AxiosBaseFile from "../AxiosBaseFile";
+import ReactQuill from "react-quill";
+import 'react-quill/dist/quill.bubble.css';
+import './../quill.css';
 
+class Fact extends Component{
+    constructor(props){
+        super(props);
+        this.quillRef = null;
+        this.modules =  {
+            syntax: true,
+            toolbar: [
+            [{ font: [] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ["bold", "italic", "underline"],
+            [{ color: [] }, { background: [] }],
+            ["blockquote", "code-block"],
+            [{ list:  "ordered" }, { list:  "bullet" }],
+            [{ align: [] }],
+            ["formula"],
+            ["clean"]
+            ]
+        }
+    }
+    render(){
+        return (
+            <ReactQuill ref={(el) => this.quillRef = el } theme='bubble' modules={this.modules} placeholder="Write a post of maximum 365 characters..." onChange={() => {
+                let name = 'fact' + this.props.postNumber;
+                let value = JSON.stringify(this.quillRef.unprivilegedEditor.getContents());
+                let data = {};
+                data[name] = value;
+                let lengthName = 'lengthOfCurrentFact' + this.props.postNumber;
+                let lengthValue = this.quillRef.unprivilegedEditor.getLength() - 1;
+                if (lengthValue > 365){
+                    document.getElementById('factContainer' + this.props.postNumber).style.border="2px solid red";
+                }else{
+                    document.getElementById('factContainer' + this.props.postNumber).style.border="2px solid #3f51b5";
+                }
+                let lengthOfCurrentFact = {};
+                lengthOfCurrentFact[lengthName] = lengthValue;
+                let dashoffset = {};
+                dashoffset['dashoffset'] = 91.25 - lengthValue / 6;
+                this.props.handleData(data, lengthOfCurrentFact, dashoffset)
+            }}
+            />
+        )
+    }
+}
 
 class ContentAuthoringTool extends Component{
     constructor(props){
@@ -15,7 +61,6 @@ class ContentAuthoringTool extends Component{
             topic: localStorage.getItem('topic'),
             subtopic: localStorage.getItem('subtopic'),
             type: '',
-            question1: '',
             fact1: '',
             background: '',
             mcq1: '',
@@ -29,10 +74,27 @@ class ContentAuthoringTool extends Component{
             maximumNumberOfPosts: 10,
             snackbarShow: false,
             dashoffset: 91.25,
-            lengthOfCurrentFact: 0
+            lengthOfCurrentFact1: 0,
+            currentFocus : 1
         }
         this.submit=this.submit.bind(this);
         this.handleChange=this.handleChange.bind(this);
+        this.handleData = this.handleData.bind(this);
+        this.quillRef = null;
+        this.modules =  {
+            syntax: true,
+            toolbar: [
+            [{ font: [] }],
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            ["bold", "italic", "underline"],
+            [{ color: [] }, { background: [] }],
+            ["blockquote", "code-block"],
+            [{ list:  "ordered" }, { list:  "bullet" }],
+            [{ align: [] }],
+            ["formula"],
+            ["clean"]
+            ]
+        }
     }
 
     handleChange(event) {
@@ -40,10 +102,7 @@ class ContentAuthoringTool extends Component{
         let value = event.target.value;
         let data = {};
         data[name] = value;
-        if (name.substr(0, 4) == 'fact'){
-            const dashoffset = 91.25 - value.length / 6;
-            this.setState({dashoffset: dashoffset, lengthOfCurrentFact: value.length})
-        }
+
         this.setState(data, () => {
             if (name == 'background' && value){
                 const bgImage = document.querySelector('#uploadMedia > input[type="file"]').files[0];
@@ -65,13 +124,36 @@ class ContentAuthoringTool extends Component{
           }
         return listOfFields
     }
+    handleData(data, lengthOfCurrentFact, dashoffset){
+        this.setState(data);
+        this.setState(lengthOfCurrentFact);
+        this.setState(dashoffset)
+      }
     generateInputFields(postNumber){
         return (
             <div>
-                <TextField variant="outlined" placeholder="Add a question, if applicable..." fullWidth type="text" label="Question" name={"question"+postNumber} inputProps={{ maxLength: 50 }} value={this.state['question'+postNumber]} onChange={this.handleChange}/>
-                    <p></p>
-                <TextField multiline variant="outlined" placeholder="Write a post of maximum 365 characters..." fullWidth type="text" label="Fact/News" form="formPost" name={"fact"+postNumber} inputProps={{ maxLength: 365 }}  value={this.state['fact' + postNumber]} onChange={this.handleChange} required/>
-                    <p></p>
+                <div className="quillField" id={'factContainer'+postNumber} onFocus={() => {
+                    let lengthOfCurrentFact = this.state['lengthOfCurrentFact' + postNumber];
+                    document.getElementById('factContainer'+postNumber).style.opacity = '1';
+                    if (lengthOfCurrentFact > 365){
+                        document.getElementById('factContainer' + postNumber).style.border="2px solid red";
+                    }else{
+                        document.getElementById('factContainer' + postNumber).style.border="2px solid #3f51b5";
+                    }
+                    let dashoffset = 91.25 - lengthOfCurrentFact / 6;
+                    this.setState({dashoffset : dashoffset, currentFocus: postNumber})
+                    }}
+
+                    onBlur={() => {
+                        let lengthOfCurrentFact = this.state['lengthOfCurrentFact' + postNumber];
+                        if (lengthOfCurrentFact <= 365){
+                            document.getElementById('factContainer'+postNumber).style.opacity = '0.25';
+                            document.getElementById('factContainer'+postNumber).style.border = '1px solid #c4c4c4';
+                        }
+                    }}>
+                    <Fact postNumber={postNumber} handleData={this.handleData} />
+                </div>
+                <p></p>
             </div>
         )
     }
@@ -214,16 +296,20 @@ class ContentAuthoringTool extends Component{
                     {this.state.numberOfPosts < this.state.maximumNumberOfPosts && 
                         <div className="d-flex justify-content-center align-items-center">
 
-                                <Tooltip title = {this.state.lengthOfCurrentFact+ " / 365"}>
+                            {this.state['lengthOfCurrentFact' + this.state.currentFocus] ?
+                            <>
+                                <Tooltip title = {this.state['lengthOfCurrentFact' + this.state.currentFocus] + " / 365"}>
                                     <svg height="100%" viewBox="0 0 20 20" width="1.75em" style={{overflow: "visible", transform: 'rotate(-90deg)', marginRight: '1em'}}>
                                         <defs><clipPath><rect height="100%" width="0" x="0"></rect></clipPath></defs>
                                         <circle cx="50%" cy="50%" fill="none" r="10" stroke="#eeeeee" stroke-width="2"></circle>
-                                        <circle cx="50%" cy="50%" fill="none" r="10" stroke="#A78EC3" stroke-dasharray="91.25" stroke-dashoffset={this.state.dashoffset} stroke-linecap="round" stroke-width="2"></circle>
-                                        <circle cx="50%" cy="50%" fill="#A78EC3" r="0"></circle>
+                                        <circle cx="50%" cy="50%" fill="none" r="10" stroke="var(--purpleMain)" stroke-dasharray="91.25" stroke-dashoffset={this.state.dashoffset} stroke-linecap="round" stroke-width="2"></circle>
+                                        <circle cx="50%" cy="50%" fill="var(--purpleMain)" r="0"></circle>
                                     </svg>
                                 </Tooltip>
 
                                 <Divider orientation="vertical" flexItem/>
+                            </> : null
+                            }
 
                                 <IconButton onClick={() => {this.setState({numberOfPosts: this.state.numberOfPosts + 1, dashoffset: 91.25, lengthOfCurrentFact: 0})}}>
                                     <AddCircleOutline />
@@ -232,8 +318,9 @@ class ContentAuthoringTool extends Component{
                                 {this.state.numberOfPosts > 1 ? 
                                     <IconButton onClick={() => this.setState({numberOfPosts: this.state.numberOfPosts - 1}, () => {
                                         const fact = 'fact' + this.state.numberOfPosts;
-                                        const lengthOfCurrentFact = this.state[fact];
-                                        const dashoffset = 91.25 - lengthOfCurrentFact.length / 6; 
+                                        const lengthName = 'lengthOfCurrentFact' + this.state.numberOfPosts;
+                                        const lengthOfCurrentFact = this.state[lengthName];
+                                        const dashoffset = 91.25 - lengthOfCurrentFact / 6; 
                                         this.setState({dashoffset: dashoffset, lengthOfCurrentFact: lengthOfCurrentFact});
                                     })}>
                                         <RemoveCircleOutline />
@@ -255,7 +342,7 @@ class ContentAuthoringTool extends Component{
 
                 {this.state.background ? <div className="d-flex justify-content-center"><img id='previewBackground' alt='not found'/></div> : null}
 
-                <p></p> <br /> <p id="fillTheFormCompleteMessage"></p>
+                 <p id="fillTheFormCompleteMessage"></p>
             
             </FormControl>
             </DialogContent>
@@ -266,13 +353,23 @@ class ContentAuthoringTool extends Component{
                         <div id="uploadMedia"> <input hidden type="file" name="background"  onChange={this.handleChange} form="formPost" accept="image/*" required /></div>
                     </Button>
 
-            <DialogActions >
-                <Button style={{color: '#A78EC3'}} onClick={() => this.handleClose()}>
+            <DialogActions>
+                <Button style={{color: 'var(--purpleMain)'}} onClick={() => this.handleClose()}>
                     Cancel
                 </Button>
-                <Button style={{backgroundColor : '#A78EC3', color: '#ffffff'}} onClick={this.submit}>
+                <Button style={{backgroundColor : 'var(--purpleMain)', color: '#ffffff'}} onClick={this.submit}>
                     Post
+                    {this.state.loading && (
+                    <CircularProgress
+                        size={16}
+                        style={{
+                          color: 'white',
+                          marginLeft: '0.25em'
+                        }}
+                    />
+                    )}
                 </Button>
+
             </DialogActions>
 </div>
         </Dialog>
@@ -280,8 +377,10 @@ class ContentAuthoringTool extends Component{
 );
 }
     submit(e){
+        this.setState({loading: true})
         e.preventDefault();
-        if (!this.state.background || !this.state.subject || !this.state.topic || !this.state.subtopic || !this.state.type || !this.state.fact1 || !this.state.mcq1 || !this.state.mcq1opt1 || !this.state.mcq1opt2){
+        if (!this.state.background || !this.state.subject || !this.state.topic || !this.state.subtopic || !this.state.type || !this.state.fact1 || !this.state.mcq1 || !this.state.mcq1opt1 || !this.state.mcq1opt2 || this.state.lengthOfCurrentFact1 > 365){
+            this.setState({loading: false})
             document.getElementById('fillTheFormCompleteMessage').innerHTML="Please fill all the mandatory fields and Background Image to create a post.";
         }
         else{
@@ -301,7 +400,6 @@ class ContentAuthoringTool extends Component{
                 form_data.append('topic', this.state.topic);
                 form_data.append('subtopic', this.state.subtopic);
                 form_data.append('type', this.state.type);
-                form_data.append('question', this.state.question1);
                 form_data.append('fact', this.state.fact1);
                 form_data.append('background', backgroundImage);
                 form_data.append('mcq1', this.state.mcq1);
@@ -309,9 +407,11 @@ class ContentAuthoringTool extends Component{
                 form_data.append('public', this.state.public);
 
                 if (! this.state.listOfSubjects.includes(this.state.subject) && this.state.subject != localStorage.getItem('subject')){
+                    this.setState({loading: false})
                     document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Subject.";
                 }
                 else if(! this.state.listOfTopics.includes(this.state.topic) && this.state.topic != localStorage.getItem('topic')){
+                    this.setState({loading: false})
                     document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Topic.";
                 }
                 else if(this.state.subject != this.state.topic != this.state.subtopic){
@@ -335,11 +435,6 @@ class ContentAuthoringTool extends Component{
                         for (let x=2; x <= this.state.numberOfPosts; x++){
                             if (this.state['fact'+x] && this.state['mcq'+x] && this.state['mcq' +x+ 'opt1'] && this.state['mcq' +x+ 'opt2']){
                                 const post = {}
-                                if (this.state['question'+x]){
-                                    post.question = this.state['question'+x];
-                                }else{
-                                    post.question = '';
-                                }
                                 post.fact = this.state['fact'+x];
                                 post.mcq = this.state['mcq'+x];
                                 const mcq1Opts = Array();
@@ -366,34 +461,39 @@ class ContentAuthoringTool extends Component{
                                     AxiosBaseFile.post('/api/db_add_next_post', form_data_list_of_posts)
                                     .then(res =>{
                                         console.log(res.data)
-                                        this.setState({setOpen: false, snackbarShow: true})
+                                        this.setState({setOpen: false, snackbarShow: true, loading: false})
                                     })
                                     .catch(err => {
+                                        this.setState({loading: false})
                                         document.getElementById('fillTheFormCompleteMessage').innerHTML="Could not process this task.";
                                         console.log(err)
                                     })
                             })
                             .catch((error) => {
                               console.log(error);
+                                this.setState({loading: false})
                               alert("We don't support Data Duplicasy!\nTo create a Post:\n1. Subject, Topic, Subtopic should be different.\n2. The type should be either News, Information or News& Information\n3. Options in multiple choice should not be same.\n4. The Fact should be Unique.");
                             });
 
                         }else{
+                            this.setState({loading: false})
                             document.getElementById('fillTheFormCompleteMessage').innerHTML="Please fill all the mandatory fields and Background Image to create a post.";
                         }
                     }
                     else{
                         AxiosBaseFile.post("/api/db_create_post", form_data)
                         .then(response => {
-                            this.setState({setOpen: false, snackbarShow: true, redirectPostId: response.data._id.$oid})
+                            this.setState({setOpen: false, snackbarShow: true, redirectPostId: response.data._id.$oid, loading: false})
                         })
                         .catch((error) => {
                             console.log(error);
+                            this.setState({loading: false})
                             alert("We don't support Data Duplicasy!\nTo create a Post:\n1. Subject, Topic, Subtopic should be different.\n2. The type should be either News, Information or News& Information\n3. Options in multiple choice should not be same.\n4. The Fact should be Unique.");
                         });
                     }
                 }
                 else{
+                    this.setState({loading: false})
                     document.getElementById('fillTheFormCompleteMessage').innerHTML="Subject, Topic & Subtopic should not be same.";
                 }
             }
@@ -404,9 +504,11 @@ class ContentAuthoringTool extends Component{
                 var backgroundImage = document.querySelector('#uploadMedia > input[type="file"]').files[0];
 
                 if (! this.state.listOfSubjects.includes(this.state.subject) && this.state.subject != localStorage.getItem('subject')){
+                    this.setState({loading: false})
                     document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Subject.";
                 }
                 else if(! this.state.listOfTopics.includes(this.state.topic) && this.state.topic != localStorage.getItem('topic')){
+                    this.setState({loading: false})
                     document.getElementById('fillTheFormCompleteMessage').innerHTML="Please Enter a Valid Topic.";
                 }
                 else if(this.state.subject != this.state.topic != this.state.subtopic){
@@ -432,11 +534,6 @@ class ContentAuthoringTool extends Component{
                     for (let x=1; x <= this.state.numberOfPosts; x++){
                         if (this.state['fact'+x] && this.state['mcq'+x] && this.state['mcq' +x+ 'opt1'] && this.state['mcq' +x+ 'opt2']){
                             const post = {}
-                            if (this.state['question'+x]){
-                                post.question = this.state['question'+x];
-                            }else{
-                                post.question = '';
-                            }
                             post.fact = this.state['fact'+x];
                             post.mcq = this.state['mcq'+x];
                             const mcq1Opts = Array();
@@ -458,20 +555,23 @@ class ContentAuthoringTool extends Component{
                         .then(res =>{
                             console.log(res.data)
                             localStorage.removeItem('id');
-                            this.setState({setOpen: false, snackbarShow: true, redirectPostId: res.data})
+                            this.setState({setOpen: false, snackbarShow: true, redirectPostId: res.data, loading: false})
                         })
                         .catch((error) => {
                             console.log(error);
+                            this.setState({loading: false})
                             document.getElementById('fillTheFormCompleteMessage').innerHTML="Could not process this task.";
                             alert("We don't support Data Duplicasy!\nTo create a Post:\n1. Subject, Topic, Subtopic should be different.\n2. The type should be either News, Information or News& Information\n3. Options in multiple choice should not be same.\n4. The Fact should be Unique.");
                         });
                     }else{
+                        this.setState({loading: false})
                         document.getElementById('fillTheFormCompleteMessage').innerHTML="Please fill all the mandatory fields and Background Image to create a post.";
                     }
                     
 
                 }
                 else{
+                    this.setState({loading: false})
                     document.getElementById('fillTheFormCompleteMessage').innerHTML="Subject, Topic & Subtopic should not be same.";
                 }
             }

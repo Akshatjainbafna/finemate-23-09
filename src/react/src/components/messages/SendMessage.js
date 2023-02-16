@@ -1,4 +1,5 @@
-import { OutlinedInput } from '@material-ui/core'
+import { IconButton, OutlinedInput } from '@material-ui/core'
+import { Send } from '@material-ui/icons'
 import React, { Component } from 'react'
 import createMessage from '../../assets/createMessage.png'
 import AxiosBaseFile from '../AxiosBaseFile'
@@ -38,12 +39,11 @@ class SendMessage extends Component {
                         onChange={this.handleChange}
                         value={this.state.message}
                         placeholder='Enter your message'
+                        style={{backgroundColor: 'var(--lightBackground)'}}
                         type='text'/>
-                    <button className={style.writeButton} onClick={this.handleSubmit}>
-                         <img
-                             src={createMessage}
-                             alt={createMessage}/>
-                    </button>
+                    <IconButton onClick={this.handleSubmit}>
+                        <Send />
+                    </IconButton>
                 </form>
             </div>
         )

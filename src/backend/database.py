@@ -451,13 +451,13 @@ def db_update_user_password():
             for i in range (6):
                 OTP += digits[math.floor(random.random()*10)]
     
-                otpMessage = OTP + " is your Finemate Verification Code."
-                s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
-                s.starttls()
+            otpMessage = OTP + " is your Finemate Verification Code."
+            s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
+            s.starttls()
 
-                sender = "hello@finemate.co"
-                emailid = userData['email'].lower()
-                message = """From: Finemate Admin<{0}>
+            sender = "hello@finemate.co"
+            emailid = userData['email'].lower()
+            message = """From: Finemate Admin<{0}>
 To: <{1}>
 MIME-Version: 1.0
 Content-type: text/html
@@ -465,12 +465,12 @@ Subject: Verification Email
 
 <h4>{2}</h4>""".format(sender, emailid, otpMessage)
 
-                try:
-                    s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
-                    s.sendmail(sender, emailid, message)
-                    return make_response(OTP, 200)
-                except:
-                    return make_response("Server Side Error", 500)
+            try:
+                s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
+                s.sendmail(sender, emailid, message)
+                return make_response(OTP, 200)
+            except:
+                return make_response("Server Side Error", 500)
         else:
             return make_response("Email not registered", 400)
     else:
@@ -786,6 +786,11 @@ def db_get_number_of_unseen_notification():
 @app.route('/api/db_get_all_threads', methods=['POST'])
 def db_get_all_threads():
     return Board(request.json).db_get_all_threads()
+
+#Get all threads of a community
+@app.route('/api/db_get_all_threads_of_community', methods=['POST'])
+def db_get_all_threads_of_community():
+    return Board(request.json).db_get_all_threads_of_community()
 
 #search a thread
 @app.route('/api/db_search_thread', methods=['POST'])

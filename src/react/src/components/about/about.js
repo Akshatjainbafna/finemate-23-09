@@ -19,6 +19,7 @@ import FinemateOnMobile from '../../assets/finemateScreenForMobile.png';
 import "./about.css";
 import AxiosBaseFile from "../AxiosBaseFile";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 class About extends Component {
   constructor(props){
@@ -40,11 +41,18 @@ class About extends Component {
   render() {
     return (
       <ContainerAbout>
+        <Helmet>
+				<title>
+					About - Finemate
+				</title>
+				<meta name='keywords' content="Retention Engine, Revision, Serial Recall, Cognitive Science, Learning, Education, Memorization, Memory, Long-Term Memory, E-Learning, Flashcards, Leitner System, Forget Things, Student Management System, Social Learning Platform, Retention, Revise, Learning Management System, Cognitive Abilities" />
+        <meta name='description' content="Finemate is a software platform that offers a range of software services to help students and professionals retain knowledge and improve their cognitive abilities. It includes a Retention Engine that employs techniques such as the Leitner system, visual elements, paraphrasing, scaffolding, and personalized content to help users retain knowledge in the long term, reduce confusion, and better understand concepts. In addition, Finemate also offers student and employee management systems, and it includes gamification elements such as quizzes to help users engage with the platform. It is designed to provide a comprehensive solution for institutes, addressing all of their students' and employees' requirements.'"/>
+			</Helmet>
         <h3> About Finemate </h3>
         <Wrapper>
             <img className="macPicture" src={macPicture} alt="" />
           <Content>
-            <h3 className="title1">What is Finemate?</h3>
+            <h3 className="title1" id='what-is-finemate'>What is Finemate?</h3>
             <p className="introFinemate">
             Finemate is a software platform that offers a range of software services to help students and professionals retain knowledge and improve their cognitive abilities. It includes a Retention Engine that employs techniques such as the Leitner system, visual elements, paraphrasing, scaffolding, and personalized content to help users retain knowledge in the long term, reduce confusion, and better understand concepts. In addition, Finemate also offers student and employee management systems, and it includes gamification elements such as quizzes to help users engage with the platform. It is designed to provide a comprehensive solution for institutes, addressing all of their students' and employees' requirements.
             </p>

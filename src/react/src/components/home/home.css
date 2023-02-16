@@ -16,7 +16,7 @@
 	border-radius: 10px;
 	max-width: 100%;
 	color: #FCFCFB;
-    background-color: #A78EC3;
+    background-color: var(--purpleMain);
 }
 .btn-get-started:hover {
 	color: white;
@@ -24,9 +24,19 @@
 	box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
 }
 .instantBreakdown{
-	color: #ff0000;
 	font: bold 2em 'Bangers', cursive;
-	text-align: center;
+	background-image: linear-gradient(45deg, #8C52FF, #BAA3D7, #FBEAAF, #64BAA9);
+
+	width: fit-content;
+	margin: auto;
+	padding: 0 5px;
+
+  	/* Use the text as a mask for the background. */
+  	/* This will show the gradient as a text color rather than element bg. */
+  	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent; 
+  	-moz-background-clip: text;
+  	-moz-text-fill-color: transparent;
 }
   .carousel-control-next,
   .carousel-control-prev, .carousel-indicators /*, .carousel-indicators */ {
@@ -45,6 +55,10 @@
   .reveal.active{
 	transform: translateY(0);
 	opacity: 1;
+  }
+  .landingPageMainScreen:hover .macPictureHome{
+	transform: scale(1.05, 1.05);
+	transition: transform 1s;
   }
   @media screen and (max-width: 600px) {
 	.carousel-inner{

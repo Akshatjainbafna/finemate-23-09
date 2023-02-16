@@ -5,6 +5,7 @@ import Typed from "react-typed";
 import { Tooltip } from "@material-ui/core";
 import Footer from "../../components/footer/Footer.component";
 import LoadingGif from "../../components/loadingGif";
+import { Helmet } from "react-helmet";
 
 export default function Team(){
     const [loading, setLoading] = useState(true);
@@ -21,6 +22,13 @@ export default function Team(){
                 </div>
       }
     return <>
+            <Helmet>
+				<title>
+					Team - Finemate
+				</title>
+				<meta name='keywords' content="Hiring, Solopreneur" />
+                <meta name='description' content="We believe in building that every great product is build by a great team who is equally motivated and eager to bring the dreams to reality, to make lives easy and jolly of people. If you think the same we have a good news for you, We are Hiring."/>
+			</Helmet>
         <OutsideNavbar />
         <div className={style.teamPageContainer}>
         <div className={style.aboutTeam}>

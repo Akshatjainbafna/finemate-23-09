@@ -2,7 +2,7 @@
     margin: 0 2vw;
 }
 .postCardContainerIndividual{
-  width: 50vw;
+  width: 554px;
   margin: 2vh auto;
 }
 .postCardContainerIndividual:hover .dropBtn, .postCardContainer:hover .dropBtn{
@@ -21,7 +21,7 @@
     align-items: center;
     margin: 0 1vw;
     height: 8vh;
-    border: 1px solid rgb(187, 187, 187);
+    border: 1px solid #dfdfdf;
     padding: 0.5vw 2vw 0;
     border-radius: 30px 30px 0 0;
     position: relative;
@@ -35,7 +35,7 @@
 
 .subject a, .topic a, .subTopic a{
     text-decoration: none;
-    color: rgba(65, 65, 65, 0.5);
+    color: #747473;
 }
 .subject{
   margin-bottom: 0;
@@ -56,38 +56,47 @@
     border-radius: 10px;
     display: none;
     z-index: 99;
-    background-color: #A78EC3;
+    background-color: var(--purpleMain);
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    color: whitesmoke;
-    padding: 1vh 1vw;
+    color: var(--pureWhite)smoke;
+    padding: 1vh auto;
 }
 .menuListVisible div{
-    border-bottom: 1px solid grey;
+  padding: 0 1vw;
 }
-.menuListVisible div button:hover, .menuListVisible div button:focus{
-  background-color: #A78EC3;
+.menuListVisible div:hover, .menuListVisible div:focus{
+  background-color: var(--purpleMain);
   cursor: pointer;
-  color: white;
-  font-weight: 600;
+  filter: brightness(95%);
 }
 
 .postImg{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    border: 1px solid rgb(226, 226, 226);
     position: relative;
-    overflow: hidden;
-    max-height: 75vh;
-    min-height: 60vh;
+    background-color: rgb(242, 242, 241);
+    border-radius: 10px;
 }
 
 .quesFactBlock{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
+  background-color: #e4e4e4;
+  border-radius: 10px;
+  width: 100%;
+    word-break: break-word;
+    margin: auto 4vw;
+    margin-top: -48px;
+    opacity: 0.9;
+    border: 1px solid #dfdfdf;
+    animation: flashCardEffect 1s;
+}
+@keyframes flashCardEffect {
+  0%{
+    margin-top: -250px;
+  }
+  100%{
+    margin-top: -48px;
+  }
 }
 .question{    
     font-size: 1.3em !important;
@@ -99,16 +108,11 @@
     margin-top: auto;
 }
 
-.postImg .fact{
-    color: rgba(0, 0, 0, 0.8);
-    margin: auto 5vw;
-    font-size: 1.2em;
-    font-weight: bold;
-    word-break: break-word;
-}
-
 .backgroundImage{
-    opacity: 0.12;
+    min-height: 250px;
+    max-height: 554px;
+    border-radius: 10px;
+    border: 1px solid rgb(242, 242, 242);
 }
 .postFooter{
     display: flex;
@@ -117,7 +121,7 @@
     align-items: center;
     margin: 0 1vw;
     height: 8vh;
-    border: 1px solid rgb(187, 187, 187);
+    border: 1px solid #dfdfdf;
     padding: 0 2vw;
     border-radius: 0 0 30px 30px;
 }
@@ -125,27 +129,27 @@
   font-size: small;
   font-weight: bold;
   border-radius: 5px;
-  color: #A78EC3;
-  background-color: white;
+  color: var(--purpleMain);
+  background-color: var(--pureWhite);
   height: 4vh;
   width: 8vw;
-  border: 1px solid #A78EC3;
+  border: 1px solid var(--purpleMain);
 }
 
 .viewPostBtn:hover{
-  color: white;
-  background-color: #A78EC3;
+  color: var(--pureWhite);
+  background-color: var(--purpleMain);
 }
 /*
 .readMoreBtn{
   font-size: small;
   font-weight: bold;
   border-radius: 5px;
-  color: #A78EC3;
-  background-color: white;
+  color: var(--purpleMain);
+  background-color: var(--pureWhite);
   height: 4vh;
   width: 8vw;
-  border: 1px solid #A78EC3;
+  border: 1px solid var(--purpleMain);
   transition: border-radius 4s, linear ;
 }
 .readMoreBtn:hover{
@@ -180,7 +184,7 @@
   top: 0;
   right: 0;
   font-size: small;
-  color: white;
+  color: var(--pureWhite);
   background-color: #746f70;
   padding: 0.25em 0.5em;
   opacity: 0.75;
@@ -215,8 +219,8 @@
 }
 .previousNextWindow{
     display: none;
-    color: white;
-    background-color: #A78EC3;
+    color: var(--pureWhite);
+    background-color: var(--purpleMain);
     border-radius: 100px;
     padding: 0.5vh 0.5vw;
     position: absolute;
@@ -240,7 +244,7 @@
 .integritySlider input[type=range] {
     -webkit-appearance: none;
     width: 10vw;
-    border: 2px solid #dfd6e9;
+    border: 2px solid #bdbdbd;
     cursor: pointer;
     border-radius: 5px;
   }
@@ -421,15 +425,15 @@
     min-height: 60vh;
     margin: 0 2vw 4vh;
     border: 1px solid rgb(226, 226, 226);
-    background-color: #dfd6e98f;
+    background-color: var(--purpleLight);
     border-radius: 30px;
   }
 .postMCQ div.mcqQuestion, div.mcqOptions{
   margin: 4vh 2vw;
   padding: 4vh;
-  background-color: white;
+  background-color: var(--pureWhite);
   border-radius: 20px ;
-  color: #000;
+  color: var(--lightThemeFontPrimary);
 }
 div.mcqOptions{
   opacity: 0;
@@ -461,11 +465,11 @@ div.correctGesture{
   min-height: 60vh;
   margin: 0vh 2vw 4vh;
   border: 2px solid rgb(226, 226, 226);
-  background-color: white;
+  background-color: var(--pureWhite);
   border-radius: 30px;
 }
 div.correctGesture > p{
-  color: black;
+  color: var(--lightThemeFontPrimary);
   font-weight: bold;
   font-size: 3vh;
 }
@@ -473,12 +477,12 @@ div.correctGesture > p{
   display: none;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid rgb(187, 187, 187);
+  border: 1px solid #dfdfdf;
   margin: 0 3vw;
   border-radius: 0 0 30px 30px;
   animation: heightAnimation 0.5s;
-  background-color: #A78EC3;
-  color: white;
+  background-color: var(--purpleMain);
+  color: var(--pureWhite);
 }
 @keyframes heightAnimation {
   0%{
@@ -512,16 +516,13 @@ div.correctGesture > p{
   .question{    
     font-size: 1.1em !important;
   }
-  .postImg .fact{
-    font-size: 1em;
-  }
   .postFooter{
     padding: 0 4vw;
   }
   .viewPostBtn{
     height: 4vh;
     width: 24vw;
-    border: 1px solid #A78EC3;
+    border: 1px solid var(--purpleMain);
   }
   .integritySlider input[type=range] {
     width: 20vw;
@@ -598,10 +599,6 @@ background-repeat: no-repeat;
 .postCardContainerIndividual{
   width: 100vw;
   margin: 2vh 0vw;
-}
-.postImg{
-  max-height: 65vh;
-  min-height: 50vh;
 }
 div.mcqOptions{
   animation: mcqOptions 1s ease 2s none ;

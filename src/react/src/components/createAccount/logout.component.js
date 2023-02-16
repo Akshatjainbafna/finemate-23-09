@@ -26,7 +26,7 @@ class Logout extends Component {
     return (
           <div className="logOutScreen">
             <p>You are logged out! Visit Soon.</p>
-            <Button style={{borderColor: '#A78EC3',	borderRadius: '10px',	width: '10rem', color: '#FCFCFB', fontFamily: "Open Sans", backgroundColor: '#A78EC3'}} onClick={()=> this.redirect()}> Login </Button>
+            <Button style={{borderColor: 'var(--purpleMain)',	borderRadius: '10px',	width: '10rem', color: '#FCFCFB', fontFamily: "Open Sans", backgroundColor: 'var(--purpleMain)'}} onClick={()=> this.redirect()}> Login </Button>
           </div>
     );
   }

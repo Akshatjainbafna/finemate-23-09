@@ -1,17 +1,40 @@
 .discussion-list-container {
-    flex-direction: column;
-    border-radius: 5px;
-    margin: 2%;
+    width: 50%;
+    margin: auto;
 }
-.divStyle{
-    margin: 1%;
-    border: 2px solid #77737a;
-    border-radius: 5px;
-    width: auto;
-    padding: 1%;
+
+.divStyle {
+    margin-bottom: 2vh;
+    background-color: var(--pureWhite);
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2) !important;
+    border-radius: 10px;
+    padding: 2px 8px;
     text-overflow: ellipsis !important;
 }
-.repliesBlock{
+
+.smallSizeProfilePicture {
+    width: 25px !important;
+    height: 25px !important;
+    border: 1px solid #DFDFDF;
+    border-radius: 100%;
+    font-size: small !important;
+}
+
+.userFullNameDiscussion {
+    flex-grow: 1;
+}
+
+.communityNameDiscussionBlock {
+    font-size: x-small;
+    background-color: #dfdfdf;
+    color: black;
+    padding: 4px 8px;
+    border-radius: 10px;
+    width: fit-content;
+    margin: 0.5rem !important;
+}
+
+.repliesBlock {
     display: inline-block;
     border-radius: 100%;
     height: 18px !important;
@@ -21,18 +44,70 @@
     background-color: #77737ada;
     font-size: small;
 }
-.discussion-list-list{
+
+.discussion-list-list {
+    margin-top: 2.5vh;
     text-overflow: ellipsis !important;
 }
+
+.inputDiscussionSortingOption {
+    position: absolute;
+    visibility: hidden;
+}
+
+.labelSortingOption {
+    font-size: x-small;
+    background-color: #bdbdbd;
+    color: white;
+    margin-right: 5px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: background-color 0.5s;
+}
+
+.inputDiscussionSortingOption:checked+.labelSortingOption {
+    background-color: var(--purpleMain);
+}
+
+.inputDiscussionSortingOption:hover+.labelSortingOption {
+    background-color: #adadad;
+}
+
+.addDiscussionButtonContainer {
+    position: fixed;
+    bottom: 8vh;
+    right: 10vw;
+    z-index: 1;
+}
+
+.addDiscussionButton {
+    background-color: var(--purpleDark);
+    color: white;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    border: none;
+}
+
+.addDiscussionButton:hover {
+    filter: brightness(90%);
+}
+
 @media screen and (max-width: 600px) {
-    .divStyle{
-        margin: 2vh auto;
-        border: 2px solid #77737a;
-        border-radius: 5px;
-        width: 90vw;
-        text-overflow: ellipsis !important;
+    .addDiscussionButtonContainer {
+        position: fixed;
+        bottom: 10vh;
+        right: 5vw;
     }
-    .discussion-list-container{
-        margin-top: 2vh;
+
+    .divStyle {
+        border-radius: 10px;
+        text-overflow: ellipsis !important;
+        margin: 2vh auto;
+        width: 90vw;
+    }
+
+    .discussion-list-container {
+        width: 100%;
     }
 }

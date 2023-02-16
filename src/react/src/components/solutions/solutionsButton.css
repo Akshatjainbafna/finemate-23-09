@@ -16,15 +16,15 @@
 }
 
 .solutions--btn--primary {
-  background-color: var(--primary);
+  background-color: var(--purpleMain);
   color: var(--secondary);
   border: none;
 }
 
 .solutions--btn--secondary {
   background-color: var(--secondary);
-  color: var(--primary);
-  border: 2px solid var(--primary);
+  color: var(--purpleMain);
+  border: 2px solid var(--purpleMain);
 }
 @media screen and (max-width: 600px) {
   .solutions--btn {

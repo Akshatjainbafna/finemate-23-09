@@ -1,13 +1,70 @@
 .footer{
-    background-image: linear-gradient(#cac6cf, #ebe5f3);
-    padding: 10vh 0;
-    text-align: center;
-    position: relative;
+    background-color: var(--purpleExtremlyDark);
+    padding: 10vh;
+    color: var(--darkThemeFontSecondary);
 }
-.socialLinks a{
-    color: rgb(100, 100, 100);
+.footer a{
+    color: var(--darkThemeFontSecondary);
     text-decoration: none;
 }
-.socialLinks a:hover{
-    color: #834bc4;
+.footer a:hover{
+    color: var(--pureWhite);
+}
+.footer div > div > div{
+    width: 15vw;
+}
+
+.footer div:first-child a{
+    display: block;
+    text-decoration: none;
+}
+.footer div:first-child p{
+    font-weight: 600;
+}
+.newsletterFormContainer{
+    margin: auto;
+    text-align: center;
+}
+.footerBottom{
+    margin-top: 10vh;
+    text-align: center;
+}
+.newsletterForm{
+    color: var(--lightThemeFontPrimary);
+    background-color: var(--lightBackgroundPrimary);
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.1);
+}
+.newsletterForm h5{
+    font-weight: 600;
+}
+.newsletterEmailField{
+    border: none;
+    box-shadow: none;
+    margin-right: 2vw;
+}
+.newsletterInputField{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1em;
+    border-radius: 10px;
+}
+@media screen and (max-width: 600px) {
+    .footer{
+        padding: 5vh;
+    }
+    .footer div > div > div{
+        margin-bottom: 5vh;
+        width: 100%;
+    }
+    .newsletterFormContainer{
+        width: 100%;
+    }
+    .newsletterEmailField{
+        width: 60vw;
+        margin-bottom: 2vh;
+        margin-right: 0;
+    }
 }

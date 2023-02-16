@@ -1,0 +1,4 @@
+.content input[type='text'], .content input[type='email'], .content textarea{
+    background-color: #f3f3f3;
+    border: none;
+}

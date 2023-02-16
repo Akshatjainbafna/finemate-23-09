@@ -1,30 +1,31 @@
 .headerTask {
-    background-color:white;
-    border-color: white;
+    background-color: var(--pureWhite);
+    border-color: var(--pureWhite);
     border-radius: 0px 0px 15px 15px;
     height: 9vh;
     align-items: center;
-    box-shadow: 0px 2px 10px -1px rgba(0,0,0,.3) !important;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0, 0.2) !important;
 }
 .notificationCount{
     position: absolute;
     top: 0px;
     right: 0;
     height: 16px;
-    width: 16px;
-    background-color:  #834bc4;
+    min-width: 16px;
+    background-color:   var(--purpleDark);
     box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.75);
     border-radius: 100%;
     font-size: 10px;
-    color: #fff;
+    color:  var(--pureWhite);
+    padding: 0;
 }
 .Navbar{
     margin-left: 22vw;
     margin-top: 0px;
 }
 .header {
-    color: #834bc4;
-    text-decoration-color: #834bc4;
+    color:  var(--lightThemeFontSecondary);
+    text-decoration-color:  var(--lightThemeFontSecondary);
     font-size: 1.25em !important;
     margin-left: 1vw;
 }
@@ -32,12 +33,12 @@
     margin-left: 2em;
 }
 .searchImg{
-    background-color: #fff;
+    background-color: var(--pureWhite);
     width: 80%;
 }
 .headerIcons {
     position: relative;
-    background-color: #fff;
+    background-color: var(--pureWhite);
     border-radius: 10px;
     border-style: none;
 }
@@ -45,7 +46,7 @@
 .seacrhButtonHeader {
     border-radius: 10px;
     width: 12vw !important;
-    background-color: #F5F7FA;
+    background-color: var(--lightBackground);
     margin-top: -4px;
     margin-right: 1em !important;
 }

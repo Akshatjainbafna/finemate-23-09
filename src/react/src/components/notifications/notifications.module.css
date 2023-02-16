@@ -6,7 +6,7 @@
   border-bottom: 1px solid rgb(222, 222, 222);
 }
 .notification:hover{
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(242, 242, 242);
 }
 .profilePictureThumbnail{
     height: 2.4rem;
@@ -28,8 +28,8 @@
 .inputSearchOption:checked + .labelSearchOption{
     font-weight: 600;
     color: black;
-    border-bottom: 2px solid #834bc4;
+    border-bottom: 2px solid var(--purpleDark);
 }
 .inputSearchOption:hover + .labelSearchOption{
-   border-bottom: 2px solid #834bc4;
+   border-bottom: 2px solid var(--purpleDark);
 }

@@ -32,7 +32,7 @@ let navItemsForNormalUser = [
     { id: 1, link: "/dashboard", imgSrc: dashboard, title: "Home" },
     { id: 2, link: "/allcoursesUser", imgSrc: courses, title: "Courses"},
     { id: 3, link: "/search", imgSrc: search, title: "Search"},
-    { id: 4, link: "/discussionList", imgSrc: forum, title: "Community" },
+    { id: 4, link: "/communities", imgSrc: forum, title: "Community" },
     { id: 5, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
   ];
   
@@ -43,7 +43,7 @@ let navItemsForNormalUser = [
     { id: 4, link: "/search", imgSrc: search, title: "Search"},
     { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
     { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-    { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
+    { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
     { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
     { id: 9, link: "/feesPayment", imgSrc: fees, title: "Fees Payment" },
   ];
@@ -55,7 +55,7 @@ let navItemsForNormalUser = [
     { id: 4, link: "/search", imgSrc: search, title: "Search"},
     { id: 5, link: "/attendanceUser", imgSrc: attendance, title: "Attendance"},
     { id: 6, link: "/gradesUser", imgSrc: grades, title: "Grades"},
-    { id: 7, link: "/discussionList", imgSrc: forum, title: "Community" },
+    { id: 7, link: "/communities", imgSrc: forum, title: "Community" },
     { id: 8, link: "/marketplace", imgSrc: cart, title: "Marketplace" },
     { id: 9, link: "/feesPayment", imgSrc: fees, title: "Salary" },
   ]

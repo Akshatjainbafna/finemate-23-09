@@ -1,10 +1,10 @@
 .faqQuestion {
     background: whitesmoke;
     border: whitesmoke;
-    width: 807px;
-    height: 60px;
+    width: 60vw;
     font-size: 20px;
     text-align: left;
+    margin-bottom: 5px;
     text-decoration-color: #A78EC3;
 }
 
@@ -19,8 +19,17 @@
 
 .faqAnswer {
     font-size: 14px;
-    padding-left: 40px;
-    width: 807px;
+    padding-left: 1em;
+    width: 60vw;
     font-weight: lighter;
     background-color: white;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .faqQuestion, .faqAnswer {
+        width: 80vw;
+    }
+    
 }

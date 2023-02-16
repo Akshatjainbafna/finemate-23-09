@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import { Card } from "react-bootstrap";
 import profilePic from "../../assets/profilePic.png";
 import "./profile.css";
@@ -7,6 +7,27 @@ import { AddPhotoAlternateRounded } from "@material-ui/icons";
 import { Button, Divider, Input, Menu, MenuItem, TextField } from "@material-ui/core";
 import { Link, Redirect } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
+import ReactQuill from "react-quill";
+
+
+function Fact(props){
+  let quillRef = useRef();
+  let modules = {
+      syntax: true,
+      toolbar: false
+  }
+
+  useEffect(() => {
+      let data = JSON.parse(props.fact);
+      console.log(data)
+      quillRef.current.getEditor().setContents(data)
+  }, [props.fact]);
+  
+  return(
+      <ReactQuill ref={quillRef} theme='bubble' modules={modules} readOnly/>
+  )
+
+}
 
 class Profile extends Component {
   constructor(props) {
@@ -45,6 +66,7 @@ class Profile extends Component {
   }
 
   componentDidMount(){
+    document.getElementById('tabNews-1').checked = true;
     AxiosBaseFile.post('/api/db_get_all_post_of_user', {username: localStorage.getItem('username')})
     .then(res => {
         this.setState({recentPosts : res.data})
@@ -197,7 +219,7 @@ displayPanel(panel){
               <div className="profile_pic_slot">
                 {this.state.displaying ? 
                   profilePicture ? 
-                    <div><img alt='profile' src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>   
+                    <div><img alt='profile' src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ profilePicture} className="elementPic" /> </div>   
                   :
                     <div><img src={profilePic} alt="not found" className="elementPic" /> </div>
                 :
@@ -287,7 +309,7 @@ displayPanel(panel){
                 <Link style={{textDecoration: 'none', color : '#302c35'}} className="flex-grow-1" to={"/profile/".concat(username)}>
                   <span>{username}</span>
                 </Link>
-                <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: '#cdb5e7', color: 'white', marginRight: "0.5em"}} onClick={() => this.removeFriend(username)}>
+                <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: 'var(--purpleDark)', color: 'var(--pureWhite)', marginRight: "0.5em"}} onClick={() => this.removeFriend(username)}>
                   Unfriend
                 </Button>
               </MenuItem>
@@ -329,7 +351,7 @@ displayPanel(panel){
                 <Link style={{textDecoration: 'none', color : '#302c35'}} className="flex-grow-1" to={"/profile/".concat(username)}>
                   <span>{username}</span> 
                 </Link>
-                  <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: "#cdb5e7", color: 'white'}} onClick={() => this.disconnect(username)}>
+                  <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: "var(--purpleDark)", color: 'var(--pureWhite)'}} onClick={() => this.disconnect(username)}>
                     Disconnect
                   </Button>
                 </MenuItem>
@@ -422,13 +444,15 @@ displayPanel(panel){
             <Card.Body className="profileElements" id="panel1">
               <div className="profileElementContainer">
                 {this.state.recentPosts.map((post, index) => 
-                  <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
+                  <Link style={{textDecoration: 'none'}} to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
                       <div className="postThumbnail">
-                        <div className="factThumbnail" name="factName" ref={this.referenceToPostFact}>
-                            <p className="subTopicThumbnail">{post.subtopic}</p>
-                            <p className="fact"> {post.fact}</p>
+                        <div className="subTopicThumbnail">{post.subtopic}</div>
+                        <div className="factThumbnailContainer">
+                          <img alt='post thumbnail' src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
+                          <p className="factThumbnail" name="factName">
+                            <Fact fact={post.fact} />
+                          </p>
                         </div>
-                        <img alt='post thumbnail' src={require('../../assets/postBackgroundImages/'+ post.background)} />
                       </div>
                     </Link>
                 )}
@@ -438,13 +462,15 @@ displayPanel(panel){
             <Card.Body className="profileElements" id="panel2">
               <div className="profileElementContainer">
               {this.state.savedPosts.map((post, index) => 
-                <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
+                <Link style={{textDecoration: 'none'}} to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
                   <div className="postThumbnail">
-                    <div className="factThumbnail" name="factName" ref={this.referenceToPostFact}>
-                      <p className="subTopicThumbnail">{post.subtopic}</p>
-                      <p className="fact"> {post.fact}</p>
+                    <div className="subTopicThumbnail">{post.subtopic}</div>
+                    <div className="factThumbnailContainer">
+                      <img alt='post thumbnail' src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
+                      <p className="factThumbnail" name="factName">
+                          <Fact fact={post.fact} />
+                      </p>
                     </div>
-                    <img alt='post thumbnail' src={require('../../assets/postBackgroundImages/'+ post.background)} />
                   </div>
                 </Link>
               )}

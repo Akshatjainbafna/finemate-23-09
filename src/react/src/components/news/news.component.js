@@ -18,6 +18,9 @@ class News extends Component {
             redirectToAbout: false
         }
     }
+    componentDidMount(){
+        document.getElementById('tabNews-1').checked = true;
+    }
     displayPanel(panel){
         for (let x=1; x<=4; x++){
             var panelId= 'panel'+String(x);
@@ -73,7 +76,7 @@ class News extends Component {
 
                         <div className={style.panelContainer}>
                         <div className={style.panel} id="panel1">
-                            <h1 className={style.newsTitle}>New courses have been added!</h1>
+                            <h5 className={style.newsTitle}>New courses have been added!</h5>
                             <img className={style.textbox} src={book} ></img>
                             <p> Check out the newly added courses in the classes section</p>
                             <div className={style.btnLearn}>
@@ -84,17 +87,17 @@ class News extends Component {
 
                         
                         <div className={style.panel} id="panel2">
-                            <h1 className={style.newsTitle}>CFC launches new campaign</h1>
+                            <h5 className={style.newsTitle}>CFC launches new campaign</h5>
                             <div className="picture-cfc">
                                 <img className={style.textbox} src={change} ></img>
                                 <p>Technology for improved education Guatemela is a project designed to improve the quality of eduction in Guatemala</p>
                             </div>
-                            <h1>CFC launches new campaign</h1>
+                            <h5>CFC launches new campaign</h5>
                             <div className="picture-cfc">
                                 <img className={style.textbox} src={change} ></img>
                                 <p>Technology for improved education Guatemela is a project designed to improve the quality of eduction in Guatemala</p>
                             </div>
-                            <h1>CFC launches new campaign</h1>
+                            <h5>CFC launches new campaign</h5>
                             <div className="picture-cfc">
                                 <img className={style.textbox} src={change} ></img>
                                 <p>Technology for improved education Guatemela is a project designed to improve the quality of eduction in Guatemala</p>
@@ -106,7 +109,7 @@ class News extends Component {
 
                         
                         <div className={style.panel} id="panel3">
-                        <h1 className={style.newsTitle}>AI system discovers new useful material</h1>
+                        <h5 className={style.newsTitle}>AI system discovers new useful material</h5>
                             <img className={style.textbox} src={computer} ></img>
                             <p>an AI algorithm called CAMEO that discovered a potentially useful new material</p>
                             <div className={style.btnLearn}>
@@ -116,7 +119,7 @@ class News extends Component {
 
                         
                         <div className={style.panel} id="panel4">
-                        <h1 className={style.newsTitle}>Want to know more about Finemate</h1>
+                        <h5 className={style.newsTitle}>Want to know more about Finemate</h5>
                             <img className={style.textbox} src={logo} ></img>
                             <p>learn more about Finemate!</p>
                             <div className={style.btnLearn}>

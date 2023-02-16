@@ -1,0 +1,51 @@
+pre.ql-syntax {
+    display: block;
+    font-size: 87.5%;
+    background-color: #23241f;
+    color: #f8f8f2 !important;
+    overflow: visible;
+    color: #212529;
+    border-radius: 3px;
+    padding: 0.5em 1em;
+}
+.ql-tooltip, .ql-picker-options{
+    left: 0 !important;
+    z-index: 5 !important;
+}
+.ql-picker-options{
+    z-index: 5 !important;
+}
+.quillField{
+    border: 1px solid #c4c4c4;
+    border-radius: 3px;
+    min-height: 5em;
+}
+.quillField:hover{
+    border: 1px solid #212121;
+}
+.factThumbnail .ql-editor{
+    padding: 8px 10px;
+}
+.factThumbnail .ql-editor p, .factThumbnail .ql-editor li{
+    font-weight: 600;
+    color: #212121;
+    font-size: 0.7em;
+    word-break: break-word;
+}
+.factThumbnail .ql-editor h1, .factThumbnail .ql-editor h2, .factThumbnail .ql-editor h3{
+    font-weight: 600;
+    color: #212121;
+    font-size: 0.85em;
+    word-break: break-word;
+}
+.ql-editor p{
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #212121;
+}
+
+@media screen and (max-width: 600px) {
+    .factThumbnail .ql-editor{
+        padding: 6px;
+    }   
+}

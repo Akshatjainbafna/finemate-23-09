@@ -14,11 +14,11 @@
     left: 0px;
     width: 22vw;
     height: 100vh !important;
-    background-color: white;
-    color: white;
+    background-color: var(--pureWhite);
+    color: var(--darkThemeFontPrimary);
     font-family: "Open Sans";
     font-weight: bold;
-    box-shadow: 2px 0px 10px -1px rgba(0,0,0,.3) !important;
+    box-shadow: 2px 0px 4px 0px rgba(0,0,0,.2) !important;
     border-radius: 0px !important;
 }
 
@@ -32,20 +32,20 @@
 }
 
 .sideBar ul a li.active {
-    background: #A78EC3;
+    background: var(--purpleMain);
     margin-left: 0;
     padding-left: 40px;
     text-decoration: none;
 }
 .sideBar ul a li.active span{
-    color: white;
+    color: var(--darkThemeFontPrimary);
     text-decoration: none;
     text-align: left;
     margin-left: 20px;
     margin-right: 12px;
 }
 .sideBar ul a li{
-    color: white;
+    color: var(--darkThemeFontPrimary);
     text-decoration: none;
     list-style-type: none;
     list-style-position: outside;
@@ -60,7 +60,7 @@
 .sideBar ul a li span{
     text-decoration: none;
     text-align: left;
-    color: #787d80;
+    color: var(--lightThemeFontSecondary);
     margin-left: 20px;
     margin-right: 12px;
     padding-left: 0px;
@@ -69,23 +69,32 @@
 } 
 
 .sideBar ul a:hover:not(.active) li{
-    background: #A78EC3;
+    background:  var(--purpleMain);
     box-shadow: 0 20px 20px -2px rgba(0,0,0,.2);
-    color:white !important;
+    color: var(--darkThemeFontPrimary) !important;
     margin-left: 0;
     padding-left: 40px;
     text-decoration: none;
 }
 
 .sideBar ul a li:hover span {
-    color: white !important;
+    color: var(--darkThemeFontPrimary) !important;
 }
 
 .sideBar ul a:hover {
-    color: white !important;
+    color: var(--darkThemeFontPrimary) !important;
     text-decoration: none;
 }
-
+.addPostIcon{
+    width: 10vw;
+    border-radius: 100px !important;
+    border: 2px solid var(--purpleMain) !important;
+    color: var(--purpleMain) !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    padding: 4px !important;
+    margin: 20px auto !important;
+  }
 
 
 
@@ -98,12 +107,12 @@
         display: none;
     }
     .sideBar ul a li.active {
-        background: white;
+        background: var(--pureWhite);
         margin: auto;
         text-decoration: none;
         padding: 10px 10px 10px 20px;
         margin-left: 0;
-        border-left: 5px solid#A78EC3;
+        border-left: 5px solid var(--purpleMain);
     }
 
     .sideBar ul a li {
@@ -114,10 +123,10 @@
 
     
     .sideBar ul a:hover:not(.active) li{
-        border-left: 5px solid#A78EC3;
-        background-color: white;
+        border-left: 5px solid var(--purpleMain);
+        background-color: var(--pureWhite);
         box-shadow: none;
-        color:white;
+        color: var(--darkThemeFontPrimary);
         text-decoration: none;
         padding: 10px 10px 10px 20px;
     }
@@ -128,7 +137,7 @@
     }
     .sideBar ul a li{
         width: fit-content;
-        color: white;
+        color: var(--darkThemeFontPrimary);
         text-decoration: none;
         align-items: center;
         text-align: center;

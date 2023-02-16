@@ -13,7 +13,7 @@ class LoginPage extends Component {
           <div className={style.pictureCreate}>
               <img src={Picture} alt="Map"></img>
           </div>
-          <div className={style.login}>
+          <div>
             <Login />
           </div>
         </div>

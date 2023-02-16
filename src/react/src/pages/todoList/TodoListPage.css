@@ -4,7 +4,7 @@
     overflow-y: auto;
 }
 .profileBox{
-    background-color: #FCFCFB;
+    background-color: var(--lightBackgroundPrimary);
     margin-left: 22vw !important;
 }
 @media screen and (max-width: 991px) {
@@ -19,7 +19,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      background-color: #FCFCFB !important;
+      background-color: var(--lightBackgroundPrimary) !important;
     }
     .footerForMobile{
       box-sizing: border-box;

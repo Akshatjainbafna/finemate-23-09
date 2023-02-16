@@ -70,6 +70,9 @@ import IndividualPostPage from "./pages/post/Post";
 import SettingPage from "./pages/settings/settings";
 import SearchPageForTopic from "./pages/searchPage/SearchPageForTopic";
 import PageNotFound from "./components/pageNotFound";
+import QuillEditor from "./components/quill";
+import ContactPage from "./pages/contact/contact";
+import JobsPage from "./pages/jobs/jobs";
 
 
 window.token = localStorage.getItem("token");
@@ -95,6 +98,9 @@ ReactDOM.render(
       <Route exact path="/create">
         <CreateAccountPage />
       </Route>
+      <Route exact path="/quillEditor">
+        <QuillEditor />
+      </Route>
       {/* Landing Page*/}
       <Route exact path="/">
         <LogInPage />
@@ -105,6 +111,14 @@ ReactDOM.render(
       {/* FAQ page*/}
       <Route exact path="/FAQ">
         <FAQPage />
+      </Route>
+      {/* Contact page*/}
+      <Route exact path="/contact">
+        <ContactPage />
+      </Route>
+      {/* Jobs page*/}
+      <Route exact path="/jobs">
+        <JobsPage />
       </Route>
       {/* profile page*/}
       <Route exact path="/profile">
@@ -273,4 +287,4 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-serviceWorker.unregister();
+serviceWorker.register();

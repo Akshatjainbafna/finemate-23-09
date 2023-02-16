@@ -43,14 +43,15 @@ img {
     width: 50vw;
   }
   .rightHalf {
+    position: fixed; /* Stay in place */
     width: 28vw;
     height: max-content;
     display: flex;
     flex-direction: column;
     align-items: center;
     right: 0px;
-    background: none repeat scroll 0 0 white;
-    box-shadow: -2px 0px 11px -1px rgba(0,0,0,.3) !important;
+    background: var(--pureWhite);
+    box-shadow: -2px 0px 4px 0px rgba(0,0,0,.2) !important;
     overflow-x: hidden !important;
   }
 

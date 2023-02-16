@@ -17,7 +17,7 @@ export default function PageNotFound(){
 }
 
 const Container = styled.div`
-  height: 84vh;
+  height: 88vh;
   width: 100vw;
   display: flex;
   justify-content: center;

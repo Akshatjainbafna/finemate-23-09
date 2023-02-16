@@ -4,6 +4,7 @@ import styled from "styled-components";
 import OutsideNavbar from "../../components/navbar/outsideNavbar.js";
 import Footer from "../../components/footer/Footer.component.js";
 import LoadingGif from "../../components/loadingGif.js";
+import DoYouForgetThingsOften from "./doYouForgetThingsOften.js";
 
 class HomePage extends Component {
   constructor(props){
@@ -26,6 +27,7 @@ class HomePage extends Component {
     }
     return (
       <Container>
+        <DoYouForgetThingsOften />
         <OutsideNavbar />
         <Home />
         <Footer />

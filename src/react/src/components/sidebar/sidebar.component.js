@@ -3,6 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import LogoDesktop from '../../assets/finemateLatestin Angelina fontLogo.png';
 import LogoTablet from "../../assets/finemateLatestin Angelina fontLogo for Tablet Screens.png";
 import style from './sidebar.module.css';
+import ContentAuthoringToolWindow from "../newsfeed/contentAuthoringTool.component";
+import { Button } from '@material-ui/core';
 
 
 const NavItem = ({link, imgSrc, title}) => {
@@ -46,7 +48,7 @@ class Sidebar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            
+            setOpen: false
 		}
     }
     render() {
@@ -58,7 +60,7 @@ class Sidebar extends Component {
                     <Link to="/dashboard" title="Home">
                     <picture> 
                         <source media='(max-width: 992px)' srcSet={LogoTablet} />
-                        <img style={{width: "150px"}} src={LogoDesktop} alt='logo'/>
+                        <img style={{width: "150px"}} src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/finemateLatestin+Angelina+fontLogo.png' alt='logo'/>
                     </picture>
                     </Link>
                 </span>
@@ -74,7 +76,10 @@ class Sidebar extends Component {
                             />
                     )}
                 </ul>
-
+                
+            <Button className={style.addPostIcon} onClick={() => this.setState({setOpen: !this.state.setOpen})}>Post</Button>
+            
+            {this.state.setOpen ? <ContentAuthoringToolWindow /> : null }
             </nav>
         );
     }

@@ -36,7 +36,7 @@ function HeaderIcon(props) {
                         {props.unseenUser && props.title == 'Messages' ? <div className='notificationCount' >{props.unseenUser}</div> : null}
                         {props.unseenNotifications && props.title == 'Notifications' ? <div className='notificationCount' >{props.unseenNotifications}</div> : null}
 
-                        <IconContext.Provider value={{ color: '#834bc4', size: '26px' }} >
+                        <IconContext.Provider value={{ color: 'var(--lightThemeFontSecondary)', size: '26px' }} >
                             <div> {props.activeIcon} </div>
                         </IconContext.Provider>
                     </button>
@@ -53,7 +53,7 @@ function HeaderIcon(props) {
                 {props.unseenUser && props.title == 'Messages' ? <div className='notificationCount' >{props.unseenUser}</div> : null}
                 {props.unseenNotifications && props.title == 'Notifications' ? <div className='notificationCount' >{props.unseenNotifications}</div> : null}
 
-                <IconContext.Provider value={{ color: '#834bc4', size: '26px' }} >
+                <IconContext.Provider value={{ color: 'var(--lightThemeFontSecondary)', size: '26px' }} >
                     <div> {props.inactiveIcon} </div>
                 </IconContext.Provider>
                 </button>
@@ -112,17 +112,6 @@ class HeaderTaskbar extends Component {
                         title={icons.title}
                     />
                 <div className='d-flex flex-row align-items-center'>
-                    <div>
-                        <form>
-                            <Button className='seacrhButtonHeader' style={{color: "#bdbdbd", border: '1px solid #bdbdbd'}} onClick={() => this.setState({openDialog: !this.state.openDialog})}> 
-                                Search
-                                <IconContext.Provider value={{color: "#bdbdbd"}}>
-                                    <BsSearch className='searchIcon' />
-                                </IconContext.Provider>
-                            </Button>
-                        </form>
-                        {this.state.openDialog? <SearchComponent search={true} /> : null }
-                    </div>
                     {headerIcons.map(
                         (icon) =>
                         <HeaderIcon
@@ -140,7 +129,7 @@ class HeaderTaskbar extends Component {
                     <form class="logout" onClick={this.setRedirect}>
 
                         <button className='headerIcons'>
-                        <IconContext.Provider value={{ color: '#834bc4', size: '28px' }} >
+                        <IconContext.Provider value={{ color: 'var(--lightThemeFontSecondary)', size: '28px' }} >
                             <div><BsPower /></div>
                             </IconContext.Provider>
                         </button>

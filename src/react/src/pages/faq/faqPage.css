@@ -1,7 +1,5 @@
 .FAQBox {
   background-color: #fcfcfb;
-  margin-left: 290px;
-  margin-top: 0px;
 }
 .faqAnswer {
   background-color: #fcfcfb !important;
@@ -12,7 +10,72 @@
   font: bold !important;
 }
 .faq-header {
-  margin-left: 490px;
   font-size: 30px;
-  font-weight: bold;
+  font-weight: 600;
+  margin-bottom: 2em;
+}
+
+.pricingScreen{
+    width: 450px;
+    margin-top: 50px;
+}
+.features p{
+  margin-bottom: 1em;
+  text-align: left;
+  padding: 0;
+}
+.features p img{
+  width: 1.2em;
+  margin-bottom: 4px;
+}
+.pricingContainer{
+  margin-top: 10vh; 
+  margin-bottom: 20vh; 
+  display:flex; 
+  justify-content: space-between; 
+  flex-wrap: wrap
+}
+.pricingContainer div{
+  width: 200px;
+  height: 225px;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.pricingContainer div p:first-child{
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 0.75em;
+}
+.pricingContainer div p:nth-child(2){
+  font-size: 14px;
+  margin-bottom: 1.5em;
+}
+.pricingScreenHeading{
+  font-size: 26pt;
+  font-weight: 600;
+  margin-bottom: 0;
+}
+@media screen and (max-width: 600px) {
+  .pricingContainer div{
+    width: 65vw;
+    height: 70vw;
+  }
+  .pricingContainer div:first-child{
+    margin-bottom: 10vh;
+  }
+  .pricingScreen{
+    width: 90vw;
+     margin: 50px auto
+  }
+  .pricingContainer{
+    justify-content: center;
+  }
+  .pricingScreenHeading{
+    font-size: 1.75em;
+  }
 }

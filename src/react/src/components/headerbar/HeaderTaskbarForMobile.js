@@ -1,7 +1,7 @@
 import { List, ListItem, ListItemIcon, ListItemText, Drawer, Divider, Button, ListItemAvatar, Avatar } from "@material-ui/core";
 import { ExtensionRounded, Inbox, Mail } from "@material-ui/icons";
 import React, { Component } from "react";
-import { BsBell, BsEmojiSunglasses } from "react-icons/bs";
+import { BsBell, BsBook, BsEmojiSunglasses } from "react-icons/bs";
 import { IconContext } from "react-icons/lib";
 import { Link, useLocation } from "react-router-dom";
 import style from './HeaderTaskbarForMobile.module.css';
@@ -12,7 +12,6 @@ import {HiOutlineSpeakerphone} from 'react-icons/hi';
 import {BsUiChecks} from 'react-icons/bs';
 import {RiSettings2Line} from 'react-icons/ri';
 import {MdOutlineLeaderboard} from 'react-icons/md'
-import {BiPlus} from 'react-icons/bi';
 
 
 function CustomListItems({id, link, imgSrc, title}) {
@@ -27,7 +26,7 @@ if (HeaderView()===link) {
       <Link to={link} title={title} className={style.sidebarListLink} key={id}>
       <ListItem className={style.sidebarListItemActive}>
         <ListItemIcon className={style.sidebarListIcon}>
-        <IconContext.Provider value={{ size: '26px', color: "#8c52ff" }}>
+        <IconContext.Provider value={{ size: '26px', color: "var(--purpleDark)" }}>
             {imgSrc}
           </IconContext.Provider>
         </ListItemIcon>
@@ -62,7 +61,7 @@ if (HeaderView()===link) {
       <Link to={link} title={title} className={style.sidebarListLink} key={id}>
       <ListItem className={style.sidebarListItemActive}>
         <ListItemIcon className={style.sidebarListIcon}>
-        <IconContext.Provider value={{ size: '26px', color: "#8c52ff" }}>
+        <IconContext.Provider value={{ size: '26px', color: "var(--purpleDark)" }}>
             {imgSrc}
           </IconContext.Provider>
         </ListItemIcon>
@@ -121,7 +120,7 @@ class HeaderBarForMobile extends Component{
     render(){
       const { books } = this.props;
       const permanentListItems=[
-        { id: 1, link: "/createpost", imgSrc: <BiPlus /> , title: "Create Post" },
+        { id: 1, link: "/allcoursesuser", imgSrc: <BsBook /> , title: "Courses" },
         { id: 2, link: "/notice", imgSrc: <HiOutlineSpeakerphone />, title: "Notice" },
         { id: 3, link: "/todolist", imgSrc: <BsUiChecks />, title: "ToDo"},
         { id: 4, link: "/leaderboard", imgSrc: <MdOutlineLeaderboard />, title: "Leaderboard"},
@@ -131,7 +130,7 @@ class HeaderBarForMobile extends Component{
                     <React.Fragment>
                           <div className={style.HeaderBarForMobile}>
                         <Button onClick={this.toggleDrawer(true)}>
-                            <IconContext.Provider value={{ color: '#834bc4', size: '25px' }} >
+                            <IconContext.Provider value={{ color: 'var(--lightThemeFontSecondary)', size: '25px' }} >
                                 <div> <BsEmojiSunglasses /> </div>
                             </IconContext.Provider>
                         </Button>
@@ -139,7 +138,7 @@ class HeaderBarForMobile extends Component{
                             <Link to="/allnotifications" title="Notifications">
                               <button className='headerIcons'>
                                 {this.state.totalUnseenNotifications ? <div className='notificationCount'>{this.state.totalUnseenNotifications}</div> : null}
-                                  <IconContext.Provider value={{ color: '#834bc4', size: '20px' }} >
+                                  <IconContext.Provider value={{ color: 'var(--lightThemeFontSecondary)', size: '20px' }} >
                                     <div> <BsBell /> </div>
                                   </IconContext.Provider>
                               </button>
@@ -154,14 +153,14 @@ class HeaderBarForMobile extends Component{
                       >
                         <div style={{width:"75vw"}}>
                           <div className="d-flex justify-content-center m-2">
-                            <img src={logo} alt="Finemate Logo" style={{width: '130px'}} />
+                            <img src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/finemateLatestin+Angelina+fontLogo.png' alt="Finemate Logo" style={{width: '130px'}} />
                           </div>
-                          <Link to="/profile" title="Profile Page" style={{color: "rgba(0, 0, 0, 0.8)", textDecoration: "none"}}>
+                          <Link to="/profile" title="Profile Page" style={{color: "var(--lightThemeFontSecondary)", textDecoration: "none"}}>
                             <div className="d-flex align-items-center">
                               <span className={style.mobileSideBarProfilePic}>
                               {this.state.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureSidebarThumbnail}/>
+                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + this.state.profilePicture } className={style.profilePictureSidebarThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>

@@ -1,5 +1,6 @@
 /*Sidebar Styles*/
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
+
 .menuIcon {
     margin: 20px 85px;
     cursor: pointer;
@@ -19,7 +20,7 @@
     font-weight: bold;
     padding: 20px 10px 20px 0px;
     border-radius: 0px 15px 15px 0px;
-    box-shadow: 0 2px 2px -2px rgba(0,0,0,.2);
+    box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .2);
 }
 
 .sideBar ul {
@@ -41,7 +42,7 @@
     text-decoration: none;
 }
 
-.sideBar ul a li{
+.sideBar ul a li {
     text-decoration: none;
     text-align: left;
     color: #3380ac;
@@ -50,12 +51,12 @@
     padding-left: 0px;
     font-size: 16px;
     position: relative;
-} 
+}
 
 .sideBar ul a li:hover {
-    background: #A78EC3;
-    box-shadow: 0 20px 20px -2px rgba(0,0,0,.2);
-    color:white;
+    background: var(--purpleMain);
+    box-shadow: 0 20px 20px -2px rgba(0, 0, 0, .2);
+    color: white;
     margin-left: 0;
     padding-left: 20px;
     text-decoration: none;
@@ -69,7 +70,7 @@
     text-decoration: none;
 }
 
-.sideBar ul a li{
+.sideBar ul a li {
     color: white;
     text-decoration: none;
     text-align: left;
@@ -89,7 +90,7 @@
     margin: 0 2vw;
 }
 
-.logOutScreen{
+.logOutScreen {
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -97,43 +98,71 @@
     align-items: center;
     justify-content: center;
 }
-.form-group:first-child{
+
+.form-group:first-child {
     margin-top: 25px;
 }
-.btn-toolbar{
+
+.btn-toolbar {
     display: flex;
     align-items: center;
     justify-content: space-around;
 }
+
+.outlinedInputName {
+    width: 125px;
+}
+
+.outlinedInputFirstName {
+    margin-right: 50px;
+}
+
+.signUpForm>div {
+    margin-bottom: 1em;
+}
+
 @media screen and (max-width: 600px) {
-    .cardStyle2{
+    .outlinedInputFirstName {
+        margin-bottom: 50px;
+    }
+
+    .cardStyle2 {
         margin-top: 5vh;
         width: 90vw;
     }
-    .form-group{
+
+    .form-group {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
-    .form-group > .outlinedInput{
+
+    .outlinedInputFirstName {
+        margin-bottom: 1em;
+    }
+
+    .outlinedInput,
+    .outlinedInputName {
         width: 75vw !important;
     }
-    .btn-outline-secondary{
+
+    .btn-outline-secondary {
         width: 17vw;
         padding: 5px 0;
         font-size: small;
     }
 }
+
 .cardTitleStyle {
     font-family: "Open Sans";
-    font-weight: 600;
-    font-size: 35px;
+    font-size: 1.75em !important;
+    font-weight: 700 !important;
     text-align: center;
-    margin: 10px auto;
+    margin: 4vh auto;
 }
 
 .btnSignUp {
-    background-color: #A78EC3;
+    background-color: var(--purpleMain);
     color: white;
     width: 200px;
     height: 50px;
@@ -142,8 +171,8 @@
     box-shadow: none;
     border: none;
     border-radius: 10px;
-    position: center;
 }
-.btnSignUp:hover{
-    background-color: #7e6897;
+
+.btnSignUp:hover {
+    filter: brightness(90%);
 }

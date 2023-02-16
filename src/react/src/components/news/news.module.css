@@ -1,19 +1,8 @@
-
-.newsTitle{
-  font-size: 20px!important;
-}
-
-
-.textbox{
+.textbox {
   float: left;
   margin-right: 20px;
+  width: 50px;
 }
-
-* {
-  box-sizing: border-box;
-  
-}
-
 .tabs {
   font-family: "Open Sans" !important;
   width: 26vw !important;
@@ -23,64 +12,55 @@
   margin: 2vh auto;
   overflow-y: auto;
 }
-
 .input {
   position: absolute;
   visibility: hidden;
 }
-
 .label {
-  padding: 5px 5px;
+  padding: 5px;
   background-color: #ffffff;
   cursor: pointer;
   font-size: 14px;
   color: #7A7A7A;
   transition: background-color 0.1s, color 0.1s;
 }
-
-.input:checked + .label{
-  background: #A78EC3;
+.input:checked+.label {
+  background: var(--purpleMain);
   color: #fff;
   border-radius: 10px;
 }
-
-.input:hover + .label {
-  background: #A78EC3;
+.input:hover+.label {
+  background: var(--purpleMain);
   color: #fff;
   border-radius: 10px;
 }
-.panelContainer{
-  height: 20vw;
-  padding: 2vh 2vw;
+.panelContainer {
+  height: 165px;
+  padding: 10px;
   overflow-y: auto;
 }
-
 .panel:first-child {
   display: block;
-  background: #fff;
 }
-.panel:not(:first-child){
+.panel:not(:first-child) {
   display: none;
-  background-color: #fff;
 }
-
-.btnLearn{
+.btnLearn {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.btnLearnMore{
-	border:  1px solid #A78EC3;
-	border-radius: 5px;
-  color: #A78EC3;
+.btnLearnMore {
+  border: 1px solid var(--purpleMain);
+  border-radius: 5px;
+  color: var(--purpleMain);
   background-color: white;
   height: 5vh;
   min-width: 8vw;
   font-size: small;
   font-weight: bold;
 }
-
-.btnLearnMore:hover{
+.btnLearnMore:hover {
   border-radius: 15px;
 }
 
@@ -88,7 +68,7 @@
   .tabs {
     width: 100vw !important;
   }
-  .panelContainer{
+  .panelContainer {
     padding: 2vh 8vw;
     overflow-y: hidden;
     height: auto;

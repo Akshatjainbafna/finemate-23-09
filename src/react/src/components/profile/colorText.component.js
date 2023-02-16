@@ -217,7 +217,7 @@ class ColourText extends Component {
                             {editMode ? 
                                 <BsXCircleFill 
                                     onClick={(event) => this.removeItem(event, texts.text, field)} 
-                                    style={{color: 'rgb(142, 130, 151)', marginLeft: '4px', height: '0.8em'}}
+                                    style={{color: 'var(--purpleGreyish)', marginLeft: '4px', height: '0.8em'}}
                                 /> 
                                 :  
                                 null
@@ -233,7 +233,7 @@ class ColourText extends Component {
                             <span>{texts}</span>
                             {editMode ? <BsXCircleFill 
                                             onClick={(event) => this.removeNewlyAddedItem(event, texts, index, field)} 
-                                            style={{color: 'rgb(142, 130, 151)', marginLeft: '4px', height: '0.8em'}} 
+                                            style={{color: 'var(--purpleGreyish)', marginLeft: '4px', height: '0.8em'}} 
                                         /> 
                                       : 
                                         ''

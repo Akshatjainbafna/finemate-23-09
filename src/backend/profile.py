@@ -78,16 +78,17 @@ class ProfileObj():
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		username = self.content['username'].lower()
+		username = self.content['username']
+		fullName = self.content['firstname'] + ' ' + self.content['lastname']
 
 		if (self.Profile.objects(username=username).count() > 0):
 			return make_response("Username already in use.", 400)
 
 		self.Profile(username=username,
 					phone_number='',
-					first_name='',
-					last_name='',
-					name='',
+					first_name = self.content['firstname'],
+					last_name = self.content['lastname'],
+					name= fullName,
 					time_join=datetime.now().strftime("%d %b %Y, %H:%M:%S"),
 					description='').save()
 		return make_response("", 200)
@@ -126,7 +127,7 @@ class ProfileObj():
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		prof_obj = self.Profile.objects(username=self.content['username']).only('profilePicture').first()
+		prof_obj = self.Profile.objects(username=self.content['username']).only('profilePicture', 'name').first()
 
 		if prof_obj:
 			return make_response(jsonify(prof_obj), 200)

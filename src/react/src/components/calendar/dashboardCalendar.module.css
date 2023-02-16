@@ -24,8 +24,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color:#FCFCFB;
-    border-color:#FCFCFB;
     font-family: "Open Sans";
     overflow: hidden;
 }
@@ -44,7 +42,7 @@
     right:10;
     justify-content: space-between;
     color: #FCFCFB;
-	background-color: #A78EC3;
+	background-color: var(--purpleMain);
 }
 .btn-class-2{
     display: flex;
@@ -190,7 +188,7 @@
   width: 40px;
   background-color: none;
   border-radius: 50%;
-  border-color: #A78EC3;
+  border-color: var(--purpleMain);
   border-style: solid;
   display: inline-block;
 }
@@ -214,8 +212,9 @@
 
 /*akshat changes*/
 .dashCardMenu img{
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
+    opacity: 0.75;
 }
 
 .dashCardMenu:hover img {

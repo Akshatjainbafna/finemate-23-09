@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import { Card } from "react-bootstrap";
 import "./profile.css";
 import profilePic from "../../assets/profilePic.png";
@@ -8,7 +8,27 @@ import {BsChatSquareTextFill} from 'react-icons/bs'
 import { IconContext } from "react-icons";
 import ColourTextUser from "./colourTextUserProfile.component.js";
 import AxiosBaseFile from "../AxiosBaseFile";
+import ReactQuill from "react-quill";
 
+
+function Fact(props){
+  let quillRef = useRef();
+  let modules = {
+      syntax: true,
+      toolbar: false
+  }
+
+  useEffect(() => {
+      let data = JSON.parse(props.fact);
+      console.log(data)
+      quillRef.current.getEditor().setContents(data)
+  }, [props.fact]);
+  
+  return(
+      <ReactQuill ref={quillRef} theme='bubble' modules={modules} readOnly/>
+  )
+
+}
 
 class UserProfile extends Component {
   constructor(props) {
@@ -52,6 +72,7 @@ class UserProfile extends Component {
   }
 
   componentDidMount(){
+    document.getElementById('tabNews-1').checked = true;
     AxiosBaseFile.post('/api/db_get_public_post_of_user', {username: this.state.username})
     .then(res => {
         console.log(res.data)
@@ -105,7 +126,7 @@ class UserProfile extends Component {
                     <div className="leftBlockofInfoCard">
                         <div className="profile_pic_slot">
                             <div>{profilePicture ? 
-                                  <div><img alt='profile' src={require('../../assets/profilePictures/'+ profilePicture)} className="elementPic" /> </div>
+                                  <div><img alt='profile' src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ profilePicture} className="elementPic" /> </div>
                                   :
                                   <div><img alt='profile' src={profilePic} className="elementPic" /> </div>
                                 }</div>
@@ -143,14 +164,20 @@ class UserProfile extends Component {
                                     return (
                                         <Link to="/message" style={{textDecoration: " none "}} onClick={() => {
                                             localStorage.setItem('targetUser', username);
-                                        }}> <IconContext.Provider value={{size: "3.8vh", color: "#7036b3"}}> <BsChatSquareTextFill /> </IconContext.Provider>
+                                        }}> 
+                                        <button className="message_button">
+                                          Message
+                                        </button>
                                         </Link>
                                     )
                                     } else {
                                     return (
                                         <Link to="/messageUser" style={{textDecoration: " none "}} onClick={() => {
                                             localStorage.setItem('targetUser', username);
-                                        }}> <IconContext.Provider value={{size: "3.8vh", color: "#7036b3"}}> <BsChatSquareTextFill /> </IconContext.Provider>
+                                        }}> 
+                                        <button className="message_button">
+                                          Message
+                                        </button>
                                         </Link>
                                     )
                                     }
@@ -158,7 +185,7 @@ class UserProfile extends Component {
 
                             </div>
                             :
-                                <button className="addFriend_button" type="button" onClick={() => this.addConnection()}> Connect </button>
+                                <button className="addFriend_button" type="button" onClick={() => this.addConnection()}>Connect</button>
                             }
                         </div>
                     </div>
@@ -198,7 +225,7 @@ class UserProfile extends Component {
                   <span>{username}</span> 
                 </Link>
                 {username == localStorage.getItem('username') ? '' : 
-                  <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: "#cdb5e7", color: 'white'}} onClick={() => this.addConnection(username)}>
+                  <Button style={{padding: "0.25rem", fontSize: "small", backgroundColor: "var(--purpleDark)", color: 'white'}} onClick={() => this.addConnection(username)}>
                     Connect
                   </Button>
                 }
@@ -271,13 +298,15 @@ class UserProfile extends Component {
             <Card.Body className="profileElements" id="panel1">
               <div className="profileElementContainer">
                 {this.state.recentPosts.map((post, index) => 
-                  <Link to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
+                  <Link style={{textDecoration: 'none'}} to={'/post/'.concat(post._id.$oid)} title='Post' key={index}>
                       <div className="postThumbnail">
-                        <div className="factThumbnail" name="factName" ref={this.referenceToPostFact}>
-                            <p className="subTopicThumbnail">{post.subtopic}</p>
-                            <p className="fact"> {post.fact}</p>
+                        <div className="subTopicThumbnail">{post.subtopic}</div>
+                        <div className="factThumbnailContainer">
+                          <img alt='post thumbnail' src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ post.background} />
+                          <p className="factThumbnail" name="factName">
+                            <Fact fact={post.fact} />
+                          </p>
                         </div>
-                        <img alt='post thumbnail' src={require('../../assets/postBackgroundImages/'+ post.background)} />
                       </div>
                     </Link>
                 )}

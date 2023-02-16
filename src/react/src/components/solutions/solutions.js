@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "./solutions.css";
 import { SolutionsButton } from "./solutionsButton.js";
 import main from "../../assets/solutionsComponent.svg";
+import { Helmet } from "react-helmet";
 
 export const Solution = () => {
   const [firstStyle, setFirstStyle] = useState("solutions--btn--primary");
@@ -28,6 +29,13 @@ export const Solution = () => {
 
   return (
     <Container>
+      <Helmet>
+				<title>
+					Solutions - Finemate
+				</title>
+				<meta name='keywords' content="Retention Engine, Revision, Serial Recall, Flashcards, Leitner System, Student Management System, Social Learning Platform, Learning Management System, Student, Professional, Institute" />
+        <meta name='description' content="We are trying to make Revision Easy, Fun & Cool with a series of solutions.'"/>
+			</Helmet>
       <Wrapper>
         <TextBox>
           <h3>Practice makes a man perfect.</h3>

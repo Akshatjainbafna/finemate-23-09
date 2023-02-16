@@ -17,7 +17,6 @@ class Message extends Component {
     componentDidMount() {
         AxiosBaseFile.post('/api/db_get_messages', {'username1': localStorage.getItem('username'), 'username2': localStorage.getItem('targetUser')})
         .then(res => {
-            console.log(res.data)
             this.setState({messages: res.data})
         })
         .catch(err => console.log(err));
@@ -29,6 +28,7 @@ class Message extends Component {
                     messages: res.data
                 })
             })
+            .catch(err => console.log(err));
         }, 2000)
     }
 
@@ -50,9 +50,9 @@ class Message extends Component {
                 <div className={style.chatHeader}>
                     <span>
                     <Link to={"/profile/".concat(localStorage.getItem('targetUser'))} title='Visit Profile' style={{textDecoration: 'none'}}>
-                        {localStorage.getItem('profilePictureTargetUser') ?
+                        {localStorage.getItem('profilePictureTargetUser') != 'null' ?
                             <ListItemAvatar>
-                                <img src={require('../../assets/profilePictures/'+ localStorage.getItem('profilePictureTargetUser'))} className={style.profilePictureChatHeader}/>
+                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ localStorage.getItem('profilePictureTargetUser')} className={style.profilePictureChatHeader}/>
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>

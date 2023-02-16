@@ -24,8 +24,7 @@ class PostObj():
         topic=me.StringField(required=True, max_length=45, min_length=3)
         subtopic=me.StringField(required=True, max_length=45, min_length=3)
         type=me.StringField(required=True, choices=['News', 'Information' , 'News & Information'])
-        question=me.StringField(max_length=50)
-        fact=me.StringField(required=True, min_length=30, max_length=365)
+        fact=me.StringField(required=True)
         background=me.StringField()
         mcq1=me.StringField(required=True)
         mcq1Options=me.ListField(required=True, unique=False)
@@ -59,7 +58,7 @@ class PostObj():
         mcqOptions = self.content['mcq1Opts'].split(',')
         publicState = True if self.content['public'] == 'true' else False
 
-        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=self.content['question'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcqOptions, creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = '', nextPost = '', mainPost = '').save()
+        createPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], fact=self.content['fact'], mcq1=self.content['mcq1'], mcq1Options= mcqOptions, creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = '', nextPost = '', mainPost = '').save()
         createPost.update(set__previousPost = createPost)
         createPost.update(set__nextPost = createPost)
         idOfCreatePost = str(createPost.id)
@@ -181,13 +180,13 @@ class PostObj():
 
                     if idOfTheNextPostOfCurrentPost != idOfTheCurrentPost:
                         nextPostOfCurrentPost = self.Posts.objects(id = currentPost.nextPost.id).first() 
-                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = nextPostOfCurrentPost, mainPost = idOfTheMainPost).save()
+                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = nextPostOfCurrentPost, mainPost = idOfTheMainPost).save()
                         currentPost.update(set__nextPost = nextPost)
                         currentPost = nextPost
                         idOfTheCurrentPost = currentPost.id
                         idOfTheNextPostOfCurrentPost = nextPost.id
                     else:
-                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], question=post['question'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = '', mainPost = idOfTheMainPost).save()
+                        nextPost = self.Posts(username = self.content['username'], subject=self.content['subject'], topic=self.content['topic'], subtopic=self.content['subtopic'], type=self.content['type'], fact=post['fact'], mcq1=post['mcq'], mcq1Options= post['mcq1Opts'], creation_date_time=datetime.now().strftime("%d %b %Y, %H:%M:%S"), background= nameOfImage, public = publicState, previousPost = currentPost, nextPost = '', mainPost = idOfTheMainPost).save()
                         nextPost.update(set__nextPost = nextPost)
                         currentPost.update(set__nextPost = nextPost)
                         currentPost = nextPost

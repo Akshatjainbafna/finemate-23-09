@@ -1,3 +1,40 @@
+:root{
+  --purpleLight: #C7BFFF;
+  --purpleMain: #9D8FFF;
+  --purpleDark: #735FFF;
+  --purpleGreyish: rgb(128, 128, 200);
+  --purpleExtremlyDark: #3A345F;
+  --blueMatchingPurple: #BCE8FF;
+
+  --aquaLight: #7EDAC7;
+  --aquaMain: #50C6AF;
+  --aquaDark: #2AAF94;
+  --aquaExtremelyDark: #004951;
+  
+  --aquaLightBright: #72DCC7;
+  --aquaMainBright: #30CAAB;
+  --aquaDarkBright: #10B190;
+
+  --lightBackgroundPrimary: #FCFCFB;
+  --lightBackgroundSecondary: #ECECEB;
+  --lightBackgroundHelper: #ECECEB;
+  --lightThemeFontPrimary: rgba(0, 0, 0, 0.85);
+  --lightThemeFontSecondary: rgba(0, 0, 0, 0.6);
+
+  --nightBackgroundPrimary: #394551;
+  --nightBackgroundSecondary: #191d21;
+  --nightBackgroundHelper: #273038;
+
+  --darkBackgroundPrimary: #333;
+  --darkBackgroundSecondary: #111;
+  --darkThemeFontPrimary: rgba(255, 255, 255, 0.95);
+  --darkThemeFontSecondary: rgba(255, 255, 255, 0.85);
+
+  --pureWhite: #fff;
+  --pureBlack: #000;
+
+  --extremelyLightFont: #dddddd;
+}
 .App {
   text-align: center;
 }
@@ -12,7 +49,7 @@
     justify-content: center;
     align-items: center;
     position: fixed;
-    background: rgba(255, 255, 255, 0.834);
+    background: #FCFCFB;
     z-index: 1;
 }
 @media (prefers-reduced-motion: no-preference) {

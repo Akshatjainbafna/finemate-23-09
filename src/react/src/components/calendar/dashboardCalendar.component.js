@@ -9,10 +9,12 @@ import TodoComponent from '../todo/todo.component.js';
 import DiaryComponent from "../diary/diary.component.js";
 import TaskComponent from "../task/task.component.js";
 
-import CalenderImg from '../../assets/calendar.png';
-import AssignmentsImg from '../../assets/assignment.png';
-import TodoImg from '../../assets/todo.png';
-import LeaderboardImg from '../../assets/leaderboard.png';
+
+/*Images*/
+import CalenderImg from '../../assets/calender-icon.png';
+import AssignmentsImg from '../../assets/assignments-icon.png';
+import TodoImg from '../../assets/todo-icon.png';
+import LeaderboardImg from '../../assets/leaderboard-icon.png';
 import CalenderLogImg from '../../assets/log list.png';
 import { Button, Tooltip } from '@material-ui/core';
 import { Redirect } from 'react-router-dom';
@@ -166,7 +168,6 @@ class DashboardCalendarComponent extends Component {
 				<div className={styles.windowHiddenHeader}>
 					<Tooltip title ="Todo List"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectTodo: true})} onClick={() => this.displayDashMenu("dashMenu1")}><img src={TodoImg} alt='not found'/> </Button></Tooltip>
 					<Tooltip title ="Calendar"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu2")}> <img src={CalenderImg} alt='not found' /> </Button></Tooltip>
-					<Tooltip title ="Diary"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu3")}><img src={CalenderLogImg} alt='not found' /> </Button></Tooltip>
 					<Tooltip title ="Assignments"><Button className={styles.dashCardMenu} onClick={() => this.displayDashMenu("dashMenu4")}><img src={AssignmentsImg} alt='not found'/> </Button></Tooltip>
 					<Tooltip title ="Leaderboard"><Button className={styles.dashCardMenu} onDoubleClick={() => this.setState({redirectLeaderboard: true})} onClick={() => this.displayDashMenu("dashMenu5")}><img src={LeaderboardImg} alt='not found'/> </Button></Tooltip>
 				</div>

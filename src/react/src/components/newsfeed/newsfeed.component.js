@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useRef } from "react";
 import update from 'react-addons-update';
 import style from './newsfeed.module.css';
 import {BsArrowLeft, BsArrowLeftRight, BsArrowRight, BsArrowRightShort, BsBookmarkHeart, BsBookmarkHeartFill, BsHeart, BsHeartFill, BsLightbulb, BsLightbulbFill, BsThreeDotsVertical} from 'react-icons/bs'
@@ -15,6 +15,27 @@ import {Favorite, Bookmark, FavoriteBorder, BookmarkBorder, SwapHorizOutlined, E
 import { FormControl, RadioGroup, Radio, Tooltip, Button, MenuItem, Menu, IconButton, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
+import ReactQuill from "react-quill";
+
+
+function Fact(props){
+    let quillRef = useRef();
+    let modules = {
+        syntax: true,
+        toolbar: false
+    }
+
+    useEffect(() => {
+        let data = JSON.parse(props.fact);
+        console.log(data)
+        quillRef.current.getEditor().setContents(data)
+    }, [props.fact]);
+    
+    return(
+        <ReactQuill ref={quillRef} theme='bubble' modules={modules} readOnly/>
+    )
+
+}
 
 function MenuList(props){
     const [anchorMenuList, setAnchorMenuList] = React.useState(null);
@@ -79,7 +100,7 @@ function MenuList(props){
                     width: '200px',
                     height: 'fit-content',
                     borderRadius: '10px',
-                    backgroundColor: '#A78EC3',
+                    backgroundColor: 'var(--purpleMain)',
                     boxShadow: '0px 2px 4px 2px rgba(0,0,0,0.2)',
                     padding: '0 10px',
                     color: 'whitesmoke',
@@ -168,7 +189,7 @@ function PreviousNextWindow(props){
                     flexDirection: 'row',
                     justifyContent: 'space-around',
                     color: 'white',
-                    backgroundColor: '#A78EC3',
+                    backgroundColor: 'var(--purpleMain)',
                     borderRadius: '100px',
                     boxShadow: '0px 2px 1px rgba(0, 0, 0, 0.2)',
                     padding: '0',
@@ -198,25 +219,6 @@ class NewsFeed extends Component{
         this.setState({
             silderValue: event.target.value
         })
-    }
-
-    showBackgroundImage(index, imgId){
-        document.getElementById(index).style.display="none";
-        document.getElementById(imgId).style.opacity=1;
-        if(this.state.responseData[index].question){
-            let allTheQuestion = document.getElementsByName('questionOfPost');
-            for (let question = 0; question< allTheQuestion.length; question++){
-                allTheQuestion[question].style.display='none';
-            }
-        }
-    }
-    hideBackgroundImage(index, imgId){
-        document.getElementById(index).style.display="block";
-        document.getElementById(imgId).style.opacity=0.12;
-        let allTheQuestion = document.getElementsByName('questionOfPost');
-            for (let question = 0; question< allTheQuestion.length; question++){
-                allTheQuestion[question].style.display='block';
-            }
     }
 
     postLiked(index){
@@ -527,7 +529,7 @@ render(){
 
                         <div className={style.postImg} onDoubleClick={() => {this.postLiked(index)}}  id="imageLocation">
 
-                        <div>{
+                            <div>{
                                 (() => {
                                     let postNumber = responseData.listOfAllThePostIds.indexOf(responseData._id.$oid) + 1;
                                     let totalPostsInThread = responseData.listOfAllThePostIds.length;
@@ -541,35 +543,10 @@ render(){
                             }
                             </div>
 
-                            <span className={style.quesFactBlock}>
-                                {responseData.question ? <p name="questionOfPost" className={style.question}>{responseData.question}</p> : ""} 
-                                <p className={style.fact} id={index}> {responseData.fact.split('\n').map(function(item, indexOfFactSpan) {
-                                    return (
-                                        <span key={indexOfFactSpan}>
-                                            {item}
-                                            <br/>
-                                        </span>
-                                        )
-                                    })}
-                                </p>
-                            </span>
-
-                            <img id={"backgroundImage"+String(index)} src={require('../../assets/postBackgroundImages/'+ responseData.background)} className={style.backgroundImage} alt='post' />
-                            
-                            <Tooltip title="View Background" > 
-                                <FormControlLabel
-                                    className={style.viewImageIcon}
-                                    control={
-                                    <Checkbox 
-                                        checked={false}
-                                        icon={ <FilterCenterFocusRounded /> } 
-                                        checkedIcon={ <FilterCenterFocusRounded /> }
-                                        name="viewBackground" 
-                                        onClickCapture={() => this.showBackgroundImage(index, "backgroundImage"+String(index))} onMouseLeave={()=> this.hideBackgroundImage(index, "backgroundImage"+String(index))}
-                                    />
-                                    }
-                                /> 
-                            </Tooltip>
+                            <img id={"backgroundImage"+String(index)} src={'https://s3.ap-south-1.amazonaws.com/finemate.media/postBackgroundImages/'+ responseData.background} className={style.backgroundImage} alt='post' />
+                            <div id={index} className={style.quesFactBlock}>
+                                <Fact fact={responseData.fact} />
+                            </div>
                         </div>
 
 
@@ -639,7 +616,7 @@ render(){
                                         <ListItem>
                                             {responseData.profilePicture ?
                                             <ListItemAvatar>
-                                                <img src={require('../../assets/profilePictures/'+ responseData.profilePicture)} alt="Profile" className={style.profilePictureChatHeader}/>
+                                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ responseData.profilePicture} alt="Profile" className={style.profilePictureChatHeader}/>
                                             </ListItemAvatar>
                                             :
                                             <ListItemAvatar>
@@ -715,7 +692,7 @@ render(){
         <br />
         <br />
         <div className="d-flex justify-content-center">
-            <Button style={{color: "#684096", border: "1px solid #A78EC3"}} onMouseOver={this.loadMorePosts} onClick={this.loadMorePosts}>Load More</Button>
+            <Button style={{color: "var(--lightThemeFontPrimary)", border: "1px solid var(--purpleMain)"}} onMouseOver={this.loadMorePosts} onClick={this.loadMorePosts}>Load More</Button>
         </div>
         <br />
         <br />

@@ -27,7 +27,7 @@
     margin-left: 10%;
 }
 .name {
-    color: black;
+    color: var(--pureBlack);
     font-size: 34px;
     margin-left:150px;
     margin-top:-75px;
@@ -46,7 +46,7 @@
     border-radius: 5px;
     padding-left: 10px;
     padding-right: 10px;
-    border-color: #A78EC3;
+    border-color: var(--purpleMain);
 }
 .selectFormColortext{
     width: 20vw !important;
@@ -68,8 +68,9 @@
     margin-left: -0.8vw;
 }
 .colourTextListItems{
-    border: 2px solid rgb(142, 130, 151);
-    color: rgb(84, 77, 88);
+    border: 2px solid var(--purpleGreyish);
+    color: var(--purpleGreyish);
+    font-weight: 600;
     border-radius: 5px;
     margin: 3px;
     padding: 4px;
@@ -80,12 +81,12 @@
     font-size: small;
 }
 .listed_titles {
-    color: #302c35;
-    font-size: larger;
+    color: var(--lightThemeFontPrimary);
+    font-size: 1em;
     font-weight: 600;
 }
 .listed_bodies {
-    color: rgb(0, 0, 0);
+    color: var(--pureBlack);
     font-size: 14px;
     font-weight: normal;
     margin-left: 5%;
@@ -108,7 +109,7 @@
     font-size: 22px;
 }
 .body {
-    color: black;
+    color: var(--pureBlack);
     font-size: 18px;
     margin-left: 4%;
 }
@@ -162,8 +163,8 @@
     padding-bottom: 20px;
 }
 .element_button {
-    background-color: #A78EC3;
-    color: white;
+    background-color: var(--purpleMain);
+    color: var(--pureWhite);
     width: 100px;
     height: 30px;
     font-weight: 300;
@@ -193,9 +194,9 @@
     box-shadow: none;
     border: none;
     border-radius: 10px;
-    background-color: #A78EC3;
-    border-color: white !important;
-    color: white;
+    background-color: var(--purpleMain);
+    border-color: var(--pureWhite) !important;
+    color: var(--pureWhite);
 }
 .divider {
     padding: 0px;
@@ -236,11 +237,11 @@
     width: 15vh;
     object-fit: cover;
     border-radius: 100%;
-    border: 1px solid #dfd6e9;
+    border: 1px solid var(--purpleLight);
 }
 
 .usernameBlocky{
-    color: #302c35;
+    color: var(--purpleExtremelyDark);
     font-size: 15px;
     font-weight: bolder;
     width: 100%;
@@ -281,36 +282,40 @@
     margin-top: 1vh;
 }
 .addFriend_button{
-    margin: 0.5vh;
-    width: 12vw;
-    height: 5vh;
+    padding: 6px 36px;
+    margin: 0.5vh 1vw;
     font-size: small;
+    font-weight: 600;
     font-family: "Open Sans";
-    box-shadow: 0px 2px 2px #a59ab3;
     border: none;
-    border-radius: 25px;
-    background-color: #834bc4;
-    border-color: white !important;
-    color: white;
-    text-shadow: 1px 2px 2px #a59ab3;
-}
-.addFriend_button:hover{
-    background-color: #6932a8;
-    box-shadow: inset 1px 2px 1px #5f3491;
-    text-shadow: none;
+    border-radius: 10px;
+    background-color: var(--purpleDark);
+    border-color: var(--pureWhite) !important;
+    color: var(--pureWhite);
 }
 .connect_button{
+    padding: 6px 8px;
     margin: 0.5vh 1vw;
-    width: 12vw;
-    height: 5vh;
     font-size: small;
-    font-weight: 700;
+    font-weight: 600;
     font-family: "Open Sans";
     box-shadow: none;
     border-radius: 8px;
-    background-color: white;
-    border-color: #621eb1;
-    color: #621eb1;
+    background-color: var(--pureWhite);
+    border: 1px solid #808080;
+    color: #808080;
+}
+.message_button{
+    padding: 6px 8px;
+    margin: 0.5vh 1vw;
+    font-size: small;
+    font-weight: 600;
+    font-family: "Open Sans";
+    box-shadow: none;
+    border-radius: 8px;
+    background-color: #38cb89;
+    border: none;
+    color: var(--pureWhite);
 }
 .addFriend_button:active, .connect_button:active{
     transform: scale(1.1);
@@ -347,60 +352,61 @@
     min-width: 15vw;
     height: 5vh;
     font-size: small;
-    font-weight: 700;
+    font-weight: 600;
     font-family: "Open Sans";
     box-shadow: none;
     border-radius: 10px;
-    background-color: white;
-    border-color: #621eb1;
-    color: #621eb1;
-}
-.edit_button_profile:hover{
-    color: white;
-    background-color: #621eb1;
-    border-color: #621eb1;
+    background-color: #dfdfdf;
+    border: none;
+    color: var(--lightThemeFontSecondary);
 }
 .postThumbnail{
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 9px;
-    border: 1px solid #dfdfdf;
     border-radius: 10px;
     position: relative;
-    align-items: center;
-}
-.postThumbnail:hover{
-    border: 1px solid #bbbbbb;
-    outline: 3px solid #dfdfdf;
+    background-color: #dfdfdf;
+    padding: 5px;
 }
 .postThumbnail img{
     border-radius: 10px;
     object-fit: cover;
-    opacity: 0.4;
-    height: 25vh;
-    width: 25vh;
+    height: 24vh;
+    width: 24vh;
+    filter: brightness(75%);
 }
 
 .factThumbnail{
     position: absolute;
-    text-align: center;
-    max-height: 100%;
+    bottom: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin: auto 1vw;
+    width: calc(25vh - 5px);
+    height: 2em;
+    margin-bottom: 0 !important;
+    
+    background-color: #dfdfdf;
+    border-radius: 10px;
+    word-break: break-word;
+
+    opacity: 0.9;
+    transition: height 1s;
+}
+.postThumbnail:hover .factThumbnail{
+    height: calc(100% - 5px);
 }
 .subTopicThumbnail{
-    font-weight: 600;
-    margin:auto;
-    font-size: 0.65em;
-    color: rgba(0, 0, 0, 0.85);
+    font-weight: 700;
+    font-size: 0.8em;
+    color: #808080;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 3px;
 }
-.fact{
-    color: rgba(0, 0, 0, 0.7);
-    font-weight: 600;
-    margin: 0.5em auto;
-    font-size: 0.5em;
-    word-break: break-word;
-}
+
 
 .changeProfilePictureBtn{
     height: 15vh;
@@ -415,21 +421,24 @@
 .profileElementsTitle{
     cursor: pointer;
     color: #787d80;
-    border-bottom: 2px solid #fcfcfb;
+    border-bottom: 2px solid var(--lightBackground);
     padding-bottom: 0.75vh;
     margin-bottom: 0;
   }
   .radioProfilePage:checked + .profileElementsTitle{
     font-weight: 600;
-    color: rgba(0, 0, 0, 0.85);
-    border-bottom: 2px solid #834bc4;
+    color: var(--lightThemeFontPrimary);
+    border-bottom: 2px solid var(--purpleDark);
   }
   .radioProfilePage:hover + .profileElementsTitle{
-    color: rgba(0, 0, 0, 0.85);
-    border-bottom: 2px solid #834bc4;
+    color: var(--lightThemeFontPrimary);
+    border-bottom: 2px solid var(--purpleDark);
   }
 
 @media screen and (max-width: 600px) {
+    .subTopicThumbnail{
+        font-size: 0.7em;
+    }
     .info, .edu {
         width: 95vw;
         /* scroll snapping */
@@ -459,16 +468,15 @@
     .main::-webkit-scrollbar {
         display: none;
     }
-    .addFriend_button, .connect_button{
-        width: 35vw;
-        margin: 0.5vh 3vw;
-    }
     .edit_button_profile{
         width: 40vw;
     }
     .postThumbnail img{
-        height: 30vw;
-        width: 30vw;
+        height: 28vw;
+        width: 28vw;
+    }
+    .factThumbnail{
+        width: 28vw;
     }
     .profileElements{
         height: fit-content;
@@ -493,6 +501,7 @@
         font-size: small;
       }
       .postThumbnail{
-        margin-bottom: 2px;
+        margin-bottom: 3px;
+        padding: 6px 4px;
     }
 }

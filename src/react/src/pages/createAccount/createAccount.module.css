@@ -7,8 +7,8 @@
     left: 0;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    margin: 5vh 0;
+    align-items: flex-start;
+    margin: 5vh;
 }
 body{
     background-color: #FCFCFB !important;
