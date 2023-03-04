@@ -2,7 +2,7 @@
     background-color: #7A7A7A !important;
 }
 body{
-    background-color: #FCFCFB !important;
+    background-color: var(--lightBackgroundPrimary) !important;
     overflow-x: hidden;
 }
 .picture{
@@ -71,7 +71,7 @@ img {
         display: flex;
         flex-direction: column;
         right: 0px;
-        background: none repeat scroll 0 0 white;
+        background: var(--lightBackgroundPrimary);
         box-shadow: -2px 0px 11px -1px rgba(0,0,0,.3) !important;
         overflow-x: hidden !important;
       }
@@ -84,7 +84,7 @@ img {
     top: 0;
     left: 0;
     width: 100%;
-    background-color: #FCFCFB !important;
+    background-color: var(--lightBackgroundPrimary) !important;
   }
   .footerForMobile{
     box-sizing: border-box;

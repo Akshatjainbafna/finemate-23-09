@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Facebook, Instagram, LinkedIn, Mail, Twitter, WhatsApp, YouTube } from '@material-ui/icons';
 import style from './footer.module.css';
-import Logo from "../../assets/finemateLatestin Angelina fontLogo.png";
+import Logo from "../../assets/Finemate Logo in White Font #9D8FFF.png";
 import { Button, TextField } from "@material-ui/core";
 import AxiosBaseFile from "../AxiosBaseFile";
 
@@ -76,8 +76,12 @@ export default function Footer() {
                             Learn
                         </p>
 
-                        <a href='/FAQ'>
+                        <a href='/pricing#FAQBox'>
                             FAQ's
+                        </a>
+
+                        <a href='/pricing'>
+                            Pricing
                         </a>
 
                         <a href='/about#what-is-finemate'>

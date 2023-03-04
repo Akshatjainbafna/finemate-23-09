@@ -35,6 +35,44 @@
 
   --extremelyLightFont: #dddddd;
 }
+.show{ 
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,.8);
+  z-index: 1030;
+  display: none;
+}
+.show .img-show{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.img-show div{
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  cursor: pointer;
+  color: #eee;
+  font-size: 1.5em;
+}
+.img-show div:hover{
+  filter: brightness(90%);
+}
+.img-show img{
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+/*End style*/
+
 .App {
   text-align: center;
 }
@@ -79,5 +117,13 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .img-show img{
+    width: 92.5%;
+    height: 90%;
+    object-fit: contain;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { Suspense, useReducer } from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import App from "./App";
@@ -73,6 +73,7 @@ import PageNotFound from "./components/pageNotFound";
 import QuillEditor from "./components/quill";
 import ContactPage from "./pages/contact/contact";
 import JobsPage from "./pages/jobs/jobs";
+import LoadingGif from "./components/loadingGif";
 
 
 window.token = localStorage.getItem("token");
@@ -93,191 +94,192 @@ ReactDOM.render(
   <Router>
     <Switch>
 
-    {/* Account creation and other pages */}
-      {/* create account page*/}
-      <Route exact path="/create">
-        <CreateAccountPage />
-      </Route>
-      <Route exact path="/quillEditor">
-        <QuillEditor />
-      </Route>
-      {/* Landing Page*/}
-      <Route exact path="/">
-        <LogInPage />
-      </Route>
-      <Route exact path="/home">
-        <HomePage />
-      </Route>
-      {/* FAQ page*/}
-      <Route exact path="/FAQ">
-        <FAQPage />
-      </Route>
-      {/* Contact page*/}
-      <Route exact path="/contact">
-        <ContactPage />
-      </Route>
-      {/* Jobs page*/}
-      <Route exact path="/jobs">
-        <JobsPage />
-      </Route>
-      {/* profile page*/}
-      <Route exact path="/profile">
-        <ProfilePage />
-      </Route>
-      <Route exact path="/profile/:username" component={UserProfilePage}></Route>
-      <Route exact path="/allnotifications">
-        <NotificationPage />
-      </Route>
-      {/* login page*/}
-      <Route exact path="/login">
-        <LogInPage />
-      </Route>
-      {/* On logout redirecting to the login page*/}
-      <Route exact path="/logout">
-        <Logout />
-      </Route>
+        {/* Account creation and other pages */}
+        {/* create account page*/}
+        <Route exact path="/create">
+          <CreateAccountPage />
+        </Route>
+        <Route exact path="/quillEditor">
+          <QuillEditor />
+        </Route>
+        {/* Landing Page*/}
+        <Route exact path="/">
+          <LogInPage />
+        </Route>
+        <Route exact path="/home">
+          <HomePage />
+        </Route>
+        {/* FAQ page*/}
+        <Route exact path="/pricing">
+          <FAQPage />
+        </Route>
+        {/* Contact page*/}
+        <Route exact path="/contact">
+          <ContactPage />
+        </Route>
+        {/* Jobs page*/}
+        <Route exact path="/jobs">
+          <JobsPage />
+        </Route>
+        {/* profile page*/}
+        <Route exact path="/profile">
+          <ProfilePage />
+        </Route>
+        <Route exact path="/profile/:username" component={UserProfilePage}></Route>
+        <Route exact path="/allnotifications">
+          <NotificationPage />
+        </Route>
+        {/* login page*/}
+        <Route exact path="/login">
+          <LogInPage />
+        </Route>
+        {/* On logout redirecting to the login page*/}
+        <Route exact path="/logout">
+          <Logout />
+        </Route>
 
-      <Route exact path="/createpost">
-        <ContentAuthoringToolComponentWindow />
-      </Route>
+        <Route exact path="/createpost">
+          <ContentAuthoringToolComponentWindow />
+        </Route>
 
-    {/* Home Screen Starts Here*/}
-      {/*Profile update questionaire*/}
-      <Route exact path="/questionaire">
-        <Questionaire />
-      </Route>
-      {/* dashboard*/}
-      <Route exact path="/dashboard">
-        <DashPage />
-      </Route>
-      {/* Individual Post */}
-      <Route exact path='/post/:id' component={IndividualPostPage}></Route>
-      <Route exact path='/topic/:topic' component={SearchPageForTopic}></Route>
-      {/* courses */}
-      <Route exact path="/allcoursesUser">
-        <AllCourses />
-      </Route>
-      {/* library */}
-      <Route exact path="/library">
-        <LibraryManagementSystem />
-      </Route>
-      {/* Search Page*/}
-      <Route exact path="/search">
-        <SearchPage />
-      </Route>
-      {/* attendance page */}
-      <Route exact path="/attendanceUser">
-        <AttendanceManagementSystem />
-      </Route>
-      {/* grades/marks of students */}
-      <Route exact path="/gradesUser">
-        <GradesManagementSystem />
-      </Route>
-      <Route exact path="/communities">
-        <DiscussionCommunitiesPage />
-      </Route>
-      {/* discussionList*/}
-      <Route exact path="/discussionList/:community" component = {DiscussionListPage}></Route>
-      { /* discussionDetail*/}
-      <Route exact path="/discussionDetail/:handle" component = {DiscussionDetailPage}></Route>
-      {/* marketplace */}
-      <Route exact path="/marketplace">
-        <Marketplace />
-      </Route>
-      {/* Fees Payment System */}
-      <Route exact path="/feesPayment">
-        <FeesPaymentSystem />
-      </Route>
-      {/* Accomodation/ Hostel Management & Transportation */}
-      <Route exact path="/a&t">
-        <AccomodationAndTransportManagementSystem />
-      </Route>
-      {/* Search user and Message Page */}
-      <Route exact path="/messageuser">
-        <SpecifyUserPage />
-      </Route>
-      <Route exact path="/todolist">
-        <TodoListPage />
-      </Route>
-      {/* news comp*/}
-      <Route exact path="/notice">
-        <NoticeNewsPage />
-      </Route>
-      <Route exact path="/leaderboard">
-        <LeaderBoardPage />
-      </Route>
-      <Route exact path="/settings">
-        <SettingPage />
-      </Route>
+        {/* Home Screen Starts Here*/}
+        {/*Profile update questionaire*/}
+        <Route exact path="/questionaire">
+          <Questionaire />
+        </Route>
+        {/* dashboard*/}
+        <Route exact path="/dashboard">
+          <DashPage />
+        </Route>
+        {/* Individual Post */}
+        <Route exact path='/post/:id' component={IndividualPostPage}></Route>
+        <Route exact path='/topic/:topic' component={SearchPageForTopic}></Route>
+        {/* courses */}
+        <Route exact path="/allcoursesUser">
+          <AllCourses />
+        </Route>
+        {/* library */}
+        <Route exact path="/library">
+          <LibraryManagementSystem />
+        </Route>
+        {/* Search Page*/}
+        <Route exact path="/search">
+          <SearchPage />
+        </Route>
+        {/* attendance page */}
+        <Route exact path="/attendanceUser">
+          <AttendanceManagementSystem />
+        </Route>
+        {/* grades/marks of students */}
+        <Route exact path="/gradesUser">
+          <GradesManagementSystem />
+        </Route>
+        <Route exact path="/communities">
+          <DiscussionCommunitiesPage />
+        </Route>
+        {/* discussionList*/}
+        <Route exact path="/discussionList/:community" component={DiscussionListPage}></Route>
+        { /* discussionDetail*/}
+        <Route exact path="/discussionDetail/:handle" component={DiscussionDetailPage}></Route>
+        {/* marketplace */}
+        <Route exact path="/marketplace">
+          <Marketplace />
+        </Route>
+        {/* Fees Payment System */}
+        <Route exact path="/feesPayment">
+          <FeesPaymentSystem />
+        </Route>
+        {/* Accomodation/ Hostel Management & Transportation */}
+        <Route exact path="/a&t">
+          <AccomodationAndTransportManagementSystem />
+        </Route>
+        {/* Search user and Message Page */}
+        <Route exact path="/messageuser">
+          <SpecifyUserPage />
+        </Route>
+        <Route exact path="/todolist">
+          <TodoListPage />
+        </Route>
+        {/* news comp*/}
+        <Route exact path="/notice">
+          <NoticeNewsPage />
+        </Route>
+        <Route exact path="/leaderboard">
+          <LeaderBoardPage />
+        </Route>
+        <Route exact path="/settings">
+          <SettingPage />
+        </Route>
 
-    {/* Pages not in use currently so they aren't redirected from Dashboard page */}
-      {/* classes the one you have enrolled in Faculties can add a course */}
-      <Route exact path="/classes">
-        <Classes />
-      </Route>
-      {/*instructorclass Faculties can add a course*/}
-      <Route exact path="/iclasses">
-        <InstructorClasses />
-      </Route>
-      {/* create a class */}
-      <Route exact path="/createclass">
-        <CreateClass />
-      </Route>
-      <Route exact path="/classcreation">
-        <CreateClassPage />
-      </Route>
-      {/* all the classes */}
-      <Route exact path="/allclasslist">
-        <AllClassListPage />
-      </Route>
-      
+        {/* Pages not in use currently so they aren't redirected from Dashboard page */}
+        {/* classes the one you have enrolled in Faculties can add a course */}
+        <Route exact path="/classes">
+          <Classes />
+        </Route>
+        {/*instructorclass Faculties can add a course*/}
+        <Route exact path="/iclasses">
+          <InstructorClasses />
+        </Route>
+        {/* create a class */}
+        <Route exact path="/createclass">
+          <CreateClass />
+        </Route>
+        <Route exact path="/classcreation">
+          <CreateClassPage />
+        </Route>
+        {/* all the classes */}
+        <Route exact path="/allclasslist">
+          <AllClassListPage />
+        </Route>
 
-      {/* events the one you have enrolled in*/}
-      <Route exact path="/events">
-        <Events />
-      </Route>
-      <Route exact path="/eventlist">
-        <AllEventsList />
-      </Route>
-      {/* create event component and page*/}
-      <Route exact path="/eventcreation">
-        <CreateEventPage />
-      </Route>
-      <Route exact path="/createevent">
-        <CreateEvent />
-      </Route>
-      {/* list of all the events */}
-      <Route exact path="/alleventlist">
-        <AllEventListPage />
-      </Route>
-      
-      
-      {/* schedule page for teachers*/}
-      <Route exact path="/schedule">
-        <SchedulePage />
-      </Route>
-      {/* not in used currently*/}
-      <Route exact path="/message">
-        <MessagePage />
-      </Route>
-      {/* about*/}
-      <Route exact path="/about">
-        <AboutPage />
-      </Route>
-      {/* solutions*/}
-      <Route exact path="/solutions">
-        <SolutionsPage />
-      </Route>
-      {/* team */}
-      <Route exact path="/team">
-        <TeamPage />
-      </Route>
 
-      {/* side bar (not in use coz all the sidebars and props are maniually given on all the pages)*/}
-      <Route path="/sidebar">
-        <Sidebar books={navItems} />
-        <Headerbar icons={headerItems} />
-      </Route>
+        {/* events the one you have enrolled in*/}
+        <Route exact path="/events">
+          <Events />
+        </Route>
+        <Route exact path="/eventlist">
+          <AllEventsList />
+        </Route>
+        {/* create event component and page*/}
+        <Route exact path="/eventcreation">
+          <CreateEventPage />
+        </Route>
+        <Route exact path="/createevent">
+          <CreateEvent />
+        </Route>
+        {/* list of all the events */}
+        <Route exact path="/alleventlist">
+          <AllEventListPage />
+        </Route>
+
+
+        {/* schedule page for teachers*/}
+        <Route exact path="/schedule">
+          <SchedulePage />
+        </Route>
+        {/* not in used currently*/}
+        <Route exact path="/message">
+          <MessagePage />
+        </Route>
+        {/* about*/}
+        <Route exact path="/about">
+          <AboutPage />
+        </Route>
+        {/* solutions*/}
+        <Route exact path="/solutions">
+          <SolutionsPage />
+        </Route>
+        {/* team */}
+        <Route exact path="/team">
+          <TeamPage />
+        </Route>
+
+        {/* side bar (not in use coz all the sidebars and props are maniually given on all the pages)*/}
+        <Route path="/sidebar">
+          <Sidebar books={navItems} />
+          <Headerbar icons={headerItems} />
+        </Route>
+
 
       <Route path="*">
         <PageNotFound />

@@ -52,7 +52,7 @@ class Message extends Component {
                     <Link to={"/profile/".concat(localStorage.getItem('targetUser'))} title='Visit Profile' style={{textDecoration: 'none'}}>
                         {localStorage.getItem('profilePictureTargetUser') != 'null' ?
                             <ListItemAvatar>
-                                <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/'+ localStorage.getItem('profilePictureTargetUser')} className={style.profilePictureChatHeader}/>
+                                <img src={require('../../assets/profilePictures/'+ localStorage.getItem('profilePictureTargetUser'))} className={style.profilePictureChatHeader}/>
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>

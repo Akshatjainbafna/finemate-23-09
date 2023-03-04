@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import LogoDesktop from '../../assets/finemateLatestin Angelina fontLogo.png';
-import LogoTablet from "../../assets/finemateLatestin Angelina fontLogo for Tablet Screens.png";
+import LogoDesktop from '../../assets/Finemate Logo in Black Font #9D8FFF.png';
+import LogoTablet from "../../assets/Finemate Mini Logo F.png";
 import style from './sidebar.module.css';
 import ContentAuthoringToolWindow from "../newsfeed/contentAuthoringTool.component";
 import { Button } from '@material-ui/core';
@@ -60,7 +60,7 @@ class Sidebar extends Component {
                     <Link to="/dashboard" title="Home">
                     <picture> 
                         <source media='(max-width: 992px)' srcSet={LogoTablet} />
-                        <img style={{width: "150px"}} src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/finemateLatestin+Angelina+fontLogo.png' alt='logo'/>
+                        <img style={{width: "150px"}} src={LogoDesktop} alt='logo'/>
                     </picture>
                     </Link>
                 </span>

@@ -36,7 +36,7 @@ class DiscussionList extends Component {
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
-                        resThread['timePassedInPercent'] = response.data[i].timePassedInPercent;
+
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
                     this.setState({ threads: thread }, () => console.log(this.state.threads))
@@ -61,7 +61,7 @@ class DiscussionList extends Component {
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
-                        resThread['timePassedInPercent'] = response.data[i].timePassedInPercent;
+
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
                     this.setState({ threads: thread }, () => console.log(this.state.threads))
@@ -98,7 +98,7 @@ class DiscussionList extends Component {
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
-                        resThread['timePassedInPercent'] = response.data[i].timePassedInPercent;
+
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
                     this.setState({ threads: thread })
@@ -123,7 +123,7 @@ class DiscussionList extends Component {
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
-                        resThread['timePassedInPercent'] = response.data[i].timePassedInPercent;
+
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
                     this.setState({ threads: thread })
@@ -169,8 +169,9 @@ class DiscussionList extends Component {
                                     <Link to={'/discussionDetail/'.concat(thread.id)} style={{ color: '#403e42', textDecoration: "none" }}>
 
                                         <div className='d-flex justify-content-between p-2' style={{ textOverflow: "ellipsis" }}>
-                                            <div>{thread.profilePicture ? <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + thread.profilePicture } className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{thread.name.charAt(0)}</Avatar>} </div>
+                                            <div>{thread.profilePicture ? <img src={require('../../assets/profilePictures/' + thread.profilePicture)} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{thread.name.charAt(0)}</Avatar>} </div>
                                             <div className='userFullNameDiscussion ml-2'>{thread.name}</div>
+                                            {/*
                                             <div>
                                                 <span>
                                                     <svg height="100%" viewBox="0 0 20 20" width="1em" style={{ overflow: "visible", transform: 'rotate(-90deg)', marginRight: '1vw' }}>
@@ -181,15 +182,18 @@ class DiscussionList extends Component {
                                                     </svg>
                                                 </span>
                                             </div>
+                                            */}
                                         </div>
 
                                         <div className='p-2 font-weight-bold'> {thread.title} </div>
 
-                                        <Link to={'/discussionList/'.concat(thread.community)} style={{textDecoration: 'none'}}>
-                                            <div className='communityNameDiscussionBlock'>
+
+                                        <div className='communityNameDiscussionBlock'>
+                                            <Link to={'/discussionList/'.concat(thread.community)} style={{ textDecoration: 'none', color: 'var(--pureBlack)' }}>
                                                 {thread.community}
-                                            </div>
-                                        </Link>
+                                            </Link>
+                                        </div>
+
 
                                         <Divider />
 

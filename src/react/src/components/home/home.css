@@ -11,6 +11,18 @@
 		opacity: 1;
 	}
 }
+.btn-get-started-white {
+	border: none;
+	border-radius: 10px;
+	max-width: 100%;
+	color: var(--purpleDark);
+    background-color: #FCFCFB;
+}
+.btn-get-started-white:hover {
+	color: var(--purpleDark);
+	transform: scale(1.1, 1.1);
+	box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+}
 .btn-get-started {
 	border: none;
 	border-radius: 10px;
@@ -23,6 +35,7 @@
 	transform: scale(1.1, 1.1);
 	box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
 }
+
 .instantBreakdown{
 	font: bold 2em 'Bangers', cursive;
 	background-image: linear-gradient(45deg, #8C52FF, #BAA3D7, #FBEAAF, #64BAA9);
@@ -60,6 +73,17 @@
 	transform: scale(1.05, 1.05);
 	transition: transform 1s;
   }
+  .landingPageMainScreen{
+	border-radius: 50px 50px 0 0;
+	width: 100%;
+	padding-top: 8vh;
+	background-image: linear-gradient(-20deg, var(--purpleMain) 0%, #98dbff 100%);
+  }
+  #svg2{
+	height: 20vh;
+	width: 100%;
+  }
+
   @media screen and (max-width: 600px) {
 	.carousel-inner{
 		width: 100%;

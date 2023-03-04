@@ -4,11 +4,6 @@
     background-color: #E0E0E0;
     border-radius: 0 0 10px 10px;
  }
-.formInlineMessage .formControlMessage {
-    width: 80%;
-    height: 40px;
-    padding: 8px;
-}
 .formInlineMessage{
     display: flex;
     justify-content: space-evenly;
@@ -17,4 +12,9 @@
 .writeButton{
     background-color: #FCFCFB;
     border: none;
+}
+@media screen and (max-width: 600px) {
+    .messagePos {
+        border-radius: 0;
+     }
 }

@@ -1,3 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Cookie&family=Inconsolata&family=Poppins&family=Raleway&family=Roboto&family=Slabo+27px&family=Sofia&family=Style+Script&family=Ubuntu&display=swap');
+
+
+.ql-font-poppins,
+.ql-font span[data-value="poppins"]::before {
+    font-family: 'Poppins', sans-serif;
+}
+
+.ql-font-raleway,
+.ql-font span[data-value="raleway"]::before {
+    font-family: 'Raleway', sans-serif;
+}
+
+.ql-font-roboto,
+.ql-font span[data-value="roboto"]::before {
+    font-family: 'Roboto', sans-serif;
+}
+
+.ql-font-ubuntu,
+.ql-font span[data-value="ubuntu"]::before {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.ql-font-slabo,
+.ql-font span[data-value="slabo"]::before {
+    font-family: 'Slabo 27px', serif;
+}
+
+.ql-font-inconsolata,
+.ql-font span[data-value="inconsolata"]::before {
+    font-family: 'Inconsolata', monospace;
+}
+
+.ql-font-cookie,
+.ql-font span[data-value="cookie"]::before {
+    font-family: 'Cookie', cursive;
+}
+
+.ql-font .ql-picker-label::before {
+    content: attr(data-value) !important;
+    text-transform: capitalize;
+}
+
+.ql-font .ql-picker-item::before {
+    content: attr(data-value) !important;
+    text-transform: capitalize;
+    font-size: 14px;
+}
+
+.ql-font .ql-picker-label[data-value="cookie"]::before {
+    font-size: 20px;
+}
+
+.ql-font .ql-picker-item[data-value="cookie"]::before {
+    font-size: 19px;
+}
+
+
 pre.ql-syntax {
     display: block;
     font-size: 87.5%;
@@ -8,44 +66,106 @@ pre.ql-syntax {
     border-radius: 3px;
     padding: 0.5em 1em;
 }
-.ql-tooltip, .ql-picker-options{
+
+.ql-tooltip,
+.ql-picker-options {
     left: 0 !important;
     z-index: 5 !important;
 }
-.ql-picker-options{
+
+.ql-picker-options {
     z-index: 5 !important;
 }
-.quillField{
+
+.quillField {
     border: 1px solid #c4c4c4;
     border-radius: 3px;
     min-height: 5em;
 }
-.quillField:hover{
+
+.quillField:hover {
     border: 1px solid #212121;
 }
-.factThumbnail .ql-editor{
+
+.ql-editor p {
+    font-size: 1.25em;
+}
+
+.ql-editor .ql-size-large {
+    font-size: 1.25em !important;
+}
+
+.ql-font-cookie {
+    font-size: 26px !important;
+}
+.ql-font-cookie.ql-size-small {
+    font-size: 18px !important;
+}
+.ql-font-cookie.ql-size-large {
+    font-size: 31px !important;
+}
+.factThumbnail .ql-font-cookie {
+    font-size: 13px !important;
+}
+.ql-editor h1 {
+    color: #313131;
+}
+
+.ql-editor h2 {
+    font-weight: 700;
+}
+
+.factThumbnail .ql-editor {
     padding: 8px 10px;
 }
-.factThumbnail .ql-editor p, .factThumbnail .ql-editor li{
-    font-weight: 600;
+
+.factThumbnail .ql-editor p,
+.factThumbnail .ql-editor li,
+.factThumbnail .ql-font-cookie {
+    font-weight: 500;
     color: #212121;
     font-size: 0.7em;
     word-break: break-word;
 }
-.factThumbnail .ql-editor h1, .factThumbnail .ql-editor h2, .factThumbnail .ql-editor h3{
+
+.factThumbnail .ql-editor h1,
+.factThumbnail .ql-editor h2,
+.factThumbnail .ql-editor h3 {
     font-weight: 600;
     color: #212121;
     font-size: 0.85em;
     word-break: break-word;
 }
-.ql-editor p{
-    font-size: 1.2em;
-    font-weight: 600;
-    color: #212121;
+
+/* Set default font-family */
+.ql-font-Ubuntu {
+    font-family: "Ubuntu", sans-serif;
+}
+
+/* Set dropdown font-families */
+.ql-font span[data-label="Ubuntu"]::before {
+    font-family: "Ubuntu";
+}
+
+.ql-font .ql-font span[data-label="Raleway"]::before {
+    font-family: "Raleway";
+}
+
+.ql-font span[data-label="Roboto"]::before {
+    font-family: "Roboto", sans-serif !important;
+}
+
+/* Set content font-families */
+.ql-font-Raleway {
+    font-family: "Raleway", sans-serif;
+}
+
+.ql-font-Roboto {
+    font-family: 'Roboto', sans-serif;
 }
 
 @media screen and (max-width: 600px) {
-    .factThumbnail .ql-editor{
+    .factThumbnail .ql-editor {
         padding: 6px;
-    }   
+    }
 }

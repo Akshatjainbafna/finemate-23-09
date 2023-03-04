@@ -77,7 +77,7 @@ class FAQPage extends Component {
               </div>
             </div>
           </div>
-          <h3 className="faq-header">Frequently Asked Questions</h3>
+          <h3 className="faq-header" id='FAQBox'>Frequently Asked Questions</h3>
           <div className="FAQBox">
             <FAQ>
               <FAQ.QAItem>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./outsideNavbar.css";
-import Logo from "../../assets/finemateLatestin Angelina fontLogo.png";
+import Logo from "../../assets/Finemate Logo in Black Font #9D8FFF.png";
 import { Link, useLocation } from "react-router-dom";
 
 function OutsideNavbarPageLinks(props){
@@ -26,8 +26,8 @@ class OutsideNavbar extends Component {
   render() {
     const arrayOfHeaderLink = [
       {id: 1, linkAddress: "/home", title: "Home"},
-      {id: 2, linkAddress: "/about", title: "About"},
-      {id: 3, linkAddress: "/solutions", title: "Solutions"},
+      {id: 2, linkAddress: "/solutions", title: "Features"},
+      {id: 3, linkAddress: "/about", title: "About"},
       {id: 4, linkAddress: "/team", title: "Team"}
     ]
     return (

@@ -184,19 +184,25 @@
     border-color: transparent;
     background-color: transparent;
 }
-.edit_button {
-    align-self: flex-end;
-    margin: 0px 30px 40px 0px;
-    width: 120px;
-    height: 50px;
+.save_button {
     font-weight: 600;
-    font-family: "Open Sans";
-    box-shadow: none;
-    border: none;
-    border-radius: 10px;
+    font-size: small;
+    width: 100px;
+    height: 30px;
+    border-radius: 8px;
     background-color: var(--purpleMain);
-    border-color: var(--pureWhite) !important;
+    border: none;
     color: var(--pureWhite);
+}
+.cancel_button {
+    font-weight: 600;
+    font-size: small;
+    width: 100px;
+    height: 30px;
+    border-radius: 8px;
+    background-color: var(--pureWhite);
+    border: 1px solid var(--purpleMain) !important;
+    color: var(--purpleMain);
 }
 .divider {
     padding: 0px;
@@ -273,13 +279,6 @@
     margin: 1vh;
     text-align: center;
     height: fit-content;
-}
-.addButton{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1vh;
 }
 .addFriend_button{
     padding: 6px 36px;
@@ -359,6 +358,9 @@
     background-color: #dfdfdf;
     border: none;
     color: var(--lightThemeFontSecondary);
+}
+.brightness-low-btn:hover{
+    filter: brightness(95%);
 }
 .postThumbnail{
     display: flex;

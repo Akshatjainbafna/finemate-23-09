@@ -114,7 +114,7 @@ class CreateThreadClass extends Component {
                     }}
                     open={this.state.snackbarShow}
                     autoHideDuration={4000}
-                    message='Thread created Successfully!'
+                    message='Discussion added successfully!'
                     onClose={() => this.setState({ snackbarShow: false })}
                 >
                 </Snackbar>
@@ -132,7 +132,7 @@ class CreateThreadClass extends Component {
                     <DialogContent>
                         <div className='d-flex align-items-center mb-3'>
                             <div>
-                                {localStorage.getItem('profilePicture') != 'undefined' ? <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + localStorage.getItem('profilePicture')} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{localStorage.getItem('name').charAt(0)}</Avatar>}
+                                {localStorage.getItem('profilePicture') != 'undefined' ? <img src={require('../../assets/profilePictures/' + localStorage.getItem('profilePicture'))} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{localStorage.getItem('name').charAt(0)}</Avatar>}
                             </div>
                             <div className='mx-2'>
                                 <small>

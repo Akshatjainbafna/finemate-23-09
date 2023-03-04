@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './discussionDetail.css'
-import { Avatar, Button, IconButton, Menu, MenuItem, Snackbar, TextField } from '@material-ui/core';
+import { Avatar, Button, Divider, IconButton, Menu, MenuItem, Snackbar, TextField } from '@material-ui/core';
 import { Link, Redirect } from 'react-router-dom';
 import AxiosBaseFile from '../AxiosBaseFile';
 import { Delete, InfoOutlined, MoreHoriz, Send } from '@material-ui/icons';
@@ -26,6 +26,7 @@ class DiscussionDetail extends Component {
             descriptionVisible: false,
             messageOptions: null
         }
+        this.discussionThreadRef = React.createRef();
         this.onChangeHandler = this.onChangeHandler.bind(this);
         this.onSubmitHandler = this.onSubmitHandler.bind(this);
         this.viewDescription = this.viewDescription.bind(this);
@@ -57,6 +58,21 @@ class DiscussionDetail extends Component {
                 console.log(error)
             });
     }
+
+    getSnapshotBeforeUpdate(prevProps, prevState) {
+        if (this.state.replies > prevState.replies) {
+            const discussionThreadRef = this.discussionThreadRef.current;
+            return discussionThreadRef.scrollHeight - discussionThreadRef.scrollTop;
+        }
+        return null;
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (snapshot !== null) {
+            const discussionThreadRef = this.discussionThreadRef.current;
+            discussionThreadRef.scrollTop = discussionThreadRef.scrollHeight;
+        }
+    }
+
     onChangeHandler(event) {
         let name = event.target.name;
         let value = event.target.value;
@@ -72,8 +88,10 @@ class DiscussionDetail extends Component {
         this.setState({ descriptionVisible: !this.state.descriptionVisible }, () => {
             if (this.state.descriptionVisible) {
                 document.getElementById('descriptionOfDiscussion').style.whiteSpace = 'normal';
+                document.getElementById('descriptionOfDiscussion').style.height = 'max-content';
             } else {
                 document.getElementById('descriptionOfDiscussion').style.whiteSpace = 'nowrap';
+                document.getElementById('descriptionOfDiscussion').style.height = '1.5em';
             }
         })
     }
@@ -86,9 +104,8 @@ class DiscussionDetail extends Component {
                     resReply['timestamps'] = 'Just Now';
                     resReply['users'] = localStorage.getItem('username');
                     let newReply = JSON.parse(JSON.stringify(resReply));
-                    console.log(newReply)
 
-                    this.setState({ replies: [...this.state.replies, newReply], body: "" }, () => console.log(this.state.replies))
+                    this.setState({ replies: [...this.state.replies, newReply], body: "" })
                 })
                 .catch((error) => {
                     console.log(error)
@@ -114,8 +131,8 @@ class DiscussionDetail extends Component {
             })
             .catch(err => this.setState({ snackbarMessage: 'Couldnot delete the discussion!', snackbarShow: true }))
     }
-    saveThread(){
-        this.setState({threadMenu: false, snackbarMessage: 'Discussion saved successfully!', snackbarShow: true })
+    saveThread() {
+        this.setState({ threadMenu: false, snackbarMessage: 'Discussion saved successfully!', snackbarShow: true })
     }
     render() {
         if (this.state.threadDeleted) {
@@ -125,29 +142,43 @@ class DiscussionDetail extends Component {
         return (
             <div className='discussion-detail-container'>
                 <div className='discussion-header-content p-2'>
-                    <h5 style={{ margin: "2%", padding: "2%", color: 'var(--darkThemeFontPrimary)', backgroundColor: 'var(--lightThemeFontSecondary)', borderRadius: '10px' }}>
+                    <h5 style={{ margin: "12px", padding: "8px 10px", color: 'var(--darkThemeFontPrimary)', backgroundColor: 'var(--lightThemeFontSecondary)', borderRadius: '10px' }}>
                         {this.state.title}
                     </h5>
 
-                    <div style={{ margin: "2%" }}>
+                    <div style={{ margin: "10px 16px" }}>
                         {this.state.replies[0].bodies != 'NO DESCRIPTION' ?
-                            <div id='descriptionOfDiscussion' className='descriptionOfDiscussion' onClick={this.viewDescription}>
-                                <InfoOutlined style={{ color: '#717175', fontSize: '1em', marginRight: '5px', marginBottom: '3px' }} />
-                                Description:  {this.state.replies[0].bodies}
+                            <div>
+                                <div id='descriptionOfDiscussion' className='descriptionOfDiscussion' onClick={this.viewDescription}>
+                                    <InfoOutlined style={{ color: 'grey', fontSize: '0.8em', marginRight: '2px' }} />
+                                    <small style={{ color: 'grey' }}>Description: </small> {this.state.replies[0].bodies.split('\n').map(function (item) {
+                                        return (
+                                            <span>
+                                                {item}
+                                                <br />
+                                            </span>
+                                        )
+                                    })}
+                                </div>
+                                {this.state.replies[0].bodies.includes('\n') ?
+                                    <p className='dropDownRectangle' onClick={this.viewDescription}></p>
+                                    :
+                                    null
+                                }
                             </div>
                             :
                             null
                         }
 
                         <div className='d-flex align-items-center justify-content-between'>
-                            <div className='d-flex align-items-center flex-grow-1 mt-3'>
-                                <div>{this.state.profilePicture ? <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + this.state.profilePicture} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{this.state.name.charAt(0)}</Avatar>} </div>
-                                <div style={{ marginLeft: "2%", color: "#aaa", fontSize: "small" }}>
+                            <div className='d-flex align-items-center flex-grow-1'>
+                                <div>{this.state.profilePicture ? <img src={require('../../assets/profilePictures/' + this.state.profilePicture)} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{this.state.name.charAt(0)}</Avatar>} </div>
+                                <div style={{ marginLeft: "10px", color: "#aaa", fontSize: "small" }}>
                                     <Link style={{ color: "#aaa" }} to={"/profile/".concat(this.state.replies[0].users)}>
                                         {this.state.replies[0].users}
                                     </Link>
                                 </div>
-                                <div style={{ marginLeft: "2%", color: "#aaa", fontSize: "xx-small" }}>
+                                <div style={{ marginLeft: "10px", color: "#aaa", fontSize: "xx-small" }}>
                                     {this.state.replies[0].timestamps}
                                 </div>
                             </div>
@@ -181,7 +212,7 @@ class DiscussionDetail extends Component {
                                 {this.state.replies[0].bodies != 'NO DESCRIPTION' ?
                                     <MenuItem onClick={() => {
                                         navigator.clipboard.writeText(this.state.replies[0].bodies);
-                                        this.setState({threadMenu: false, snackbarShow: true, snackbarMessage: 'Message Copied Successfully!' })
+                                        this.setState({ threadMenu: false, snackbarShow: true, snackbarMessage: 'Message Copied Successfully!' })
                                     }}>
                                         <HiClipboardCopy size={20} style={{ marginRight: '1em' }} />Copy Message
                                     </MenuItem>
@@ -191,71 +222,85 @@ class DiscussionDetail extends Component {
                             </Menu>
                         </div>
                     </div>
+                    <Divider />
+                </div>
 
-                    <hr></hr>
+                <div className='discussion-detail-li px-2'>
 
-                    <div className='d-flex' style={{ margin: "2%" }}>
-                        <TextField minRows={1} multiline variant="outlined" placeholder="Add a reply..." fullWidth name='body' value={this.state.body} onChange={this.onChangeHandler} inputProps={{ maxLength: "365" }} required />
+                    <div className='discussion-detail-box' ref={this.discussionThreadRef}> {this.state.replies.length > 1 ?
+                        this.state.replies.slice(1).map(
+                            (reply, index) => {
+                                if (reply.users == localStorage.getItem('username')) {
+                                    return (
+                                        <div key={index} className='d-flex justify-content-end mt-2 messageRow'>
+                                            <div className='messageMenuContainer'>
+                                                <IconButton onClick={(e) => { this.setState({ messageOptions: e.currentTarget, currentReply: reply.bodies, currentIndex: index, currentUser: reply.users }) }}>
+                                                    <MoreHoriz />
+                                                </IconButton>
+                                            </div>
+                                            <div className='discussionReply1'>
+                                                <div>{reply.bodies.split('\n').map(function (item) {
+                                                    return (
+                                                        <span>
+                                                            {item}
+                                                            <br />
+                                                        </span>
+                                                    )
+                                                })}</div>
+                                                <div style={{ color: "#dfdfdf", fontSize: "xx-small" }} className='d-flex justify-content-between mt-2'>
+                                                    <div>
+                                                        <Link style={{ color: "#dfdfdf", marginRight: '2vw' }} to={"/profile/".concat(reply.users)}>
+                                                            {reply.users}
+                                                        </Link>
+                                                    </div>
+                                                    <div>{reply.timestamps}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <div key={index} className='d-flex justify-content-start mt-2 messageRow'>
+                                            <div className='discussionReply2'>
+                                                <div>{reply.bodies.split('\n').map(function (item) {
+                                                    return (
+                                                        <span>
+                                                            {item}
+                                                            <br />
+                                                        </span>
+                                                    )
+                                                })}</div>
+                                                <div style={{ color: "#dfdfdf", fontSize: "xx-small" }} className='d-flex justify-content-between mt-2'>
+                                                    <div>
+                                                        <Link style={{ color: "#dfdfdf", marginRight: '2vw' }} to={"/profile/".concat(reply.users)}>
+                                                            {reply.users}
+                                                        </Link>
+                                                    </div>
+                                                    <div>{reply.timestamps}</div>
+                                                </div>
+                                            </div>
+
+                                            <div className='messageMenuContainer'>
+                                                <IconButton onClick={(e) => { this.setState({ messageOptions: e.currentTarget, currentReply: reply.bodies, currentIndex: index, currentUser: reply.users }) }}>
+                                                    <MoreHoriz />
+                                                </IconButton>
+                                            </div>
+                                        </div>
+                                    )
+                                }
+                            }
+                        )
+                        :
+                        <div className='d-flex align-items-center justify-content-center'><p>Start the discussion</p></div>
+                    }
+                    </div>
+                    <div className='d-flex align-items-center p-2 discussionReplyFieldContainer'>
+                        <TextField minRows={1} maxRows={3} multiline variant="outlined" placeholder="Add a reply..." fullWidth name='body' value={this.state.body} onChange={this.onChangeHandler} required />
                         <IconButton onClick={this.onSubmitHandler}>
                             <Send />
                         </IconButton>
                     </div>
-
-                    <hr></hr>
-
-                </div>
-
-                <div className='discussion-detail-li p-2'>
-
-                    {this.state.replies.slice(1).map(
-                        (reply, index) => {
-                            if (reply.users == localStorage.getItem('username')) {
-                                return (
-                                    <div key={index} className='d-flex justify-content-end mt-2 messageRow'>
-                                        <div className='messageMenuContainer'>
-                                            <IconButton onClick={(e) => { this.setState({ messageOptions: e.currentTarget, currentReply: reply.bodies, currentIndex: index, currentUser: reply.users }) }}>
-                                                <MoreHoriz />
-                                            </IconButton>
-                                        </div>
-                                        <div className='discussionReply1'>
-                                            <div>{reply.bodies}</div>
-                                            <div style={{ color: "#dfdfdf", fontSize: "xx-small" }} className='d-flex justify-content-between mt-2'>
-                                                <div>
-                                                    <Link style={{ color: "#dfdfdf", marginRight: '2vw' }} to={"/profile/".concat(reply.users)}>
-                                                        {reply.users}
-                                                    </Link>
-                                                </div>
-                                                <div>{reply.timestamps}</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            }
-                            else {
-                                return (
-                                    <div key={index} className='d-flex justify-content-start mt-2 messageRow'>
-                                        <div className='discussionReply2'>
-                                            <div>{reply.bodies}</div>
-                                            <div style={{ color: "#dfdfdf", fontSize: "xx-small" }} className='d-flex justify-content-between mt-2'>
-                                                <div>
-                                                    <Link style={{ color: "#dfdfdf", marginRight: '2vw' }} to={"/profile/".concat(reply.users)}>
-                                                        {reply.users}
-                                                    </Link>
-                                                </div>
-                                                <div>{reply.timestamps}</div>
-                                            </div>
-                                        </div>
-
-                                        <div className='messageMenuContainer'>
-                                            <IconButton onClick={(e) => { this.setState({ messageOptions: e.currentTarget, currentReply: reply.bodies, currentIndex: index, currentUser: reply.users }) }}>
-                                                <MoreHoriz />
-                                            </IconButton>
-                                        </div>
-                                    </div>
-                                )
-                            }
-                        }
-                    )}
 
                     <Menu
                         id="reply-menu"

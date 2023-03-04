@@ -5,7 +5,7 @@ import { BsBell, BsBook, BsEmojiSunglasses } from "react-icons/bs";
 import { IconContext } from "react-icons/lib";
 import { Link, useLocation } from "react-router-dom";
 import style from './HeaderTaskbarForMobile.module.css';
-import logo from '../../assets/finemateLatestin Angelina fontLogo.png';
+import logo from '../../assets/Finemate Logo in Black Font #9D8FFF.png';
 import profile from "../../assets/tinyprofile.png";
 import AxiosBaseFile from "../AxiosBaseFile";
 import {HiOutlineSpeakerphone} from 'react-icons/hi';
@@ -153,14 +153,14 @@ class HeaderBarForMobile extends Component{
                       >
                         <div style={{width:"75vw"}}>
                           <div className="d-flex justify-content-center m-2">
-                            <img src='https://s3.ap-south-1.amazonaws.com/finemate.media/mainImages/finemateLatestin+Angelina+fontLogo.png' alt="Finemate Logo" style={{width: '130px'}} />
+                            <img src={logo} alt="Finemate Logo" style={{width: '130px'}} />
                           </div>
                           <Link to="/profile" title="Profile Page" style={{color: "var(--lightThemeFontSecondary)", textDecoration: "none"}}>
                             <div className="d-flex align-items-center">
                               <span className={style.mobileSideBarProfilePic}>
                               {this.state.profilePicture ?
                                     <ListItemAvatar>
-                                        <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + this.state.profilePicture } className={style.profilePictureSidebarThumbnail}/>
+                                        <img src={require('../../assets/profilePictures/'+ this.state.profilePicture)} className={style.profilePictureSidebarThumbnail}/>
                                     </ListItemAvatar>
                                     :
                                     <ListItemAvatar>

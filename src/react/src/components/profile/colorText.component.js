@@ -23,7 +23,7 @@ class ColourText extends Component {
                         if (this.state.listOfItems.includes(this.state.itemName)){
                         AxiosBaseFile.put('/api/db_add_profile_education', { education : this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
-                            this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
+                            this.setState({added: [...this.state.added, this.state.itemName]})
                             this.setState({itemName: ''})
                         })
                         .catch(err => console.log(err))
@@ -35,7 +35,7 @@ class ColourText extends Component {
                     case 'skill':
                         AxiosBaseFile.put('/api/db_add_profile_skill', {skill: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
-                            this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
+                            this.setState({added: [...this.state.added, this.state.itemName]})
                             this.setState({itemName: ''})
                         })
                         .catch(err => alert('Some error occured, try again!'))
@@ -43,7 +43,7 @@ class ColourText extends Component {
                     case 'language':
                         AxiosBaseFile.put('/api/db_add_profile_language', {language: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
-                            this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
+                            this.setState({added: [...this.state.added, this.state.itemName]})
                             this.setState({itemName: ''})
                         })
                         .catch(err => alert('Some error occured, try again!'))
@@ -51,7 +51,7 @@ class ColourText extends Component {
                     case 'interest':
                         AxiosBaseFile.put('/api/db_add_profile_interest', {interest: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
-                            this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
+                            this.setState({added: [...this.state.added, this.state.itemName]})
                             this.setState({itemName: ''})
                         })
                         .catch(err => alert('Some error occured, try again!'))
@@ -59,7 +59,7 @@ class ColourText extends Component {
                     case 'hate':
                         AxiosBaseFile.put('/api/db_add_profile_hate', {hate: this.state.itemName, username: localStorage.getItem('username')})
                         .then(() => {
-                            this.setState({added: [...this.state.added, this.state.itemName]}, () => console.log(this.state.added))
+                            this.setState({added: [...this.state.added, this.state.itemName]})
                             this.setState({itemName: ''})
                         })
                         .catch(err => alert('Some error occured, try again!'))
@@ -82,35 +82,35 @@ class ColourText extends Component {
                     case 'education':
                         AxiosBaseFile.post('/api/db_delete_profile_education', {education: item, username: localStorage.getItem('username')})
                         .then(() => {
-                            window.location.reload(true);  
+                            this.forceUpdate();
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'skill':
                         AxiosBaseFile.post('/api/db_delete_profile_skill', {skill: item, username: localStorage.getItem('username')})
                         .then(() => {
-                            window.location.reload(true);  
+                            this.forceUpdate();
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'language':
                         AxiosBaseFile.post('/api/db_delete_profile_language', {language: item, username: localStorage.getItem('username')})
                         .then(() => {
-                            window.location.reload(true);  
+                            this.forceUpdate();
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'interest':
                         AxiosBaseFile.post('/api/db_delete_profile_interest', {interest: item, username: localStorage.getItem('username')})
                         .then(() => {
-                            window.location.reload(true);  
+                            this.forceUpdate();
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
                     case 'hate':
                         AxiosBaseFile.post('/api/db_delete_profile_hate', {hate: item, username: localStorage.getItem('username')})
                         .then(() => {
-                            window.location.reload(true);  
+                            this.forceUpdate();
                         })
                         .catch(err => alert('Some error occured, try again!'))
                         break;
@@ -198,25 +198,22 @@ class ColourText extends Component {
         const { textInfo } = this.props;
         const { field } = this.props;
         const { editMode } = this.props;
-        var res = {};
-        var array = [];
-        for (var i = 0; i < textInfo.length; i++){
-            res['text'] = textInfo[i];
-            array[i] = JSON.parse(JSON.stringify(res));
-        }
-       
-        // console.log(array)
+
         return(
 
             <>
                 <div className="listed_educations_list" >
-                    {array.map(
-                        (texts, index) => 
+                    {textInfo.map(
+                        (text, index) => 
                         <div key={index} className='colourTextListItems'>
-                            <span>{texts.text}</span>
+                            <span>{text}</span>
                             {editMode ? 
                                 <BsXCircleFill 
-                                    onClick={(event) => this.removeItem(event, texts.text, field)} 
+                                    onClick={(event) => {
+                                        this.removeItem(event, text, field);
+                                        const indexOfItem = textInfo.indexOf(text);
+                                        textInfo.splice(indexOfItem, 1);
+                                    }} 
                                     style={{color: 'var(--purpleGreyish)', marginLeft: '4px', height: '0.8em'}}
                                 /> 
                                 :  

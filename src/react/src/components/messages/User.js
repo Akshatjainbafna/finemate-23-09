@@ -116,7 +116,7 @@ class User extends Component {
                                                 <ListItem>
                                                     {user.profilePicture ?
                                                         <ListItemAvatar>
-                                                            <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + user.profilePicture} alt="Profile" className={style.profilePictureChatHeader} />
+                                                            <img src={require('../../assets/profilePictures/' + user.profilePicture)} alt="Profile" className={style.profilePictureChatHeader} />
                                                         </ListItemAvatar>
                                                         :
                                                         <ListItemAvatar>
@@ -174,7 +174,7 @@ class User extends Component {
                                         <Link to={"/profile/".concat(user.username2 == localStorage.getItem('username') ? user.username1 : user.username2)} title='Visit Profile' style={{ textDecoration: 'none' }}>
                                             <div className={style.userChatThumbnailImage}>
                                                 {user.profilePicture ?
-                                                    <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + user.profilePicture} className={style.profilePictureChatHeader} />
+                                                    <img src={require('../../assets/profilePictures/' + user.profilePicture)} className={style.profilePictureChatHeader} />
                                                     :
                                                     <Avatar className={style.profilePictureChatHeader}> {user.username2 == localStorage.getItem('username') ? user.username1[0] : user.username2[0]} </Avatar>
                                                 }

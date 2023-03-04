@@ -20,7 +20,7 @@ export default function QuillEditor(){
         syntax: true,
         toolbar: [
         [{ font: [] }],
-        [{ header: [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'size': ['small', false, 'large'] }],
         ["bold", "italic", "underline"],
         [{ color: [] }, { background: [] }],
         ["blockquote", "code-block"],

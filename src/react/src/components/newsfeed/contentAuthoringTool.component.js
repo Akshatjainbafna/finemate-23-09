@@ -9,6 +9,11 @@ import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.bubble.css';
 import './../quill.css';
 
+const Quill = ReactQuill.Quill
+var Font = Quill.import('formats/font');
+Font.whitelist = ['san-serif', 'poppins', 'raleway', 'ubuntu', 'serif', 'monospace', 'cookie'];
+Quill.register(Font, true);
+
 class Fact extends Component{
     constructor(props){
         super(props);
@@ -16,10 +21,10 @@ class Fact extends Component{
         this.modules =  {
             syntax: true,
             toolbar: [
-            [{ font: [] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+            [{ font: Font.whitelist }],
+            [{ 'size': ['small', false, 'large'] }],
             ["bold", "italic", "underline"],
-            [{ color: [] }, { background: [] }],
+            [{ color: [ '#000', '#555', '#e71313', '#ff9900', '#00b000', '#0066cc', '#9933ff', '#fff', '#aaa', '#f66774', '#ffff00', '#93f400', '#4de6e6', '#fc7899'] }, { background: ['#000', '#555', '#e71313', '#ff9900', '#00b000', '#009ef2', '#9933ff', '#fff', '#aaa', '#f66774', '#ffff00', '#93f400', '#4de6e6', '#fc7899'] }],
             ["blockquote", "code-block"],
             [{ list:  "ordered" }, { list:  "bullet" }],
             [{ align: [] }],
@@ -81,20 +86,6 @@ class ContentAuthoringTool extends Component{
         this.handleChange=this.handleChange.bind(this);
         this.handleData = this.handleData.bind(this);
         this.quillRef = null;
-        this.modules =  {
-            syntax: true,
-            toolbar: [
-            [{ font: [] }],
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-            ["bold", "italic", "underline"],
-            [{ color: [] }, { background: [] }],
-            ["blockquote", "code-block"],
-            [{ list:  "ordered" }, { list:  "bullet" }],
-            [{ align: [] }],
-            ["formula"],
-            ["clean"]
-            ]
-        }
     }
 
     handleChange(event) {

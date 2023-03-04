@@ -1,15 +1,16 @@
 /*Sidebar Styles*/
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
-.logoContainer{
+
+.logoContainer {
     display: flex;
     justify-content: center;
     margin: 5px auto;
 }
+
 .sideBar {
     display: flex;
     flex-direction: column;
     position: fixed;
-    margin-left: 0px;
     top: 0px;
     left: 0px;
     width: 22vw;
@@ -17,8 +18,8 @@
     background-color: var(--pureWhite);
     color: var(--darkThemeFontPrimary);
     font-family: "Open Sans";
-    font-weight: bold;
-    box-shadow: 2px 0px 4px 0px rgba(0,0,0,.2) !important;
+    font-weight: 600;
+    box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, .2) !important;
     border-radius: 0px !important;
 }
 
@@ -34,46 +35,59 @@
 .sideBar ul a li.active {
     background: var(--purpleMain);
     margin-left: 0;
-    padding-left: 40px;
+    padding-left: 66px;
     text-decoration: none;
 }
-.sideBar ul a li.active span{
+
+.sideBar ul a li.active span {
     color: var(--darkThemeFontPrimary);
     text-decoration: none;
     text-align: left;
     margin-left: 20px;
     margin-right: 12px;
 }
-.sideBar ul a li{
+
+.sideBar ul a li {
     color: var(--darkThemeFontPrimary);
     text-decoration: none;
     list-style-type: none;
     list-style-position: outside;
     text-align: left;
-    margin-left: 30px;
+    margin-left: 66px;
     margin-right: 12px;
     margin-top: 10px;
     border-radius: 0px 15px 15px 0px;
     padding: 10px 10px 10px 0px;
+    display: flex;
+    align-items: center;
 }
 
-.sideBar ul a li span{
+.sideBar ul a li img {
+    opacity: 0.7;
+}
+
+.sideBar ul a li.active img,
+.sideBar ul a:hover img {
+    opacity: 1;
+    filter: invert(100%);
+}
+
+.sideBar ul a li span {
     text-decoration: none;
     text-align: left;
     color: var(--lightThemeFontSecondary);
     margin-left: 20px;
-    margin-right: 12px;
     padding-left: 0px;
     font-size: 16px;
     position: relative;
-} 
+}
 
-.sideBar ul a:hover:not(.active) li{
-    background:  var(--purpleMain);
-    box-shadow: 0 20px 20px -2px rgba(0,0,0,.2);
+.sideBar ul a:hover:not(.active) li {
+    background: var(--purpleMain);
+    box-shadow: 0 20px 20px -2px rgba(0, 0, 0, .2);
     color: var(--darkThemeFontPrimary) !important;
     margin-left: 0;
-    padding-left: 40px;
+    padding-left: 66px;
     text-decoration: none;
 }
 
@@ -85,27 +99,30 @@
     color: var(--darkThemeFontPrimary) !important;
     text-decoration: none;
 }
-.addPostIcon{
+
+.addPostIcon {
     width: 10vw;
     border-radius: 100px !important;
-    border: 2px solid var(--purpleMain) !important;
+    border: 3px solid var(--purpleMain) !important;
     color: var(--purpleMain) !important;
-    font-weight: 600 !important;
+    font-weight: 800 !important;
     font-size: 16px !important;
     padding: 4px !important;
     margin: 20px auto !important;
-  }
+}
 
 
 
 /* for tablet screens */
 @media screen and (max-width: 991px) {
-    .sideBar{
+    .sideBar {
         width: 80px;
     }
-    .sideBar ul a li span{
+
+    .sideBar ul a li span {
         display: none;
     }
+
     .sideBar ul a li.active {
         background: var(--pureWhite);
         margin: auto;
@@ -121,8 +138,7 @@
         text-decoration: none;
     }
 
-    
-    .sideBar ul a:hover:not(.active) li{
+    .sideBar ul a:hover:not(.active) li {
         border-left: 5px solid var(--purpleMain);
         background-color: var(--pureWhite);
         box-shadow: none;
@@ -131,11 +147,12 @@
         padding: 10px 10px 10px 20px;
     }
 
-    .logoContainer{
+    .logoContainer {
         margin: 2vh auto 0;
         width: 70%;
     }
-    .sideBar ul a li{
+
+    .sideBar ul a li {
         width: fit-content;
         color: var(--darkThemeFontPrimary);
         text-decoration: none;
@@ -145,14 +162,9 @@
         padding: 10px;
         margin: 2vh auto;
     }
-    
 }
 
 
 
 /* for mobile screens */
-@media screen and (max-width: 600px) {
-
-    
-    
-}
+@media screen and (max-width: 600px) {}

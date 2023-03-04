@@ -138,7 +138,7 @@ function Communities() {
             <Link onClick={() => { sessionStorage.setItem('communityName', community.title) }} key={index} to={'/discussionList/'.concat(community.title)} title={community.title}>
               <li className='communityItem'>
                 <div className='communityContainer'>
-                  <div className='communityIcon'> <img src={community.imgSrc} alt="club-icon" /> </div>
+                  <div className='communityIcon'> <img src={community.imgSrc} alt="club-icon" loading='lazy' /> </div>
                   <p className='communityName'>{community.title}</p>
                 </div>
               </li>
