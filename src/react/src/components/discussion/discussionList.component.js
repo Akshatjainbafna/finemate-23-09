@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import { Avatar, Button, Divider } from '@material-ui/core';
 import AxiosBaseFile from '../AxiosBaseFile';
 import { Add, TrendingFlat } from '@material-ui/icons';
+import { AvatarGenerator } from "random-avatar-generator";
+
+const generator = new AvatarGenerator();
 
 class DiscussionList extends Component {
     constructor(props) {
@@ -24,22 +27,17 @@ class DiscussionList extends Component {
             AxiosBaseFile.post('/api/db_get_all_threads_of_community', { 'username': localStorage.getItem('username'), 'community': this.state.community, 'option': 'New' })
                 .then(response => {
                     for (var i = 0; i < response.data.length; i++) {
-                        if (!response.data[i].profilePicture) {
-                            console.log('Here');
-                            resThread['profilePicture'] = '';
-                        } else {
-                            resThread['profilePicture'] = response.data[i].profilePicture;
-                        }
                         resThread['name'] = response.data[i].name;
                         resThread['community'] = response.data[i].community;
                         resThread['id'] = response.data[i]._id.$oid;
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
+                        resThread['profilePicture'] = response.data[i].profilePicture;
 
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
-                    this.setState({ threads: thread }, () => console.log(this.state.threads))
+                    this.setState({ threads: thread })
                 })
                 .catch((error) => {
                     this.setState({ threads: [] })
@@ -49,22 +47,17 @@ class DiscussionList extends Component {
             AxiosBaseFile.post('/api/db_get_all_threads', { 'username': localStorage.getItem('username'), 'option': 'New' })
                 .then(response => {
                     for (var i = 0; i < response.data.length; i++) {
-                        if (!response.data[i].profilePicture) {
-                            console.log('Here');
-                            resThread['profilePicture'] = '';
-                        } else {
-                            resThread['profilePicture'] = response.data[i].profilePicture;
-                        }
                         resThread['name'] = response.data[i].name;
                         resThread['community'] = response.data[i].community;
                         resThread['id'] = response.data[i]._id.$oid;
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
+                        resThread['profilePicture'] = response.data[i].profilePicture;
 
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
-                    this.setState({ threads: thread }, () => console.log(this.state.threads))
+                    this.setState({ threads: thread })
                 })
                 .catch((error) => {
                     this.setState({ threads: [] })
@@ -86,18 +79,13 @@ class DiscussionList extends Component {
             AxiosBaseFile.post('/api/db_get_all_threads_of_community', { 'username': localStorage.getItem('username'), 'community': this.state.community, 'option': option })
                 .then(response => {
                     for (var i = 0; i < response.data.length; i++) {
-                        if (!response.data[i].profilePicture) {
-                            console.log('Here');
-                            resThread['profilePicture'] = '';
-                        } else {
-                            resThread['profilePicture'] = response.data[i].profilePicture;
-                        }
                         resThread['name'] = response.data[i].name;
                         resThread['community'] = response.data[i].community;
                         resThread['id'] = response.data[i]._id.$oid;
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
+                        resThread['profilePicture'] = response.data[i].profilePicture;
 
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
@@ -111,18 +99,13 @@ class DiscussionList extends Component {
             AxiosBaseFile.post('/api/db_get_all_threads', { 'username': localStorage.getItem('username'), 'option': option })
                 .then(response => {
                     for (var i = 0; i < response.data.length; i++) {
-                        if (!response.data[i].profilePicture) {
-                            console.log('Here');
-                            resThread['profilePicture'] = '';
-                        } else {
-                            resThread['profilePicture'] = response.data[i].profilePicture;
-                        }
                         resThread['name'] = response.data[i].name;
                         resThread['community'] = response.data[i].community;
                         resThread['id'] = response.data[i]._id.$oid;
                         resThread['title'] = response.data[i].title;
                         resThread['total_number_of_replies'] = response.data[i].total_number_of_replies;
                         resThread['date'] = response.data[i].timestamps[0];
+                        resThread['profilePicture'] = response.data[i].profilePicture;
 
                         thread[i] = JSON.parse(JSON.stringify(resThread));
                     }
@@ -145,7 +128,7 @@ class DiscussionList extends Component {
 
                 {this.props.community ? <div className='mt-4'></div> : null}
 
-                <div className="d-flex discussionsSortingContainer justify-content-center">
+                <div className="d-flex justify-content-center">
                     <input name="tabDiscussionSorting" type="radio" id="tabDiscussionSorting-1" className="inputDiscussionSortingOption" onChange={() => this.changeDiscussionSortingOption("New")} />
                     <label for="tabDiscussionSorting-1" className="labelSortingOption">New</label>
 
@@ -168,8 +151,14 @@ class DiscussionList extends Component {
                                 <div id={thread.id} key={index} className="divStyle">
                                     <Link to={'/discussionDetail/'.concat(thread.id)} style={{ color: '#403e42', textDecoration: "none" }}>
 
-                                        <div className='d-flex justify-content-between p-2' style={{ textOverflow: "ellipsis" }}>
-                                            <div>{thread.profilePicture ? <img src={require('../../assets/profilePictures/' + thread.profilePicture)} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{thread.name.charAt(0)}</Avatar>} </div>
+                                        <div className='d-flex justify-content-between align-items-center px-2 pt-2' style={{ textOverflow: "ellipsis" }}>
+                                            <div>
+                                                {thread.profilePicture != 'null' ?
+                                                    <img src={require('../../assets/profilePictures/' + thread.profilePicture)} className='smallSizeProfilePicture' />
+                                                    :
+                                                    <img src={generator.generateRandomAvatar(thread.name)} className='smallSizeProfilePicture' />
+                                                }
+                                            </div>
                                             <div className='userFullNameDiscussion ml-2'>{thread.name}</div>
                                             {/*
                                             <div>
@@ -185,7 +174,7 @@ class DiscussionList extends Component {
                                             */}
                                         </div>
 
-                                        <div className='p-2 font-weight-bold'> {thread.title} </div>
+                                        <div style={{ fontWeight: '600' }} className='px-2 pt-2'> {thread.title} </div>
 
 
                                         <div className='communityNameDiscussionBlock'>
@@ -198,7 +187,7 @@ class DiscussionList extends Component {
                                         <Divider />
 
                                         {thread.total_number_of_replies > 0 ?
-                                            <div style={{ fontSize: 'small' }} className='p-2 d-flex justify-content-between align-items-center'>
+                                            <div style={{ fontSize: 'small' }} className='px-2 py-1 d-flex justify-content-between align-items-center'>
                                                 <div>
 
                                                 </div>
@@ -207,7 +196,7 @@ class DiscussionList extends Component {
                                                 </div>
                                             </div>
                                             :
-                                            <div style={{ fontSize: 'small', color: 'var(--purpleDark)' }} className='p-2 d-flex justify-content-end align-items-center'>
+                                            <div style={{ fontSize: 'small', color: 'var(--purpleDark)' }} className='px-2 py-1 d-flex justify-content-end align-items-center'>
                                                 Start Discussion <TrendingFlat />
                                             </div>
                                         }

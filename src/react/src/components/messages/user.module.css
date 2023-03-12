@@ -2,7 +2,6 @@
     width: 40px;
     object-fit: cover;
     border-radius: 100%;
-    border: 1px solid #bdbdbd;
 }
 .recentUserList{
     display: flex;

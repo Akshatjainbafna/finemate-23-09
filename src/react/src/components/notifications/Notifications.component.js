@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 import style from './notifications.module.css';
+import { AvatarGenerator } from "random-avatar-generator";
+
+const generator = new AvatarGenerator();
 
 class NotificationComponent extends Component {
     constructor(props) {
@@ -77,6 +80,7 @@ class NotificationComponent extends Component {
         if (type === 'Connections') {
             AxiosBaseFile.post('/api/db_get_pending', { 'username': localStorage.getItem('username') })
                 .then(res => {
+                    console.log(res.data)
                     this.setState({ allThePending: res.data })
                 })
                 .catch(err => console.log(err))
@@ -110,10 +114,10 @@ class NotificationComponent extends Component {
                                                 <div className="d-flex">
                                                     <Link style={{ textDecoration: 'none', color: 'rgb(140, 140, 140)', display: 'flex', alignItems: 'center' }} to={"/profile/".concat(notification.sender)}>
                                                         <span>
-                                                            {notification.profilePicture ?
+                                                            {notification.profilePicture != 'null' ?
                                                                 <img src={require('../../assets/profilePictures/' + notification.profilePicture)} className={style.profilePictureThumbnail} />
                                                                 :
-                                                                <Avatar> {notification.sender[0]} </Avatar>
+                                                                <img src={generator.generateRandomAvatar(notification.name)} className={style.profilePictureThumbnail} />
                                                             }
                                                         </span>
                                                         <span style={{ margin: 'auto 0.5em', fontWeight: '600' }}>
@@ -144,10 +148,10 @@ class NotificationComponent extends Component {
 
                                                 <div className="d-flex align-items-center">
                                                     <span>
-                                                        {notification.profilePicture ?
+                                                        {notification.profilePicture != 'null' ?
                                                             <img src={require('../../assets/profilePictures/' + notification.profilePicture)} className={style.profilePictureThumbnail} />
                                                             :
-                                                            <Avatar> {notification.sender[0]} </Avatar>
+                                                            <img src={generator.generateRandomAvatar(notification.name)} className={style.profilePictureThumbnail} />
                                                         }
                                                     </span>
                                                     <span style={{ margin: 'auto 0.5em', fontWeight: '600' }}>
@@ -182,10 +186,10 @@ class NotificationComponent extends Component {
                                         <div key={index} style={{ borderBottom: '1px solid rgb(222, 222, 222)' }}>
                                             <ListItem>
                                                 <Link style={{ textDecoration: 'none', color: 'rgb(140, 140, 140)' }} className="d-flex" to={"/profile/".concat(user.username)}>
-                                                    {user.profilePicture ?
+                                                    {user.profilePicture != 'null' ?
                                                         <img src={require('../../assets/profilePictures/' + user.profilePicture)} className={style.profilePictureThumbnail} />
                                                         :
-                                                        <Avatar> {user.username[0]} </Avatar>
+                                                        <img src={generator.generateRandomAvatar(user.name)} className={style.profilePictureThumbnail} />
                                                     }
                                                     <ListItemText style={{ marginLeft: '2vw' }}>
                                                         {user.username}

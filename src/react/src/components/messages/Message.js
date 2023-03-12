@@ -5,6 +5,9 @@ import style from './Message.module.css'
 import { Link } from 'react-router-dom';
 import { Avatar, ListItemAvatar } from '@material-ui/core';
 import AxiosBaseFile from '../AxiosBaseFile.js';
+import { AvatarGenerator } from "random-avatar-generator";
+
+const generator = new AvatarGenerator();
 
 class Message extends Component {
     constructor() {
@@ -56,7 +59,7 @@ class Message extends Component {
                             </ListItemAvatar>
                             :
                             <ListItemAvatar>
-                                <Avatar className={style.profilePictureChatHeader}> {localStorage.getItem('targetUser')[0]} </Avatar>
+                                <img src={generator.generateRandomAvatar(localStorage.getItem('targetName'))} className={style.profilePictureChatHeader} /> 
                             </ListItemAvatar>
                         }
                     </Link>

@@ -8,7 +8,9 @@ import { Button, Divider, Input, Menu, MenuItem, TextField } from "@material-ui/
 import { Link, Redirect } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 import ReactQuill from "react-quill";
+import { AvatarGenerator } from "random-avatar-generator";
 
+const generator = new AvatarGenerator();
 
 function Fact(props) {
   let quillRef = useRef();
@@ -19,7 +21,6 @@ function Fact(props) {
 
   useEffect(() => {
     let data = JSON.parse(props.fact);
-    console.log(data)
     quillRef.current.getEditor().setContents(data)
   }, [props.fact]);
 
@@ -218,10 +219,10 @@ class Profile extends Component {
 
                 <div className="profile_pic_slot">
                   {this.state.displaying ?
-                    profilePicture ?
+                    profilePicture != 'null' ?
                       <div><img alt='profile' src={require('../../assets/profilePictures/' + profilePicture)} className="elementPic" /> </div>
                       :
-                      <div><img src={profilePic} alt="not found" className="elementPic" /> </div>
+                      <div><img alt='profile' src={generator.generateRandomAvatar(name)} className="elementPic" /> </div>
                     :
                     <div>
                       <Button variant="contained" component="label" className='changeProfilePictureBtn' style={{ borderRadius: '100%', padding: '0' }} >
@@ -234,7 +235,7 @@ class Profile extends Component {
                       </Button>
                     </div>
                   }
-                  <div className="usernameBlocky">{username}</div>
+                  <div className="usernameBlocky">{name}</div>
                 </div>
 
               </div>

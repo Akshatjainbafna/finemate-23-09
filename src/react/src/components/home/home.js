@@ -206,7 +206,7 @@ const Wrapper = styled.div`
   margin: 10vh 0;
   background-image: url(${backgroundHome});
   background-size: cover;
-  padding: 20vh 8vw 15vh;
+  padding: 12vh 8vw;
   background-repeat: no-repeat;
 
   	.introCardsContainer{
@@ -214,7 +214,7 @@ const Wrapper = styled.div`
 		margin-top: 20vh;
   	}
 	.introCards{
-		min-height: 70vh;
+		min-height: 66vh;
 	}
 	.introCards div{
 		display: flex;

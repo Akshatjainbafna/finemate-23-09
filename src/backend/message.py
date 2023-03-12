@@ -114,13 +114,14 @@ class MessageObj():
                 latestMessage['time'] = str(timeDifference)
 
                 if i.username2 == self.content['username']:
-                    profilePicture = Profile.objects(username = i.username1).only('profilePicture').first()
+                    profilePicture = Profile.objects(username = i.username1).only('profilePicture', 'name').first()
                     uniqueUsers.append(i.username1)
                 else:
-                    profilePicture = Profile.objects(username = i.username2).only('profilePicture').first()
+                    profilePicture = Profile.objects(username = i.username2).only('profilePicture', 'name').first()
                     uniqueUsers.append(i.username2)
 
                 latestMessage['profilePicture'] = profilePicture.profilePicture
+                latestMessage['name'] = profilePicture.name
 
                 messages.append(latestMessage)
 

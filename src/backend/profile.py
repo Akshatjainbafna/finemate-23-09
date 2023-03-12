@@ -90,7 +90,8 @@ class ProfileObj():
 					last_name = self.content['lastname'],
 					name= fullName,
 					time_join=datetime.now().strftime("%d %b %Y, %H:%M:%S"),
-					description='').save()
+					description='',
+					profilePicture = 'null').save()
 		return make_response("", 200)
 	
 	def db_get_profile(self):
@@ -523,7 +524,7 @@ class ProfileObj():
 		allThePendings = []
 		if allTheConnections:
 			for i in allTheConnections.pending:
-				pendingUser = self.Profile.objects(username=i).only('username', 'profilePicture').first()
+				pendingUser = self.Profile.objects(username=i).only('username', 'profilePicture', 'name').first()
 				if pendingUser:
 					allThePendings.append(pendingUser)
 			return make_response(jsonify(allThePendings), 200)

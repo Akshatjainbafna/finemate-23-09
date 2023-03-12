@@ -71,6 +71,7 @@ class Notification(me.Document):
                 notificationToSend['title'] = thread.title
                 notificationToSend['time_of_creation'] = str(datetime.now() - datetime.strptime(i.time_of_creation, '%d %b %Y, %H:%M:%S'))
                 notificationToSend['profilePicture'] = profile.profilePicture
+                notificationToSend['name'] = profile.name
                 top20LatestNotifications.append(notificationToSend)
 
             elif i.object_type == 'connection' or i.object_type == 'friend':
@@ -78,6 +79,7 @@ class Notification(me.Document):
                 notificationToSend = json.loads(i.to_json())
                 notificationToSend['time_of_creation'] = str(datetime.now() - datetime.strptime(i.time_of_creation, '%d %b %Y, %H:%M:%S'))
                 notificationToSend['profilePicture'] = profile.profilePicture
+                notificationToSend['name'] = profile.name
                 top20LatestNotifications.append(notificationToSend)
 
             else:

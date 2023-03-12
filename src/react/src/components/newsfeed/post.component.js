@@ -17,7 +17,9 @@ import postNotFound from '../../../../react/src/assets/postNotFoundScreen.png';
 import { Link, Redirect } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 import ReactQuill from "react-quill";
+import { AvatarGenerator } from "random-avatar-generator";
 
+const generator = new AvatarGenerator();
 
 function Fact(props) {
     let quillRef = useRef();
@@ -439,13 +441,13 @@ class IndividualPost extends Component {
                                     <div>
                                         <Link style={{ textDecoration: "none", color: "grey" }} to={"/profile/".concat(responseData.username)}>
                                             <ListItem>
-                                                {responseData.profilePicture ?
+                                                {responseData.profilePicture != 'null' ?
                                                     <ListItemAvatar>
                                                         <img src={require('../../assets/profilePictures/' + responseData.profilePicture)} alt="Profile" className={style.profilePictureChatHeader} />
                                                     </ListItemAvatar>
                                                     :
                                                     <ListItemAvatar>
-                                                        <Avatar> {responseData.username[0]} </Avatar>
+                                                        <img src={generator.generateRandomAvatar(responseData.name)} className={style.profilePictureChatHeader} />
                                                     </ListItemAvatar>
                                                 }
 

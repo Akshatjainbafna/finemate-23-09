@@ -428,8 +428,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #join user profileImage with the post 
-                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
                         objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                        objectOfTheCombinedString['name'] = profile.name
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -467,8 +468,10 @@ class UserInteractions(me.Document):
                     objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                     #join user profileImage with the post 
-                    profile = Profile.objects(username = post.username).only("profilePicture").first()
+                    profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
                     objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                    objectOfTheCombinedString['name'] = profile.name
+
 
                     #appending the combined object build from two different strings to the postData List to send to client
                     postData.append(objectOfTheCombinedString)
@@ -503,8 +506,10 @@ class UserInteractions(me.Document):
                     objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                     #join user profileImage with the post 
-                    profile = Profile.objects(username = post.username).only("profilePicture").first()
+                    profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
                     objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                    objectOfTheCombinedString['name'] = profile.name
+
 
                     #appending the combined object build from two different strings to the postData List to send to client
                     postData.append(objectOfTheCombinedString)
@@ -544,8 +549,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #join user profileImage with the post 
-                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
                         objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                        objectOfTheCombinedString['name'] = profile.name
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -621,8 +627,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #join user profileImage with the post 
-                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
                         objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                        objectOfTheCombinedString['name'] = profile.name
 
                         #appending the combined object build from two different strings to the postData List to send to client
                         postData.append(objectOfTheCombinedString)
@@ -667,8 +674,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #join user profileImage with the post 
-                        profile = Profile.objects(username = addThePost.username).only("profilePicture").first()
+                        profile = Profile.objects(username = addThePost.username).only("profilePicture", 'name').first()
                         objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                        objectOfTheCombinedString['name'] = profile.name
 
 
                         #appending the combined object build from two different strings to the postData List to send to client
@@ -707,8 +715,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #join user profileImage with the post 
-                        profile = Profile.objects(username = addThePost.username).only("profilePicture").first()
+                        profile = Profile.objects(username = addThePost.username).only("profilePicture", 'name').first()
                         objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                        objectOfTheCombinedString['name'] = profile.name
 
 
                         #appending the combined object build from two different strings to the postData List to send to client
@@ -749,8 +758,9 @@ class UserInteractions(me.Document):
                         objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
 
                         #join user profileImage with the post 
-                        profile = Profile.objects(username = post.username).only("profilePicture").first()
+                        profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
                         objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+                        objectOfTheCombinedString['name'] = profile.name
 
 
                         #appending the combined object build from two different strings to the postData List to send to client
@@ -794,7 +804,7 @@ class UserInteractions(me.Document):
             return make_response("Missing required field: " + x, 400)
 
         post = PostObj.Posts.objects(id=incomingData['id']).first()
-        profile = Profile.objects(username = post.username).only("profilePicture").first()
+        profile = Profile.objects(username = post.username).only("profilePicture", 'name').first()
 
         if post:
 
@@ -828,6 +838,8 @@ class UserInteractions(me.Document):
                 objectOfTheCombinedString['listOfAllThePostIds'] = listOfAllThePostIds
             
             objectOfTheCombinedString['profilePicture'] = profile.profilePicture
+            objectOfTheCombinedString['name'] = profile.name
+            
             return make_response(jsonify(objectOfTheCombinedString), 200)
             
         else:

@@ -9,7 +9,9 @@ import { IconContext } from "react-icons";
 import ColourTextUser from "./colourTextUserProfile.component.js";
 import AxiosBaseFile from "../AxiosBaseFile";
 import ReactQuill from "react-quill";
+import { AvatarGenerator } from "random-avatar-generator";
 
+const generator = new AvatarGenerator();
 
 function Fact(props) {
   let quillRef = useRef();
@@ -119,12 +121,12 @@ class UserProfile extends Component {
 
               <div className="leftBlockofInfoCard">
                 <div className="profile_pic_slot">
-                  <div>{profilePicture ?
+                  <div>{profilePicture != 'null' ?
                     <div><img alt='profile' src={require('../../assets/profilePictures/' + profilePicture)} className="elementPic" /> </div>
                     :
-                    <div><img alt='profile' src={profilePic} className="elementPic" /> </div>
+                    <div><img alt='profile' src={generator.generateRandomAvatar(name)} className="elementPic" /> </div>
                   }</div>
-                  <div className="usernameBlocky">{username}</div>
+                  <div className="usernameBlocky">{name}</div>
                 </div>
               </div>
 

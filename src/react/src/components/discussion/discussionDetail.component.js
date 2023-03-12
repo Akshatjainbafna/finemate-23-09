@@ -1,12 +1,16 @@
 import React, { Component } from 'react'
 import './discussionDetail.css'
 import { Avatar, Button, Divider, IconButton, Menu, MenuItem, Snackbar, TextField } from '@material-ui/core';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AxiosBaseFile from '../AxiosBaseFile';
 import { Delete, InfoOutlined, MoreHoriz, Send } from '@material-ui/icons';
 import { MdDelete } from 'react-icons/md';
 import { HiClipboardCopy, HiSave } from 'react-icons/hi';
 import { RiAlertFill } from 'react-icons/ri';
+import RedirectToLastVisitedPage from '../redirectToLastVisitedPage';
+import { AvatarGenerator } from "random-avatar-generator";
+
+const generator = new AvatarGenerator();
 
 class DiscussionDetail extends Component {
     constructor(props) {
@@ -22,9 +26,10 @@ class DiscussionDetail extends Component {
             snackbarMessage: '',
             snackbarShow: false,
             name: '',
-            profilePicture: '',
+            profilePicture: 'null',
             descriptionVisible: false,
-            messageOptions: null
+            messageOptions: null,
+            scrollMessage: 'Tap to view description!'
         }
         this.discussionThreadRef = React.createRef();
         this.onChangeHandler = this.onChangeHandler.bind(this);
@@ -89,9 +94,11 @@ class DiscussionDetail extends Component {
             if (this.state.descriptionVisible) {
                 document.getElementById('descriptionOfDiscussion').style.whiteSpace = 'normal';
                 document.getElementById('descriptionOfDiscussion').style.height = 'max-content';
+                this.setState({ scrollMessage: 'Tap to hide description!' });
             } else {
                 document.getElementById('descriptionOfDiscussion').style.whiteSpace = 'nowrap';
                 document.getElementById('descriptionOfDiscussion').style.height = '1.5em';
+                this.setState({ scrollMessage: 'Tap to view description!' });
             }
         })
     }
@@ -136,21 +143,19 @@ class DiscussionDetail extends Component {
     }
     render() {
         if (this.state.threadDeleted) {
-            const LastPageVisited = '/discussionList/' + this.state.community;
-            return <Redirect to={LastPageVisited} />;
+            return <RedirectToLastVisitedPage />;
         }
         return (
             <div className='discussion-detail-container'>
-                <div className='discussion-header-content p-2'>
-                    <h5 style={{ margin: "12px", padding: "8px 10px", color: 'var(--darkThemeFontPrimary)', backgroundColor: 'var(--lightThemeFontSecondary)', borderRadius: '10px' }}>
+                <div className='discussion-header-content px-1 pt-1'>
+                    <p style={{ margin: "10px", padding: "6px 10px", color: 'var(--darkThemeFontPrimary)', backgroundColor: 'var(--lightThemeFontSecondary)', borderRadius: '10px', fontSize: '1.15em', fontWeight: '500' }}>
                         {this.state.title}
-                    </h5>
+                    </p>
 
-                    <div style={{ margin: "10px 16px" }}>
+                    <div style={{ margin: "2px 12px 0" }}>
                         {this.state.replies[0].bodies != 'NO DESCRIPTION' ?
-                            <div>
-                                <div id='descriptionOfDiscussion' className='descriptionOfDiscussion' onClick={this.viewDescription}>
-                                    <InfoOutlined style={{ color: 'grey', fontSize: '0.8em', marginRight: '2px' }} />
+                            <div onClick={this.viewDescription} title={this.state.scrollMessage}>
+                                <div id='descriptionOfDiscussion' className='descriptionOfDiscussion'>
                                     <small style={{ color: 'grey' }}>Description: </small> {this.state.replies[0].bodies.split('\n').map(function (item) {
                                         return (
                                             <span>
@@ -161,7 +166,7 @@ class DiscussionDetail extends Component {
                                     })}
                                 </div>
                                 {this.state.replies[0].bodies.includes('\n') ?
-                                    <p className='dropDownRectangle' onClick={this.viewDescription}></p>
+                                    <p className='dropDownRectangle'></p>
                                     :
                                     null
                                 }
@@ -172,17 +177,22 @@ class DiscussionDetail extends Component {
 
                         <div className='d-flex align-items-center justify-content-between'>
                             <div className='d-flex align-items-center flex-grow-1'>
-                                <div>{this.state.profilePicture ? <img src={require('../../assets/profilePictures/' + this.state.profilePicture)} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{this.state.name.charAt(0)}</Avatar>} </div>
+                                <div>{this.state.profilePicture != 'null' ?
+                                    <img src={require('../../assets/profilePictures/' + this.state.profilePicture)} className='smallSizeProfilePicture' />
+                                    :
+                                    <img src={generator.generateRandomAvatar(this.state.name)} className='smallSizeProfilePicture' />
+                                }
+                                </div>
                                 <div style={{ marginLeft: "10px", color: "#aaa", fontSize: "small" }}>
                                     <Link style={{ color: "#aaa" }} to={"/profile/".concat(this.state.replies[0].users)}>
-                                        {this.state.replies[0].users}
+                                        {this.state.name}
                                     </Link>
                                 </div>
                                 <div style={{ marginLeft: "10px", color: "#aaa", fontSize: "xx-small" }}>
                                     {this.state.replies[0].timestamps}
                                 </div>
                             </div>
-                            <IconButton style={{ marginRight: "1%" }} onClick={() => this.setState({ threadMenu: true })}>
+                            <IconButton style={{ padding: '8px' }} onClick={() => this.setState({ threadMenu: true })}>
                                 <MoreHoriz style={{ color: '#aaa' }} />
                             </IconButton>
                             <Menu
@@ -214,7 +224,7 @@ class DiscussionDetail extends Component {
                                         navigator.clipboard.writeText(this.state.replies[0].bodies);
                                         this.setState({ threadMenu: false, snackbarShow: true, snackbarMessage: 'Message Copied Successfully!' })
                                     }}>
-                                        <HiClipboardCopy size={20} style={{ marginRight: '1em' }} />Copy Message
+                                        <HiClipboardCopy size={20} style={{ marginRight: '1em' }} />Copy Description
                                     </MenuItem>
                                     :
                                     null
@@ -292,10 +302,10 @@ class DiscussionDetail extends Component {
                             }
                         )
                         :
-                        <div className='d-flex align-items-center justify-content-center'><p>Start the discussion</p></div>
+                        <div className='d-flex align-items-center justify-content-center pt-5'><p className='mt-5'>Start the discussion</p></div>
                     }
                     </div>
-                    <div className='d-flex align-items-center p-2 discussionReplyFieldContainer'>
+                    <div className='d-flex align-items-center py-1 sticky-bottom discussionReplyFieldContainer'>
                         <TextField minRows={1} maxRows={3} multiline variant="outlined" placeholder="Add a reply..." fullWidth name='body' value={this.state.body} onChange={this.onChangeHandler} required />
                         <IconButton onClick={this.onSubmitHandler}>
                             <Send />

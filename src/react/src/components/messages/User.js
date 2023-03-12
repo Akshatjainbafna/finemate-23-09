@@ -5,6 +5,9 @@ import style from './user.module.css'
 import { Avatar, IconButton, List, ListItem, ListItemAvatar, ListItemText, OutlinedInput } from '@material-ui/core'
 import AxiosBaseFile from '../AxiosBaseFile'
 import { Search } from '@material-ui/icons'
+import { AvatarGenerator } from "random-avatar-generator";
+
+const generator = new AvatarGenerator();
 
 class User extends Component {
     constructor() {
@@ -54,6 +57,7 @@ class User extends Component {
     }
 
     openChatBox(e, index) {
+        localStorage.setItem('targetName', this.state.recentChatUsers[index].name);
         if (this.state.recentChatUsers[index].username1 == localStorage.getItem('username')) {
             localStorage.setItem('targetUser', this.state.recentChatUsers[index].username2)
         }
@@ -109,40 +113,54 @@ class User extends Component {
                     {
                         this.state.setSearchData.length > 0 ? <div className={style.recentChats}>
                             {this.state.setSearchData.map((user, index) =>
-                                <div key={index} onClick={() => { localStorage.setItem('targetUser', user.username); localStorage.setItem('profilePictureTargetUser', this.state.recentChatUsers[index].profilePicture); }} style={{ cursor: 'pointer' }}>
+                                <div key={index} onClick={() => { localStorage.setItem('targetUser', user.username); localStorage.setItem('targetName', user.name); localStorage.setItem('profilePictureTargetUser', user.profilePicture); this.setState({setSearchData: [], targetUser: ''})}} style={{ cursor: 'pointer' }}>
                                     <List>{(() => {
                                         if (window.innerWidth <= 600) {
                                             return <Link style={{ textDecoration: "none", color: "grey" }} to={"/message"}>
                                                 <ListItem>
-                                                    {user.profilePicture ?
+                                                    {user.profilePicture != 'null' ?
                                                         <ListItemAvatar>
                                                             <img src={require('../../assets/profilePictures/' + user.profilePicture)} alt="Profile" className={style.profilePictureChatHeader} />
                                                         </ListItemAvatar>
                                                         :
                                                         <ListItemAvatar>
-                                                            <Avatar> {user.username[0]} </Avatar>
+                                                            <img src={generator.generateRandomAvatar(user.name)} className={style.profilePictureChatHeader} />
                                                         </ListItemAvatar>
                                                     }
 
                                                     <ListItemText>
-                                                        {user.username}
+                                                        <div>
+                                                            {user.name}
+                                                        </div>
+                                                        <div>
+                                                            <small>
+                                                                {user.username}
+                                                            </small>
+                                                        </div>
                                                     </ListItemText>
                                                 </ListItem>
                                             </Link>
                                         } else {
                                             return <ListItem>
-                                                {user.profilePicture ?
+                                                {user.profilePicture != 'null'?
                                                     <ListItemAvatar>
                                                         <img src={require('../../assets/profilePictures/' + user.profilePicture)} alt="Profile" className={style.profilePictureChatHeader} />
                                                     </ListItemAvatar>
                                                     :
                                                     <ListItemAvatar>
-                                                        <Avatar> {user.username[0]} </Avatar>
+                                                        <img src={generator.generateRandomAvatar(user.name)} className={style.profilePictureChatHeader} />
                                                     </ListItemAvatar>
                                                 }
 
                                                 <ListItemText>
-                                                    {user.username}
+                                                    <div>
+                                                        {user.name}
+                                                    </div>
+                                                    <div>
+                                                        <small>
+                                                            {user.username}
+                                                        </small>
+                                                    </div>
                                                 </ListItemText>
                                             </ListItem>
                                         }
@@ -157,15 +175,28 @@ class User extends Component {
                                     return <div className={style.userChatThumbnail} key={index} onClick={(e) => { this.openChatBox(e, index) }}>
                                         <Link to={"/profile/".concat(user.username2 == localStorage.getItem('username') ? user.username1 : user.username2)} title='Visit Profile' style={{ textDecoration: 'none' }}>
                                             <div className={style.userChatThumbnailImage}>
-                                                {user.profilePicture ?
+                                                {user.profilePicture !='null' ?
                                                     <img src={require('../../assets/profilePictures/' + user.profilePicture)} className={style.profilePictureChatHeader} />
                                                     :
-                                                    <Avatar className={style.profilePictureChatHeader}> {user.username2 == localStorage.getItem('username') ? user.username1[0] : user.username2[0]} </Avatar>
+                                                    <img src={generator.generateRandomAvatar(user.name)} className={style.profilePictureChatHeader} />
                                                 }
                                             </div>
                                         </Link>
                                         <Link to='/message' style={{ textDecoration: 'none', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                                            <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2 == localStorage.getItem('username') ? user.username1 : user.username2}</div> {(!user.user1seen && localStorage.getItem('username') == user.username1) || (!user.user2seen && localStorage.getItem('username') == user.username2) ? <div style={{ color: 'rgba(0, 0, 0, 0.85)' }} className={style.lastMessage}>{user.message}</div> : <div style={{ color: '#919699' }} className={style.lastMessage}>{user.message}</div>}   </div>
+                                            <div className={style.userNameAndRecentMessage}>
+                                                <div className={style.userChatThumbnailUsername}>
+                                                    {user.name}
+                                                </div>
+                                                {(!user.user1seen && localStorage.getItem('username') == user.username1) || (!user.user2seen && localStorage.getItem('username') == user.username2)
+                                                    ?
+                                                    <div style={{ color: 'rgba(0, 0, 0, 0.85)' }} className={style.lastMessage}>
+                                                        {user.message}
+                                                    </div>
+                                                    :
+                                                    <div style={{ color: '#919699' }} className={style.lastMessage}>
+                                                        {user.message}
+                                                    </div>}
+                                            </div>
                                             <div className={style.userChatThumbnailTime}>  {user.time} </div>
                                         </Link>
                                     </div>
@@ -173,14 +204,24 @@ class User extends Component {
                                     return <div className={style.userChatThumbnail} key={index} onClick={(e) => { this.openChatBox(e, index) }}>
                                         <Link to={"/profile/".concat(user.username2 == localStorage.getItem('username') ? user.username1 : user.username2)} title='Visit Profile' style={{ textDecoration: 'none' }}>
                                             <div className={style.userChatThumbnailImage}>
-                                                {user.profilePicture ?
+                                                {user.profilePicture != 'null' ?
                                                     <img src={require('../../assets/profilePictures/' + user.profilePicture)} className={style.profilePictureChatHeader} />
                                                     :
-                                                    <Avatar className={style.profilePictureChatHeader}> {user.username2 == localStorage.getItem('username') ? user.username1[0] : user.username2[0]} </Avatar>
+                                                    <img src={generator.generateRandomAvatar(user.name)} className={style.profilePictureChatHeader} />
                                                 }
                                             </div>
                                         </Link>
-                                        <div className={style.userNameAndRecentMessage}> <div className={style.userChatThumbnailUsername}>   {user.username2 == localStorage.getItem('username') ? user.username1 : user.username2}</div> {(!user.user1seen && localStorage.getItem('username') == user.username1) || (!user.user2seen && localStorage.getItem('username') == user.username2) ? <div style={{ color: 'rgba(0, 0, 0, 0.85)' }} className={style.lastMessage}>{user.message}</div> : <div style={{ color: '#919699' }} className={style.lastMessage}>{user.message}</div>}   </div>
+                                        <div className={style.userNameAndRecentMessage}>
+                                            <div className={style.userChatThumbnailUsername}>
+                                                {user.name}
+                                            </div>
+                                            {(!user.user1seen && localStorage.getItem('username') == user.username1) || (!user.user2seen && localStorage.getItem('username') == user.username2)
+                                                ?
+                                                <div style={{ color: 'rgba(0, 0, 0, 0.85)' }} className={style.lastMessage}>{user.message}</div>
+                                                :
+                                                <div style={{ color: '#919699' }} className={style.lastMessage}>{user.message}</div>
+                                            }
+                                        </div>
                                         <div className={style.userChatThumbnailTime}>  {user.time} </div>
                                     </div>
                                 }

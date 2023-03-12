@@ -2,7 +2,6 @@
     width: 50vw;
     margin: auto;
     box-shadow: 0px 0px 10px 0px rgb(0 0 0 / 20%);
-    border-radius: 10px;
 }
 
 .discussion-header-content {
@@ -24,6 +23,7 @@
     max-width: 80%;
     margin-left: 5vw !important;
     word-break: break-word;
+    font-size: 0.85em;
 }
 
 .discussionReply2 {
@@ -37,6 +37,7 @@
 }
 
 .descriptionOfDiscussion {
+    font-size: 0.85em;
     height: 1.5em;
     white-space: nowrap;
     overflow: hidden;
@@ -53,6 +54,7 @@
     margin: 4px auto 0;
     border-radius: 6px;
     cursor: pointer;
+    font-size: 0.85em;
 }
 
 .createReply {
@@ -79,7 +81,7 @@
 }
 
 .discussion-detail-box {
-    height: 60vh;
+    height: 60.6vh;
     overflow-y: scroll;
 }
 
@@ -104,13 +106,7 @@
     }
 
     .discussion-header-content {
-        position: sticky;
         top: -1px;
-        z-index: 5;
-        background-color: var(--lightBackgroundPrimary);
-    }
-
-    .discussion-detail-box {
-        min-height: 60vh;
+        z-index: 101;
     }
 }

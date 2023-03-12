@@ -26,12 +26,13 @@ class Board():
         total_number_of_replies = me.IntField(default = 0)
         saved_by = me.ListField(me.StringField(required=True), default = [])
 
-        #the thread will be deleted after 1.5 days or 36.5 hours
+        '''the thread will be deleted after 1.5 days or 36.5 hours
         meta = {'indexes':[{
           'fields': ['time_of_creation'],
           'expireAfterSeconds': 131400
         }
         ]}
+        '''
 
 
     def __init__(self, content):

@@ -15,7 +15,6 @@
     object-fit: cover;
     border-radius: 100%;
     margin: 5px 20px;
-    border: 1px solid #bdbdbd;
 }
 .targetUser {
     font-size: large;

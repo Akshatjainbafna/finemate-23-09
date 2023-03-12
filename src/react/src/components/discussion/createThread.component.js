@@ -6,6 +6,7 @@ import { Avatar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divi
 import { useTheme } from '@material-ui/core/styles';
 import AxiosBaseFile from '../AxiosBaseFile';
 import { KeyboardArrowDown, KeyboardArrowDownOutlined, TrendingFlat } from '@material-ui/icons';
+import { AvatarGenerator } from "random-avatar-generator";
 
 import StartupClub from '../../assets/sampleImages/startup-club.png';
 import CodersClub from '../../assets/sampleImages/coders-club.png';
@@ -20,6 +21,8 @@ import SportsClub from '../../assets/sampleImages/sports-club.png';
 import MarketersClub from '../../assets/sampleImages/marketers-club.png';
 import DesignersClub from '../../assets/sampleImages/designers-club.png';
 
+
+const generator = new AvatarGenerator();
 
 class CreateThreadClass extends Component {
     constructor(props) {
@@ -38,7 +41,7 @@ class CreateThreadClass extends Component {
         this.handleCloseCommunityOptionList = this.handleCloseCommunityOptionList.bind(this);
     }
     componentWillMount() {
-        if (! this.props.community){
+        if (!this.props.community) {
             this.setState({ community: 'Finemate Hangout' });
         }
         this.setState({ setOpen: true });
@@ -132,7 +135,11 @@ class CreateThreadClass extends Component {
                     <DialogContent>
                         <div className='d-flex align-items-center mb-3'>
                             <div>
-                                {localStorage.getItem('profilePicture') != 'undefined' ? <img src={require('../../assets/profilePictures/' + localStorage.getItem('profilePicture'))} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{localStorage.getItem('name').charAt(0)}</Avatar>}
+                                {localStorage.getItem('profilePicture') != 'null' ?
+                                    <img src={require('../../assets/profilePictures/' + localStorage.getItem('profilePicture'))} className='smallSizeProfilePicture' />
+                                    :
+                                    <img src={generator.generateRandomAvatar(localStorage.getItem('name'))} className='smallSizeProfilePicture' />
+                                }
                             </div>
                             <div className='mx-2'>
                                 <small>
@@ -169,9 +176,9 @@ class CreateThreadClass extends Component {
                                             this.setState({ community: community.title });
                                             this.handleCloseCommunityOptionList();
                                         }} disableRipple>
-                                            { !this.props.community ?
+                                            {!this.props.community ?
                                                 <img style={{ width: '1.25em', height: '1.25em', marginRight: '8px' }} src={community.imgSrc} alt="club-icon" />
-                                                : 
+                                                :
                                                 null
                                             }
                                             {community.title}
@@ -211,11 +218,17 @@ class CreateThreadClass extends Component {
 
                 {this.state.newThread ?
 
-                    <div className="divStyle">
+                    <div className="divStyle mt-2">
                         <Link to={'/discussionDetail/'.concat(this.state.newThread._id.$oid)} style={{ color: '#403e42', textDecoration: "none" }}>
 
-                            <div className='d-flex justify-content-between p-2' style={{ textOverflow: "ellipsis" }}>
-                                <div>{this.state.profilePicture ? <img src={'https://s3.ap-south-1.amazonaws.com/finemate.media/profilePictures/' + this.state.profilePicture} className='smallSizeProfilePicture' /> : <Avatar className='smallSizeProfilePicture'>{this.state.name.charAt(0)}</Avatar>} </div>
+                            <div className='d-flex justify-content-between align-items-center px-2 pt-2' style={{ textOverflow: "ellipsis" }}>
+                                <div>
+                                    {this.state.profilePicture != 'null' ?
+                                        <img src={require('../../assets/profilePictures/' + this.state.profilePicture)} className='smallSizeProfilePicture' />
+                                        :
+                                        <img src={generator.generateRandomAvatar(this.state.name)} className='smallSizeProfilePicture' />
+                                    }
+                                </div>
                                 <div className='userFullNameDiscussion ml-2'>{this.state.name}</div>
                                 <div>
                                     <span>
@@ -228,9 +241,9 @@ class CreateThreadClass extends Component {
                                     </span>
                                 </div>
                             </div>
-                            <div className='p-2 font-weight-bold'> {this.state.newThread.title} </div>
+                            <div style={{ fontWeight: '600' }} className='p-2'> {this.state.newThread.title} </div>
                             <Divider />
-                            <div style={{ fontSize: 'small', color: 'var(--purpleDark)' }} className='p-2 d-flex justify-content-end align-items-center'>
+                            <div style={{ fontSize: 'small', color: 'var(--purpleDark)' }} className='px-2 py-1 d-flex justify-content-end align-items-center'>
                                 Start Discussion <TrendingFlat />
                             </div>
                         </Link>

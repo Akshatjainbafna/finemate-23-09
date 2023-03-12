@@ -15,18 +15,18 @@
 .smallSizeProfilePicture {
     width: 25px !important;
     height: 25px !important;
-    border: 1px solid #DFDFDF;
     border-radius: 100%;
     font-size: small !important;
 }
 
 .userFullNameDiscussion {
     flex-grow: 1;
+    font-size: 0.85em;
 }
 
 .communityNameDiscussionBlock {
     font-size: x-small;
-    background-color: #dfdfdf;
+    background-color: #eeeeee;
     color: black;
     padding: 4px 8px;
     border-radius: 10px;
@@ -46,7 +46,7 @@
 }
 
 .discussion-list-list {
-    margin-top: 2.5vh;
+    margin-top: 1vh;
     text-overflow: ellipsis !important;
 }
 
@@ -104,10 +104,14 @@
         border-radius: 10px;
         text-overflow: ellipsis !important;
         margin: 2vh auto;
-        width: 90vw;
+        padding: 2px 4px;
+        width: 94vw;
     }
 
     .discussion-list-container {
         width: 100%;
+    }
+    .labelSortingOption {
+        margin-bottom: 0;
     }
 }

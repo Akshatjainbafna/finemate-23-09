@@ -3,13 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AxiosBaseFile from "../AxiosBaseFile";
 import style from './search.module.css';
+import { AvatarGenerator } from "random-avatar-generator";
+
+const generator = new AvatarGenerator();
 
 export default function SearchPageComponent(props) {
     const [searchData, setSearchData] = useState([]);
     const [category, setCategory] = useState('People');
 
-    useEffect(() =>
-        {document.getElementById('tabNews-1').checked = true}, [])
+    useEffect(() => { document.getElementById('tabNews-1').checked = true }, [])
 
     function search(event) {
         if (event.target.value.length > 4) {
@@ -41,7 +43,6 @@ export default function SearchPageComponent(props) {
                 AxiosBaseFile.post('/api/db_search_posts_of_topic', { 'topic': event.target.value })
                     .then(response => {
                         if (response.data) {
-                            console.log(response.data)
                             setSearchData(response.data)
                         }
                     })
@@ -99,18 +100,25 @@ export default function SearchPageComponent(props) {
                                 <List>
                                     <Link style={{ textDecoration: "none", color: "grey" }} to={"/profile/".concat(user.username)}>
                                         <ListItem>
-                                            {user.profilePicture ?
+                                            {user.profilePicture != 'null' ?
                                                 <ListItemAvatar>
                                                     <img src={require('../../assets/profilePictures/' + user.profilePicture)} alt="Profile" className={style.profilePictureThumbnail} />
                                                 </ListItemAvatar>
                                                 :
                                                 <ListItemAvatar>
-                                                    <Avatar> {user.username[0]} </Avatar>
+                                                    <img src={generator.generateRandomAvatar(user.name)} className={style.profilePictureThumbnail} />
                                                 </ListItemAvatar>
                                             }
 
                                             <ListItemText>
-                                                {user.username}
+                                                <div>
+                                                    {user.name}
+                                                </div>
+                                                <div>
+                                                    <small>
+                                                        {user.username}
+                                                    </small>
+                                                </div>
                                             </ListItemText>
                                         </ListItem>
                                     </Link>
