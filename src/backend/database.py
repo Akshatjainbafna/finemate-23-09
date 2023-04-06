@@ -151,7 +151,6 @@ def db_get_public_post_of_user():
 def db_add_next_post():
     formData = request.form
     try:
-        print(formData)
         if request.files['background'] and not formData['previousBackground']:
             image = request.files['background']
             backgroundImage = Image.open(image)
@@ -371,6 +370,97 @@ Subject: Verification Email
         else:
             return make_response('Entered OTP is incorrect.', 400)
 
+# sign in with google using google identity services and posts it to the database when provided with a name, first_name, last_name, user_type, email and picture
+@app.route('/api/db_sign_in_with_third_parties', methods=['POST'])
+def db_sign_in_with_third_parties():
+    userData = request.form
+    sender = 'hello@finemate.co'
+
+    print(userData)
+    usernameEmailCheck = UserObj(userData).db_check_email_present()
+
+    if usernameEmailCheck == 'true':
+        return ProfileObj(userData).db_get_profile_using_email()
+    else:
+        print('here2')
+        userCreatedObj = UserObj(userData).db_create_user_using_google()
+        
+        ProfileObj(userCreatedObj).db_create_profile()
+        
+        TodoDocument.db_create_todo_profile(userCreatedObj)
+
+        try:
+            if request.files['profilePicture']:
+                profileImage = request.files['profilePicture']
+                profileImageThumbnail = Image.open(profileImage)
+                profileImageThumbnail.thumbnail((250, 250))
+                cleanfilenameOfImage = secure_filename(profileImage.filename)
+                filename_without_extension = os.path.splitext(cleanfilenameOfImage)[0]
+                extension = os.path.splitext(cleanfilenameOfImage)[1]
+
+                # Check if the file is of proper extension
+                if len(extension) > 0 and extension.lower() not in allowed_extensions:
+                    return make_response("Invalid file type", 400)
+                
+                timestamp = time.strftime('_%Y-%m-%d-%H-%M-%S')
+                cleanfilenameOfImage = filename_without_extension[:10] + timestamp + extension
+                complete_file_path = '../react/src/assets/profilePictures/'
+                folderName = 'profilePictures/'
+                profileImageThumbnail.save(f"{complete_file_path}{cleanfilenameOfImage}")
+                old_profile_picture = ProfileObj(userCreatedObj).delete_old_profile_picture()
+
+                if mode == 'production':
+                    
+                    try:
+                        s3.Bucket(aws_bucket_name).upload_file(complete_file_path + cleanfilenameOfImage, folderName + cleanfilenameOfImage)
+                        s3.Bucket(aws_bucket_name).delete_objects(
+                            Delete = {
+                                'Objects' : [
+                                   { 'Key' : folderName + old_profile_picture}
+                                ]
+                            }
+                        )
+                    except FileNotFoundError:
+                        print("Error: The file was not found")
+                        return ""
+                    except NoCredentialsError:
+                        print("Error: Credentials not available")
+                        return ""
+                    os.remove(complete_file_path + cleanfilenameOfImage)
+
+                else: 
+                    os.remove(complete_file_path + old_profile_picture)
+
+                ProfileObj(userCreatedObj).set_profile_picture(cleanfilenameOfImage)
+
+                return ProfileObj(userCreatedObj).db_get_profile_using_email()
+
+        except:
+            return make_response("Internal Server Error, something went wrong", 500)
+        
+
+        s = smtplib.SMTP('email-smtp.us-east-1.amazonaws.com', 587)
+        s.starttls()
+
+        multipart = MIMEMultipart()
+        multipart['Subject'] = 'Welcome to Finemate'
+        multipart['From'] = formataddr(('Finemate', sender))
+        multipart['To'] = formataddr(( userCreatedObj['username'], userCreatedObj['email']))
+
+        bodytemp = r'newRegistrationEmail.html'
+        with open(bodytemp, "r", encoding='utf-8') as emailTemplate:
+            file = emailTemplate.read()
+
+        multipart.attach(MIMEText(file, 'html'))
+        
+        try:
+            s.login("AKIAX34YHC3NDECFB34U", "BNBe+R8b5qffGlFtF3D/R3/QXf2I60xdArM/MrHkD5sn")
+            s.sendmail(sender, userCreatedObj['email'], multipart.as_string())
+            
+            return make_response('Done', 200)
+        except:
+            return make_response('Done', 200)
+        
 # connect a user with other user
 @app.route('/api/db_add_connection', methods=['POST'])
 def db_add_connection():
@@ -491,7 +581,7 @@ def db_delete_single_user():
 def db_delete_all_users():
     return UserObj(request.json).db_delete_all_users()
 
-# when provided with a json text formatted as {username: username, password: password} returns {true} if such user exists and {false} o/w
+# when provided with a json text formatted as {username: username / email, password: password} returns {true} if such user exists and {false} o/w
 @app.route('/api/db_login', methods=['POST'])
 def db_login():
     return UserObj(request.json).db_login()

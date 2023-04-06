@@ -346,11 +346,11 @@ class NewsFeed extends Component {
     openImageWindow(img, index) {
         const src = img.getAttribute('src');
         console.log(src)
-        $(".show").fadeIn();
-        document.querySelector('.show img').setAttribute('src', src);
+        $(".popup-background-image-display-screen").fadeIn();
+        document.querySelector('.popup-background-image-display-screen img').setAttribute('src', src);
     }
     closeImageWindow() {
-        $(".show").fadeOut();
+        $(".popup-background-image-display-screen").fadeOut();
     }
     componentDidMount() {
         const headers = { "Content-Type": "application/json" };
@@ -714,7 +714,7 @@ class NewsFeed extends Component {
                 <br />
                 <br />
                 <br />
-                <div className="show" onClick={this.closeImageWindow}>
+                <div className="popup-background-image-display-screen" onClick={this.closeImageWindow}>
                     <div className="img-show">
                         <div><BsFillXCircleFill /> </div>
                         <img src="" />

@@ -121,6 +121,85 @@
     margin-bottom: 1em;
 }
 
+.signUpButtonContainers {
+    margin-top: 100px;
+}
+
+.signUpButtonContainers>div {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5vh;
+}
+
+.signUpButtonContainers button {
+    width: 192px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    font-family: 'Poppins';
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+.signUpButtonContainers button:hover {
+    opacity: 0.75;
+}
+
+.signUpButtonContainers .facebookBtn button {
+    background-color: rgb(14, 85, 170);
+}
+
+.signUpButtonContainers .emailBtn {
+    background-color: rgb(8, 70, 140);
+}
+
+.signUpButtonContainers .linkedInBtn {
+    background-color: rgb(20, 100, 200);
+}
+
+.signUpButtonContainers i {
+    font-size: 1.75em;
+    margin: auto 9% auto 4.5%;
+}
+
+.hr-lines {
+    position: relative;
+    /*  new lines  */
+    max-width: 500px;
+    margin: 4vh auto;
+    text-align: center;
+}
+
+.hr-lines:before {
+    content: " ";
+    display: block;
+    height: 1px;
+    width: 33%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    background: #BEBEC4;
+}
+
+.hr-lines:after {
+    content: " ";
+    height: 1px;
+    width: 33%;
+    background: #BEBEC4;
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+}
+
+.signUpForm .my-facebook-button-class {
+    border: none !important;
+    background-color: #4267B2 !important;
+    color: white !important;
+}
+
 @media screen and (max-width: 600px) {
     .outlinedInputFirstName {
         margin-bottom: 50px;
@@ -150,6 +229,14 @@
         width: 17vw;
         padding: 5px 0;
         font-size: small;
+    }
+
+    .hr-lines:before {
+        width: 25%;
+    }
+
+    .hr-lines:after {
+        width: 25%;
     }
 }
 

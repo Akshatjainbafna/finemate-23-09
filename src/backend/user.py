@@ -4,8 +4,9 @@ from flask import Flask, make_response, request, jsonify
 from Exceptions.MissingRequiredField import checkFields
 from Exceptions.MissingRequiredField import checkFieldsReturnAll
 from datetime import datetime
-from profile import ProfileObj
 import re
+import math
+import random
 
 
 class UserObj():
@@ -35,7 +36,6 @@ class UserObj():
 				"email": self.email,
 				"last_login": self.last_login, 
 				"last_logout": self.last_logout
-
 			}
 
 	def __init__(self, content):
@@ -65,6 +65,17 @@ class UserObj():
 			return make_response("Username or Email already in use.", 400)
 		else:
 			return 'true'
+	
+	def db_check_email_present(self):
+
+		x = checkFields(self.content, fields=['email'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+
+		if (self.User.objects(email = self.content['email']).count() > 0):
+			return 'true'
+		else:
+			return 'false'
 
 	def db_create_user(self):
 		"""
@@ -87,6 +98,36 @@ class UserObj():
 		self.User(user_type=self.content['user_type'], username=username, password=self.content['password'], email=email, last_login='N/A', last_logout='N/A').save()
 		return 'Done'
 	
+	def create_user_using_google(self):
+		"""
+		Saves the current user to the database using google account.
+		"""
+		
+		x = checkFields(self.content, fields=['user_type', 'email'])
+		if (x):
+			return make_response("Missing required field: " + x, 400)
+		
+
+		username = self.content['firstname'].lower() + '_' + self.content['lastname'].lower()
+
+		count = 0
+
+		while(self.User.objects(username=username).count() > 0):
+			username = username + '_' + str(count)
+
+		password = ''
+		allTheCharacter = '0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
+		for i in range(10):
+			password += allTheCharacter[ math.floor ( random.random() * len(allTheCharacter ) ) ]
+
+		userAccountObj = self.User(user_type=self.content['user_type'], username = username, password = password, email=self.content['email'], last_login='N/A', last_logout='N/A').save()
+		
+		userDataDict = self.content
+		userDataDict['username'] = username 
+
+		return userDataDict
+
 	def db_get_user(self):
 		"""
 		Creates the user based off of the email passed in.
@@ -112,7 +153,7 @@ class UserObj():
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		user_obj = self.User.objects(username=self.content['username']).first()
+		user_obj = self.User.objects(me.Q(username=self.content['username']) | me.Q(email=self.content['username'])).first()
 		if user_obj:
 			return make_response(jsonify(user_obj.last_login), 200)
 		else:
@@ -144,8 +185,6 @@ class UserObj():
 
 		user_obj = self.User.objects(email=self.content['email']).first()
 		if user_obj:
-			prof_obj = ProfileObj.Profile.objects(username=user_obj.username).first()
-			prof_obj.update(username=self.content['username'])
 			user_obj.update(username=self.content['username'])
 			return make_response("", 200)
 		else:
@@ -210,17 +249,18 @@ class UserObj():
 
 	def db_login(self):
 		"""
-		Logs in using the username and password given
+		Logs in using the username/email and password given
 		"""
 
 		x = checkFields(self.content, fields=['password', 'username'])
 		if (x):
 			return make_response("Missing required field: " + x, 400)
 
-		user_obj = self.User.objects(username=self.content['username'], password=self.content['password']).first()
+		user_obj = self.User.objects(me.Q(username=self.content['username'], password=self.content['password']) | me.Q(email=self.content['username'], password=self.content['password'])).only('username', 'user_type').first()
+
 		if user_obj:
 			user_obj.update(last_login=datetime.now().strftime("%d %b %Y, %H:%M:%S"))
-			return make_response(jsonify("true"), 200)
+			return make_response(jsonify(user_obj.to_json()), 200)
 		else:
 			return make_response(jsonify("false"), 401)
             
@@ -259,10 +299,6 @@ class UserObj():
 		
 
 		all_profiles = []
-		for c in consultants:
-			cur_profile = ProfileObj.Profile.objects(username=c.username, name=f_dict['name']).first()
-			if cur_profile:
-				all_profiles.append(cur_profile.to_json())
 
 		if len(all_profiles) > 0:
 			return make_response(jsonify(all_profiles), 200)

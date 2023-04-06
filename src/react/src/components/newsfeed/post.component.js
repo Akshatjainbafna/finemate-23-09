@@ -193,11 +193,11 @@ class IndividualPost extends Component {
     }
     openImageWindow(img) {
         const src = img.getAttribute('src');
-        $(".show").fadeIn();
+        $(".popup-background-image-display-screen").fadeIn();
         document.querySelector('.img-show img').setAttribute('src', src);
     }
     closeImageWindow() {
-        $(".show").fadeOut();
+        $(".popup-background-image-display-screen").fadeOut();
     }
     componentWillUnmount() {
         if (!this.state.createNewPost) {
@@ -364,7 +364,7 @@ class IndividualPost extends Component {
                                     </div>
                                 </div>
 
-                                <div className="show" onClick={this.closeImageWindow}>
+                                <div className="popup-background-image-display-screen" onClick={this.closeImageWindow}>
                                     <div className="img-show">
                                         <div><BsXCircleFill /> </div>
                                         <img src="" />

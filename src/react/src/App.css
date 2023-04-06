@@ -35,7 +35,9 @@
 
   --extremelyLightFont: #dddddd;
 }
-.show{ 
+
+/* styling for popup screen for background image*/
+.popup-background-image-display-screen{ 
   width: 100%;
   height: 100%;
   position: fixed;
@@ -45,7 +47,7 @@
   z-index: 1030;
   display: none;
 }
-.show .img-show{
+.popup-background-image-display-screen .img-show{
   position: relative;
   width: 100vw;
   height: 100vh;
@@ -55,7 +57,7 @@
   align-items: center;
   justify-content: center;
 }
-.img-show div{
+.popup-background-image-display-screen .img-show div{
   position: absolute;
   top: 0px;
   right: 10px;
@@ -63,10 +65,10 @@
   color: #eee;
   font-size: 1.5em;
 }
-.img-show div:hover{
+.popup-background-image-display-screen .img-show div:hover{
   filter: brightness(90%);
 }
-.img-show img{
+.popup-background-image-display-screen .img-show img{
   width: 80%;
   height: 80%;
   object-fit: contain;

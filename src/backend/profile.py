@@ -4,7 +4,8 @@ from mongoengine.fields import StringField
 from flask import Flask, make_response, request, jsonify
 from Exceptions.MissingRequiredField import checkFields
 from datetime import datetime
-
+from user import UserObj
+UserAccount = UserObj.User
 
 class ProfileObj():
 	"""
@@ -118,6 +119,31 @@ class ProfileObj():
 		else:
 			return make_response("Username does not exist", 404)
 
+	def db_get_profile_using_email(self):
+		"""
+		Gets the profile given a email
+		"""
+
+		user_obj = UserAccount.objects(email = self.content['email']).first()
+		prof_obj = self.Profile.objects(username = user_obj.username).first()
+
+		joinedOn = prof_obj.time_join
+
+		joinedOn = datetime.strptime(joinedOn, "%d %b %Y, %H:%M:%S")
+		todayDate = datetime.now()
+
+		if user_obj:
+			prof_obj_to_dict = prof_obj.to_json()
+			prof_obj_to_dict['last_login'] = user_obj.last_login
+			prof_obj_to_dict['user_type'] = user_obj.user_type
+
+			print(type(prof_obj_to_dict))
+
+			if str(todayDate-joinedOn).find(",") != -1:
+				prof_obj_to_dict['total_days_joined'] = (str(todayDate-joinedOn).split(","))[0]
+			return make_response(jsonify(prof_obj_to_dict), 200)
+		else:
+			return make_response("Username does not exist", 404)
 
 	def db_get_profile_picture(self):
 		"""
@@ -374,7 +400,6 @@ class ProfileObj():
 		"""
 		Adds a profile education in the database for the corresponding username
 		"""
-		print(self.content)
 		x = checkFields(self.content, fields=['hate', 'username'])
 		if (x):
 			return make_response("Missing required field: " + x, 400)

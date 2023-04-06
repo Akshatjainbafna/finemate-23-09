@@ -39,7 +39,7 @@
 .instantBreakdown{
 	font: bold 2em 'Bangers', cursive;
 	background-image: linear-gradient(45deg, #8C52FF, #BAA3D7, #FBEAAF, #64BAA9);
-
+	text-align: center;
 	width: fit-content;
 	margin: auto;
 	padding: 0 5px;

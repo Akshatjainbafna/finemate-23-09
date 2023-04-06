@@ -91,6 +91,10 @@
 	width: 160px;
 }
 
+.buttonContainer div {
+	display: none;
+}
+
 @media screen and (max-width: 575px) {
 	.buttonContainer {
 		display: flex;

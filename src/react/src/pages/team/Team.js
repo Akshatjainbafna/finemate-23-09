@@ -6,46 +6,78 @@ import { Tooltip } from "@material-ui/core";
 import Footer from "../../components/footer/Footer.component";
 import LoadingGif from "../../components/loadingGif";
 import { Helmet } from "react-helmet";
+import AkshatPassportPhoto from "../../assets/Akshat Bafna Passport photo.jpg";
+import { ArrowLeft, ArrowRight, Instagram, LinkedIn, Mail, Twitter } from "@material-ui/icons";
 
-export default function Team(){
+export default function Team() {
     const [loading, setLoading] = useState(true);
-    const textLines= ["Dear esteemed investors, developers, startup enthusiasts, and entrepreneurs, <br />  <br />  I am Akshat Jain Bafna, an IT engineer and solopreneur who is driven to address the issue of poor retention and incomplete cognition. This is a problem that I, along with many others, experience on a daily basis in our academic, professional, and personal lives. I have dedicated a significant amount of time studying the problem and developing a comprehensive solution to make learning easier for others. <br />    While there is no one-size-fits-all solution to solve this problem, there are multiple strategies that can help improve retention and make learning more effective. I am puzzled as to why, even in 2022, there are so many shortcomings in our education system and why more solutions have not been developed to address this important issue. If you share my concern and would like to join me in addressing this problem, please feel free to contact me on Finemate or through the social networks mentioned below. <br /> <br />   Sincerely, <br />   Akshat Jain Bafna"];
-    
-    useEffect(() =>{
+    const [socialMenuBar, setSocialMenubar] = useState(false);
+    const textLines = ["Dear esteemed investors, developers, startup enthusiasts, and entrepreneurs, <br />  <br />  I am Akshat Jain Bafna, an IT engineer and solopreneur who is driven to address the issue of poor retention and incomplete cognition. This is a problem that I, along with many others, experience on a daily basis in our academic, professional, and personal lives. I have dedicated a significant amount of time studying the problem and developing a comprehensive solution to make learning easier for others. <br />    While there is no one-size-fits-all solution to solve this problem, there are multiple strategies that can help improve retention and make learning more effective. I am puzzled as to why, even in 2022, there are so many shortcomings in our education system and why more solutions have not been developed to address this important issue. If you share my concern and would like to join me in addressing this problem, please feel free to contact me on Finemate or through the social networks mentioned below. <br /> <br />   Sincerely, <br />   Akshat Jain Bafna"];
+
+    useEffect(() => {
         setTimeout(() => {
             setLoading(false)
-            }, 2000);
+        }, 2000);
     })
-    if (loading){
-        return  <div className="loadingGif">
-                    <LoadingGif />
-                </div>
-      }
+
+    function socialMenuBarToggle() {
+        setSocialMenubar(!socialMenuBar);
+        if (!socialMenuBar) {
+            document.getElementById('teamMemberSocialLinks').style.visibility = 'visible';
+            document.getElementById('teamMemberSocialLinks').style.width = '180px';
+        } else {
+            document.getElementById('teamMemberSocialLinks').style.visibility = 'hidden';
+            document.getElementById('teamMemberSocialLinks').style.width = '0px';
+        }
+    }
+    if (loading) {
+        return <div className="loadingGif">
+            <LoadingGif />
+        </div>
+    }
     return <>
-            <Helmet>
-				<title>
-					Team - Finemate
-				</title>
-				<meta name='keywords' content="Hiring, Solopreneur" />
-                <meta name='description' content="We believe in building that every great product is build by a great team who is equally motivated and eager to bring the dreams to reality, to make lives easy and jolly of people. If you think the same we have a good news for you, We are Hiring."/>
-			</Helmet>
+        <Helmet>
+            <title>
+                Team - Finemate
+            </title>
+            <meta name='keywords' content="Hiring, Solopreneur" />
+            <meta name='description' content="We believe in building that every great product is build by a great team who is equally motivated and eager to bring the dreams to reality, to make lives easy and jolly of people. If you think the same we have a good news for you, We are Hiring." />
+        </Helmet>
         <OutsideNavbar />
         <div className={style.teamPageContainer}>
-        <div className={style.aboutTeam}>
-            <Typed strings={textLines} typeSpeed={10} />
-        </div>
-        <div className={style.linksContainer}>
-            <div className={style.links}>
-                <Tooltip title="Click to download Powerpoint Presentation a 3 minutes Read">
-                <a href={require("../../assets/Finemate Presentation Pitch Deck.pdf")} download="Finemate Pitch Deck"><img src={require("../../assets/leftCapsuleAllopethic.png")} alt =""/></a>
-                </Tooltip>
+            <div className={style.akshatPictureContainer}>
+                <div>
+                    <img src={AkshatPassportPhoto} alt='akshat jain bafna' />
+                </div>
+                <div id='teamMemberSocialLinks' className={style.teamMemberSocialLinks}>
+                    <a href="https://www.instagram.com/a_different_being_/" target='_blank'> <Instagram /> </a>
+                    <a href="https://twitter.com/akshatjainbafna" target='_blank'> <Twitter /> </a>
+                    <a href="https://www.linkedin.com/in/akshat-jain-1435139/" target='_blank'> <LinkedIn /> </a>
+                    <a href="mailto:akshatbjain.aj@gmail.com" target='_blank'> <Mail /> </a>
+                </div>
+                <div>
+                    {socialMenuBar ? <ArrowRight onClick={socialMenuBarToggle} /> : <ArrowLeft onClick={socialMenuBarToggle} />}
+                </div>
             </div>
-            <div className={style.links}>
-                <Tooltip title= "Click to download Document a 6 minutes Read">
-                <a href={require("../../assets/Finemate Draft.pdf")} download="Finemate Draft"> <img src={require("../../assets/rightHomepathic.png")} alt =""/> </a>
-                </Tooltip>
+            <div className={style.aboutTeam}>
+                <Typed strings={textLines} typeSpeed={10} />
             </div>
-        </div>
+            <div className={style.linksContainer}>
+                <div className={style.links}>
+                    <Tooltip title="Click to download Powerpoint Presentation a 3 minutes Read">
+                        <a href={require("../../assets/Finemate Presentation Pitch Deck.pdf")} download="Finemate Pitch Deck">
+                            <img src={require("../../assets/leftCapsuleAllopethic.png")} alt="" />
+                        </a>
+                    </Tooltip>
+                </div>
+                <div className={style.links}>
+                    <Tooltip title="Click to download Document a 6 minutes Read">
+                        <a href={require("../../assets/Finemate Draft.pdf")} download="Finemate Draft">
+                            <img src={require("../../assets/rightHomepathic.png")} alt="" />
+                        </a>
+                    </Tooltip>
+                </div>
+            </div>
             <br />
             <br />
         </div>

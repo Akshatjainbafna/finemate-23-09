@@ -1,12 +1,206 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import Card from 'react-bootstrap/Card'
 import { Redirect } from 'react-router-dom'
 import { CircularProgress, IconButton, InputAdornment, InputLabel, OutlinedInput, Tooltip } from '@material-ui/core';
 import { Info, Visibility, VisibilityOff } from '@material-ui/icons';
 import AxiosBaseFile from '../AxiosBaseFile';
 import { Helmet } from 'react-helmet';
+import { GoogleLogin, useGoogleLogin, useGoogleOneTapLogin } from '@react-oauth/google';
+import Axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import { LinkedIn } from 'react-linkedin-login-oauth2';
+import FacebookLogin from 'react-facebook-login';
+
+function LoginWithThirdParties() {
+	const [firstLogIn, setFirstLogin] = useState(null)
+
+	const loginWithGoogle = useGoogleLogin({
+		onSuccess: credentialResponse => {
+			let authorisationConfig = {
+				headers: {
+					"Authorization": `Bearer ${credentialResponse.access_token}`
+				}
+			}
+
+			//https://react-oauth.vercel.app different ways to authenticate and authorize using google
+			Axios.get('https://www.googleapis.com/oauth2/v3/userinfo/', authorisationConfig)
+				.then(res => {
+					const userCredentials = res.data;
+					const formData = new FormData();
+					formData.append('user_type', 'normal');
+					formData.append('email', userCredentials.email);
+					formData.append('name', userCredentials.name);
+					formData.append('firstname', userCredentials.given_name);
+					formData.append('lastname', userCredentials.family_name);
+					Axios.get(userCredentials.picture, {
+						responseType: 'blob'
+					})
+						.then(response => {
+							formData.append('profilePicture', response.data);
+						})
+						.catch(err => console.log(err));
+
+					signInWithThirdParty(formData);
+				})
+				.catch(err => console.warn(err))
+
+		},
+		onError: () => {
+			console.log('Login Failed');
+		}
+	});
+
+	const loginWithFacebook = (userCredentials) => {
+		const formData = new FormData();
+		const given_name = userCredentials.name.split(' ')[0];
+		const family_name = userCredentials.name.split(' ')[1];
+
+		formData.append('user_type', 'normal');
+		formData.append('email', userCredentials.email);
+		formData.append('name', userCredentials.name);
+		formData.append('firstname', given_name);
+		formData.append('lastname', family_name);
+
+		Axios.get(userCredentials.picture.data.url, {
+			responseType: 'blob'
+		})
+			.then(response => {
+				formData.append('profilePicture', response.data);
+			})
+			.catch(err => console.log(err));
+
+		signInWithThirdParty(formData);
+	}
+
+	const loginWithLinkedin = (credentialResponse) => {
+		const body = {
+			'grant_type': "authorization_code",
+			'code': credentialResponse,
+			'redirect_uri': `${window.location.origin}/linkedin`,
+			'client_id': "77jps0wbeeqxux",
+			'client_secret': "MTqfKjBZFKiOJVrB"
+		}
+		let config = {
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		};
+		Axios.post('https://www.linkedin.com/oauth/v2/accessToken', body, config)
+			.then(res => {
+				let authorisationConfig = {
+					headers: {
+						"Authorization": `Bearer ${res.data.access_token}`
+					}
+				}
+				Axios.get('https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))', authorisationConfig)
+					.then(res => {
+						const responseData = res.data;
+
+						const formData = new FormData();
+
+						const given_name = responseData.firstName.localized.en_US;
+						const family_name = responseData.lastName.localized.en_US;
+						const name = given_name + ' ' + family_name;
+
+						formData.append('user_type', 'normal');
+						formData.append('name', name);
+						formData.append('firstname', given_name);
+						formData.append('lastname', family_name);
+
+						Axios.get('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', authorisationConfig)
+							.then(res => {
+								const responseEmail = res.data;
+								formData.append('email', responseEmail['elements'][0]['handle~']['emailAddress']);
+							})
+
+						Axios.get(responseData['profilePicture']['displayImage~']['elements'][1]['identifiers'][0]['identifier'], { responseType: 'blob' })
+							.then(response => {
+								formData.append('profilePicture', response.data);
+							})
+							.catch(err => console.log(err));
+
+						this.signInWithThirdParty(formData);
+					})
+					.catch(err => {
+						alert('Try to log in another way');
+						console.warn(err);
+					})
+			})
+			.catch(err => {
+				alert('Try to log in another way');
+				console.warn(err);
+			})
+	}
 
 
+	function signInWithThirdParty(formData) {
+		AxiosBaseFile.post('/api/db_sign_in_with_third_parties', formData)
+			.then(response => {
+				let responseData = response.data;
+
+				localStorage.setItem('token', true)
+				localStorage.setItem('usertype', responseData.user_type)
+				localStorage.setItem('username', responseData.username)
+				localStorage.setItem('profilePicture', responseData.profilePicture)
+				localStorage.setItem('name', responseData.name)
+
+				if (responseData.last_login == 'N/A') {
+					setFirstLogin(true);
+				}
+				else {
+					setFirstLogin(false);
+				}
+			})
+			.catch(err => console.log(err))
+	}
+
+	if (firstLogIn == false) {
+		return <Redirect to='/dashboard' />
+	} else if (firstLogIn == true) {
+		return <Redirect to='/questionaire' />
+	}
+
+	return (
+		<div style={{ display: 'flex', justifyContent: 'space-evenly', margin: 'auto 20%' }}>
+			<div>
+			<IconButton style={{ backgroundColor: '#4285F4', color: '#fff', width: '45px', height: '45px' }} onClick={loginWithGoogle}>
+							<i class="fa fa-google" aria-hidden=""></i>
+						</IconButton>
+			</div>
+			<div>
+				<IconButton style={{ backgroundColor: '#4267B2', color: '#fff', width: '45px', height: '45px' }}>
+					<FacebookLogin
+						appId="574266974631240"
+						textButton=''
+						fields="name,email,picture"
+						callback={loginWithFacebook}
+						cssClass="my-facebook-button-class"
+						icon="fa fa-facebook"
+					/>
+				</IconButton>
+			</div>
+			<div>
+				<LinkedIn
+					clientId="77jps0wbeeqxux"
+					redirectUri={`${window.location.origin}/linkedin`}
+					onSuccess={(credentialResponse) => {
+						loginWithLinkedin(credentialResponse)
+					}}
+					onError={(error) => {
+						console.log(error);
+					}}
+					scope="r_emailaddress r_liteprofile w_member_social"
+				>
+					{({ linkedInLogin }) => (
+						<IconButton style={{ backgroundColor: '#0072b1', color: '#fff', width: '45px', height: '45px' }} onClick={linkedInLogin}>
+							<i class="fa fa-linkedin" aria-hidden="true"></i>
+						</IconButton>
+					)}
+				</LinkedIn>
+			</div>
+		</div>
+	)
+}
 class Login extends Component {
 
 	constructor(props) {
@@ -214,7 +408,7 @@ class Login extends Component {
 
 						<form class="flex-column signUpForm" onSubmit={this.submit}>
 							<div>
-								<InputLabel htmlFor="outlined-adornment-username">Username</InputLabel>
+								<InputLabel htmlFor="outlined-adornment-username">Username/Email</InputLabel>
 								<OutlinedInput
 									id="outlined-adornment-username"
 									name='username'
@@ -255,7 +449,6 @@ class Login extends Component {
 							</div>
 
 							<form class="flex-row" onSubmit={this.submit}>
-
 								<div class="mx-auto text-right p-0 col-md-12 mb-4 text-sm">
 									<button style={{ boxShadow: 'none', border: 'none', backgroundColor: 'inherit' }} class="text-dark font-weight-bold" onClick={() => this.setState({ forgetPassword: true })}><u>Forgot Password</u></button>
 								</div>
@@ -274,18 +467,18 @@ class Login extends Component {
 										)}
 									</button>
 								</div>
-
 							</form>
-							<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
+
+							<div class="mx-auto text-center p-0 text-sm">
+								Don't have an account?	<a href="/create" class="ml-1 text-dark font-weight-bold"><u>Sign Up</u></a>
 							</div>
-							<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
-								<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
-									Don't have an account?
-									<a href="/create" class="ml-1 text-dark font-weight-bold"><u>Sign Up</u></a>
-								</div>
-								<div class="mx-auto text-center p-0 col-md-12 mb-4 text-sm">
-								</div>
+
+							<div className='hr-lines'>
+								Or log in with
 							</div>
+
+							<LoginWithThirdParties />
+
 						</form>
 					}
 				</Card.Body>
@@ -295,9 +488,11 @@ class Login extends Component {
 
 	otpVerification(e) {
 		e.preventDefault();
+
 		this.setState({ loading: true })
-		console.log(this.state.enteredOTP, this.state.machineOTP, typeof (this.state.machineOTP), typeof (this.state.enteredOTP))
+
 		document.getElementById('ErrorMessage').innerHTML = "Wait A Second.";
+
 		if (this.state.enteredOTP == this.state.machineOTP) {
 			AxiosBaseFile.post('/api/db_update_user_password', { email: this.state.email, username: this.state.username, password: this.state.password, OTP: this.state.enteredOTP, machineOTP: this.state.machineOTP })
 				.then(response => {
@@ -351,22 +546,15 @@ class Login extends Component {
 				this.state.firstLogIn = (response.data == "N/A");
 				AxiosBaseFile.post('/api/db_login', { username: this.state.username, password: this.state.password })
 					.then(response => {
-						localStorage.setItem('token', response.data)
-						localStorage.setItem('username', (this.state.username))
+						localStorage.setItem('token', 'true')
+						localStorage.setItem('username', response.data.username)
+						localStorage.setItem('usertype', response.data.user_type)
 
-						AxiosBaseFile.post('/api/db_get_user_type', { username: this.state.username })
-							.then(response => {
-								localStorage.setItem('usertype', response.data)
-								this.setState({ loggedIn: true });
-							})
-							.catch((error) => {
-								console.log(error)
-							});
-
-						AxiosBaseFile.post('/api/db_get_profile_picture', { username: this.state.username })
+						AxiosBaseFile.post('/api/db_get_profile_picture', { username: response.data.username })
 							.then(res => {
 								localStorage.setItem('profilePicture', res.data.profilePicture)
-								localStorage.setItem('name', res.data.name)		
+								localStorage.setItem('name', res.data.name)
+								this.setState({ loggedIn: true });
 							})
 							.catch((error) => {
 								console.log(error)
